@@ -1,11 +1,11 @@
 package com.hcl.capstoneserver.user.entities;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 
 @Entity
 public class Client extends AppUser{
-    @Id
+    @Column(unique = true)
     private int clientId;
 
     private String name;
