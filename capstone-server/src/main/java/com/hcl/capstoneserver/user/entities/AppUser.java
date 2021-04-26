@@ -1,9 +1,12 @@
 package com.hcl.capstoneserver.user.entities;
 
+import com.hcl.capstoneserver.user.UserRole;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -23,6 +26,10 @@ public class AppUser {
 
     public AppUser(String userId) {
         this.userId = userId;
+    }
+
+    public UserRole getUserRole() {
+        return UserRole.USER;
     }
 
     public String getUserId() {
