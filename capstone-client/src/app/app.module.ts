@@ -1,12 +1,20 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { AppRoutingModule } from './app-routing.module';
+import { AppRoutingModule } from './routing/app-routing.module';
 import { AppComponent } from './app.component';
+import { SignUpClientComponent } from './sign-up/sign-up-client.component';
+import {SignInComponent} from './sign-in/sign-in.component';
+import {SignUpSupplierComponent} from './sign-up/sign-up-supplier.component';
+import { TopNavbarComponent } from './top-navbar/top-navbar.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    SignInComponent,
+    SignUpClientComponent,
+    SignUpSupplierComponent,
+    TopNavbarComponent
   ],
   imports: [
     BrowserModule,
