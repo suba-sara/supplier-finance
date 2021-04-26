@@ -16,7 +16,6 @@ public class CustomUserDetailService implements UserDetailsService {
         this.appUserRepository = appUserRepository;
     }
 
-    // used in spring security don't change
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         AppUser user = appUserRepository.findByUsername(s);
