@@ -2,8 +2,11 @@ package com.hcl.capstoneserver.user.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public class AppUser {
     @Id
     private String userId;
