@@ -9,14 +9,14 @@
     <div>
       <mat-form-field appearance="outline">
         <mat-label>Username</mat-label>
-        <input matInput maxlength="256" placeholder="username" [(ngModel)]="login.username">
+        <input matInput maxlength="256" placeholder="username" [(ngModel)]="signInData.username">
         <mat-icon matPrefix>person_outline</mat-icon>
       </mat-form-field>
     </div>
     <div>
       <mat-form-field appearance="outline">
         <mat-label>Password</mat-label>
-        <input type="password" matInput maxlength="256" placeholder="password" [(ngModel)]="login.password">
+        <input type="password" matInput maxlength="256" placeholder="password" [(ngModel)]="signInData.password">
         <mat-icon matPrefix>vpn_key</mat-icon>
       </mat-form-field>
     </div>
@@ -24,7 +24,7 @@
       <a href="#">Forget Password?</a>
     </div>
     <div>
-      <button mat-flat-button (click)="signIn()">Sign In</button>
+      <button mat-flat-button (click)="handleSignInClick()">Sign In</button>
     </div>
     <div class="new-account-section">
       <a href="#">Don't have an account yet? Sign Up</a>
