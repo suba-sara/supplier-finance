@@ -1,5 +1,7 @@
 package com.hcl.capstoneserver.user.entities;
 
+import com.hcl.capstoneserver.user.UserRole;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
@@ -14,6 +16,11 @@ public class Client extends AppUser{
     private String phone;
     private Float interestRate;
     private int accountNumber;
+
+    @Override
+    public UserRole getUserRole() {
+        return UserRole.CLIENT;
+    }
 
     public int getClientId() {
         return clientId;
