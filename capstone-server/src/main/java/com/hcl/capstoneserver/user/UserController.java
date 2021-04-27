@@ -1,9 +1,28 @@
 package com.hcl.capstoneserver.user;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import com.hcl.capstoneserver.user.dto.SignInRequestDTO;
+import com.hcl.capstoneserver.user.dto.SignInResponseDTO;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
-@Controller
+@RestController()
 public class UserController {
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
+    @PostMapping("/api/sign-in")
+    public ResponseEntity<SignInResponseDTO> signIn(@RequestBody SignInRequestDTO signInRequestDTO) {
+        return new ResponseEntity<>(
+                userService.signIn(
+                        signInRequestDTO.getUsername(),
+                        signInRequestDTO.getPassword()
+                ),
+                HttpStatus.OK
+        );
+    }
 }
