@@ -2,6 +2,7 @@ package com.hcl.capstoneserver.user;
 
 import com.hcl.capstoneserver.user.dto.SignInRequestDTO;
 import com.hcl.capstoneserver.user.dto.SignInResponseDTO;
+import com.hcl.capstoneserver.user.dto.SignUpResponseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,5 +25,11 @@ public class UserController {
                 ),
                 HttpStatus.OK
         );
+    }
+
+    //testing only -> implement proper methods
+    @PostMapping("/api/sign-up")
+    public SignUpResponseDTO signUp(@RequestBody SignInRequestDTO dto) {
+        return userService.signUp(dto);
     }
 }
