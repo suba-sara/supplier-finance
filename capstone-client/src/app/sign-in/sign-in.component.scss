@@ -1,0 +1,42 @@
+.section {
+  display: flex;
+  height: 100%;
+  width: 50%;
+}
+
+.left-section {
+  float: left;
+  background: black;
+}
+
+.right-section {
+  float: right;
+}
+
+.div-header {
+  width: 50%;
+  justify-content: center;
+  align-items: center;
+}
+
+h1 {
+  font-size: 40px;
+  color: #181880;
+}
+
+.div-components {
+  display: block;
+  justify-content: center;
+  button, mat-form-field {
+    appearance: mat-color(#181880);
+    outline: #181880;
+    width: 320px;
+  }
+  mat-form-field{
+    color: #181880;
+  }
+  button{
+    background: #181880;
+    color: white;
+  }
+}
