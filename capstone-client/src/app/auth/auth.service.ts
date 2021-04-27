@@ -30,8 +30,7 @@ export class AuthService {
         localStorage.setItem('userType', response.userType);
 
         handleResponse({status: 200, message: 'Successfully signed in'});
-      }, (error) => {
-
+      }, () => {
         handleResponse({status: 403, message: 'Invalid username or password'});
       });
   }
