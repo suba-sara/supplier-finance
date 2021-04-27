@@ -29,7 +29,7 @@ export class SignInComponent implements OnInit {
   }
 
   signIn(): void {
-    this.http.post(`${API_PATH}/sign-in`, {login: this.login})
+    this.http.post(`${API_PATH}/sign-in`, this.login)
       .subscribe((response) => console.log(response));
   }
 }
