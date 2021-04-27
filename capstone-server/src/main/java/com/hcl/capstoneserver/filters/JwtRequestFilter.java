@@ -4,6 +4,7 @@ import com.hcl.capstoneserver.user.UserService;
 import com.hcl.capstoneserver.util.JWTUtil;
 import org.hibernate.annotations.Filter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -15,6 +16,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collections;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
@@ -31,11 +33,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         // extract the authorization header
         final String authorizationHeader = request.getHeader("Authorization");
 
-        String jwt =  null;
+        String jwt = null;
         String userName = null;
 
         //check if authorization header has bearer on it
-        if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             // extract content after bearer as jwt token
             // Bearer jwt_token -> jwt_token
             jwt = authorizationHeader.substring(7);
@@ -45,15 +47,15 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         }
 
         //if username exists and request is not already authorized
-        if(userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             //fetch the user by username
-            UserDetails userDetails = userService.loadUserByUsername(userName);
+            String userType = jwtUtil.extractUserType(jwt);
 
             //check if the jwt is valid or not
-            if(jwtUtil.validateToken(jwt, userDetails)) {
+            if (jwtUtil.validateToken(jwt)) {
                 UsernamePasswordAuthenticationToken authenticationToken =
                         new UsernamePasswordAuthenticationToken(
-                                userDetails, null, userDetails.getAuthorities()
+                                userName, null, Collections.singleton(new SimpleGrantedAuthority(userType))
                         );
 
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

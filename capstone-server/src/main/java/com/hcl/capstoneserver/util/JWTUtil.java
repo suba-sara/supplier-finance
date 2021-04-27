@@ -28,6 +28,10 @@ public class JWTUtil {
         return extractClaim(token, Claims::getExpiration);
     }
 
+    public String extractUserType(String token) {
+        return extractClaim(token, (claims -> claims.get("userType"))).toString();
+    }
+
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
@@ -53,8 +57,7 @@ public class JWTUtil {
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
     }
 
-    public Boolean validateToken(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    public Boolean validateToken(String token) {
+        return  !isTokenExpired(token);
     }
 }
