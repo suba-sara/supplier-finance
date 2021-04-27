@@ -1,2 +1,5 @@
 /.settings/.jsdtscope
 .idea/
+
+##Properties file##
+capstone-server/src/main/resources/application.properties
