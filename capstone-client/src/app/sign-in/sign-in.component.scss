@@ -39,6 +39,7 @@
   display: block;
   justify-content: center;
   padding: 2%;
+
   button, mat-form-field {
     appearance: mat-color(#181880);
     outline: #181880;
@@ -54,16 +55,19 @@
     color: white;
   }
 }
-a{
+
+a {
   font-weight: bold;
 }
+
 .forget-section {
   padding-bottom: 5%;
+
   a {
     color: #817474;
   }
 }
 
-.new-account-section{
+.new-account-section {
   padding: 10% 0;
 }
