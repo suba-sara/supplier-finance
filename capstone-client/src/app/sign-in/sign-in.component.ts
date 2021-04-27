@@ -4,7 +4,7 @@ import {environment} from '../../environments/environment';
 
 const {API_PATH} = environment;
 
-export type Login = {
+export type SignInData = {
   username: string;
   password: string;
 };
@@ -16,10 +16,10 @@ export type Login = {
 })
 
 export class SignInComponent implements OnInit {
-  @Input() login: Login;
+  @Input() signInData: SignInData;
 
   constructor(private http: HttpClient) {
-    this.login = {
+    this.signInData = {
       username: '',
       password: ''
     };
@@ -28,8 +28,9 @@ export class SignInComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  signIn(): void {
-    this.http.post(`${API_PATH}/sign-in`, this.login)
+
+  handleSignInClick(): void {
+    this.http.post(`${API_PATH}/sign-in`, this.signInData)
       .subscribe((response) => console.log(response));
   }
 }
