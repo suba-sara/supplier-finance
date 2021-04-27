@@ -1,42 +1,69 @@
 .section {
   display: flex;
   height: 100%;
-  width: 50%;
 }
 
 .left-section {
   float: left;
   background: black;
+  width: 45%;
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
 }
 
 .right-section {
-  float: right;
-}
-
-.div-header {
-  width: 50%;
-  justify-content: center;
+  display: flex;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 
-h1 {
-  font-size: 40px;
-  color: #181880;
+.header-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2%;
+
+  h1 {
+    width: 100%;
+    font-size: 40px;
+    color: #181880;
+    font-weight: bold;
+  }
 }
 
 .div-components {
   display: block;
   justify-content: center;
+  padding: 2%;
   button, mat-form-field {
     appearance: mat-color(#181880);
     outline: #181880;
     width: 320px;
   }
-  mat-form-field{
+
+  mat-form-field {
     color: #181880;
   }
-  button{
+
+  button {
     background: #181880;
     color: white;
   }
+}
+a{
+  font-weight: bold;
+}
+.forget-section {
+  padding-bottom: 5%;
+  a {
+    color: #817474;
+  }
+}
+
+.new-account-section{
+  padding: 10% 0;
 }
