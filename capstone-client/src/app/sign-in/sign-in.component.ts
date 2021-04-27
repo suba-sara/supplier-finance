@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 
@@ -16,13 +16,15 @@ export type SignInData = {
 })
 
 export class SignInComponent implements OnInit {
-  @Input() signInData: SignInData;
+  signInData: SignInData;
+  hideToggle: boolean;
 
   constructor(private http: HttpClient) {
     this.signInData = {
       username: '',
       password: ''
     };
+    this.hideToggle = true;
   }
 
   ngOnInit(): void {
