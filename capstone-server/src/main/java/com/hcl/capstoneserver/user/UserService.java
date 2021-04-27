@@ -38,7 +38,7 @@ public class UserService implements UserDetailsService {
 
         String jwt = jwtUtil.generateToken(userDetails);
 
-        return new SignInResponseDTO(jwt);
+        return new SignInResponseDTO(jwt,userDetails.getAuthorities().toArray()[0].toString());
     }
 
     // used by spring security don't change
