@@ -1,15 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {environment} from '../../environments/environment';
+import {AuthService, SignInData} from '../auth/auth.service';
 
-const {API_PATH} = environment;
 
-export type SignInData = {
-  username: string;
-  password: string;
-};
-
-type SignInResponseType = {
+export type SignInResponseType = {
   jwt: string,
   userType: string,
 };
@@ -23,7 +17,7 @@ type SignInResponseType = {
 export class SignInComponent implements OnInit {
   @Input() signInData: SignInData;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private authService: AuthService) {
     this.signInData = {
       username: '',
       password: ''
@@ -34,16 +28,12 @@ export class SignInComponent implements OnInit {
   }
 
   handleSignInClick(): void {
-    this.http.post<SignInResponseType>(`${API_PATH}/sign-in`, this.signInData)
-      .subscribe((response) => {
-        // store data on local storage
-        localStorage.setItem('token', response.jwt);
-        localStorage.setItem('userType', response.userType);
-
-        // give success feedback and navigate user
-      }, (error) => {
-        // give error feedback if response returned error
-        console.log(error);
-      });
+    this.authService.signIn(this.signInData, (res) => {
+      if (res.status === 200) {
+        // give success feedback to user and navigate
+      } else if (res.status === 403) {
+        // give error feedback to user
+      }
+    });
   }
 }
