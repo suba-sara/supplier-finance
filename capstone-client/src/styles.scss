@@ -33,6 +33,10 @@ $capstone-client-theme: mat-light-theme((
 // that you are using.
 @include angular-material-theme($capstone-client-theme);
 
+
+//import bootstrap grid system
+@import "~bootstrap/dist/css/bootstrap-grid.min.css";
+
 /* You can add global styles to this file, and also import other style files */
 * {
   margin: 0;
