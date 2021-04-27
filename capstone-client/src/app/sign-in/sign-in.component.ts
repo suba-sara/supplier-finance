@@ -9,6 +9,11 @@ export type SignInData = {
   password: string;
 };
 
+type SignInResponseType = {
+  jwt: string,
+  userType: string,
+};
+
 @Component({
   selector: 'app-sign-in',
   templateUrl: './sign-in.component.html',
@@ -28,9 +33,17 @@ export class SignInComponent implements OnInit {
   ngOnInit(): void {
   }
 
-
   handleSignInClick(): void {
-    this.http.post(`${API_PATH}/sign-in`, this.signInData)
-      .subscribe((response) => console.log(response));
+    this.http.post<SignInResponseType>(`${API_PATH}/sign-in`, this.signInData)
+      .subscribe((response) => {
+        // store data on local storage
+        localStorage.setItem('token', response.jwt);
+        localStorage.setItem('userType', response.userType);
+
+        // give success feedback and navigate user
+      }, (error) => {
+        // give error feedback if response returned error
+        console.log(error);
+      });
   }
 }
