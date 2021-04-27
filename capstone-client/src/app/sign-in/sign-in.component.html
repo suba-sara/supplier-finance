@@ -9,25 +9,30 @@
     <div>
       <mat-form-field appearance="outline">
         <mat-label>Username</mat-label>
-        <input matInput maxlength="256" label="username" [(ngModel)]="signInData.username">
+        <input matInput label="username" [(ngModel)]="signInData.username" required #name='ngModel'>
         <mat-icon matPrefix>person_outline</mat-icon>
+        <mat-error *ngIf="name.invalid && (name.dirty || name.touched)">username is required</mat-error>
       </mat-form-field>
     </div>
     <div>
       <mat-form-field appearance="outline">
         <mat-label>Password</mat-label>
-        <input type="password" matInput maxlength="256" label="password" [(ngModel)]="signInData.password">
         <mat-icon matPrefix>vpn_key</mat-icon>
+        <input matInput [type]="hideToggle ? 'password' : 'text'" label="password" [(ngModel)]="signInData.password" required #name='ngModel'>
+        <button mat-icon-button matSuffix (click)="hideToggle = !hideToggle" [attr.aria-label]="'Hide password'" >
+          <mat-icon>{{hideToggle ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+        <mat-error *ngIf="name.invalid && (name.dirty || name.touched)">password is required</mat-error>
       </mat-form-field>
     </div>
     <div class="forget-section">
-      <a href="#">Forget Password?</a>
+      <a routerLink="../forget" routerLinkActive="active">Forget Password?</a>
     </div>
     <div>
       <button mat-flat-button (click)="handleSignInClick()">Sign In</button>
     </div>
     <div class="new-account-section">
-      <a href="#">Don't have an account yet? Sign Up</a>
+      <a routerLink="../sign-up/client" routerLinkActive="active">Don't have an account yet? Sign Up</a>
     </div>
   </div>
 </div>
