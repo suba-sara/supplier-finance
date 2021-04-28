@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {AuthService, SignInData} from '../auth/auth.service';
-
+import {Router} from '@angular/router';
 
 export type SignInResponseType = {
   jwt: string,
@@ -17,8 +17,9 @@ export type SignInResponseType = {
 export class SignInComponent implements OnInit {
   signInData: SignInData;
   isPasswordVisible: boolean;
+  errorMessage?: string;
 
-  constructor(private http: HttpClient, private authService: AuthService) {
+  constructor(private http: HttpClient, private authService: AuthService, private router: Router) {
     this.signInData = {
       username: '',
       password: ''
@@ -30,11 +31,12 @@ export class SignInComponent implements OnInit {
   }
 
   handleSignInClick(): void {
+    this.errorMessage = undefined;
     this.authService.signIn(this.signInData, (res) => {
       if (res.status === 200) {
-        // give success feedback to user and navigate
+        this.router.navigate(['dashboard']);
       } else if (res.status === 403) {
-        // give error feedback to user
+        this.errorMessage = res.message;
       }
     });
   }
