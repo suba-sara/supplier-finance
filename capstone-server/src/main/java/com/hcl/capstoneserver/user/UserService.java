@@ -52,7 +52,7 @@ public class UserService implements UserDetailsService {
         return new User(
                 user.get().getUserId(),
                 user.get().getPassword(),
-                Collections.singleton(new SimpleGrantedAuthority(user.get().getUserRole().toString()))
+                Collections.singleton(new SimpleGrantedAuthority(user.get().getUserType()))
         );
     }
 
