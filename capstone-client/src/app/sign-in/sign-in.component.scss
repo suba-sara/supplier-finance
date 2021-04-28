@@ -56,6 +56,12 @@
   }
 }
 
+.isVisible-Point {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
 .forget-section {
   padding-top: 2%;
   padding-bottom: 5%;
