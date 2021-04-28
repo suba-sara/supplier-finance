@@ -35,7 +35,7 @@
       </mat-form-field>
     </div>
     <div class="forget-section">
-      <a routerLink="forgot-password">Forgot Password?</a>
+      <a [routerLink]="['/forgot-password']">Forgot Password?</a>
     </div>
     <div>
       <button mat-flat-button (click)="handleSignInClick()">Sign In</button>
