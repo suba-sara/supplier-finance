@@ -78,3 +78,18 @@
     font-weight: bold;
   }
 }
+
+.mat-card-warning {
+  display: flex;
+  align-items: center;
+  color: #D50000;
+  background: #FFEBEE;
+  width: 110%;
+  margin-left: -15px;
+  padding: 10px;
+  outline: none;
+  border-radius: 5px;
+  mat-icon {
+    margin-right: 2%;
+  }
+}

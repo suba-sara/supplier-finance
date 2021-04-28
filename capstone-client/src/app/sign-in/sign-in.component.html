@@ -5,7 +5,14 @@
   <div class="header-section">
     <h1>Sign In</h1>
   </div>
+
   <div class="div-components">
+    <mat-card class="mat-elevation-z0 outline" *ngIf="message != ''">
+      <div class="mat-card-warning">
+        <mat-icon>error_outline</mat-icon>
+        <mat-label>{{message}}</mat-label>
+      </div>
+    </mat-card>
     <div>
       <mat-form-field appearance="outline">
         <mat-label>Username</mat-label>
