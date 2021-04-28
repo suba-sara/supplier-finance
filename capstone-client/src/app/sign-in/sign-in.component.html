@@ -7,10 +7,10 @@
   </div>
 
   <div class="div-components">
-    <mat-card class="mat-elevation-z0 outline" *ngIf="message != ''">
+    <mat-card class="mat-elevation-z0 outline" *ngIf="errorMessage">
       <div class="mat-card-warning">
         <mat-icon>error_outline</mat-icon>
-        <mat-label>{{message}}</mat-label>
+        <mat-label>{{errorMessage}}</mat-label>
       </div>
     </mat-card>
     <div>
@@ -35,7 +35,7 @@
       </mat-form-field>
     </div>
     <div class="forget-section">
-      <a href="#">Forget Password?</a>
+      <a routerLink="forgot-password">Forgot Password?</a>
     </div>
     <div>
       <button mat-flat-button (click)="handleSignInClick()">Sign In</button>
