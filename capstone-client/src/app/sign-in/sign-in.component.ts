@@ -17,14 +17,14 @@ export type SignInData = {
 
 export class SignInComponent implements OnInit {
   signInData: SignInData;
-  hideToggle: boolean;
+  isPasswordVisible: boolean;
 
   constructor(private http: HttpClient) {
     this.signInData = {
       username: '',
       password: ''
     };
-    this.hideToggle = true;
+    this.isPasswordVisible = true;
   }
 
   ngOnInit(): void {
