@@ -18,7 +18,6 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 // import httpClient
 import {HttpClientModule} from '@angular/common/http';
-import { ForgetComponent } from './forget/forget.component';
 
 @NgModule({
   declarations: [
@@ -27,8 +26,7 @@ import { ForgetComponent } from './forget/forget.component';
     SignUpClientComponent,
     SignUpSupplierComponent,
     TopNavbarComponent,
-    HomeComponent,
-    ForgetComponent
+    HomeComponent
   ],
     imports: [
         BrowserModule,

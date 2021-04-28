@@ -18,15 +18,15 @@
       <mat-form-field appearance="outline">
         <mat-label>Password</mat-label>
         <mat-icon matPrefix>vpn_key</mat-icon>
-        <input matInput [type]="hideToggle ? 'password' : 'text'" label="password" [(ngModel)]="signInData.password" required #name='ngModel'>
-        <button mat-icon-button matSuffix (click)="hideToggle = !hideToggle" [attr.aria-label]="'Hide password'" >
-          <mat-icon>{{hideToggle ? 'visibility_off' : 'visibility'}}</mat-icon>
+        <input matInput [type]="isPasswordVisible ? 'password' : 'text'" label="password" [(ngModel)]="signInData.password" required #name='ngModel'>
+        <button mat-icon-button matSuffix (click)="isPasswordVisible = !isPasswordVisible" [attr.aria-label]="'Hide password'" >
+          <mat-icon>{{isPasswordVisible ? 'visibility_off' : 'visibility'}}</mat-icon>
         </button>
         <mat-error *ngIf="name.invalid && (name.dirty || name.touched)">password is required</mat-error>
       </mat-form-field>
     </div>
     <div class="forget-section">
-      <a routerLink="../forget" routerLinkActive="active">Forget Password?</a>
+      <a href="#">Forget Password?</a>
     </div>
     <div>
       <button mat-flat-button (click)="handleSignInClick()">Sign In</button>
