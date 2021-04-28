@@ -18,10 +18,12 @@
       <mat-form-field appearance="outline">
         <mat-label>Password</mat-label>
         <mat-icon matPrefix>vpn_key</mat-icon>
-        <input matInput [type]="isPasswordVisible ? 'password' : 'text'" label="password" [(ngModel)]="signInData.password" required #name='ngModel'>
-        <button mat-icon-button matSuffix (click)="isPasswordVisible = !isPasswordVisible" [attr.aria-label]="'Hide password'" >
-          <mat-icon>{{isPasswordVisible ? 'visibility_off' : 'visibility'}}</mat-icon>
-        </button>
+        <input matInput [type]="isPasswordVisible ? 'password' : 'text'" label="password"
+               [(ngModel)]="signInData.password" required #name='ngModel'>
+       
+        <mat-icon matSuffix
+                  (click)="isPasswordVisible = !isPasswordVisible">{{isPasswordVisible ? 'visibility_off' : 'visibility'}}</mat-icon>
+
         <mat-error *ngIf="name.invalid && (name.dirty || name.touched)">password is required</mat-error>
       </mat-form-field>
     </div>
