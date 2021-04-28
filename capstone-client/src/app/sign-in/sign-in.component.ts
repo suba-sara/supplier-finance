@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {AuthService, SignInData} from '../auth/auth.service';
 
@@ -15,13 +15,15 @@ export type SignInResponseType = {
 })
 
 export class SignInComponent implements OnInit {
-  @Input() signInData: SignInData;
+  signInData: SignInData;
+  isPasswordVisible: boolean;
 
   constructor(private http: HttpClient, private authService: AuthService) {
     this.signInData = {
       username: '',
       password: ''
     };
+    this.isPasswordVisible = true;
   }
 
   ngOnInit(): void {
