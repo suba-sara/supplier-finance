@@ -16,9 +16,18 @@ public class Supplier extends AppUser{
     private String phone;
     private Float interestRate;
 
-    @Override
-    public UserRole getUserRole() {
-        return UserRole.SUPPLIER;
+    public Supplier() {
+    }
+
+    public Supplier(String userId, String password, int supplierId,
+                    String name, String address, String email, String phone, Float interestRate) {
+        super(userId, password, "SUPPLIER");
+        this.supplierId = supplierId;
+        this.name = name;
+        this.address = address;
+        this.email = email;
+        this.phone = phone;
+        this.interestRate = interestRate;
     }
 
     public int getSupplierId() {

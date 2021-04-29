@@ -17,9 +17,19 @@ public class Client extends AppUser{
     private Float interestRate;
     private int accountNumber;
 
-    @Override
-    public UserRole getUserRole() {
-        return UserRole.CLIENT;
+    public Client() {
+    }
+
+    public Client(String userId, String password, int clientId, String name,
+                  String address, String email, String phone, Float interestRate, int accountNumber) {
+        super(userId, password, "CLIENT");
+        this.clientId = clientId;
+        this.name = name;
+        this.address = address;
+        this.email = email;
+        this.phone = phone;
+        this.interestRate = interestRate;
+        this.accountNumber = accountNumber;
     }
 
     public int getClientId() {
