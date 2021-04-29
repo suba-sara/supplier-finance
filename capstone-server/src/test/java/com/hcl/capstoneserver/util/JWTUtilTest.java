@@ -1,4 +1,4 @@
-package com.hcl.capstoneserver;
+package com.hcl.capstoneserver.util;
 
 import com.hcl.capstoneserver.util.JWTUtil;
 import io.jsonwebtoken.ExpiredJwtException;
