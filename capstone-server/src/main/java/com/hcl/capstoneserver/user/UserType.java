@@ -1,6 +1,6 @@
 package com.hcl.capstoneserver.user;
 
-public enum UserRole {
+public enum UserType {
     USER,
     CLIENT,
     SUPPLIER,
