@@ -25,24 +25,23 @@ public class Client extends Person {
             }
     )
     @Column(unique = true)
-    private int clientId;
+    private String clientId;
 
     private int accountNumber;
 
     public Client() {
     }
 
-    public Client(String userId, String password, String name, String address, String email, String phone, Float interestRate, int clientId, int accountNumber) {
+    public Client(String userId, String password, String name, String address, String email, String phone, Float interestRate, String clientId, int accountNumber) {
         super(userId, password, UserType.CLIENT, name, address, email, phone, interestRate);
-        this.clientId = clientId;
         this.accountNumber = accountNumber;
     }
 
-    public int getClientId() {
+    public String getClientId() {
         return clientId;
     }
 
-    public void setClientId(int clientId) {
+    public void setClientId(String clientId) {
         this.clientId = clientId;
     }
 
