@@ -22,12 +22,6 @@ public class AppUser {
         this.userId = userId;
     }
 
-    public AppUser(String userId, String password) {
-        this.userId = userId;
-        this.password = password;
-        this.userType = UserType.USER;
-    }
-
     public AppUser(String userId, String password, UserType userType) {
         this.userId = userId;
         this.password = password;
