@@ -53,8 +53,7 @@ public class UserService implements UserDetailsService {
         return new User(
                 user.get().getUserId(),
                 user.get().getPassword(),
-                Collections.singleton(
-                        new SimpleGrantedAuthority((user.get().getUserType()))));
+                Collections.singleton(new SimpleGrantedAuthority((user.get().getUserType()))));
     }
 
 //    testing only -> implement proper methods
