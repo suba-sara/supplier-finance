@@ -1,27 +1,38 @@
 package com.hcl.capstoneserver.user.dto;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Min;
 
 public class PersonDTO extends AppUserDTO {
+    @NotBlank(message = "name is required")
     @Size(min = 3, max = 30, message = "name must be between 3 to 30 characters")
     private String name = null;
 
+    @NotBlank(message = "address is required")
     @Pattern(regexp = "^[a-zA-Z0-9_, ]+$", message = "address must only contain alphanumeric values")
-    @NotBlank
     private String address = null;
 
+    @NotBlank(message = "email is required")
     @Email(message = "email is not valid")
-    @NotNull
     private String email = null;
+
+    @NotBlank(message = "phone is required")
+    @Pattern(regexp = "^[0-9+ ]+$", message = "phone number is not valid")
     private String phone = null;
 
-    @NotBlank
+    @NotNull
+    @Min(0)
     private Float interestRate = null;
 
     public PersonDTO() {
     }
 
-    public PersonDTO(String name, String address, String email, String phone, Float interestRate) {
+    public PersonDTO(String userId, String name, String address, String email, String phone, Float interestRate) {
+        super(userId);
         this.name = name;
         this.address = address;
         this.email = email;

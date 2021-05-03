@@ -6,8 +6,9 @@ public class SupplierDTO extends PersonDTO {
     public SupplierDTO() {
     }
 
-    public SupplierDTO(String name, String address, String email, String phone, Float interestRate, int supplierId) {
-        super(name, address, email, phone, interestRate);
+    public SupplierDTO(String userId, String name, String address, String email, String phone, Float interestRate,
+                       Integer supplierId) {
+        super(userId, name, address, email, phone, interestRate);
         this.supplierId = supplierId;
     }
 

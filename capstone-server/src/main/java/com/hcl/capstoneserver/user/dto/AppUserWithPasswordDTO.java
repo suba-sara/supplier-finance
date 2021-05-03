@@ -1,14 +1,28 @@
 package com.hcl.capstoneserver.user.dto;
 
-public class AppUserWithPasswordDTO extends AppUserDTO implements WithPassword{
+import javax.validation.constraints.NotBlank;
+
+public class AppUserWithPasswordDTO implements WithPassword{
+    @NotBlank(message = "userId is required")
+    private String userId;
+
+    @NotBlank(message = "password is required")
     private String password;
 
     public AppUserWithPasswordDTO() {
     }
 
     public AppUserWithPasswordDTO(String userId, String password) {
-        super(userId);
+        this.userId = userId;
         this.password = password;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     @Override
