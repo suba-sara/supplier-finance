@@ -7,14 +7,15 @@ import javax.persistence.Entity;
 
 @Entity
 public class Supplier extends Person {
+
     @Column(unique = true)
     private int supplierId;
 
     public Supplier() {
     }
 
-    public Supplier(String userId, String password, UserType userType, String name, String address, String email, String phone, Float interestRate, int supplierId) {
-        super(userId, password, userType, name, address, email, phone, interestRate);
+    public Supplier(String userId, String password, String name, String address, String email, String phone, Float interestRate, int supplierId) {
+        super(userId, password, UserType.SUPPLIER, name, address, email, phone, interestRate);
         this.supplierId = supplierId;
     }
 

@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 
 @Entity
 public class Client extends Person {
+
     @Column(unique = true)
     private int clientId;
 
@@ -15,8 +16,8 @@ public class Client extends Person {
     public Client() {
     }
 
-    public Client(String userId, String password, UserType userType, String name, String address, String email, String phone, Float interestRate, int clientId, int accountNumber) {
-        super(userId, password, userType, name, address, email, phone, interestRate);
+    public Client(String userId, String password, String name, String address, String email, String phone, Float interestRate, int clientId, int accountNumber) {
+        super(userId, password, UserType.CLIENT, name, address, email, phone, interestRate);
         this.clientId = clientId;
         this.accountNumber = accountNumber;
     }
