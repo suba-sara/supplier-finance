@@ -37,12 +37,6 @@ public class UserController {
         );
     }
 
-//    testing only -> implement proper methods
-//    @PostMapping("/api/sign-up")
-//    public ResponseEntity<SignUpResponseDTO> signUp(@RequestBody SignInRequestDTO dto) {
-//        return new ResponseEntity<>(userService.signUp(dto), HttpStatus.CREATED);
-//    }
-
     @PostMapping("/api/sign-up/supplier")
     public ResponseEntity<SupplierDTO> signUpSupplier(@Valid @RequestBody PersonWithPasswordDTO dto) {
         return new ResponseEntity<>(
