@@ -57,18 +57,18 @@ public class UserService implements UserDetailsService {
                         new SimpleGrantedAuthority((user.get().getUserType()))));
     }
 
-    //testing only -> implement proper methods
-    public SignUpResponseDTO signUp(SignInRequestDTO dto) {
-        if (appUserRepository.existsById(dto.getUsername())) {
-            throw new UserAlreadyExistsException(dto.getUsername());
-        }
-
-        AppUser createdUser = appUserRepository.save(new AppUser(
-                dto.getUsername(),
-                bCryptPasswordEncoder.encode(dto.getPassword())
-        ));
-
-        return new SignUpResponseDTO(createdUser.getUserId(), createdUser.getUserType());
-    }
+//    testing only -> implement proper methods
+//    public SignUpResponseDTO signUp(SignInRequestDTO dto) {
+//        if (appUserRepository.existsById(dto.getUsername())) {
+//            throw new UserAlreadyExistsException(dto.getUsername());
+//        }
+//
+//        AppUser createdUser = appUserRepository.save(new AppUser(
+//                dto.getUsername(),
+//                bCryptPasswordEncoder.encode(dto.getPassword())
+//        ));
+//
+//        return new SignUpResponseDTO(createdUser.getUserId(), createdUser.getUserType());
+//    }
 }
 
