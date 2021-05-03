@@ -1,13 +1,13 @@
 package com.hcl.capstoneserver.user.dto;
 
-public class SignInResponseDTO {
+public class JwtWithTypeDTO {
     private String jwt;
     private String userType;
 
-    public SignInResponseDTO() {
+    public JwtWithTypeDTO() {
     }
 
-    public SignInResponseDTO(String jwt, String userType) {
+    public JwtWithTypeDTO(String jwt, String userType) {
         this.jwt = jwt;
         this.userType = userType;
     }

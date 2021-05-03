@@ -1,6 +1,6 @@
 package com.hcl.capstoneserver.user;
 
-import com.hcl.capstoneserver.user.dto.SignUpSupplierRequestDTO;
+import com.hcl.capstoneserver.user.dto.SupplierDTO;
 import com.hcl.capstoneserver.user.entities.Supplier;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -17,30 +17,28 @@ public class UserServiceTest {
     @Test
     @DisplayName("it should create a new supplier")
     public void createNewSupplier() {
-        Assertions.assertNotNull(userService.signUpSupplier(new SignUpSupplierRequestDTO(
+        Assertions.assertNotNull(userService.signUpSupplier(new Supplier(
                 "sup1",
                 "password",
-                "madara",
+                "ma",
                 "konoha",
                 "madara@konoha.org",
                 "123456",
-                5.0F,
-                10002
+                5.0F
         )));
     }
 
     @Test
     @DisplayName("It should generate a new supplier id")
     public void shouldGenerateSupplierId() {
-        Supplier supplier = userService.signUpSupplier(new SignUpSupplierRequestDTO(
+        SupplierDTO supplier = userService.signUpSupplier(new Supplier(
                 "sup2",
                 "password",
                 "madara",
                 "konoha",
                 "madara@konoha.org",
                 "123456",
-                5.0F,
-                10002
+                5.0F
         ));
 
         Assertions.assertNotNull(supplier.getSupplierId());

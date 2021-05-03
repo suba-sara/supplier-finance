@@ -1,8 +1,9 @@
 package com.hcl.capstoneserver.user;
 
-import com.hcl.capstoneserver.user.dto.SignInRequestDTO;
-import com.hcl.capstoneserver.user.dto.SignInResponseDTO;
-import com.hcl.capstoneserver.user.dto.SignUpSupplierRequestDTO;
+import com.hcl.capstoneserver.user.dto.AppUserWithPasswordDTO;
+import com.hcl.capstoneserver.user.dto.PersonWithPasswordDTO;
+import com.hcl.capstoneserver.user.dto.JwtWithTypeDTO;
+import com.hcl.capstoneserver.user.dto.SupplierDTO;
 import com.hcl.capstoneserver.user.entities.Supplier;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 @CrossOrigin
 @RestController()
@@ -24,11 +27,11 @@ public class UserController {
     }
 
     @PostMapping("/api/sign-in")
-    public ResponseEntity<SignInResponseDTO> signIn(@RequestBody SignInRequestDTO signInRequestDTO) {
+    public ResponseEntity<JwtWithTypeDTO> signIn(@RequestBody AppUserWithPasswordDTO dto) {
         return new ResponseEntity<>(
                 userService.signIn(
-                        signInRequestDTO.getUsername(),
-                        signInRequestDTO.getPassword()
+                        dto.getUserId(),
+                        dto.getPassword()
                 ),
                 HttpStatus.OK
         );
@@ -41,7 +44,10 @@ public class UserController {
 //    }
 
     @PostMapping("/api/sign-up/supplier")
-    public ResponseEntity<Supplier> signUpSupplier(@RequestBody SignUpSupplierRequestDTO dto) {
-        return new ResponseEntity<>(userService.signUpSupplier(dto), HttpStatus.CREATED);
+    public ResponseEntity<SupplierDTO> signUpSupplier(@Valid @RequestBody PersonWithPasswordDTO dto) {
+        return new ResponseEntity<>(
+                userService.signUpSupplier(mapper.map(dto, Supplier.class)),
+                HttpStatus.CREATED
+        );
     }
 }
