@@ -30,7 +30,7 @@ public class UserService implements UserDetailsService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public UserService(AppUserRepository appUserRepository, SupplierRepository supplierRepository,
-                       JWTUtil jwtUtil, @Lazy BCryptPasswordEncoder bCryptPasswordEncoder) {
+                       JWTUtil jwtUtil, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.appUserRepository = appUserRepository;
         this.supplierRepository = supplierRepository;
         this.jwtUtil = jwtUtil;
