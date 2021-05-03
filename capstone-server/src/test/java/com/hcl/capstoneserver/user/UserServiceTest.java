@@ -15,6 +15,11 @@ public class UserServiceTest {
     UserService userService;
 
     @Test
+    void contextLoads() {
+        Assertions.assertNotNull(userService);
+    }
+
+    @Test
     @DisplayName("it should create a new supplier")
     public void createNewSupplier() {
         Assertions.assertNotNull(userService.signUpSupplier(new Supplier(
