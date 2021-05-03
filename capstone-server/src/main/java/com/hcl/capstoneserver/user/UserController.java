@@ -4,6 +4,7 @@ import com.hcl.capstoneserver.user.dto.SignInRequestDTO;
 import com.hcl.capstoneserver.user.dto.SignInResponseDTO;
 import com.hcl.capstoneserver.user.dto.SignUpSupplierRequestDTO;
 import com.hcl.capstoneserver.user.entities.Supplier;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,9 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController()
 public class UserController {
     private final UserService userService;
+    private final ModelMapper mapper;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, ModelMapper mapper) {
         this.userService = userService;
+        this.mapper = mapper;
     }
 
     @PostMapping("/api/sign-in")
