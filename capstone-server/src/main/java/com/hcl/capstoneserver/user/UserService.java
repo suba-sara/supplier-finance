@@ -1,6 +1,8 @@
 package com.hcl.capstoneserver.user;
 
 import com.hcl.capstoneserver.user.dto.SignInResponseDTO;
+import com.hcl.capstoneserver.user.dto.SignUpResponseDTO;
+import com.hcl.capstoneserver.user.dto.SignUpSupplierRequestDTO;
 import com.hcl.capstoneserver.user.entities.AppUser;
 import com.hcl.capstoneserver.user.repositories.AppUserRepository;
 import com.hcl.capstoneserver.util.JWTUtil;
@@ -66,5 +68,9 @@ public class UserService implements UserDetailsService {
 //
 //        return new SignUpResponseDTO(createdUser.getUserId(), createdUser.getUserType());
 //    }
+
+    public SignUpResponseDTO signUpSupplier(SignUpSupplierRequestDTO dto) {
+        return new SignUpResponseDTO();
+    }
 }
 
