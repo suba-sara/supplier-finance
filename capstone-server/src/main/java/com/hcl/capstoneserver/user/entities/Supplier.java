@@ -25,21 +25,20 @@ public class Supplier extends Person {
             }
     )
     @Column(unique = true)
-    private int supplierId;
+    private String supplierId;
 
     public Supplier() {
     }
 
-    public Supplier(String userId, String password, String name, String address, String email, String phone, Float interestRate, int supplierId) {
+    public Supplier(String userId, String password, String name, String address, String email, String phone, Float interestRate) {
         super(userId, password, UserType.SUPPLIER, name, address, email, phone, interestRate);
-        this.supplierId = supplierId;
     }
 
-    public int getSupplierId() {
+    public String getSupplierId() {
         return supplierId;
     }
 
-    public void setSupplierId(int supplierId) {
+    public void setSupplierId(String supplierId) {
         this.supplierId = supplierId;
     }
 
