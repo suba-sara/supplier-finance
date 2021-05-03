@@ -1,10 +1,7 @@
 package com.hcl.capstoneserver.user;
 
-import com.hcl.capstoneserver.user.dto.SignInRequestDTO;
 import com.hcl.capstoneserver.user.dto.SignInResponseDTO;
-import com.hcl.capstoneserver.user.dto.SignUpResponseDTO;
 import com.hcl.capstoneserver.user.entities.AppUser;
-import com.hcl.capstoneserver.user.exceptions.UserAlreadyExistsException;
 import com.hcl.capstoneserver.user.repositories.AppUserRepository;
 import com.hcl.capstoneserver.util.JWTUtil;
 import org.springframework.context.annotation.Lazy;

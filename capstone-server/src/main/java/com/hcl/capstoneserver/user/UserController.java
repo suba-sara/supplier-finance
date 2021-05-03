@@ -2,10 +2,12 @@ package com.hcl.capstoneserver.user;
 
 import com.hcl.capstoneserver.user.dto.SignInRequestDTO;
 import com.hcl.capstoneserver.user.dto.SignInResponseDTO;
-import com.hcl.capstoneserver.user.dto.SignUpResponseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin
 @RestController()
