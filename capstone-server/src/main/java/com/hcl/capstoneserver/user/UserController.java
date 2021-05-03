@@ -3,6 +3,7 @@ package com.hcl.capstoneserver.user;
 import com.hcl.capstoneserver.user.dto.SignInRequestDTO;
 import com.hcl.capstoneserver.user.dto.SignInResponseDTO;
 import com.hcl.capstoneserver.user.dto.SignUpSupplierRequestDTO;
+import com.hcl.capstoneserver.user.entities.Supplier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -37,7 +38,7 @@ public class UserController {
 //    }
 
     @PostMapping("/api/sign-up/supplier")
-    public ResponseEntity<SignUpResponseDTO> signUpSupplier(@RequestBody SignUpSupplierRequestDTO dto) {
+    public ResponseEntity<Supplier> signUpSupplier(@RequestBody SignUpSupplierRequestDTO dto) {
         return new ResponseEntity<>(userService.signUpSupplier(dto), HttpStatus.CREATED);
     }
 }

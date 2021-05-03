@@ -13,8 +13,8 @@ public class SignUpSupplierRequestDTO {
     public SignUpSupplierRequestDTO() {
     }
 
-    public SignUpSupplierRequestDTO(String username, String password, String name, String address,
-                                    String email, String phone, Float interestRate, int accountNumber) {
+    public SignUpSupplierRequestDTO(String username, String password, String name, String address, String email,
+                                    String phone, Float interestRate, int accountNumber) {
         this.username = username;
         this.password = password;
         this.name = name;

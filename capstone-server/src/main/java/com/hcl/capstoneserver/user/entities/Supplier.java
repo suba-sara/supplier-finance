@@ -34,6 +34,7 @@ public class Supplier extends Person {
         super(userId, password, UserType.SUPPLIER, name, address, email, phone, interestRate);
     }
 
+
     public String getSupplierId() {
         return supplierId;
     }

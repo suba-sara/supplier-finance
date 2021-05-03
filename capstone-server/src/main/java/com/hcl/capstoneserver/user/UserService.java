@@ -4,7 +4,10 @@ import com.hcl.capstoneserver.user.dto.SignInResponseDTO;
 import com.hcl.capstoneserver.user.dto.SignUpResponseDTO;
 import com.hcl.capstoneserver.user.dto.SignUpSupplierRequestDTO;
 import com.hcl.capstoneserver.user.entities.AppUser;
+import com.hcl.capstoneserver.user.entities.Supplier;
+import com.hcl.capstoneserver.user.exceptions.UserAlreadyExistsException;
 import com.hcl.capstoneserver.user.repositories.AppUserRepository;
+import com.hcl.capstoneserver.user.repositories.SupplierRepository;
 import com.hcl.capstoneserver.util.JWTUtil;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -22,11 +25,14 @@ import java.util.Optional;
 @Service
 public class UserService implements UserDetailsService {
     private final AppUserRepository appUserRepository;
+    private final SupplierRepository supplierRepository;
     private final JWTUtil jwtUtil;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public UserService(AppUserRepository appUserRepository, JWTUtil jwtUtil, @Lazy BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UserService(AppUserRepository appUserRepository, SupplierRepository supplierRepository,
+                       JWTUtil jwtUtil, @Lazy BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.appUserRepository = appUserRepository;
+        this.supplierRepository = supplierRepository;
         this.jwtUtil = jwtUtil;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
@@ -52,7 +58,8 @@ public class UserService implements UserDetailsService {
         return new User(
                 user.get().getUserId(),
                 user.get().getPassword(),
-                Collections.singleton(new SimpleGrantedAuthority((user.get().getUserType()))));
+                Collections.singleton(new SimpleGrantedAuthority((user.get().getUserType())))
+        );
     }
 
 //    testing only -> implement proper methods
@@ -69,8 +76,21 @@ public class UserService implements UserDetailsService {
 //        return new SignUpResponseDTO(createdUser.getUserId(), createdUser.getUserType());
 //    }
 
-    public SignUpResponseDTO signUpSupplier(SignUpSupplierRequestDTO dto) {
-        return new SignUpResponseDTO();
+    public Supplier signUpSupplier(SignUpSupplierRequestDTO dto) {
+        //check if user already exists
+        if (supplierRepository.existsById(dto.getUsername())) {
+            throw new UserAlreadyExistsException(dto.getUsername());
+        }
+
+        return supplierRepository.save(new Supplier(
+                dto.getUsername(),
+                bCryptPasswordEncoder.encode(dto.getPassword()),
+                dto.getName(),
+                dto.getAddress(),
+                dto.getEmail(),
+                dto.getPhone(),
+                dto.getInterestRate()
+        ));
     }
 }
 
