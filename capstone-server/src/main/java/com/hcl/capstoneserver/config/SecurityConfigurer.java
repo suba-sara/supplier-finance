@@ -20,10 +20,13 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     private final UserService userService;
     private final JwtRequestFilter jwtRequestFilter;
+    private final BCryptPasswordEncoder passwordEncoder;
 
-    public SecurityConfigurer(UserService userService, JwtRequestFilter jwtRequestFilter) {
+    public SecurityConfigurer(UserService userService, JwtRequestFilter jwtRequestFilter,
+                              BCryptPasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.jwtRequestFilter = jwtRequestFilter;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -32,16 +35,12 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userService);
     }
 
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
     @Bean
     AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(userService);
-        provider.setPasswordEncoder(passwordEncoder());
+        provider.setPasswordEncoder(passwordEncoder);
 
         return provider;
     }
