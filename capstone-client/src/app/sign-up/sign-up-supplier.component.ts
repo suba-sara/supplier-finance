@@ -33,42 +33,32 @@ export class SignUpSupplierComponent implements OnInit {
   clientDetails: ClientDetail;
   pageNumber: number;
 
-  clientFormData = new FormGroup(
-    {
-      firstName: new FormControl('', [Validators.required]),
-      lastName: new FormControl('', [Validators.required]),
-      email: new FormControl('', [Validators.required, Validators.email]),
-      phone: new FormControl('', [
-        Validators.required,
-        Validators.pattern(/^[0-9+ ]+$/),
-      ]),
-      addressLine1: new FormControl('', [Validators.required]),
-      city: new FormControl('', [Validators.required]),
-      state: new FormControl('', [Validators.required]),
-      province: new FormControl('', [Validators.required]),
-      country: new FormControl('', [Validators.required]),
-    },
-    {
-      validators: [
-        // full name validation function
-        (control): ValidationErrors | null => {
-          const firstName: string = control.get('firstName')?.value;
-          const lastName: string = control.get('lastName')?.value;
-
-          if (
-            firstName.length + lastName.length < 3 ||
-            firstName.length + lastName.length > 30
-          ) {
-            return {
-              fullName: true,
-            };
-          }
-
-          return null;
-        },
-      ],
-    }
-  );
+  clientFormData = new FormGroup({
+    firstName: new FormControl('', [
+      Validators.required,
+      Validators.minLength(3),
+      Validators.maxLength(30),
+    ]),
+    lastName: new FormControl('', [
+      Validators.required,
+      Validators.minLength(3),
+      Validators.maxLength(30),
+    ]),
+    email: new FormControl('', [
+      Validators.required,
+      Validators.email,
+      Validators.maxLength(255),
+    ]),
+    phone: new FormControl('', [
+      Validators.required,
+      Validators.pattern(/^[0-9+ ]+$/),
+    ]),
+    addressLine1: new FormControl('', [Validators.required]),
+    city: new FormControl('', [Validators.required]),
+    state: new FormControl('', [Validators.required]),
+    province: new FormControl('', [Validators.required]),
+    country: new FormControl('', [Validators.required]),
+  });
 
   supplierAccDetail: SupplierAccDetail;
 
