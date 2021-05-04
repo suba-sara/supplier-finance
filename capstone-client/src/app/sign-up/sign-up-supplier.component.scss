@@ -83,6 +83,12 @@ button {
   margin-bottom: 15px;
   align-items: center;
   justify-content: space-between;
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 10;
+  box-shadow: inset 0px 0px 40px 40px #81747450;
+
 }
 
 .icon-container {

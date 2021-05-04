@@ -26,7 +26,7 @@ type SupplierAccDetail = {
 })
 export class SignUpSupplierComponent implements OnInit {
   clientDetails: ClientDetail;
-  pageNumber: 1 | 2;
+  pageNumber: number;
 
   supplierAccDetail: SupplierAccDetail;
 
@@ -51,11 +51,15 @@ export class SignUpSupplierComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  goToNextPage(): void {
-    this.pageNumber = 2;
+  goToPreviousPage(): void {
+    if (this.pageNumber > 1) {
+      this.pageNumber = this.pageNumber - 1;
+    }
   }
 
-  goToPreviousPage(): void {
-    this.pageNumber = 1;
+  goToNextPage(): void {
+    if (this.pageNumber < 2) {
+      this.pageNumber = this.pageNumber + 1;
+    }
   }
 }
