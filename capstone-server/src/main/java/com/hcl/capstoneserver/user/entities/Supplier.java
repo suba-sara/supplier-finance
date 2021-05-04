@@ -1,80 +1,51 @@
 package com.hcl.capstoneserver.user.entities;
 
-import com.hcl.capstoneserver.user.UserRole;
+import com.hcl.capstoneserver.generator.id.CustomIdGenerator;
+import com.hcl.capstoneserver.user.UserType;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 
 @Entity
-public class Supplier extends AppUser{
+public class Supplier extends Person {
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "suppler_id_sequence")
+    @GenericGenerator(name = "suppler_id_sequence",
+            strategy = "com.hcl.capstoneserver.generator.id.CustomIdGenerator",
+            parameters = {
+                    @Parameter(name = CustomIdGenerator.SEQUENCE_PARAM, value = "suppler_id_sequence"),
+                    @Parameter(name = CustomIdGenerator.INITIAL_PARAM, value = "1"),
+                    @Parameter(name = CustomIdGenerator.OPT_PARAM, value = "pooled-lo"),
+                    @Parameter(name = CustomIdGenerator.INCREMENT_PARAM, value = "1"),
+                    @Parameter(name = CustomIdGenerator.PREFIX_PARAM, value = "SP_"),
+                    @Parameter(name = CustomIdGenerator.NUMBER_FORMAT_PARAM, value = "%05d")
+            }
+    )
     @Column(unique = true)
-    private int supplierId;
-
-    private String name;
-    private String address;
-    private String email;
-    private String phone;
-    private Float interestRate;
+    private String supplierId;
 
     public Supplier() {
     }
 
-    public Supplier(String userId, String password, int supplierId,
-                    String name, String address, String email, String phone, Float interestRate) {
-        super(userId, password, "SUPPLIER");
-        this.supplierId = supplierId;
-        this.name = name;
-        this.address = address;
-        this.email = email;
-        this.phone = phone;
-        this.interestRate = interestRate;
+    public Supplier(String userId, String password, String name, String address, String email, String phone, Float interestRate) {
+        super(userId, password, UserType.SUPPLIER, name, address, email, phone, interestRate);
     }
 
-    public int getSupplierId() {
+    public String getSupplierId() {
         return supplierId;
     }
 
-    public void setSupplierId(int supplierId) {
+    public void setSupplierId(String supplierId) {
         this.supplierId = supplierId;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public Float getInterestRate() {
-        return interestRate;
-    }
-
-    public void setInterestRate(Float interestRate) {
-        this.interestRate = interestRate;
+    @Override
+    public String toString() {
+        return "Supplier{" +
+                "supplierId=" + supplierId +
+                "} " + super.toString();
     }
 }

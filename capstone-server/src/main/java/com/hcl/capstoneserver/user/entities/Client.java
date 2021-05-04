@@ -1,83 +1,48 @@
 package com.hcl.capstoneserver.user.entities;
 
-import com.hcl.capstoneserver.user.UserRole;
+import com.hcl.capstoneserver.generator.id.CustomIdGenerator;
+import com.hcl.capstoneserver.user.UserType;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 
 @Entity
-public class Client extends AppUser{
+public class Client extends Person {
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "client_id_sequence")
+    @GenericGenerator(name = "client_id_sequence",
+            strategy = "com.hcl.capstoneserver.generator.id.CustomIdGenerator",
+            parameters = {
+                    @Parameter(name = CustomIdGenerator.SEQUENCE_PARAM, value = "client_id_sequence"),
+                    @Parameter(name = CustomIdGenerator.INITIAL_PARAM, value = "1"),
+                    @Parameter(name = CustomIdGenerator.OPT_PARAM, value = "pooled-lo"),
+                    @Parameter(name = CustomIdGenerator.INCREMENT_PARAM, value = "1"),
+                    @Parameter(name = CustomIdGenerator.PREFIX_PARAM, value = "CL_"),
+                    @Parameter(name = CustomIdGenerator.NUMBER_FORMAT_PARAM, value = "%05d")
+            }
+    )
     @Column(unique = true)
-    private int clientId;
+    private String clientId;
 
-    private String name;
-    private String address;
-    private String email;
-    private String phone;
-    private Float interestRate;
     private int accountNumber;
 
     public Client() {
     }
 
-    public Client(String userId, String password, int clientId, String name,
-                  String address, String email, String phone, Float interestRate, int accountNumber) {
-        super(userId, password, "CLIENT");
-        this.clientId = clientId;
-        this.name = name;
-        this.address = address;
-        this.email = email;
-        this.phone = phone;
-        this.interestRate = interestRate;
+    public Client(String userId, String password, String name, String address, String email, String phone, Float interestRate, String clientId, int accountNumber) {
+        super(userId, password, UserType.CLIENT, name, address, email, phone, interestRate);
         this.accountNumber = accountNumber;
     }
 
-    public int getClientId() {
+    public String getClientId() {
         return clientId;
     }
 
-    public void setClientId(int clientId) {
+    public void setClientId(String clientId) {
         this.clientId = clientId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public Float getInterestRate() {
-        return interestRate;
-    }
-
-    public void setInterestRate(Float interestRate) {
-        this.interestRate = interestRate;
     }
 
     public int getAccountNumber() {
@@ -86,5 +51,13 @@ public class Client extends AppUser{
 
     public void setAccountNumber(int accountNumber) {
         this.accountNumber = accountNumber;
+    }
+
+    @Override
+    public String toString() {
+        return "Client{" +
+                "clientId=" + clientId +
+                ", accountNumber=" + accountNumber +
+                "} " + super.toString();
     }
 }

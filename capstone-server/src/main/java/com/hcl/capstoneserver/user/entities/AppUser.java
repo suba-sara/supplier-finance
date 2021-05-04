@@ -1,12 +1,13 @@
 package com.hcl.capstoneserver.user.entities;
 
-import com.hcl.capstoneserver.user.UserRole;
+import com.hcl.capstoneserver.user.UserType;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -16,27 +17,21 @@ public class AppUser {
 
     private String password;
 
-    private String userType;
+    @Enumerated(value = EnumType.STRING)
+    private UserType userType;
 
     public AppUser() {
-    }
-
-    public AppUser(String userId, String password) {
-        this.userId = userId;
-        this.password = password;
-        this.userType = "USER";
-    }
-
-    public AppUser(String userId, String password, String userType) {
-        this.userId = userId;
-        this.password = password;
-        this.userType = userType;
     }
 
     public AppUser(String userId) {
         this.userId = userId;
     }
 
+    public AppUser(String userId, String password, UserType userType) {
+        this.userId = userId;
+        this.password = password;
+        this.userType = userType;
+    }
 
     public String getUserId() {
         return userId;
@@ -55,10 +50,10 @@ public class AppUser {
     }
 
     public String getUserType() {
-        return userType;
+        return userType.toString();
     }
 
-    public void setUserType(String userType) {
+    public void setUserType(UserType userType) {
         this.userType = userType;
     }
 }

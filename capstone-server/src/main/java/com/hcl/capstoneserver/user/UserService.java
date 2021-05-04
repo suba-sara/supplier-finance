@@ -1,10 +1,7 @@
 package com.hcl.capstoneserver.user;
 
-import com.hcl.capstoneserver.user.dto.SignInRequestDTO;
 import com.hcl.capstoneserver.user.dto.SignInResponseDTO;
-import com.hcl.capstoneserver.user.dto.SignUpResponseDTO;
 import com.hcl.capstoneserver.user.entities.AppUser;
-import com.hcl.capstoneserver.user.exceptions.UserAlreadyExistsException;
 import com.hcl.capstoneserver.user.repositories.AppUserRepository;
 import com.hcl.capstoneserver.util.JWTUtil;
 import org.springframework.context.annotation.Lazy;
@@ -53,22 +50,21 @@ public class UserService implements UserDetailsService {
         return new User(
                 user.get().getUserId(),
                 user.get().getPassword(),
-                Collections.singleton(new SimpleGrantedAuthority(user.get().getUserType()))
-        );
+                Collections.singleton(new SimpleGrantedAuthority((user.get().getUserType()))));
     }
 
-    //testing only -> implement proper methods
-    public SignUpResponseDTO signUp(SignInRequestDTO dto) {
-        if (appUserRepository.existsById(dto.getUsername())) {
-            throw new UserAlreadyExistsException(dto.getUsername());
-        }
-
-        AppUser createdUser = appUserRepository.save(new AppUser(
-                dto.getUsername(),
-                bCryptPasswordEncoder.encode(dto.getPassword())
-        ));
-
-        return new SignUpResponseDTO(createdUser.getUserId(), createdUser.getUserType());
-    }
+//    testing only -> implement proper methods
+//    public SignUpResponseDTO signUp(SignInRequestDTO dto) {
+//        if (appUserRepository.existsById(dto.getUsername())) {
+//            throw new UserAlreadyExistsException(dto.getUsername());
+//        }
+//
+//        AppUser createdUser = appUserRepository.save(new AppUser(
+//                dto.getUsername(),
+//                bCryptPasswordEncoder.encode(dto.getPassword())
+//        ));
+//
+//        return new SignUpResponseDTO(createdUser.getUserId(), createdUser.getUserType());
+//    }
 }
 
