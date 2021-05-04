@@ -29,7 +29,8 @@ public class UserServiceTest {
                 "konoha",
                 "madara@konoha.org",
                 "123456",
-                5.0F
+                5.0F,
+                "s001"
         )));
     }
 
@@ -43,7 +44,8 @@ public class UserServiceTest {
                 "konoha",
                 "madara@konoha.org",
                 "123456",
-                5.0F
+                5.0F,
+                "s002"
         ));
 
         Assertions.assertNotNull(supplier.getSupplierId());

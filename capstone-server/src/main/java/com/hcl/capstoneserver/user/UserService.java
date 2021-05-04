@@ -8,6 +8,7 @@ import com.hcl.capstoneserver.user.exceptions.UserAlreadyExistsException;
 import com.hcl.capstoneserver.user.repositories.AppUserRepository;
 import com.hcl.capstoneserver.user.repositories.SupplierRepository;
 import com.hcl.capstoneserver.util.JWTUtil;
+import com.hcl.capstoneserver.util.SequenceGenerator;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -28,14 +29,18 @@ public class UserService implements UserDetailsService {
     private final JWTUtil jwtUtil;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ModelMapper mapper;
+    private final SequenceGenerator sequenceGenerator;
 
     public UserService(AppUserRepository appUserRepository, SupplierRepository supplierRepository,
-                       JWTUtil jwtUtil, BCryptPasswordEncoder bCryptPasswordEncoder, ModelMapper mapper) {
+                       JWTUtil jwtUtil,
+                       BCryptPasswordEncoder bCryptPasswordEncoder, ModelMapper mapper,
+                       SequenceGenerator sequenceGenerator) {
         this.appUserRepository = appUserRepository;
         this.supplierRepository = supplierRepository;
         this.jwtUtil = jwtUtil;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.mapper = mapper;
+        this.sequenceGenerator = sequenceGenerator;
     }
 
     public JwtWithTypeDTO signIn(String username, String password) {
@@ -83,6 +88,7 @@ public class UserService implements UserDetailsService {
             throw new UserAlreadyExistsException(supplier.getUserId());
         }
 
+
         return mapper.map(supplierRepository.save(new Supplier(
                 supplier.getUserId(),
                 bCryptPasswordEncoder.encode(supplier.getPassword()),
@@ -90,8 +96,9 @@ public class UserService implements UserDetailsService {
                 supplier.getAddress(),
                 supplier.getEmail(),
                 supplier.getPhone(),
-                supplier.getInterestRate()
-        )), SupplierDTO.class);
+                supplier.getInterestRate(),
+                sequenceGenerator.getSupplierSequence()
+                )), SupplierDTO.class);
     }
 }
 
