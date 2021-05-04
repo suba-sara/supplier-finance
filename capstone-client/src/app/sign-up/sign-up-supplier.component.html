@@ -1,121 +1,187 @@
 <div class="main-container">
-  <div class="header-section">
-    <h1>Supplier Registration</h1>
-  </div>
-  <div class="image-container">
-    <div class="icon-container active" >
-      <div>
-      <svg  width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M50 20.3125C39.3145 20.3125 30.6452 28.7109 30.6452 39.0625C30.6452 49.4141 39.3145 57.8125 50 57.8125C60.6855 57.8125 69.3548 49.4141 69.3548 39.0625C69.3548 28.7109 60.6855 20.3125 50 20.3125ZM50 48.4375C44.6573 48.4375 40.3226 44.2383 40.3226 39.0625C40.3226 33.8867 44.6573 29.6875 50 29.6875C55.3427 29.6875 59.6774 33.8867 59.6774 39.0625C59.6774 44.2383 55.3427 48.4375 50 48.4375ZM50 1.5625C22.379 1.5625 0 23.2422 0 50C0 76.7578 22.379 98.4375 50 98.4375C77.621 98.4375 100 76.7578 100 50C100 23.2422 77.621 1.5625 50 1.5625ZM50 89.0625C39.9798 89.0625 30.8266 85.4883 23.7702 79.6094C26.7742 75.1172 31.9153 72.0703 37.8024 71.8945C41.996 73.1445 45.9879 73.7695 50 73.7695C54.0121 73.7695 58.004 73.1641 62.1976 71.8945C68.0847 72.0898 73.2258 75.1172 76.2298 79.6094C69.1734 85.4883 60.0202 89.0625 50 89.0625V89.0625ZM82.8024 72.6367C77.8831 66.5039 70.2823 62.5 61.6129 62.5C59.5565 62.5 56.371 64.375 50 64.375C43.6492 64.375 40.4435 62.5 38.3871 62.5C29.7379 62.5 22.1371 66.5039 17.1976 72.6367C12.4798 66.25 9.67742 58.4375 9.67742 50C9.67742 28.457 27.7621 10.9375 50 10.9375C72.2379 10.9375 90.3226 28.457 90.3226 50C90.3226 58.4375 87.5202 66.25 82.8024 72.6367Z" fill="#817474"/>
-      </svg>
-      </div>
-      <div>
-        Personal Details
+  <div class="content-container">
+    <div class="header-section">
+      <div><h1>Supplier Registration</h1></div>
+      <div class="image-container">
+        <div class="icon-container active">
+          <div>
+            <svg
+              width="100"
+              height="100"
+              viewBox="0 0 100 100"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M50 20.3125C39.3145 20.3125 30.6452 28.7109 30.6452 39.0625C30.6452 49.4141 39.3145 57.8125 50 57.8125C60.6855 57.8125 69.3548 49.4141 69.3548 39.0625C69.3548 28.7109 60.6855 20.3125 50 20.3125ZM50 48.4375C44.6573 48.4375 40.3226 44.2383 40.3226 39.0625C40.3226 33.8867 44.6573 29.6875 50 29.6875C55.3427 29.6875 59.6774 33.8867 59.6774 39.0625C59.6774 44.2383 55.3427 48.4375 50 48.4375ZM50 1.5625C22.379 1.5625 0 23.2422 0 50C0 76.7578 22.379 98.4375 50 98.4375C77.621 98.4375 100 76.7578 100 50C100 23.2422 77.621 1.5625 50 1.5625ZM50 89.0625C39.9798 89.0625 30.8266 85.4883 23.7702 79.6094C26.7742 75.1172 31.9153 72.0703 37.8024 71.8945C41.996 73.1445 45.9879 73.7695 50 73.7695C54.0121 73.7695 58.004 73.1641 62.1976 71.8945C68.0847 72.0898 73.2258 75.1172 76.2298 79.6094C69.1734 85.4883 60.0202 89.0625 50 89.0625V89.0625ZM82.8024 72.6367C77.8831 66.5039 70.2823 62.5 61.6129 62.5C59.5565 62.5 56.371 64.375 50 64.375C43.6492 64.375 40.4435 62.5 38.3871 62.5C29.7379 62.5 22.1371 66.5039 17.1976 72.6367C12.4798 66.25 9.67742 58.4375 9.67742 50C9.67742 28.457 27.7621 10.9375 50 10.9375C72.2379 10.9375 90.3226 28.457 90.3226 50C90.3226 58.4375 87.5202 66.25 82.8024 72.6367Z"
+                fill="#817474"
+              />
+            </svg>
+          </div>
+          <div>Personal Details</div>
+        </div>
+        <div
+          class="icon-container margin-middle-line-container"
+          [ngClass]="pageNumber === 2 ? 'active' : 'inactive'"
+        >
+          <hr />
+        </div>
+        <div
+          class="icon-container"
+          [ngClass]="pageNumber === 2 ? 'active' : 'inactive'"
+        >
+          <div>
+            <svg
+              width="100"
+              height="100"
+              viewBox="0 0 94 88"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M93.875 19.0001V22.1251C93.875 22.5395 93.7104 22.9369 93.4174 23.2299C93.1243 23.5229 92.7269 23.6876 92.3125 23.6876H87.625V26.0313C87.625 27.3256 86.5756 28.3751 85.2812 28.3751H8.71875C7.42441 28.3751 6.375 27.3256 6.375 26.0313V23.6876H1.6875C1.2731 23.6876 0.875671 23.5229 0.582646 23.2299C0.28962 22.9369 0.125 22.5395 0.125 22.1251V19.0001C0.125002 18.6909 0.216695 18.3888 0.388477 18.1318C0.560259 17.8748 0.80441 17.6745 1.09004 17.5563L46.4025 0.368803C46.7851 0.210399 47.2149 0.210399 47.5975 0.368803L92.91 17.5563C93.1956 17.6745 93.4397 17.8748 93.6115 18.1318C93.7833 18.3888 93.875 18.6909 93.875 19.0001V19.0001ZM89.1875 78.3751H4.8125C2.22363 78.3751 0.125 80.4737 0.125 83.0626V86.1876C0.125 86.602 0.28962 86.9994 0.582646 87.2924C0.875671 87.5854 1.2731 87.7501 1.6875 87.7501H92.3125C92.7269 87.7501 93.1243 87.5854 93.4174 87.2924C93.7104 86.9994 93.875 86.602 93.875 86.1876V83.0626C93.875 80.4737 91.7764 78.3751 89.1875 78.3751ZM15.75 31.5001V69.0001H8.71875C7.42441 69.0001 6.375 70.0495 6.375 71.3438V75.2501H87.625V71.3438C87.625 70.0495 86.5756 69.0001 85.2812 69.0001H78.25V31.5001H65.75V69.0001H53.25V31.5001H40.75V69.0001H28.25V31.5001H15.75Z"
+                fill="#817474"
+              />
+            </svg>
+          </div>
+          <div>Bank Details</div>
+        </div>
       </div>
     </div>
-    <div class="icon-container margin-middle-line-container" [ngClass]="pageNumber===2? 'active':'inactive'">
-    <hr>
-    </div>
-    <div class="icon-container" [ngClass]="pageNumber===2? 'active':'inactive'">
-      <div>
-      <svg width="100" height="100" viewBox="0 0 94 88" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M93.875 19.0001V22.1251C93.875 22.5395 93.7104 22.9369 93.4174 23.2299C93.1243 23.5229 92.7269 23.6876 92.3125 23.6876H87.625V26.0313C87.625 27.3256 86.5756 28.3751 85.2812 28.3751H8.71875C7.42441 28.3751 6.375 27.3256 6.375 26.0313V23.6876H1.6875C1.2731 23.6876 0.875671 23.5229 0.582646 23.2299C0.28962 22.9369 0.125 22.5395 0.125 22.1251V19.0001C0.125002 18.6909 0.216695 18.3888 0.388477 18.1318C0.560259 17.8748 0.80441 17.6745 1.09004 17.5563L46.4025 0.368803C46.7851 0.210399 47.2149 0.210399 47.5975 0.368803L92.91 17.5563C93.1956 17.6745 93.4397 17.8748 93.6115 18.1318C93.7833 18.3888 93.875 18.6909 93.875 19.0001V19.0001ZM89.1875 78.3751H4.8125C2.22363 78.3751 0.125 80.4737 0.125 83.0626V86.1876C0.125 86.602 0.28962 86.9994 0.582646 87.2924C0.875671 87.5854 1.2731 87.7501 1.6875 87.7501H92.3125C92.7269 87.7501 93.1243 87.5854 93.4174 87.2924C93.7104 86.9994 93.875 86.602 93.875 86.1876V83.0626C93.875 80.4737 91.7764 78.3751 89.1875 78.3751ZM15.75 31.5001V69.0001H8.71875C7.42441 69.0001 6.375 70.0495 6.375 71.3438V75.2501H87.625V71.3438C87.625 70.0495 86.5756 69.0001 85.2812 69.0001H78.25V31.5001H65.75V69.0001H53.25V31.5001H40.75V69.0001H28.25V31.5001H15.75Z" fill="#817474"/>
-      </svg>
-      </div>
-      <div>
-        Bank Details
-      </div>
-    </div>
-
-  </div>
-  <div class="form-container" [ngSwitch]="pageNumber">
-    <section *ngSwitchCase="1">
-      <div class="double-input-container">
+    <div class="form-container" [ngSwitch]="pageNumber">
+      <section *ngSwitchCase="1">
+        <div class="double-input-container">
           <mat-form-field appearance="outline" class="left-input-field">
             <mat-label>First Name</mat-label>
-            <input matInput minlength="3" maxlength="30" [(ngModel)]="clientDetails.firstName">
+            <input
+              matInput
+              minlength="3"
+              maxlength="30"
+              [(ngModel)]="clientDetails.firstName"
+            />
           </mat-form-field>
           <mat-form-field appearance="outline">
             <mat-label>Last Name</mat-label>
-            <input matInput minlength="3" maxlength="30" [(ngModel)]="clientDetails.lastName">
+            <input
+              matInput
+              minlength="3"
+              maxlength="30"
+              [(ngModel)]="clientDetails.lastName"
+            />
           </mat-form-field>
-      </div>
-      <div class="full-width-field-container">
-        <mat-form-field appearance="outline">
-          <mat-label>Email</mat-label>
-          <input matInput maxlength="255" [(ngModel)]="clientDetails.email">
-        </mat-form-field>
-      </div>
-      <div class="full-width-field-container">
-        <mat-form-field appearance="outline">
-          <mat-label>Mobile Number</mat-label>
-          <input matInput maxlength="10" [(ngModel)]="clientDetails.mobileNumber">
-        </mat-form-field>
-      </div>
-      <div class="full-width-field-container">
-        <mat-form-field appearance="outline">
-          <mat-label>Address Line1</mat-label>
-          <input matInput maxlength="225" [(ngModel)]="clientDetails.addressLine1">
-        </mat-form-field>
-      </div>
-      <div class="double-input-container">
-        <mat-form-field appearance="outline" class="left-input-field">
-          <mat-label>City</mat-label>
-          <input matInput maxlength="255" [(ngModel)]="clientDetails.city">
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-          <mat-label>State</mat-label>
-          <input matInput maxlength="255" [(ngModel)]="clientDetails.state">
-        </mat-form-field>
-      </div>
-      <div class="double-input-container">
-        <mat-form-field appearance="outline" class="left-input-field">
-          <mat-label>Province</mat-label>
-          <input matInput maxlength="255" [(ngModel)]="clientDetails.province">
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-          <mat-label>Country</mat-label>
-          <input matInput maxlength="255" [(ngModel)]="clientDetails.country">
-        </mat-form-field>
-      </div>
-      <div>
-        <button mat-flat-button (click)="goToNextPage()">Next</button>
-      </div>
-    </section>
-    <section *ngSwitchCase="2">
-      <div class="full-width-field2-container">
-        <mat-form-field appearance="outline">
-          <mat-label>Credit Account Number</mat-label>
-          <input matInput maxlength="255" [(ngModel)]="supplierAccDetail.creditAccNumber">
-        </mat-form-field>
-      </div>
-      <div class="full-width-field2-container">
-        <mat-form-field appearance="outline">
-          <mat-label>Bank Code</mat-label>
-          <input matInput maxlength="255" [(ngModel)]="supplierAccDetail.bankCode">
-        </mat-form-field>
-      </div>
-      <div class="full-width-field2-container">
-        <mat-form-field appearance="outline">
-          <mat-label>Supplier Limit</mat-label>
-          <input matInput maxlength="255" [(ngModel)]="supplierAccDetail.supplierLimit">
-        </mat-form-field>
-      </div>
-      <div class="full-width-field2-container">
-        <mat-form-field appearance="outline">
-          <mat-label>Invoice Payment</mat-label>
-          <input matInput maxlength="255" [(ngModel)]="supplierAccDetail.invoicePayment">
-        </mat-form-field>
-      </div>
-      <div class="button-container">
-        <div>
-          <button mat-flat-button (click)="goToPreviousPage()">Previous</button>
         </div>
-        <div>
-          <button mat-flat-button>Finish</button>
+        <div class="full-width-field-container">
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput maxlength="255" [(ngModel)]="clientDetails.email" />
+          </mat-form-field>
         </div>
-      </div>
-    </section>
+        <div class="full-width-field-container">
+          <mat-form-field appearance="outline">
+            <mat-label>Mobile Number</mat-label>
+            <input
+              matInput
+              maxlength="10"
+              [(ngModel)]="clientDetails.mobileNumber"
+            />
+          </mat-form-field>
+        </div>
+        <div class="full-width-field-container">
+          <mat-form-field appearance="outline">
+            <mat-label>Address Line1</mat-label>
+            <input
+              matInput
+              maxlength="225"
+              [(ngModel)]="clientDetails.addressLine1"
+            />
+          </mat-form-field>
+        </div>
+        <div class="double-input-container">
+          <mat-form-field appearance="outline" class="left-input-field">
+            <mat-label>City</mat-label>
+            <input matInput maxlength="255" [(ngModel)]="clientDetails.city" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>State</mat-label>
+            <input matInput maxlength="255" [(ngModel)]="clientDetails.state" />
+          </mat-form-field>
+        </div>
+        <div class="double-input-container">
+          <mat-form-field appearance="outline" class="left-input-field">
+            <mat-label>Province</mat-label>
+            <input
+              matInput
+              maxlength="255"
+              [(ngModel)]="clientDetails.province"
+            />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Country</mat-label>
+            <input
+              matInput
+              maxlength="255"
+              [(ngModel)]="clientDetails.country"
+            />
+          </mat-form-field>
+        </div>
+        <div class="button-container button-container-end">
+          <div>
+            <button mat-flat-button (click)="goToNextPage()">Next</button>
+          </div>
+        </div>
+      </section>
+      <section *ngSwitchCase="2">
+        <div class="full-width-field2-container">
+          <mat-form-field appearance="outline">
+            <mat-label>Credit Account Number</mat-label>
+            <input
+              matInput
+              maxlength="255"
+              [(ngModel)]="supplierAccDetail.creditAccNumber"
+            />
+          </mat-form-field>
+        </div>
+        <div class="full-width-field2-container">
+          <mat-form-field appearance="outline">
+            <mat-label>Bank Code</mat-label>
+            <input
+              matInput
+              maxlength="255"
+              [(ngModel)]="supplierAccDetail.bankCode"
+            />
+          </mat-form-field>
+        </div>
+        <div class="full-width-field2-container">
+          <mat-form-field appearance="outline">
+            <mat-label>Supplier Limit</mat-label>
+            <input
+              matInput
+              maxlength="255"
+              [(ngModel)]="supplierAccDetail.supplierLimit"
+            />
+          </mat-form-field>
+        </div>
+        <div class="full-width-field2-container">
+          <mat-form-field appearance="outline">
+            <mat-label>Invoice Payment</mat-label>
+            <input
+              matInput
+              maxlength="255"
+              [(ngModel)]="supplierAccDetail.invoicePayment"
+            />
+          </mat-form-field>
+        </div>
+        <div class="button-container">
+          <div>
+            <button mat-flat-button (click)="goToPreviousPage()">
+              Previous
+            </button>
+          </div>
+          <div>
+            <button mat-flat-button>Finish</button>
+          </div>
+        </div>
+      </section>
+    </div>
   </div>
 </div>
-
