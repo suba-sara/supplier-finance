@@ -1,11 +1,6 @@
 package com.hcl.capstoneserver.user.dto;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Min;
+import javax.validation.constraints.*;
 
 public class PersonDTO extends AppUserDTO {
     @NotBlank(message = "name is required")
@@ -24,8 +19,8 @@ public class PersonDTO extends AppUserDTO {
     @Pattern(regexp = "^[0-9+ ]+$", message = "phone number is not valid")
     private String phone = null;
 
-    @NotNull
-    @Min(0)
+    @NotNull(message = "interest rate is required")
+    @Min(value = 0, message = "interest rate must be greater than 0")
     private Float interestRate = null;
 
     public PersonDTO() {

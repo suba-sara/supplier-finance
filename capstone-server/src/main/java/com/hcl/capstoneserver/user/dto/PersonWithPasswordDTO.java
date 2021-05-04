@@ -1,8 +1,10 @@
 package com.hcl.capstoneserver.user.dto;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 public class PersonWithPasswordDTO extends PersonDTO implements WithPassword {
+    @NotBlank(message = "password is required")
     @Size(min = 4, max = 255, message = "password must be at least 4 characters long")
     private String password;
 
