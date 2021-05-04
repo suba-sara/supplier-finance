@@ -68,19 +68,6 @@ public class UserService implements UserDetailsService {
         );
     }
 
-//    testing only -> implement proper methods
-//    public SignUpResponseDTO signUp(SignInRequestDTO dto) {
-//        if (appUserRepository.existsById(dto.getUsername())) {
-//            throw new UserAlreadyExistsException(dto.getUsername());
-//        }
-//
-//        AppUser createdUser = appUserRepository.save(new AppUser(
-//                dto.getUsername(),
-//                bCryptPasswordEncoder.encode(dto.getPassword())
-//        ));
-//
-//        return new SignUpResponseDTO(createdUser.getUserId(), createdUser.getUserType());
-//    }
 
     public SupplierDTO signUpSupplier(Supplier supplier) {
         //check if user already exists
