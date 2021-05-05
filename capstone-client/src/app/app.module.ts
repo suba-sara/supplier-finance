@@ -1,52 +1,49 @@
-import {NgModule} from '@angular/core';
-import {BrowserModule} from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 
-import {AppRoutingModule} from './routing/app-routing.module';
-import {AppComponent} from './app.component';
-import {SignUpClientComponent} from './sign-up/sign-up-client.component';
-import {SignInComponent} from './sign-in/sign-in.component';
-import {SignUpSupplierComponent} from './sign-up/sign-up-supplier.component';
-import {TopNavbarComponent} from './top-navbar/top-navbar.component';
-import {HomeComponent} from './home/home.component';
-import {ForgotPasswordComponent} from './forgot-password/forgot-password.component';
+import { AppRoutingModule } from './routing/app-routing.module';
+import { AppComponent } from './app.component';
+import { SignInComponent } from './sign-in/sign-in.component';
+import { TopNavbarComponent } from './top-navbar/top-navbar.component';
+import { HomeComponent } from './home/home.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 
 // import angular materials
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MatInputModule} from '@angular/material/input';
-import {MatIconModule} from '@angular/material/icon';
-import {MatButtonModule} from '@angular/material/button';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {MatCardModule} from '@angular/material/card';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatCardModule } from '@angular/material/card';
 
 // import httpClient
-import {HttpClientModule} from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { SignUpModule } from './sign-up/sign-up.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     SignInComponent,
-    SignUpClientComponent,
-    SignUpSupplierComponent,
     TopNavbarComponent,
     HomeComponent,
     ForgotPasswordComponent,
-    DashboardComponent
+    DashboardComponent,
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        MatInputModule,
-        MatIconModule,
-        MatButtonModule,
-        FormsModule,
-        HttpClientModule,
-        ReactiveFormsModule,
-        MatCardModule
-    ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MatInputModule,
+    MatIconModule,
+    MatButtonModule,
+    FormsModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+    MatCardModule,
+    SignUpModule,
+  ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule {
-}
+export class AppModule {}

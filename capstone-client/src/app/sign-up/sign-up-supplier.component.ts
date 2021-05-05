@@ -1,22 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  FormControl,
-  FormGroup,
-  ValidationErrors,
-  Validators,
-} from '@angular/forms';
+import { PersonalDetails } from './personal-data-form/personal-data-form.component';
 
-type ClientDetail = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  mobileNumber: string;
-  addressLine1: string;
-  city: string;
-  state: string;
-  province: string;
-  country: string;
-};
 type SupplierAccDetail = {
   creditAccNumber?: number;
   bankCode?: number;
@@ -30,40 +14,13 @@ type SupplierAccDetail = {
   styleUrls: ['./sign-up-supplier.component.scss'],
 })
 export class SignUpSupplierComponent implements OnInit {
-  clientDetails: ClientDetail;
+  personalDetails: PersonalDetails;
   pageNumber: number;
-
-  clientFormData = new FormGroup({
-    firstName: new FormControl('', [
-      Validators.required,
-      Validators.minLength(3),
-      Validators.maxLength(30),
-    ]),
-    lastName: new FormControl('', [
-      Validators.required,
-      Validators.minLength(3),
-      Validators.maxLength(30),
-    ]),
-    email: new FormControl('', [
-      Validators.required,
-      Validators.email,
-      Validators.maxLength(255),
-    ]),
-    phone: new FormControl('', [
-      Validators.required,
-      Validators.pattern(/^[0-9+ ]+$/),
-    ]),
-    addressLine1: new FormControl('', [Validators.required]),
-    city: new FormControl('', [Validators.required]),
-    state: new FormControl('', [Validators.required]),
-    province: new FormControl('', [Validators.required]),
-    country: new FormControl('', [Validators.required]),
-  });
 
   supplierAccDetail: SupplierAccDetail;
 
   constructor() {
-    this.clientDetails = {
+    this.personalDetails = {
       firstName: '',
       lastName: '',
       email: '',
@@ -74,13 +31,17 @@ export class SignUpSupplierComponent implements OnInit {
       province: '',
       country: '',
     };
-    this.pageNumber = 1;
+    this.pageNumber = 2;
 
     this.supplierAccDetail = {};
-    this.pageNumber = 1;
   }
 
   ngOnInit(): void {}
+
+  submitPersonalData(value: PersonalDetails): void {
+    this.personalDetails = value;
+    this.goToNextPage();
+  }
 
   goToPreviousPage(): void {
     if (this.pageNumber > 1) {

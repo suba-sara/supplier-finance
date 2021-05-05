@@ -50,85 +50,9 @@
     </div>
     <div class="form-container" [ngSwitch]="pageNumber">
       <section *ngSwitchCase="1">
-        <form [formGroup]="clientFormData">
-          <div class="double-input-container">
-            <mat-form-field appearance="outline" class="left-input-field">
-              <mat-label>First Name</mat-label>
-              <input matInput formControlName="firstName" />
-              <mat-error
-                *ngIf="
-                  clientFormData.get('firstName')?.hasError('minlength') ||
-                  clientFormData.get('firstName')?.hasError('maxlength')
-                "
-              >
-                must be between 3 - 30 characters
-              </mat-error>
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-              <mat-label>Last Name</mat-label>
-              <input matInput formControlName="lastName" />
-              <mat-error
-                *ngIf="
-                  clientFormData.get('lastName')?.hasError('minlength') ||
-                  clientFormData.get('lastName')?.hasError('maxlength')
-                "
-              >
-                must be between 3 - 30 characters
-              </mat-error>
-            </mat-form-field>
-          </div>
-          <div class="full-width-field-container">
-            <mat-form-field appearance="outline">
-              <mat-label>Email</mat-label>
-              <input matInput formControlName="email" />
-              <mat-error *ngIf="clientFormData.get('email')?.hasError('email')">
-                not a valid email address
-              </mat-error>
-              <mat-error
-                *ngIf="clientFormData.get('email')?.hasError('maxlength')"
-              >
-                must be less than 255 characters
-              </mat-error>
-            </mat-form-field>
-          </div>
-          <div class="full-width-field-container">
-            <mat-form-field appearance="outline">
-              <mat-label>Mobile Number</mat-label>
-              <input matInput formControlName="phone" />
-            </mat-form-field>
-          </div>
-          <div class="full-width-field-container">
-            <mat-form-field appearance="outline">
-              <mat-label>Address Line1</mat-label>
-              <input matInput formControlName="addressLine1" />
-            </mat-form-field>
-          </div>
-          <div class="double-input-container">
-            <mat-form-field appearance="outline" class="left-input-field">
-              <mat-label>City</mat-label>
-              <input matInput maxlength="255" />
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-              <mat-label>State</mat-label>
-              <input matInput maxlength="255" />
-            </mat-form-field>
-          </div>
-          <div class="double-input-container">
-            <mat-form-field appearance="outline" class="left-input-field">
-              <mat-label>Province</mat-label>
-              <input matInput maxlength="255" />
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-              <mat-label>Country</mat-label>
-              <input matInput maxlength="255" />
-            </mat-form-field>
-          </div>
-          <div class="button-container button-container-end">
-            <div>
-              <button mat-flat-button (click)="goToNextPage()">Next</button>
-            </div>
-          </div>
-        </form>
+        <app-personal-data-form
+          (formSubmitEvent)="submitPersonalData($event)"
+        ></app-personal-data-form>
       </section>
       <section *ngSwitchCase="2">
         <div class="full-width-field2-container">
