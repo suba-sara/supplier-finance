@@ -43,7 +43,7 @@ export class SignUpSupplierComponent implements OnInit {
     this.goToNextPage();
   }
 
-  goToPreviousPage(): void {
+  gotoPreviousPage(): void {
     if (this.pageNumber > 1) {
       this.pageNumber = this.pageNumber - 1;
     }
