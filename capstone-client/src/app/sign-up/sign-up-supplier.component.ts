@@ -1,37 +1,26 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { PersonalDetails } from './personal-data-form/personal-data-form.component';
 
-type ClientDetail = {
-  firstName: string,
-  lastName: string,
-  email: string,
-  mobileNumber: string,
-  addressLine1: string,
-  city: string,
-  state: string,
-  province: string;
-  country: string,
-};
 type SupplierAccDetail = {
-  creditAccNumber?: number,
-  bankCode?: number,
-  supplierLimit?: number,
-  invoicePayment?: string
-
+  creditAccNumber?: number;
+  bankCode?: number;
+  supplierLimit?: number;
+  invoicePayment?: string;
 };
 
 @Component({
   selector: 'app-sign-up-supplier',
   templateUrl: './sign-up-supplier.component.html',
-  styleUrls: ['./sign-up-supplier.component.scss']
+  styleUrls: ['./sign-up-supplier.component.scss'],
 })
 export class SignUpSupplierComponent implements OnInit {
-  clientDetails: ClientDetail;
+  personalDetails: PersonalDetails;
   pageNumber: number;
 
   supplierAccDetail: SupplierAccDetail;
 
   constructor() {
-    this.clientDetails = {
+    this.personalDetails = {
       firstName: '',
       lastName: '',
       email: '',
@@ -42,16 +31,19 @@ export class SignUpSupplierComponent implements OnInit {
       province: '',
       country: '',
     };
-    this.pageNumber = 1;
+    this.pageNumber = 2;
 
     this.supplierAccDetail = {};
-    this.pageNumber = 1;
   }
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
+
+  submitPersonalData(value: PersonalDetails): void {
+    this.personalDetails = value;
+    this.goToNextPage();
   }
 
-  goToPreviousPage(): void {
+  gotoPreviousPage(): void {
     if (this.pageNumber > 1) {
       this.pageNumber = this.pageNumber - 1;
     }
