@@ -3,13 +3,20 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-top-navbar',
   templateUrl: './top-navbar.component.html',
-  styleUrls: ['./top-navbar.component.scss']
+  styleUrls: ['./top-navbar.component.scss'],
 })
 export class TopNavbarComponent implements OnInit {
+  isMobileMenuOpen = false;
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
+
+  toggleMenu(hide?: boolean): void {
+    if (hide) {
+      this.isMobileMenuOpen = hide;
+    } else {
+      this.isMobileMenuOpen = !this.isMobileMenuOpen;
+    }
   }
-
 }
