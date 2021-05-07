@@ -6,10 +6,12 @@ import { DashboardComponent } from '../../dashboard/dashboard.component';
 import { SignInComponent } from '../../sign-in/sign-in.component';
 import { SignUpClientComponent } from '../../sign-up/sign-up-client.component';
 import { SignUpSupplierComponent } from '../../sign-up/sign-up-supplier.component';
+import { SignUpComponent } from '../../sign-up/sign-up.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'sign-in', component: SignInComponent },
+  { path: 'sign-up', component: SignUpComponent },
   { path: 'sign-up/client', component: SignUpClientComponent },
   { path: 'sign-up/supplier', component: SignUpSupplierComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },

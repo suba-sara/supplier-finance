@@ -31,7 +31,7 @@ export class SignUpSupplierComponent implements OnInit {
       province: '',
       country: '',
     };
-    this.pageNumber = 2;
+    this.pageNumber = 1;
 
     this.supplierAccDetail = {};
   }
