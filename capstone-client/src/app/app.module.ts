@@ -9,6 +9,8 @@ import {SignUpSupplierComponent} from './sign-up/sign-up-supplier.component';
 import {TopNavbarComponent} from './top-navbar/top-navbar.component';
 import {HomeComponent} from './home/home.component';
 import {ForgotPasswordComponent} from './forgot-password/forgot-password.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { SignUpHomeComponent } from './sign-up/sign-up-home/sign-up-home.component';
 
 // import angular materials
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -20,7 +22,6 @@ import {MatCardModule} from '@angular/material/card';
 
 // import httpClient
 import {HttpClientModule} from '@angular/common/http';
-import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     TopNavbarComponent,
     HomeComponent,
     ForgotPasswordComponent,
-    DashboardComponent
+    DashboardComponent,
+    SignUpHomeComponent
   ],
     imports: [
         BrowserModule,
