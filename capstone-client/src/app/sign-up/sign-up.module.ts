@@ -8,12 +8,14 @@ import { RouterModule } from '@angular/router';
 import { PersonalDataFormComponent } from './personal-data-form/personal-data-form.component';
 import { BankAccountDetailsFormComponent } from './bank-account-details-form/bank-account-details-form.component';
 import { SignUpClientComponent } from './sign-up-client.component';
+import { SignUpComponent } from './sign-up.component';
 
 @NgModule({
   declarations: [
+    SignUpComponent,
+    SignUpClientComponent,
     SignUpSupplierComponent,
     PersonalDataFormComponent,
-    SignUpClientComponent,
     BankAccountDetailsFormComponent,
   ],
   imports: [
