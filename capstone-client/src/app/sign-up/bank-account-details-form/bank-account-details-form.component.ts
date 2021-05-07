@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-bank-account-details-form',
@@ -6,12 +6,8 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
   styleUrls: ['./bank-account-details-form.component.scss'],
 })
 export class BankAccountDetailsFormComponent implements OnInit {
-  @Output()
-  goToPreviousPageEvent = new EventEmitter();
-
-  goBack(): void {
-    this.goToPreviousPageEvent.emit();
-  }
+  @Input()
+  goBack!: () => void;
 
   constructor() {}
 

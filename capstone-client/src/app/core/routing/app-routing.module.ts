@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { SignInComponent } from '../../sign-in/sign-in.component';
-import { SignUpClientComponent } from '../../sign-up/sign-up-client.component';
-import { SignUpSupplierComponent } from '../../sign-up/sign-up-supplier.component';
 import { HomeComponent } from '../../home/home.component';
 import { ForgotPasswordComponent } from '../../forgot-password/forgot-password.component';
 import { DashboardComponent } from '../../dashboard/dashboard.component';
+import { SignInComponent } from '../../sign-in/sign-in.component';
+import { SignUpClientComponent } from '../../sign-up/sign-up-client.component';
+import { SignUpSupplierComponent } from '../../sign-up/sign-up-supplier.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
