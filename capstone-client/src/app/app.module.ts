@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { AppRoutingModule } from './routing/app-routing.module';
 import { AppComponent } from './app.component';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { HomeComponent } from './home/home.component';
@@ -18,8 +17,7 @@ import { MatCardModule } from '@angular/material/card';
 // import httpClient
 import { HttpClientModule } from '@angular/common/http';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { SignUpModule } from './sign-up/sign-up.module';
-import { TopNavbarModule } from './top-navbar/top-navbar.module';
+import { CoreModule } from './core/core.module';
 
 @NgModule({
   declarations: [
@@ -31,7 +29,6 @@ import { TopNavbarModule } from './top-navbar/top-navbar.module';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     BrowserAnimationsModule,
     MatInputModule,
     MatIconModule,
@@ -40,8 +37,7 @@ import { TopNavbarModule } from './top-navbar/top-navbar.module';
     HttpClientModule,
     ReactiveFormsModule,
     MatCardModule,
-    SignUpModule,
-    TopNavbarModule,
+    CoreModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
