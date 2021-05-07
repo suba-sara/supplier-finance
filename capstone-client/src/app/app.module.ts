@@ -20,7 +20,7 @@ import {MatCardModule} from '@angular/material/card';
 import {HttpClientModule} from '@angular/common/http';
 import {DashboardComponent} from './dashboard/dashboard.component';
 import {SignUpModule} from './sign-up/sign-up.module';
-import {SignUpHomeComponent} from './sign-up/sign-up-home/sign-up-home.component';
+import {SignUpComponent} from './sign-up/sign-up.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +30,7 @@ import {SignUpHomeComponent} from './sign-up/sign-up-home/sign-up-home.component
     HomeComponent,
     ForgotPasswordComponent,
     DashboardComponent,
-    SignUpHomeComponent
+    SignUpComponent
   ],
   imports: [
     BrowserModule,

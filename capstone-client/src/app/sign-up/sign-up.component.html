@@ -2,11 +2,10 @@
   <div class="content-container">
     <h1>Select Account Type</h1>
     <div class="radio-card">
-      <label for="1">
-        <input [(ngModel)]="accountType" value="/sign-up/client" id="1" name="account" type="radio">
-        <h2>Client</h2>
+      <a routerLink="/sign-up/client">
+        <div class="content-header">Client</div>
         <div class="character">
-          <img src="../../../assets/Images/Client.png" alt="Client">
+          <img src="../assets/Images/Client.png" alt="Client">
         </div>
         <ul>
           <li>Lorem ipsum dolor sit amet, consectetur.</li>
@@ -14,12 +13,11 @@
           <li>Lorem ipsum dolor sit amet, consectetur.</li>
           <li>Lorem ipsum dolor sit amet, consectetur.</li>
         </ul>
-      </label>
-      <label for="2">
-        <input [(ngModel)]="accountType" value="/sign-up/supplier" id="2" name="account" type="radio">
-        <h2>Supplier</h2>
+      </a>
+      <a routerLink="/sign-up/supplier">
+        <div class="content-header">Supplier</div>
         <div class="character">
-          <img src="../../../assets/Images/Supplier.png" alt="Supplier">
+          <img src="../assets/Images/Supplier.png" alt="Supplier">
         </div>
         <ul>
           <li>Lorem ipsum dolor sit amet, consectetur.</li>
@@ -27,12 +25,7 @@
           <li>Lorem ipsum dolor sit amet, consectetur.</li>
           <li>Lorem ipsum dolor sit amet, consectetur.</li>
         </ul>
-      </label>
-    </div>
-    <div class="next-button">
-      <button mat-flat-button [class]="!accountType?  '' : 'active-class' " [disabled]="!accountType"
-              [routerLink]="accountType">Next
-      </button>
+      </a>
     </div>
   </div>
 </div>
