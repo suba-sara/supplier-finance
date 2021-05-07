@@ -2,16 +2,12 @@
   position: relative;
   width: 100%;
   height: 100%;
-  overflow: hidden;
   padding: 10px;
 }
 
 .background-container {
-  position: absolute;
-  display: block;
-  height: 100vh;
-  width: 100vw;
-  background: url("../../assets/Images/home-gb.svg") no-repeat center center fixed;
+  background: linear-gradient(0deg, rgba(12, 12, 12, 0.6), rgba(3, 3, 3, 0.8)),
+    url("../../assets/Images/home-bg2.jpg") no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -19,55 +15,55 @@
   background-origin: border-box;
 }
 
-.logo-container {
-  width: 100%;
-  display: flex;
-  justify-content: flex-end;
-  align-content: center;
-
-  h1{
-    padding: 2px 5px;
-    color: #181880;
-    font-weight: bolder;
-    font-size: 2em;
-  }
-}
-
-.logo {
-  display: flex;
-  svg {
-    fill: #181880;
-    width: 35px;
-    height: 35px;
-  }
-}
-
 .details-container {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: column;
   position: absolute;
-  color: #181880;
-  max-width: 400px;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 
-  h1 {
-    font-weight: bolder;
-    font-size: 2.5em;
+  transform: translate(-70%, -50%);
+}
+
+.main-heading {
+  color: #d2d0d0;
+  font-weight: bolder;
+  font-size: 4.5em;
+  line-height: 1em;
+}
+
+.secondary-content {
+  font-style: italic;
+  color: #aaa9a9;
+  font-size: 1.2em;
+  text-align: justify;
+}
+
+.get-started-button {
+  margin-top: 30px;
+  font-size: 1.8em;
+  border-radius: 15px;
+  padding: 20px 15px;
+  max-width: 200px;
+  background: #1e1ea0;
+  color: white;
+}
+
+@media only screen and (max-width: 768px) {
+  .details-container {
+    width: 80%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+@media only screen and (max-width: 599px) {
+  .details-container {
+    width: 80%;
+    transform: translate(-50%, -50%);
   }
 
-  p {
-    text-align: justify;
-  }
-
-  button {
-    margin-top: 10px;
-    border-radius: 25px;
-    padding: 4px;
-    width: 120px;
-    background: #181880;
-    color: white;
+  .main-heading {
+    margin-bottom: 40px;
   }
 }

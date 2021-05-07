@@ -1,34 +1,36 @@
-import {Component, OnInit} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {AuthService, SignInData} from '../auth/auth.service';
-import {Router} from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { AuthService, SignInData } from '../core/auth/auth.service';
+import { Router } from '@angular/router';
 
 export type SignInResponseType = {
-  jwt: string,
-  userType: string,
+  jwt: string;
+  userType: string;
 };
 
 @Component({
   selector: 'app-sign-in',
   templateUrl: './sign-in.component.html',
-  styleUrls: ['./sign-in.component.scss']
+  styleUrls: ['./sign-in.component.scss'],
 })
-
 export class SignInComponent implements OnInit {
   signInData: SignInData;
   isPasswordVisible: boolean;
   errorMessage?: string;
 
-  constructor(private http: HttpClient, private authService: AuthService, private router: Router) {
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService,
+    private router: Router
+  ) {
     this.signInData = {
       username: '',
-      password: ''
+      password: '',
     };
     this.isPasswordVisible = true;
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   handleSignInClick(): void {
     this.errorMessage = undefined;

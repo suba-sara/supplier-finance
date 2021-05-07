@@ -31,27 +31,27 @@ export class SignUpSupplierComponent implements OnInit {
       province: '',
       country: '',
     };
-    this.pageNumber = 2;
+    this.pageNumber = 1;
 
     this.supplierAccDetail = {};
   }
 
   ngOnInit(): void {}
 
-  submitPersonalData(value: PersonalDetails): void {
+  submitPersonalData = (value: PersonalDetails): void => {
     this.personalDetails = value;
     this.goToNextPage();
-  }
+  };
 
-  gotoPreviousPage(): void {
+  gotoPreviousPage = (): void => {
     if (this.pageNumber > 1) {
       this.pageNumber = this.pageNumber - 1;
     }
-  }
+  };
 
-  goToNextPage(): void {
+  goToNextPage = (): void => {
     if (this.pageNumber < 2) {
       this.pageNumber = this.pageNumber + 1;
     }
-  }
+  };
 }

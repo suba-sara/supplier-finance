@@ -56,7 +56,7 @@
       </section>
       <section *ngSwitchCase="2">
         <app-bank-account-details-form
-          (goToPreviousPageEvent)="gotoPreviousPage()"
+          [goBack]="gotoPreviousPage"
         ></app-bank-account-details-form>
       </section>
     </div>
