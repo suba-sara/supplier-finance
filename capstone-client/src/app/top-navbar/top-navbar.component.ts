@@ -12,11 +12,11 @@ export class TopNavbarComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  toggleMenu(hide?: boolean): void {
+  toggleMenu = (hide?: boolean): void => {
     if (hide) {
       this.isMobileMenuOpen = hide;
     } else {
       this.isMobileMenuOpen = !this.isMobileMenuOpen;
     }
-  }
+  };
 }
