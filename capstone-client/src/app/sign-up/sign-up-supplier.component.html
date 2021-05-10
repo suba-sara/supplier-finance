@@ -50,11 +50,14 @@
     </div>
     <div class="form-container" [ngSwitch]="pageNumber">
       <section *ngSwitchCase="1">
+        <app-user-data-form></app-user-data-form>
+      </section>
+      <section *ngSwitchCase="2">
         <app-personal-data-form
           (formSubmitEvent)="submitPersonalData($event)"
         ></app-personal-data-form>
       </section>
-      <section *ngSwitchCase="2">
+      <section *ngSwitchCase="3">
         <app-bank-account-details-form
           [goBack]="gotoPreviousPage"
         ></app-bank-account-details-form>
