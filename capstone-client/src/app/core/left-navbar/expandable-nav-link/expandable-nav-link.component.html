@@ -7,14 +7,12 @@
     <div>
       <mat-icon>play_arrow</mat-icon>
     </div>
-    <div>Invoices</div>
+    <div>{{ title }}</div>
   </div>
   <div
     [class.show-extended-links]="isExpanded"
     class="extended-links-container"
   >
-    <app-nav-link></app-nav-link>
-    <app-nav-link></app-nav-link>
-    <app-nav-link></app-nav-link>
+    <ng-content></ng-content>
   </div>
 </div>
