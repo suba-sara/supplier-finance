@@ -100,22 +100,20 @@ export class AuthService implements OnDestroy {
     localStorage.removeItem('user_type');
   }
 
-  refreshToken(token: string): Observable<void> {
-    return this.http
-      .post<SignInResponse>(`${API_PATH}/refresh-token`, { jwt: token })
-      .pipe(
-        map((response) => {
-          this.user.next({
-            username: response.username,
-            userType: response.userType,
-          });
-          this.setLocalStorage({
-            accessToken: response.jwt,
-            userName: response.username,
-            userType: response.userType,
-          });
-        })
-      );
+  refreshToken(): Observable<void> {
+    return this.http.post<SignInResponse>(`${API_PATH}/refresh-token`, {}).pipe(
+      map((response) => {
+        this.user.next({
+          username: response.username,
+          userType: response.userType,
+        });
+        this.setLocalStorage({
+          accessToken: response.jwt,
+          userName: response.username,
+          userType: response.userType,
+        });
+      })
+    );
   }
 
   /* to be used in future for refresh tokens */

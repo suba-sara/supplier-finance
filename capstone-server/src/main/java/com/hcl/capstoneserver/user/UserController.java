@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @CrossOrigin
 @RestController()
@@ -36,9 +37,9 @@ public class UserController {
     }
 
     @PostMapping("/api/refresh-token")
-    public ResponseEntity<JwtWithTypeDTO> refreshToken(@Valid @RequestBody JwtRefreshDto dto) {
+    public ResponseEntity<JwtWithTypeDTO> refreshToken(Principal principal) {
         return new ResponseEntity<>(
-                userService.refreshToken(dto),
+                userService.refreshToken(principal.getName()),
                 HttpStatus.OK
         );
     }

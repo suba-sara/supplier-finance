@@ -6,7 +6,6 @@ import com.hcl.capstoneserver.user.dto.SupplierDTO;
 import com.hcl.capstoneserver.user.entities.AppUser;
 import com.hcl.capstoneserver.user.entities.Client;
 import com.hcl.capstoneserver.user.entities.Supplier;
-import com.hcl.capstoneserver.user.exceptions.JwtInvalidException;
 import com.hcl.capstoneserver.user.exceptions.UserAlreadyExistsException;
 import com.hcl.capstoneserver.user.repositories.AppUserRepository;
 import com.hcl.capstoneserver.user.repositories.ClientRepository;
@@ -65,17 +64,12 @@ public class UserService implements UserDetailsService {
                 userDetails.getAuthorities().toArray()[0].toString(), user.getUserId());
     }
 
-    public JwtWithTypeDTO refreshToken(JwtRefreshDto dto) {
-        if (jwtUtil.validateToken(dto.getJwt())) {
-            String username = jwtUtil.extractUsername(dto.getJwt());
-            UserDetails userDetails = loadUserByUsername(username);
-            String jwt = jwtUtil.generateToken(userDetails);
+    public JwtWithTypeDTO refreshToken(String username) {
+        UserDetails userDetails = loadUserByUsername(username);
+        String jwt = jwtUtil.generateToken(userDetails);
 
-            return new JwtWithTypeDTO(jwt,
-                    userDetails.getAuthorities().toArray()[0].toString(), username);
-        } else {
-            throw new JwtInvalidException();
-        }
+        return new JwtWithTypeDTO(jwt,
+                userDetails.getAuthorities().toArray()[0].toString(), username);
     }
 
     // used by spring security don't change
