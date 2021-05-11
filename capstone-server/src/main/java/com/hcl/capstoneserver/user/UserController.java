@@ -1,6 +1,7 @@
 package com.hcl.capstoneserver.user;
 
 import com.hcl.capstoneserver.user.dto.*;
+import com.hcl.capstoneserver.user.entities.AppUser;
 import com.hcl.capstoneserver.user.entities.Client;
 import com.hcl.capstoneserver.user.entities.Supplier;
 import org.modelmapper.ModelMapper;
@@ -25,12 +26,19 @@ public class UserController {
     }
 
     @PostMapping("/api/sign-in")
-    public ResponseEntity<JwtWithTypeDTO> signIn(@RequestBody AppUserWithPasswordDTO dto) {
+    public ResponseEntity<JwtWithTypeDTO> signIn(@Valid @RequestBody AppUserWithPasswordDTO dto) {
         return new ResponseEntity<>(
                 userService.signIn(
-                        dto.getUserId(),
-                        dto.getPassword()
+                        mapper.map(dto, AppUser.class)
                 ),
+                HttpStatus.OK
+        );
+    }
+
+    @PostMapping("/api/refresh-token")
+    public ResponseEntity<JwtWithTypeDTO> refreshToken(@Valid @RequestBody JwtRefreshDto dto) {
+        return new ResponseEntity<>(
+                userService.refreshToken(dto),
                 HttpStatus.OK
         );
     }

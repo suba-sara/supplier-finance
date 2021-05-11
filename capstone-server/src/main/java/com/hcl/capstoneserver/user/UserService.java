@@ -1,11 +1,12 @@
 package com.hcl.capstoneserver.user;
 
-import com.hcl.capstoneserver.user.dto.ClientDTO;
 import com.hcl.capstoneserver.user.dto.JwtWithTypeDTO;
+import com.hcl.capstoneserver.user.dto.ClientDTO;
 import com.hcl.capstoneserver.user.dto.SupplierDTO;
 import com.hcl.capstoneserver.user.entities.AppUser;
 import com.hcl.capstoneserver.user.entities.Client;
 import com.hcl.capstoneserver.user.entities.Supplier;
+import com.hcl.capstoneserver.user.exceptions.JwtInvalidException;
 import com.hcl.capstoneserver.user.exceptions.UserAlreadyExistsException;
 import com.hcl.capstoneserver.user.repositories.AppUserRepository;
 import com.hcl.capstoneserver.user.repositories.ClientRepository;
@@ -53,19 +54,28 @@ public class UserService implements UserDetailsService {
         this.sequenceGenerator = sequenceGenerator;
     }
 
-    public JwtWithTypeDTO signIn(String username, String password) {
-        UserDetails userDetails = loadUserByUsername(username);
-        if (!bCryptPasswordEncoder.matches(password, userDetails.getPassword())) {
+    public JwtWithTypeDTO signIn(AppUser user) {
+        UserDetails userDetails = loadUserByUsername(user.getUserId());
+        if (!bCryptPasswordEncoder.matches(user.getPassword(), userDetails.getPassword()))
             throw new BadCredentialsException("Invalid username or password");
-        }
 
         String jwt = jwtUtil.generateToken(userDetails);
 
-        return new JwtWithTypeDTO(
-                jwt,
-                userDetails.getAuthorities()
-                           .toArray()[0].toString()
-        );
+        return new JwtWithTypeDTO(jwt,
+                userDetails.getAuthorities().toArray()[0].toString(), user.getUserId());
+    }
+
+    public JwtWithTypeDTO refreshToken(JwtRefreshDto dto) {
+        if (jwtUtil.validateToken(dto.getJwt())) {
+            String username = jwtUtil.extractUsername(dto.getJwt());
+            UserDetails userDetails = loadUserByUsername(username);
+            String jwt = jwtUtil.generateToken(userDetails);
+
+            return new JwtWithTypeDTO(jwt,
+                    userDetails.getAuthorities().toArray()[0].toString(), username);
+        } else {
+            throw new JwtInvalidException();
+        }
     }
 
     // used by spring security don't change
