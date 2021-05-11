@@ -9,12 +9,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class SequenceGenerator {
     private final SupplierIdSequenceRepository supplierIdSequenceRepository;
-    private final ClientIdSequenceRepository   clientIdSequenceRepository;
+    private final ClientIdSequenceRepository clientIdSequenceRepository;
 
-    public SequenceGenerator(SupplierIdSequenceRepository supplierIdSequenceRepository,
-                             ClientIdSequenceRepository clientIdSequenceRepository) {
+    public SequenceGenerator(
+            SupplierIdSequenceRepository supplierIdSequenceRepository,
+            ClientIdSequenceRepository clientIdSequenceRepository
+    ) {
         this.supplierIdSequenceRepository = supplierIdSequenceRepository;
-        this.clientIdSequenceRepository   = clientIdSequenceRepository;
+        this.clientIdSequenceRepository = clientIdSequenceRepository;
     }
 
 
