@@ -1,3 +1,5 @@
+@import "../../../styles/variables.scss";
+
 .button-card {
   min-width: 250px;
   width: 400px;
@@ -9,18 +11,22 @@
   align-items: center;
   background: none;
   border: none;
-  box-shadow: 0 0 5px #181880;
+  box-shadow: 0 0 5px $primary-color;
 
   cursor: pointer;
 
   .content-header {
-    color: #181880;
+    color: $primary-color;
     font-size: 2em;
     font-weight: bold;
     margin-bottom: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+
+  &:hover {
+    box-shadow: 0 0 15px rgb(0, 102, 182);
   }
 }
 
