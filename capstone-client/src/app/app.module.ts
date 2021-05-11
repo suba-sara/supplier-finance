@@ -12,6 +12,7 @@ import { ForgotPasswordModule } from './forgot-password/forgot-password.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { HttpClientModule } from '@angular/common/http';
 import { SignUpModule } from './sign-up/sign-up.module';
+import { UserModule } from './user/user.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -26,6 +27,7 @@ import { SignUpModule } from './sign-up/sign-up.module';
     SignUpModule,
     ForgotPasswordModule,
     DashboardModule,
+    UserModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
