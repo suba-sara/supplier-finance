@@ -2,6 +2,7 @@ package com.hcl.capstoneserver.filters;
 
 import com.hcl.capstoneserver.user.UserService;
 import com.hcl.capstoneserver.util.JWTUtil;
+import io.jsonwebtoken.JwtException;
 import org.hibernate.annotations.Filter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -29,7 +30,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
         // extract the authorization header
         final String authorizationHeader = request.getHeader("Authorization");
 
@@ -42,8 +44,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             // Bearer jwt_token -> jwt_token
             jwt = authorizationHeader.substring(7);
 
-            //extract the username from jwt
-            userName = jwtUtil.extractUsername(jwt);
+            try {
+                //extract the username from jwt
+                userName = jwtUtil.extractUsername(jwt);
+            } catch (JwtException ignored) {
+            }
         }
 
         //if username exists and request is not already authorized
