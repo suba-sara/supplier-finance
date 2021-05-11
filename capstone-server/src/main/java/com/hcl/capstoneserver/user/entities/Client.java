@@ -21,16 +21,33 @@ public class Client extends Person {
     public Client() {
     }
 
-    public Client(String userId,
-                  String password,
-                  String name,
-                  String address,
-                  String email,
-                  String phone,
-                  Float interestRate,
-                  String clientId,
-                  int accountNumber) {
+    public Client(
+            String userId,
+            String password,
+            String name,
+            String address,
+            String email,
+            String phone,
+            Float interestRate,
+            int accountNumber
+    ) {
         super(userId, password, UserType.CLIENT, name, address, email, phone, interestRate);
+        this.accountNumber = accountNumber;
+    }
+
+    public Client(
+            String userId,
+            String password,
+            String name,
+            String address,
+            String email,
+            String phone,
+            Float interestRate,
+            String clientId,
+            int accountNumber
+    ) {
+        super(userId, password, UserType.CLIENT, name, address, email, phone, interestRate);
+        this.clientId = clientId;
         this.accountNumber = accountNumber;
     }
 

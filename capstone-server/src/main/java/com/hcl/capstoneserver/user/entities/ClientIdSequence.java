@@ -12,17 +12,17 @@ import javax.persistence.Id;
 @Entity
 public class ClientIdSequence {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "client_id_sequence")
-    @GenericGenerator(name = "client_id_sequence",
-                      strategy = "com.hcl.capstoneserver.generator.id.CustomIdGenerator",
-                      parameters = {
-                              @Parameter(name = CustomIdGenerator.SEQUENCE_PARAM, value = "client_id_sequence"),
-                              @Parameter(name = CustomIdGenerator.INITIAL_PARAM, value = "1"),
-                              @Parameter(name = CustomIdGenerator.OPT_PARAM, value = "pooled-lo"),
-                              @Parameter(name = CustomIdGenerator.INCREMENT_PARAM, value = "1"),
-                              @Parameter(name = CustomIdGenerator.PREFIX_PARAM, value = "CL_"),
-                              @Parameter(name = CustomIdGenerator.NUMBER_FORMAT_PARAM, value = "%05d")
-                      }
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "client_id_sequence_new")
+    @GenericGenerator(name = "client_id_sequence_new",
+            strategy = "com.hcl.capstoneserver.generator.id.CustomIdGenerator",
+            parameters = {
+                    @Parameter(name = CustomIdGenerator.SEQUENCE_PARAM, value = "client_id_sequence_new"),
+                    @Parameter(name = CustomIdGenerator.INITIAL_PARAM, value = "1"),
+                    @Parameter(name = CustomIdGenerator.OPT_PARAM, value = "pooled-lo"),
+                    @Parameter(name = CustomIdGenerator.INCREMENT_PARAM, value = "1"),
+                    @Parameter(name = CustomIdGenerator.PREFIX_PARAM, value = "CL_"),
+                    @Parameter(name = CustomIdGenerator.NUMBER_FORMAT_PARAM, value = "%05d")
+            }
     )
     private String id;
 
