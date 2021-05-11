@@ -1,0 +1,44 @@
+@import "src/styles/variables";
+
+.link-container {
+  padding: 15px 5px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+}
+
+.extended-links-container {
+  max-height: 0;
+  transform: translateX(-100px);
+  transition: all ease 0.2s;
+  visibility: hidden;
+}
+
+.show-extended-links {
+  max-height: none;
+  transform: translateX(0);
+  visibility: visible;
+}
+
+.link-title-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  color: #817474;
+
+  font-size: 1.6em;
+  transition: all ease 0.2s;
+
+  mat-icon {
+    transition: transform 0.2s linear;
+  }
+}
+
+.rotate-icon {
+  mat-icon {
+    transform: rotate(90deg);
+  }
+}

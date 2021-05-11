@@ -1,0 +1,20 @@
+<div class="link-container">
+  <div
+    (click)="toggleExpandedMode()"
+    [class.rotate-icon]="isExpanded"
+    class="link-title-container"
+  >
+    <div>
+      <mat-icon>play_arrow</mat-icon>
+    </div>
+    <div>Invoices</div>
+  </div>
+  <div
+    [class.show-extended-links]="isExpanded"
+    class="extended-links-container"
+  >
+    <app-nav-link></app-nav-link>
+    <app-nav-link></app-nav-link>
+    <app-nav-link></app-nav-link>
+  </div>
+</div>
