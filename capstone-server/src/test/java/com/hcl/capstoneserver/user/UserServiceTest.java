@@ -1,6 +1,7 @@
 package com.hcl.capstoneserver.user;
 
 import com.hcl.capstoneserver.user.dto.SupplierDTO;
+import com.hcl.capstoneserver.user.entities.Client;
 import com.hcl.capstoneserver.user.entities.Supplier;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -49,5 +50,40 @@ public class UserServiceTest {
         ));
 
         Assertions.assertNotNull(supplier.getSupplierId());
+    }
+
+    @Test
+    @DisplayName("It should create new client")
+    public void shouldCreateNewClient() {
+        Assertions.assertEquals(
+                "Sheldon",
+                userService.signUpClient(
+                        new Client(
+                                "shel",
+                                "sdfdsfds",
+                                "Sheldon",
+                                "Colombo",
+                                "shel@gmail.com",
+                                "071-2314538",
+                                2.5f,
+                                "1001",
+                                1234567891
+                        )).getName()
+        );
+    }
+
+    @Test
+    @DisplayName("It should generate Client Id")
+    public void shouldGenerateClientId() {
+        Assertions.assertNotNull(userService.signUpClient(new Client(
+                "shel",
+                "sdfdsfds",
+                "Sheldon",
+                "Colombo",
+                "shel@gmail.com",
+                "071-2314538",
+                2.5f,
+                1234567891
+        )).getClientId());
     }
 }
