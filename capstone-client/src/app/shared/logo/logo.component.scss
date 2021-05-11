@@ -1,4 +1,4 @@
-@import "../../../../styles/variables";
+@import "src/styles/variables";
 
 .logo-container {
   width: 20%;
@@ -24,5 +24,11 @@
     transform: translateY(25%);
     font-weight: bold;
     color: white;
+  }
+}
+
+.dark-title {
+  h1 {
+    color: $primary-color-dark;
   }
 }
