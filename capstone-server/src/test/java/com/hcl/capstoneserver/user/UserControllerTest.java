@@ -1,5 +1,6 @@
 package com.hcl.capstoneserver.user;
 
+import com.hcl.capstoneserver.user.dto.ClientDTO;
 import com.hcl.capstoneserver.user.dto.PersonWithPasswordDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -41,14 +42,14 @@ public class UserControllerTest {
 
 
         webTestClient.post()
-                .uri(String.format("http://localhost:%d/api/sign-up/supplier", port))
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(Mono.just(dto), PersonWithPasswordDTO.class)
-                .exchange()
-                .expectStatus()
-                .isCreated()
-                .expectBody()
-                .jsonPath("$.userId").isEqualTo("sup1");
+                     .uri(String.format("http://localhost:%d/api/sign-up/supplier", port))
+                     .contentType(MediaType.APPLICATION_JSON)
+                     .body(Mono.just(dto), PersonWithPasswordDTO.class)
+                     .exchange()
+                     .expectStatus()
+                     .isCreated()
+                     .expectBody()
+                     .jsonPath("$.userId").isEqualTo("sup1");
     }
 
     @Test
@@ -64,13 +65,59 @@ public class UserControllerTest {
 
 
         webTestClient.post()
-                .uri(String.format("http://localhost:%d/api/sign-up/supplier", port))
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(Mono.just(dto), PersonWithPasswordDTO.class)
-                .exchange()
-                .expectStatus()
-                .isBadRequest()
-                .expectBody()
-                .jsonPath("$.errors[0].field").isEqualTo("userId");
+                     .uri(String.format("http://localhost:%d/api/sign-up/supplier", port))
+                     .contentType(MediaType.APPLICATION_JSON)
+                     .body(Mono.just(dto), PersonWithPasswordDTO.class)
+                     .exchange()
+                     .expectStatus()
+                     .isBadRequest()
+                     .expectBody()
+                     .jsonPath("$.errors[0].field").isEqualTo("userId");
+    }
+
+    @Test
+    @DisplayName("it should be create a new Client")
+    public void shouldCreateClient() {
+        PersonWithPasswordDTO person = new PersonWithPasswordDTO();
+        person.setUserId("Tester");
+        person.setPassword("sdsdfsdfs");
+        person.setName("Sheldon");
+        person.setAddress("colombo");
+        person.setEmail("shedfds@gmail.com");
+        person.setPhone("21312");
+        person.setInterestRate(2.0F);
+
+        webTestClient.post()
+                     .uri(String.format("http://localhost:%d/api/sign-up/client", port))
+                     .contentType(MediaType.APPLICATION_JSON)
+                     .body(Mono.just(person), PersonWithPasswordDTO.class)
+                     .exchange()
+                     .expectStatus()
+                     .is2xxSuccessful()
+                     .expectBody()
+                     .jsonPath("$.name").isEqualTo("Sheldon");
+    }
+
+    @Test
+    @DisplayName("It should generate client id")
+    public void shouldGenerateClientId() {
+        PersonWithPasswordDTO person = new PersonWithPasswordDTO();
+        person.setUserId("Tester");
+        person.setPassword("sdsdfsdfs");
+        person.setName("Sheldon");
+        person.setAddress("colombo");
+        person.setEmail("shedfds@gmail.com");
+        person.setPhone("21312");
+        person.setInterestRate(2.0F);
+
+        webTestClient.post()
+                     .uri(String.format("http://localhost:%d/api/sign-up/client", port))
+                     .contentType(MediaType.APPLICATION_JSON)
+                     .body(Mono.just(person), PersonWithPasswordDTO.class)
+                     .exchange()
+                     .expectStatus()
+                     .is2xxSuccessful()
+                     .expectBody()
+                     .jsonPath("$.clientId").isNotEmpty();
     }
 }
