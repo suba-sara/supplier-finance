@@ -16,15 +16,17 @@ public class ClientDTO extends PersonDTO {
     public ClientDTO() {
     }
 
-    public ClientDTO(String userId,
-                     String name,
-                     String address,
-                     String email,
-                     String phone,
-                     Float interestRate,
-                     String clientId, int accountNumber) {
+    public ClientDTO(
+            String userId,
+            String name,
+            String address,
+            String email,
+            String phone,
+            Float interestRate,
+            String clientId, int accountNumber
+    ) {
         super(userId, name, address, email, phone, interestRate);
-        this.clientId      = clientId;
+        this.clientId = clientId;
         this.accountNumber = accountNumber;
     }
 
