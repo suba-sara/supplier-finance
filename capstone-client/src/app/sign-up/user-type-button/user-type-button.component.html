@@ -1,11 +1,9 @@
-<div class='button-card'>
-    <a routerLink='{{accountType?.redirectPath}}'>
-        <div class='content-header'>{{accountType?.accountName}}</div>
-        <div class='character'>
-            <img src='{{accountType?.imagePath}}' alt='{{accountType?.accountName}}'>
-        </div>
-        <ul>
-            <li *ngFor='let info of accountType?.accountInfo'>{{info}}</li>
-        </ul>
-    </a>
+<div class="button-card">
+  <a routerLink="{{ routePath }}">
+    <div class="content-header">{{ accountType }}</div>
+    <div class="character">
+      <img alt="{{ accountType }}" src="{{ imagePath }}" />
+    </div>
+    <ng-content></ng-content>
+  </a>
 </div>
