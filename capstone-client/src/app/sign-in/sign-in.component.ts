@@ -24,7 +24,7 @@ export class SignInComponent implements OnInit {
     private router: Router
   ) {
     this.signInData = {
-      username: '',
+      userId: '',
       password: '',
     };
     this.isPasswordVisible = true;
@@ -34,12 +34,17 @@ export class SignInComponent implements OnInit {
 
   handleSignInClick(): void {
     this.errorMessage = undefined;
-    this.authService.signIn(this.signInData, (res) => {
-      if (res.status === 200) {
-        this.router.navigate(['dashboard']);
-      } else if (res.status === 403) {
-        this.errorMessage = res.message;
+    this.authService.signIn(this.signInData).subscribe(
+      () => {
+        this.router.navigateByUrl('/dashboard');
+      },
+      ({ error }) => {
+        if (error.status === 400) {
+          this.errorMessage = 'Invalid username or password';
+        } else {
+          this.errorMessage = error.message;
+        }
       }
-    });
+    );
   }
 }
