@@ -63,7 +63,7 @@ const routes: Routes = [
     component: DashboardComponent,
     canActivate: [AuthGuard],
     data: {
-      roles: ['SUPPLIER'],
+      roles: ['SUPPLIER', 'CLIENT', 'BANK'],
     },
   },
 ];
