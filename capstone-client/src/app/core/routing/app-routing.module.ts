@@ -7,15 +7,65 @@ import { SignInComponent } from '../../sign-in/sign-in.component';
 import { SignUpClientComponent } from '../../sign-up/sign-up-client.component';
 import { SignUpSupplierComponent } from '../../sign-up/sign-up-supplier.component';
 import { SignUpComponent } from '../../sign-up/sign-up.component';
+import { AuthGuard } from '../auth/auth.guard';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'sign-in', component: SignInComponent },
-  { path: 'sign-up', component: SignUpComponent },
-  { path: 'sign-up/client', component: SignUpClientComponent },
-  { path: 'sign-up/supplier', component: SignUpSupplierComponent },
-  { path: 'forgot-password', component: ForgotPasswordComponent },
-  { path: 'dashboard', component: DashboardComponent },
+  {
+    path: '',
+    component: HomeComponent,
+    canActivate: [AuthGuard],
+    data: {
+      roles: ['UNAUTHORIZED'],
+    },
+  },
+  {
+    path: 'sign-in',
+    component: SignInComponent,
+    canActivate: [AuthGuard],
+    data: {
+      roles: ['UNAUTHORIZED'],
+    },
+  },
+  {
+    path: 'sign-up',
+    component: SignUpComponent,
+    canActivate: [AuthGuard],
+    data: {
+      roles: ['UNAUTHORIZED'],
+    },
+  },
+  {
+    path: 'sign-up/client',
+    component: SignUpClientComponent,
+    canActivate: [AuthGuard],
+    data: {
+      roles: ['UNAUTHORIZED'],
+    },
+  },
+  {
+    path: 'sign-up/supplier',
+    component: SignUpSupplierComponent,
+    canActivate: [AuthGuard],
+    data: {
+      roles: ['UNAUTHORIZED'],
+    },
+  },
+  {
+    path: 'forgot-password',
+    component: ForgotPasswordComponent,
+    canActivate: [AuthGuard],
+    data: {
+      roles: ['UNAUTHORIZED'],
+    },
+  },
+  {
+    path: 'dashboard',
+    component: DashboardComponent,
+    canActivate: [AuthGuard],
+    data: {
+      roles: ['SUPPLIER'],
+    },
+  },
 ];
 
 @NgModule({
