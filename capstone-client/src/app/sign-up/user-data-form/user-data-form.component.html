@@ -1,5 +1,4 @@
-<form>
-  <h1>User Details</h1>
+<form [formGroup]="userDataForm">
   <div class="full-width-field-container">
     <mat-form-field appearance="outline">
       <mat-label>Username</mat-label>
@@ -9,18 +8,21 @@
   <div class="full-width-field-container">
     <mat-form-field appearance="outline">
       <mat-label>Password</mat-label>
-      <input matInput formControlName="username" />
+      <input matInput formControlName="password" type="password" />
     </mat-form-field>
   </div>
   <div class="full-width-field-container">
     <mat-form-field appearance="outline">
       <mat-label>Confirm Password</mat-label>
-      <input matInput formControlName="username" />
+      <input matInput formControlName="confirm_password" type="password" />
+      <mat-error *ngIf="userDataForm.hasError('notSame')">
+        Passwords do not match
+      </mat-error>
     </mat-form-field>
   </div>
   <div class="button-container">
     <div>
-      <button mat-flat-button>Next</button>
+      <button mat-flat-button (click)="confirmUserData()">Next</button>
     </div>
   </div>
 </form>
