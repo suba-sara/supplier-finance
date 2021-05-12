@@ -9,6 +9,7 @@ import { PersonalDataFormComponent } from './personal-data-form/personal-data-fo
 import { BankAccountDetailsFormComponent } from './bank-account-details-form/bank-account-details-form.component';
 import { SignUpClientComponent } from './sign-up-client.component';
 import { SignUpComponent } from './sign-up.component';
+import { UserTypeButtonComponent } from './user-type-button/user-type-button.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { SignUpComponent } from './sign-up.component';
     SignUpSupplierComponent,
     PersonalDataFormComponent,
     BankAccountDetailsFormComponent,
+    UserTypeButtonComponent,
   ],
   imports: [
     CommonModule,
