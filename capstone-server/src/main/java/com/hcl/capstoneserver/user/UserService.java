@@ -1,11 +1,14 @@
 package com.hcl.capstoneserver.user;
 
+import com.hcl.capstoneserver.user.dto.ClientDTO;
 import com.hcl.capstoneserver.user.dto.JwtWithTypeDTO;
 import com.hcl.capstoneserver.user.dto.SupplierDTO;
 import com.hcl.capstoneserver.user.entities.AppUser;
+import com.hcl.capstoneserver.user.entities.Client;
 import com.hcl.capstoneserver.user.entities.Supplier;
 import com.hcl.capstoneserver.user.exceptions.UserAlreadyExistsException;
 import com.hcl.capstoneserver.user.repositories.AppUserRepository;
+import com.hcl.capstoneserver.user.repositories.ClientRepository;
 import com.hcl.capstoneserver.user.repositories.SupplierRepository;
 import com.hcl.capstoneserver.util.JWTUtil;
 import com.hcl.capstoneserver.util.SequenceGenerator;
@@ -26,17 +29,24 @@ import java.util.Optional;
 public class UserService implements UserDetailsService {
     private final AppUserRepository appUserRepository;
     private final SupplierRepository supplierRepository;
+    private final ClientRepository clientRepository;
     private final JWTUtil jwtUtil;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ModelMapper mapper;
     private final SequenceGenerator sequenceGenerator;
 
-    public UserService(AppUserRepository appUserRepository, SupplierRepository supplierRepository,
-                       JWTUtil jwtUtil,
-                       BCryptPasswordEncoder bCryptPasswordEncoder, ModelMapper mapper,
-                       SequenceGenerator sequenceGenerator) {
+    public UserService(
+            AppUserRepository appUserRepository,
+            SupplierRepository supplierRepository,
+            ClientRepository clientRepository,
+            JWTUtil jwtUtil,
+            BCryptPasswordEncoder bCryptPasswordEncoder,
+            ModelMapper mapper,
+            SequenceGenerator sequenceGenerator
+    ) {
         this.appUserRepository = appUserRepository;
         this.supplierRepository = supplierRepository;
+        this.clientRepository = clientRepository;
         this.jwtUtil = jwtUtil;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.mapper = mapper;
@@ -45,12 +55,17 @@ public class UserService implements UserDetailsService {
 
     public JwtWithTypeDTO signIn(String username, String password) {
         UserDetails userDetails = loadUserByUsername(username);
-        if (!bCryptPasswordEncoder.matches(password, userDetails.getPassword()))
+        if (!bCryptPasswordEncoder.matches(password, userDetails.getPassword())) {
             throw new BadCredentialsException("Invalid username or password");
+        }
 
         String jwt = jwtUtil.generateToken(userDetails);
 
-        return new JwtWithTypeDTO(jwt, userDetails.getAuthorities().toArray()[0].toString());
+        return new JwtWithTypeDTO(
+                jwt,
+                userDetails.getAuthorities()
+                           .toArray()[0].toString()
+        );
     }
 
     // used by spring security don't change
@@ -58,13 +73,17 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<AppUser> user = appUserRepository.findById(username);
 
-        if (!user.isPresent())
+        if (!user.isPresent()) {
             throw new UsernameNotFoundException("User not found");
+        }
 
         return new User(
-                user.get().getUserId(),
-                user.get().getPassword(),
-                Collections.singleton(new SimpleGrantedAuthority((user.get().getUserType())))
+                user.get()
+                    .getUserId(),
+                user.get()
+                    .getPassword(),
+                Collections.singleton(new SimpleGrantedAuthority((user.get()
+                                                                      .getUserType())))
         );
     }
 
@@ -85,7 +104,26 @@ public class UserService implements UserDetailsService {
                 supplier.getPhone(),
                 supplier.getInterestRate(),
                 sequenceGenerator.getSupplierSequence()
-                )), SupplierDTO.class);
+        )), SupplierDTO.class);
+    }
+
+    public ClientDTO signUpClient(Client client) {
+        //check if the client is already exists or not
+        if (clientRepository.existsById((client.getUserId()))) {
+            throw new UserAlreadyExistsException((client.getUserId()));
+        }
+
+        return mapper.map(clientRepository.save(new Client(
+                client.getUserId(),
+                bCryptPasswordEncoder.encode(client.getPassword()),
+                client.getName(),
+                client.getAddress(),
+                client.getEmail(),
+                client.getPhone(),
+                client.getInterestRate(),
+                sequenceGenerator.getClientSequence(),
+                client.getAccountNumber()
+        )), ClientDTO.class);
     }
 }
 

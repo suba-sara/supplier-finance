@@ -1,9 +1,7 @@
 package com.hcl.capstoneserver.user;
 
-import com.hcl.capstoneserver.user.dto.AppUserWithPasswordDTO;
-import com.hcl.capstoneserver.user.dto.PersonWithPasswordDTO;
-import com.hcl.capstoneserver.user.dto.JwtWithTypeDTO;
-import com.hcl.capstoneserver.user.dto.SupplierDTO;
+import com.hcl.capstoneserver.user.dto.*;
+import com.hcl.capstoneserver.user.entities.Client;
 import com.hcl.capstoneserver.user.entities.Supplier;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -41,6 +39,14 @@ public class UserController {
     public ResponseEntity<SupplierDTO> signUpSupplier(@Valid @RequestBody PersonWithPasswordDTO dto) {
         return new ResponseEntity<>(
                 userService.signUpSupplier(mapper.map(dto, Supplier.class)),
+                HttpStatus.CREATED
+        );
+    }
+
+    @PostMapping("/api/sign-up/client")
+    public ResponseEntity<ClientDTO> signUpClient(@Valid @RequestBody PersonWithPasswordDTO dto) {
+        return new ResponseEntity<>(
+                userService.signUpClient(mapper.map(dto, Client.class)),
                 HttpStatus.CREATED
         );
     }
