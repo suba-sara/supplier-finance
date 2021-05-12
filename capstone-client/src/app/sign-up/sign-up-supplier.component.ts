@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PersonalDetails } from './personal-data-form/personal-data-form.component';
+import { UserDetails } from './user-data-form/user-data-form.component';
 
 type SupplierAccDetail = {
   creditAccNumber?: number;
@@ -16,8 +17,8 @@ type SupplierAccDetail = {
 export class SignUpSupplierComponent implements OnInit {
   personalDetails: PersonalDetails;
   pageNumber: number;
-
   supplierAccDetail: SupplierAccDetail;
+  userDetails: UserDetails;
 
   constructor() {
     this.personalDetails = {
@@ -34,10 +35,15 @@ export class SignUpSupplierComponent implements OnInit {
     this.pageNumber = 1;
 
     this.supplierAccDetail = {};
+    this.userDetails = { password: '', username: '' };
   }
 
   ngOnInit(): void {}
 
+  submitUserData = (value: UserDetails): void => {
+    this.userDetails = value;
+    this.goToNextPage();
+  };
   submitPersonalData = (value: PersonalDetails): void => {
     this.personalDetails = value;
     this.goToNextPage();

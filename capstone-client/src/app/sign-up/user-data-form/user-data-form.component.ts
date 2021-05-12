@@ -1,10 +1,14 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 
 export type UserDetails = {
   username: string;
   password: string;
-  confirm_password: string;
 };
 
 @Component({
@@ -13,14 +17,32 @@ export type UserDetails = {
   styleUrls: ['./user-data-form.component.scss'],
 })
 export class UserDataFormComponent implements OnInit {
-  userDataForm = new FormGroup({
-    username: new FormControl('', [Validators.required]),
-    password: new FormControl('', [
-      Validators.required,
-      Validators.minLength(8),
-    ]),
-    confirm_password: new FormControl('', [Validators.required]),
-  });
+  userDataForm = new FormGroup(
+    {
+      username: new FormControl('', [
+        Validators.required,
+        Validators.minLength(4),
+      ]),
+      password: new FormControl('', [
+        Validators.required,
+        Validators.minLength(6),
+      ]),
+      confirm_password: new FormControl(''),
+    },
+    {
+      validators: (control) => {
+        const errors: ValidationErrors = {};
+        const passwordControl = control.get('password');
+        const confirmPasswordControl = control.get('confirm_password');
+
+        if (passwordControl?.value !== confirmPasswordControl?.value) {
+          confirmPasswordControl?.setErrors({ notSame: true });
+        }
+
+        return errors;
+      },
+    }
+  );
 
   @Output()
   formSubmitEvent = new EventEmitter<UserDetails>();

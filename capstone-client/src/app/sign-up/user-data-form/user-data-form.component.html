@@ -2,25 +2,39 @@
   <div class="full-width-field-container">
     <mat-form-field appearance="outline">
       <mat-label>Username</mat-label>
-      <input matInput formControlName="username" />
+      <input formControlName="username" matInput />
+      <mat-error *ngIf="userDataForm.get('username')?.hasError('required')">
+        required
+      </mat-error>
+      <mat-error *ngIf="userDataForm.get('username')?.hasError('minLength')">
+        must be at least 4 characters long
+      </mat-error>
     </mat-form-field>
   </div>
   <div class="full-width-field-container">
     <mat-form-field appearance="outline">
       <mat-label>Password</mat-label>
-      <input matInput formControlName="password" type="password" />
+      <input formControlName="password" matInput type="password" />
+      <mat-error *ngIf="userDataForm.get('password')?.hasError('required')">
+        required
+      </mat-error>
+      <mat-error *ngIf="userDataForm.get('password')?.hasError('minLength')">
+        must be at least 6 characters long
+      </mat-error>
     </mat-form-field>
   </div>
   <div class="full-width-field-container">
     <mat-form-field appearance="outline">
       <mat-label>Confirm Password</mat-label>
-      <input matInput formControlName="confirm_password" type="password" />
-      <mat-error *ngIf="userDataForm.hasError('notSame')">
+      <input formControlName="confirm_password" matInput type="password" />
+      <mat-error
+        *ngIf="userDataForm.get('confirm_password')?.hasError('notSame')"
+      >
         Passwords do not match
       </mat-error>
     </mat-form-field>
   </div>
-  <div class="button-container">
+  <div class="button-container button-container-end">
     <div>
       <button mat-flat-button (click)="confirmUserData()">Next</button>
     </div>
