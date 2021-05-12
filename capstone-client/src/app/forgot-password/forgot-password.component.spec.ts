@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ForgotPasswordComponent } from './forgot-password.component';
+import { CommonModule } from '@angular/common';
 
 describe('ForgotPasswordComponent', () => {
   let component: ForgotPasswordComponent;
@@ -8,9 +9,9 @@ describe('ForgotPasswordComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ForgotPasswordComponent ]
-    })
-    .compileComponents();
+      imports: [CommonModule],
+      declarations: [ForgotPasswordComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

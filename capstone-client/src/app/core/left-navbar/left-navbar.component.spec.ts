@@ -1,6 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LeftNavbarComponent } from './left-navbar.component';
+import { CommonModule } from '@angular/common';
+import { AuthModule } from '../auth/auth.module';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { RouterModule } from '@angular/router';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatRippleModule } from '@angular/material/core';
 
 describe('LeftNavbarComponent', () => {
   let component: LeftNavbarComponent;
@@ -8,9 +15,17 @@ describe('LeftNavbarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ LeftNavbarComponent ]
-    })
-    .compileComponents();
+      imports: [
+        CommonModule,
+        AuthModule,
+        MatIconModule,
+        MatButtonModule,
+        RouterModule,
+        MatTooltipModule,
+        MatRippleModule,
+      ],
+      declarations: [LeftNavbarComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

@@ -6,18 +6,16 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
-import { LeftNavbarModule } from '../core/left-navbar/left-navbar.module';
 
 @NgModule({
   declarations: [DashboardComponent],
   imports: [
     CommonModule,
+    RouterModule,
+    SharedModule,
     MatIconModule,
     MatButtonModule,
     MatTooltipModule,
-    RouterModule,
-    SharedModule,
-    LeftNavbarModule,
   ],
 })
 export class DashboardModule {}

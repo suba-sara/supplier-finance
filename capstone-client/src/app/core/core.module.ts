@@ -1,24 +1,15 @@
 import { APP_INITIALIZER, NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { TopNavbarModule } from './top-navbar/top-navbar.module';
 import { AppRoutingModule } from './routing/app-routing.module';
 import { appInitializer } from './app-initializer';
 import { AuthService } from './auth/auth.service';
 import { LeftNavbarModule } from './left-navbar/left-navbar.module';
-import { SharedModule } from '../shared/shared.module';
 import { AuthModule } from './auth/auth.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptor } from './auth/jwt.interceptor';
 import { UnauthorizedInterceptor } from './auth/unauthorized.interceptor';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    TopNavbarModule,
-    AppRoutingModule,
-    LeftNavbarModule,
-    SharedModule,
-  ],
   providers: [
     {
       provide: APP_INITIALIZER,

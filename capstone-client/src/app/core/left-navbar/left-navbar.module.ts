@@ -8,6 +8,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { ExpandableNavLinkComponent } from './expandable-nav-link/expandable-nav-link.component';
 import { MatRippleModule } from '@angular/material/core';
 import { NavLinkComponent } from './nav-link/nav-link.component';
+import { AuthModule } from '../auth/auth.module';
 
 @NgModule({
   declarations: [
@@ -17,9 +18,10 @@ import { NavLinkComponent } from './nav-link/nav-link.component';
   ],
   imports: [
     CommonModule,
+    AuthModule,
+    RouterModule,
     MatIconModule,
     MatButtonModule,
-    RouterModule,
     MatTooltipModule,
     MatRippleModule,
   ],

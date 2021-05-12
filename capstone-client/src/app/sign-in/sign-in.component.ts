@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { AuthService, SignInData } from '../core/auth/auth.service';
 import { Router } from '@angular/router';
 
@@ -18,11 +17,7 @@ export class SignInComponent implements OnInit {
   isPasswordVisible: boolean;
   errorMessage?: string;
 
-  constructor(
-    private http: HttpClient,
-    private authService: AuthService,
-    private router: Router
-  ) {
+  constructor(private authService: AuthService, private router: Router) {
     this.signInData = {
       userId: '',
       password: '',

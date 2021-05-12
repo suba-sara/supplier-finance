@@ -1,6 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SignUpClientComponent } from './sign-up-client.component';
+import { CommonModule } from '@angular/common';
+import { RouterTestingModule } from '@angular/router/testing';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 describe('SignUpComponent', () => {
   let component: SignUpClientComponent;
@@ -8,9 +13,16 @@ describe('SignUpComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SignUpClientComponent ]
-    })
-    .compileComponents();
+      imports: [
+        CommonModule,
+        RouterTestingModule,
+        MatInputModule,
+        MatButtonModule,
+        FormsModule,
+        ReactiveFormsModule,
+      ],
+      declarations: [SignUpClientComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

@@ -8,6 +8,12 @@ import { SignUpClientComponent } from '../../sign-up/sign-up-client.component';
 import { SignUpSupplierComponent } from '../../sign-up/sign-up-supplier.component';
 import { SignUpComponent } from '../../sign-up/sign-up.component';
 import { AuthGuard } from '../auth/auth.guard';
+import { HomeModule } from '../../home/home.module';
+import { SignInModule } from '../../sign-in/sign-in.module';
+import { SignUpModule } from '../../sign-up/sign-up.module';
+import { ForgotPasswordModule } from '../../forgot-password/forgot-password.module';
+import { DashboardModule } from '../../dashboard/dashboard.module';
+import { UserModule } from '../../user/user.module';
 
 const routes: Routes = [
   {
@@ -69,7 +75,15 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [
+    RouterModule.forRoot(routes),
+    HomeModule,
+    SignInModule,
+    SignUpModule,
+    ForgotPasswordModule,
+    DashboardModule,
+    UserModule,
+  ],
   exports: [RouterModule],
   declarations: [],
 })
