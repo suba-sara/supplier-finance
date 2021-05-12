@@ -21,7 +21,7 @@ public class UserController {
 
     public UserController(UserService userService, ModelMapper mapper) {
         this.userService = userService;
-        this.mapper      = mapper;
+        this.mapper = mapper;
     }
 
     @PostMapping("/api/sign-in")
@@ -30,14 +30,16 @@ public class UserController {
                 userService.signIn(
                         dto.getUserId(),
                         dto.getPassword()
-                                  ),
+                ),
                 HttpStatus.OK
         );
     }
 
     @PostMapping("/api/sign-up/supplier")
-    public ResponseEntity<SupplierDTO> signUpSupplier(@Valid @RequestBody
-                                                              PersonWithPasswordDTO dto) {
+    public ResponseEntity<SupplierDTO> signUpSupplier(
+            @Valid @RequestBody
+                    PersonWithPasswordDTO dto
+    ) {
         return new ResponseEntity<>(
                 userService.signUpSupplier(mapper.map(dto, Supplier.class)),
                 HttpStatus.CREATED
@@ -45,8 +47,10 @@ public class UserController {
     }
 
     @PostMapping("/api/sign-up/client")
-    public ResponseEntity<ClientDTO> signUpClient(@Valid @RequestBody
-                                                          PersonWithPasswordDTO dto) {
+    public ResponseEntity<ClientDTO> signUpClient(
+            @Valid @RequestBody
+                    PersonWithPasswordDTO dto
+    ) {
         return new ResponseEntity<>(
                 userService.signUpClient(mapper.map(dto, Client.class)),
                 HttpStatus.CREATED

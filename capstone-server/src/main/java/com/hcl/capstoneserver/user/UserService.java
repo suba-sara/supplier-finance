@@ -27,28 +27,30 @@ import java.util.Optional;
 
 @Service
 public class UserService implements UserDetailsService {
-    private final AppUserRepository     appUserRepository;
-    private final SupplierRepository    supplierRepository;
-    private final ClientRepository      clientRepository;
-    private final JWTUtil               jwtUtil;
+    private final AppUserRepository appUserRepository;
+    private final SupplierRepository supplierRepository;
+    private final ClientRepository clientRepository;
+    private final JWTUtil jwtUtil;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final ModelMapper           mapper;
-    private final SequenceGenerator     sequenceGenerator;
+    private final ModelMapper mapper;
+    private final SequenceGenerator sequenceGenerator;
 
-    public UserService(AppUserRepository appUserRepository,
-                       SupplierRepository supplierRepository,
-                       ClientRepository clientRepository,
-                       JWTUtil jwtUtil,
-                       BCryptPasswordEncoder bCryptPasswordEncoder,
-                       ModelMapper mapper,
-                       SequenceGenerator sequenceGenerator) {
-        this.appUserRepository     = appUserRepository;
-        this.supplierRepository    = supplierRepository;
-        this.clientRepository      = clientRepository;
-        this.jwtUtil               = jwtUtil;
+    public UserService(
+            AppUserRepository appUserRepository,
+            SupplierRepository supplierRepository,
+            ClientRepository clientRepository,
+            JWTUtil jwtUtil,
+            BCryptPasswordEncoder bCryptPasswordEncoder,
+            ModelMapper mapper,
+            SequenceGenerator sequenceGenerator
+    ) {
+        this.appUserRepository = appUserRepository;
+        this.supplierRepository = supplierRepository;
+        this.clientRepository = clientRepository;
+        this.jwtUtil = jwtUtil;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-        this.mapper                = mapper;
-        this.sequenceGenerator     = sequenceGenerator;
+        this.mapper = mapper;
+        this.sequenceGenerator = sequenceGenerator;
     }
 
     public JwtWithTypeDTO signIn(String username, String password) {
@@ -59,9 +61,11 @@ public class UserService implements UserDetailsService {
 
         String jwt = jwtUtil.generateToken(userDetails);
 
-        return new JwtWithTypeDTO(jwt,
-                                  userDetails.getAuthorities()
-                                             .toArray()[0].toString());
+        return new JwtWithTypeDTO(
+                jwt,
+                userDetails.getAuthorities()
+                           .toArray()[0].toString()
+        );
     }
 
     // used by spring security don't change
@@ -109,15 +113,17 @@ public class UserService implements UserDetailsService {
             throw new UserAlreadyExistsException((client.getUserId()));
         }
 
-        return mapper.map(clientRepository.save(new Client(client.getUserId(),
-                                                           bCryptPasswordEncoder.encode(client.getPassword()),
-                                                           client.getName(),
-                                                           client.getAddress(),
-                                                           client.getEmail(),
-                                                           client.getPhone(),
-                                                           client.getInterestRate(),
-                                                           sequenceGenerator.getClientSequence(),
-                                                           client.getAccountNumber())), ClientDTO.class);
+        return mapper.map(clientRepository.save(new Client(
+                client.getUserId(),
+                bCryptPasswordEncoder.encode(client.getPassword()),
+                client.getName(),
+                client.getAddress(),
+                client.getEmail(),
+                client.getPhone(),
+                client.getInterestRate(),
+                sequenceGenerator.getClientSequence(),
+                client.getAccountNumber()
+        )), ClientDTO.class);
     }
 }
 
