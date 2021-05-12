@@ -12,11 +12,11 @@ import javax.persistence.Id;
 @Entity
 public class ClientIdSequence {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "client_id_sequence")
-    @GenericGenerator(name = "client_id_sequence",
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "clientid_sequence")
+    @GenericGenerator(name = "clientid_sequence",
             strategy = "com.hcl.capstoneserver.generator.id.CustomIdGenerator",
             parameters = {
-                    @Parameter(name = CustomIdGenerator.SEQUENCE_PARAM, value = "client_id_sequence"),
+                    @Parameter(name = CustomIdGenerator.SEQUENCE_PARAM, value = "clientid_sequence"),
                     @Parameter(name = CustomIdGenerator.INITIAL_PARAM, value = "1"),
                     @Parameter(name = CustomIdGenerator.OPT_PARAM, value = "pooled-lo"),
                     @Parameter(name = CustomIdGenerator.INCREMENT_PARAM, value = "1"),
