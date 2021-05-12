@@ -10,33 +10,33 @@ import java.sql.Date;
 public class Invoice {
     @Id
     @GeneratedValue
-    private Integer  invoiceId;
+    private Integer invoiceId;
     @ManyToOne
     @JoinColumn(name = "clientId", nullable = false)
-    private Client   clientId;
+    private Client clientId;
     @ManyToOne
     @JoinColumn(name = "supplierId", nullable = false)
     private Supplier supplierId;
-    private Integer  invoiceNumber;
-    private Date     invoiceDate;
-    private Double   amount;
-    private Integer  status;
+    private Integer invoiceNumber;
+    private Date invoiceDate;
+    private Double amount;
+    private Integer status;
 
     public Invoice() {
     }
 
-    public Invoice(Integer invoiceId,
-                   Client clientId,
-                   Supplier supplierId,
-                   Integer invoiceNumber,
-                   Date invoiceDate, Double amount, Integer status) {
-        this.invoiceId     = invoiceId;
-        this.clientId      = clientId;
-        this.supplierId    = supplierId;
+    public Invoice(
+            Client clientId,
+            Supplier supplierId,
+            Integer invoiceNumber,
+            Date invoiceDate, Double amount, Integer status
+    ) {
+        this.clientId = clientId;
+        this.supplierId = supplierId;
         this.invoiceNumber = invoiceNumber;
-        this.invoiceDate   = invoiceDate;
-        this.amount        = amount;
-        this.status        = status;
+        this.invoiceDate = invoiceDate;
+        this.amount = amount;
+        this.status = status;
     }
 
     public Integer getInvoiceId() {
