@@ -14,7 +14,7 @@ public class InvoiceServiceTest {
     InvoiceService invoiceService;
 
     @Test
-    @DisplayName("it shoudl create new invoice")
+    @DisplayName("it should create new invoice")
     public void shouldCreateNewInvoice() {
         Assertions.assertNotNull(invoiceService.createInvoice(
                 new InvoiceDTO(
