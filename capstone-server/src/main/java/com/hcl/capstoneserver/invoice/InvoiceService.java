@@ -16,9 +16,9 @@ public class InvoiceService {
     }
 
     public Invoice createInvoice(InvoiceDTO invoice) {
-        if (invoiceRepository.findInvoiceByInvoiceNumber(invoice.getInvoiceNumber())) {
-            throw new InvoiceNumberNotExistsException(invoice.getInvoiceNumber());
-        }
+//        if (invoiceRepository.findInvoiceByInvoiceNumber(invoice.getInvoiceNumber())) {
+//            throw new InvoiceNumberNotExistsException(invoice.getInvoiceNumber());
+//        }
 
         return mapper.map(invoiceRepository.save(
                 new Invoice(
