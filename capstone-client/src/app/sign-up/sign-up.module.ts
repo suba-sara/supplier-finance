@@ -11,6 +11,7 @@ import { SignUpClientComponent } from './sign-up-client.component';
 import { SignUpComponent } from './sign-up.component';
 import { UserDataFormComponent } from './user-data-form/user-data-form.component';
 import { UserTypeButtonComponent } from './user-type-button/user-type-button.component';
+import { FormHeaderComponent } from './form-header/form-header.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { UserTypeButtonComponent } from './user-type-button/user-type-button.com
     BankAccountDetailsFormComponent,
     UserDataFormComponent,
     UserTypeButtonComponent,
+    FormHeaderComponent,
   ],
   imports: [
     CommonModule,
