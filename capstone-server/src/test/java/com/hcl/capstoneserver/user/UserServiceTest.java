@@ -76,7 +76,7 @@ public class UserServiceTest {
     @DisplayName("It should generate Client Id")
     public void shouldGenerateClientId() {
         Assertions.assertNotNull(userService.signUpClient(new Client(
-                "shel",
+                "shel1",
                 "sdfdsfds",
                 "Sheldon",
                 "Colombo",
