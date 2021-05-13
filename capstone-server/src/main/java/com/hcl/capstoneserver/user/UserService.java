@@ -1,7 +1,7 @@
 package com.hcl.capstoneserver.user;
 
-import com.hcl.capstoneserver.user.dto.JwtWithTypeDTO;
 import com.hcl.capstoneserver.user.dto.ClientDTO;
+import com.hcl.capstoneserver.user.dto.JwtWithTypeDTO;
 import com.hcl.capstoneserver.user.dto.SupplierDTO;
 import com.hcl.capstoneserver.user.entities.AppUser;
 import com.hcl.capstoneserver.user.entities.Client;
@@ -60,16 +60,22 @@ public class UserService implements UserDetailsService {
 
         String jwt = jwtUtil.generateToken(userDetails);
 
-        return new JwtWithTypeDTO(jwt,
-                userDetails.getAuthorities().toArray()[0].toString(), user.getUserId());
+        return new JwtWithTypeDTO(
+                jwt,
+                userDetails.getAuthorities().toArray()[0].toString(),
+                user.getUserId()
+        );
     }
 
     public JwtWithTypeDTO refreshToken(String username) {
         UserDetails userDetails = loadUserByUsername(username);
         String jwt = jwtUtil.generateToken(userDetails);
 
-        return new JwtWithTypeDTO(jwt,
-                userDetails.getAuthorities().toArray()[0].toString(), username);
+        return new JwtWithTypeDTO(
+                jwt,
+                userDetails.getAuthorities().toArray()[0].toString(),
+                username
+        );
     }
 
     // used by spring security don't change
@@ -86,8 +92,9 @@ public class UserService implements UserDetailsService {
                     .getUserId(),
                 user.get()
                     .getPassword(),
-                Collections.singleton(new SimpleGrantedAuthority((user.get()
-                                                                      .getUserType())))
+                Collections.singleton(
+                        new SimpleGrantedAuthority(user.get().getUserType())
+                )
         );
     }
 
