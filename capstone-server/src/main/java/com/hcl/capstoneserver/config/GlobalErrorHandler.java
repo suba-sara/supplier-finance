@@ -2,6 +2,9 @@ package com.hcl.capstoneserver.config;
 
 import com.hcl.capstoneserver.config.error_responses.DefaultErrorResponse;
 import com.hcl.capstoneserver.config.error_responses.DefaultValidationErrorResponse;
+import io.jsonwebtoken.JwtException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -21,14 +24,16 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalErrorHandler extends ResponseEntityExceptionHandler {
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-                                                                  HttpHeaders headers, HttpStatus status,
-                                                                  WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException ex,
+            HttpHeaders headers, HttpStatus status,
+            WebRequest request
+    ) {
         ArrayList<Map<String, String>> errors = new ArrayList<>();
 
         for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
             LinkedHashMap<String, String> error = new LinkedHashMap<>();
-            error.put("field",fieldError.getField());
+            error.put("field", fieldError.getField());
             error.put("message", fieldError.getDefaultMessage());
 
             errors.add(error);
@@ -41,9 +46,11 @@ public class GlobalErrorHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
-                                                                  HttpHeaders headers, HttpStatus status,
-                                                                  WebRequest request) {
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(
+            HttpMessageNotReadableException ex,
+            HttpHeaders headers, HttpStatus status,
+            WebRequest request
+    ) {
         return new ResponseEntity<>(
                 new DefaultErrorResponse(HttpStatus.BAD_REQUEST, "Invalid request"),
                 HttpStatus.BAD_REQUEST
@@ -59,7 +66,7 @@ public class GlobalErrorHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    public final ResponseEntity<DefaultErrorResponse> handleBadCredentials(BadCredentialsException ex) {
+    public final ResponseEntity<DefaultErrorResponse> handleBadCredentials() {
         return new ResponseEntity<>(
                 new DefaultErrorResponse(HttpStatus.UNAUTHORIZED, "Invalid username or password"),
                 HttpStatus.UNAUTHORIZED
