@@ -90,8 +90,7 @@ public class GlobalErrorHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public final ResponseEntity<DefaultErrorResponse> handleConstraintViolatedErrors(Exception ex) {
-        ex.printStackTrace();
+    public final ResponseEntity<DefaultErrorResponse> handleConstraintViolatedErrors(DataIntegrityViolationException ex) {
         return new ResponseEntity<>(
                 new DefaultErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage()),
                 HttpStatus.BAD_REQUEST
