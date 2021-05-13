@@ -107,7 +107,7 @@ public class UserService implements UserDetailsService {
         }
 
         //check if the supplier provided email is already exists or not
-        if (clientRepository.existsByEmail(supplier.getEmail())) {
+        if (supplierRepository.existsByEmail(supplier.getEmail())) {
             throw new EmailAlreadyExistsException(supplier.getEmail());
         }
 
