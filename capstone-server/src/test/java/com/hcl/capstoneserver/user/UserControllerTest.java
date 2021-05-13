@@ -27,6 +27,7 @@ public class UserControllerTest {
         Assertions.assertNotNull(userController);
     }
 
+    // Supplier Testings
     @Test
     @DisplayName("it should create a supplier on correct parameters")
     public void supplierCorrectSignup() {
@@ -35,7 +36,7 @@ public class UserControllerTest {
         dto.setPassword("password");
         dto.setName("madara");
         dto.setAddress("address");
-        dto.setEmail("madara@konoh.org");
+        dto.setEmail("madara1@konoh.org");
         dto.setPhone("123456");
         dto.setInterestRate(5.0F);
 
@@ -52,13 +53,72 @@ public class UserControllerTest {
     }
 
     @Test
-    @DisplayName("it should throw errors on invalid userid")
+    @DisplayName("It should generate supplier id")
+    public void shouldGenerateSupplierId() {
+        PersonWithPasswordDTO dto = new PersonWithPasswordDTO();
+        dto.setUserId("sup2");
+        dto.setPassword("password");
+        dto.setName("madara");
+        dto.setAddress("address");
+        dto.setEmail("madara2@konoh.org");
+        dto.setPhone("123456");
+        dto.setInterestRate(5.0F);
+
+        webTestClient.post()
+                     .uri(String.format("http://localhost:%d/api/sign-up/supplier", port))
+                     .contentType(MediaType.APPLICATION_JSON)
+                     .body(Mono.just(dto), PersonWithPasswordDTO.class)
+                     .exchange()
+                     .expectStatus()
+                     .is2xxSuccessful()
+                     .expectBody()
+                     .jsonPath("$.supplierId").isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("It should throw error when supplier has exists userId")
+    public void shouldCheckSupplierUserIdExisted() {
+        PersonWithPasswordDTO dto = new PersonWithPasswordDTO();
+        dto.setUserId("sup3");
+        dto.setPassword("password");
+        dto.setName("madara");
+        dto.setAddress("address");
+        dto.setEmail("madara3@konoh.org");
+        dto.setPhone("123456");
+        dto.setInterestRate(5.0F);
+
+        // create user
+        webTestClient.post()
+                     .uri(String.format("http://localhost:%d/api/sign-up/supplier", port))
+                     .contentType(MediaType.APPLICATION_JSON)
+                     .body(Mono.just(dto), PersonWithPasswordDTO.class)
+                     .exchange()
+                     .expectStatus()
+                     .is2xxSuccessful()
+                     .expectBody()
+                     .jsonPath("$.userId").isEqualTo(dto.getUserId());
+
+        // test the error
+        webTestClient.post()
+                     .uri(String.format("http://localhost:%d/api/sign-up/supplier", port))
+                     .contentType(MediaType.APPLICATION_JSON)
+                     .body(Mono.just(dto), PersonWithPasswordDTO.class)
+                     .exchange()
+                     .expectStatus()
+                     .isBadRequest()
+                     .expectBody()
+                     .jsonPath("$.message")
+                     .isEqualTo(String.format("400 User with username %s already exits", dto.getUserId()));
+    }
+
+    @Test
+    @DisplayName("it should throw errors on supplier not providing a userid")
     public void supplierInvalidSignupUserId() {
         PersonWithPasswordDTO dto = new PersonWithPasswordDTO();
         dto.setPassword("password");
         dto.setName("madara");
         dto.setAddress("address");
-        dto.setEmail("madara@konoh.org");
+        dto.setEmail("madara4@konoh.org");
         dto.setPhone("123456");
         dto.setInterestRate(5.0F);
 
@@ -75,14 +135,60 @@ public class UserControllerTest {
     }
 
     @Test
+    @DisplayName("It should throw an exception when supplier has exists email")
+    public void shouldCheckSupplierEmailExisted() {
+        PersonWithPasswordDTO dto = new PersonWithPasswordDTO();
+        dto.setUserId("sup5");
+        dto.setPassword("password");
+        dto.setName("madara");
+        dto.setAddress("address");
+        dto.setEmail("madara5@konoh.org");
+        dto.setPhone("123456");
+        dto.setInterestRate(5.0F);
+
+        // create user
+        webTestClient.post()
+                     .uri(String.format("http://localhost:%d/api/sign-up/supplier", port))
+                     .contentType(MediaType.APPLICATION_JSON)
+                     .body(Mono.just(dto), PersonWithPasswordDTO.class)
+                     .exchange()
+                     .expectStatus()
+                     .is2xxSuccessful()
+                     .expectBody()
+                     .jsonPath("$.userId").isEqualTo(dto.getUserId());
+
+        //test the error
+        dto = new PersonWithPasswordDTO();
+        dto.setUserId("sup6");
+        dto.setPassword("password");
+        dto.setName("madara");
+        dto.setAddress("address");
+        dto.setEmail("madara5@konoh.org");
+        dto.setPhone("123456");
+        dto.setInterestRate(5.0F);
+
+        webTestClient.post()
+                     .uri(String.format("http://localhost:%d/api/sign-up/supplier", port))
+                     .contentType(MediaType.APPLICATION_JSON)
+                     .body(Mono.just(dto), PersonWithPasswordDTO.class)
+                     .exchange()
+                     .expectStatus()
+                     .isBadRequest()
+                     .expectBody()
+                     .jsonPath("$.message")
+                     .isEqualTo(String.format("400 User with email %s already exits", dto.getEmail()));
+    }
+
+    // Client Testings
+    @Test
     @DisplayName("it should be create a new Client")
     public void shouldCreateClient() {
         PersonWithPasswordDTO person = new PersonWithPasswordDTO();
-        person.setUserId("Tester");
+        person.setUserId("Tester1");
         person.setPassword("sdsdfsdfs");
         person.setName("Sheldon");
         person.setAddress("colombo");
-        person.setEmail("shedfds@gmail.com");
+        person.setEmail("shedfds1@gmail.com");
         person.setPhone("21312");
         person.setInterestRate(2.0F);
 
@@ -105,7 +211,7 @@ public class UserControllerTest {
         person.setPassword("sdsdfsdfs");
         person.setName("Sheldon");
         person.setAddress("colombo");
-        person.setEmail("shedfds@gmail.com");
+        person.setEmail("shedfds2@gmail.com");
         person.setPhone("21312");
         person.setInterestRate(2.0F);
 
@@ -118,5 +224,109 @@ public class UserControllerTest {
                      .is2xxSuccessful()
                      .expectBody()
                      .jsonPath("$.clientId").isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("It should throw error when client has exists userId")
+    public void shouldCheckClientUserIdExisted() {
+        PersonWithPasswordDTO person = new PersonWithPasswordDTO();
+        person.setUserId("Tester3");
+        person.setPassword("sdsdfsdfs");
+        person.setName("Sheldon");
+        person.setAddress("colombo");
+        person.setEmail("shedfds3@gmail.com");
+        person.setPhone("21312");
+        person.setInterestRate(2.0F);
+
+        // create user
+        webTestClient.post()
+                     .uri(String.format("http://localhost:%d/api/sign-up/client", port))
+                     .contentType(MediaType.APPLICATION_JSON)
+                     .body(Mono.just(person), PersonWithPasswordDTO.class)
+                     .exchange()
+                     .expectStatus()
+                     .is2xxSuccessful()
+                     .expectBody()
+                     .jsonPath("$.userId").isEqualTo(person.getUserId());
+
+        // test the error
+        webTestClient.post()
+                     .uri(String.format("http://localhost:%d/api/sign-up/client", port))
+                     .contentType(MediaType.APPLICATION_JSON)
+                     .body(Mono.just(person), PersonWithPasswordDTO.class)
+                     .exchange()
+                     .expectStatus()
+                     .isBadRequest()
+                     .expectBody()
+                     .jsonPath("$.message")
+                     .isEqualTo(String.format("400 User with username %s already exits", person.getUserId()));
+    }
+
+    @Test
+    @DisplayName("it should throw errors on client not providing a userid")
+    public void clientInvalidSignupUserId() {
+        PersonWithPasswordDTO person = new PersonWithPasswordDTO();
+        person.setPassword("sdsdfsdfs");
+        person.setName("Sheldon");
+        person.setAddress("colombo");
+        person.setEmail("shedfds4@gmail.com");
+        person.setPhone("21312");
+        person.setInterestRate(2.0F);
+
+
+        webTestClient.post()
+                     .uri(String.format("http://localhost:%d/api/sign-up/client", port))
+                     .contentType(MediaType.APPLICATION_JSON)
+                     .body(Mono.just(person), PersonWithPasswordDTO.class)
+                     .exchange()
+                     .expectStatus()
+                     .isBadRequest()
+                     .expectBody()
+                     .jsonPath("$.errors[0].field").isEqualTo("userId");
+    }
+
+    @Test
+    @DisplayName("It should throw an exception when client has exists email")
+    public void shouldCheckClientEmailExisted() {
+        PersonWithPasswordDTO person = new PersonWithPasswordDTO();
+        person.setUserId("Tester5");
+        person.setPassword("sdsdfsdfs");
+        person.setName("Sheldon");
+        person.setAddress("colombo");
+        person.setEmail("shedfds5@gmail.com");
+        person.setPhone("21312");
+        person.setInterestRate(2.0F);
+
+        // create user
+        webTestClient.post()
+                     .uri(String.format("http://localhost:%d/api/sign-up/client", port))
+                     .contentType(MediaType.APPLICATION_JSON)
+                     .body(Mono.just(person), PersonWithPasswordDTO.class)
+                     .exchange()
+                     .expectStatus()
+                     .is2xxSuccessful()
+                     .expectBody()
+                     .jsonPath("$.userId").isEqualTo(person.getUserId());
+
+        //test the error
+        person = new PersonWithPasswordDTO();
+        person.setUserId("Tester6");
+        person.setPassword("sdsdfsdfs");
+        person.setName("Sheldon");
+        person.setAddress("colombo");
+        person.setEmail("shedfds5@gmail.com");
+        person.setPhone("21312");
+        person.setInterestRate(2.0F);
+
+        webTestClient.post()
+                     .uri(String.format("http://localhost:%d/api/sign-up/client", port))
+                     .contentType(MediaType.APPLICATION_JSON)
+                     .body(Mono.just(person), PersonWithPasswordDTO.class)
+                     .exchange()
+                     .expectStatus()
+                     .isBadRequest()
+                     .expectBody()
+                     .jsonPath("$.message")
+                     .isEqualTo(String.format("400 User with email %s already exits", person.getEmail()));
     }
 }
