@@ -43,7 +43,7 @@ public class UserServiceTest {
                 "password",
                 "madara",
                 "konoha",
-                "madara@konoha.org",
+                "madara1@konoha.org",
                 "123456",
                 5.0F,
                 "s002"
@@ -80,7 +80,7 @@ public class UserServiceTest {
                 "sdfdsfds",
                 "Sheldon",
                 "Colombo",
-                "shel@gmail.com",
+                "shel1@gmail.com",
                 "071-2314538",
                 2.5f,
                 1234567891
