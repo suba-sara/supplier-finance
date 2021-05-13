@@ -2,9 +2,6 @@ package com.hcl.capstoneserver.config;
 
 import com.hcl.capstoneserver.config.error_responses.DefaultErrorResponse;
 import com.hcl.capstoneserver.config.error_responses.DefaultValidationErrorResponse;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -31,7 +28,7 @@ public class GlobalErrorHandler extends ResponseEntityExceptionHandler {
 
         for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
             LinkedHashMap<String, String> error = new LinkedHashMap<>();
-            error.put("field", fieldError.getField());
+            error.put("field",fieldError.getField());
             error.put("message", fieldError.getDefaultMessage());
 
             errors.add(error);
@@ -69,7 +66,6 @@ public class GlobalErrorHandler extends ResponseEntityExceptionHandler {
         );
     }
 
-
     @ExceptionHandler(HttpClientErrorException.class)
     public final ResponseEntity<DefaultErrorResponse> handleClientErrors(HttpClientErrorException ex) {
         return new ResponseEntity<>(
@@ -83,6 +79,15 @@ public class GlobalErrorHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(
                 new DefaultErrorResponse(HttpStatus.UNAUTHORIZED, ex.getMessage()),
                 HttpStatus.UNAUTHORIZED
+        );
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public final ResponseEntity<DefaultErrorResponse> handleConstraintViolatedErrors(Exception ex) {
+        ex.printStackTrace();
+        return new ResponseEntity<>(
+                new DefaultErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage()),
+                HttpStatus.BAD_REQUEST
         );
     }
 }
