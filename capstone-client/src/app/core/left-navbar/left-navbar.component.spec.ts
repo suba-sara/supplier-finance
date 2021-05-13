@@ -5,9 +5,9 @@ import { CommonModule } from '@angular/common';
 import { AuthModule } from '../auth/auth.module';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { RouterModule } from '@angular/router';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatRippleModule } from '@angular/material/core';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('LeftNavbarComponent', () => {
   let component: LeftNavbarComponent;
@@ -20,7 +20,7 @@ describe('LeftNavbarComponent', () => {
         AuthModule,
         MatIconModule,
         MatButtonModule,
-        RouterModule,
+        RouterTestingModule,
         MatTooltipModule,
         MatRippleModule,
       ],
