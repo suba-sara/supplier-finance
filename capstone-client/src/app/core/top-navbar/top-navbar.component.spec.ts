@@ -1,6 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TopNavbarComponent } from './top-navbar.component';
+import { CommonModule } from '@angular/common';
+import { SharedModule } from '../../shared/shared.module';
+import { RouterTestingModule } from '@angular/router/testing';
+import { NavLinkComponent } from './nav-link/nav-link.component';
+import { BurgerMenuComponent } from './burger-menu/burger-menu.component';
 
 describe('TopNavbarComponent', () => {
   let component: TopNavbarComponent;
@@ -8,7 +13,8 @@ describe('TopNavbarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TopNavbarComponent],
+      imports: [CommonModule, RouterTestingModule, SharedModule],
+      declarations: [TopNavbarComponent, NavLinkComponent, BurgerMenuComponent],
     }).compileComponents();
   });
 

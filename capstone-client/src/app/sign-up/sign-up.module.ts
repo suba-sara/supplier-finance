@@ -24,11 +24,11 @@ import { UserTypeButtonComponent } from './user-type-button/user-type-button.com
   ],
   imports: [
     CommonModule,
+    RouterModule,
     MatInputModule,
     MatButtonModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule,
   ],
 })
 export class SignUpModule {}

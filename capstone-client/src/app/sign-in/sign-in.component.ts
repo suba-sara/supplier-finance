@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { AuthService, SignInData } from '../core/auth/auth.service';
 import { Router } from '@angular/router';
 
@@ -18,13 +17,9 @@ export class SignInComponent implements OnInit {
   isPasswordVisible: boolean;
   errorMessage?: string;
 
-  constructor(
-    private http: HttpClient,
-    private authService: AuthService,
-    private router: Router
-  ) {
+  constructor(private authService: AuthService, private router: Router) {
     this.signInData = {
-      username: '',
+      userId: '',
       password: '',
     };
     this.isPasswordVisible = true;
@@ -34,12 +29,17 @@ export class SignInComponent implements OnInit {
 
   handleSignInClick(): void {
     this.errorMessage = undefined;
-    this.authService.signIn(this.signInData, (res) => {
-      if (res.status === 200) {
-        this.router.navigate(['dashboard']);
-      } else if (res.status === 403) {
-        this.errorMessage = res.message;
+    this.authService.signIn(this.signInData).subscribe(
+      () => {
+        this.router.navigateByUrl('/dashboard');
+      },
+      ({ error }) => {
+        if (error.status === 400) {
+          this.errorMessage = 'Invalid username or password';
+        } else {
+          this.errorMessage = error.message;
+        }
       }
-    });
+    );
   }
 }

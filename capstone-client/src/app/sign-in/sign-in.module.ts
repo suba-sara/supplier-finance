@@ -7,14 +7,18 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { AuthModule } from '../core/auth/auth.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [SignInComponent],
   imports: [
     CommonModule,
+    AuthModule,
+    RouterModule,
+    BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule,
     MatInputModule,
     MatCardModule,
     MatButtonModule,

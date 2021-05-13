@@ -53,18 +53,28 @@ public class UserService implements UserDetailsService {
         this.sequenceGenerator = sequenceGenerator;
     }
 
-    public JwtWithTypeDTO signIn(String username, String password) {
-        UserDetails userDetails = loadUserByUsername(username);
-        if (!bCryptPasswordEncoder.matches(password, userDetails.getPassword())) {
+    public JwtWithTypeDTO signIn(AppUser user) {
+        UserDetails userDetails = loadUserByUsername(user.getUserId());
+        if (!bCryptPasswordEncoder.matches(user.getPassword(), userDetails.getPassword()))
             throw new BadCredentialsException("Invalid username or password");
-        }
 
         String jwt = jwtUtil.generateToken(userDetails);
 
         return new JwtWithTypeDTO(
                 jwt,
-                userDetails.getAuthorities()
-                           .toArray()[0].toString()
+                userDetails.getAuthorities().toArray()[0].toString(),
+                user.getUserId()
+        );
+    }
+
+    public JwtWithTypeDTO refreshToken(String username) {
+        UserDetails userDetails = loadUserByUsername(username);
+        String jwt = jwtUtil.generateToken(userDetails);
+
+        return new JwtWithTypeDTO(
+                jwt,
+                userDetails.getAuthorities().toArray()[0].toString(),
+                username
         );
     }
 
@@ -82,8 +92,9 @@ public class UserService implements UserDetailsService {
                     .getUserId(),
                 user.get()
                     .getPassword(),
-                Collections.singleton(new SimpleGrantedAuthority((user.get()
-                                                                      .getUserType())))
+                Collections.singleton(
+                        new SimpleGrantedAuthority(user.get().getUserType())
+                )
         );
     }
 

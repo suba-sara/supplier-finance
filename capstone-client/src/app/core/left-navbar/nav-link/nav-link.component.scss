@@ -1,0 +1,12 @@
+.link-root {
+  padding: 15px 5px;
+  display: flex;
+  align-items: center;
+
+  font-size: 1.4em;
+  cursor: pointer;
+
+  mat-icon {
+    margin-right: 15px;
+  }
+}

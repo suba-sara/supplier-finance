@@ -1,6 +1,7 @@
 package com.hcl.capstoneserver.user;
 
 import com.hcl.capstoneserver.user.dto.*;
+import com.hcl.capstoneserver.user.entities.AppUser;
 import com.hcl.capstoneserver.user.entities.Client;
 import com.hcl.capstoneserver.user.entities.Supplier;
 import org.modelmapper.ModelMapper;
@@ -10,8 +11,10 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @CrossOrigin
 @RestController()
@@ -25,12 +28,23 @@ public class UserController {
     }
 
     @PostMapping("/api/sign-in")
-    public ResponseEntity<JwtWithTypeDTO> signIn(@RequestBody AppUserWithPasswordDTO dto) {
+    public ResponseEntity<JwtWithTypeDTO> signIn(@Valid @RequestBody AppUserWithPasswordDTO dto) {
         return new ResponseEntity<>(
                 userService.signIn(
-                        dto.getUserId(),
-                        dto.getPassword()
+                        mapper.map(dto, AppUser.class)
                 ),
+                HttpStatus.OK
+        );
+    }
+
+    @PostMapping("/api/refresh-token")
+    public ResponseEntity<JwtWithTypeDTO> refreshToken(Principal principal) {
+        // throw unauthorized error if no user is defined
+        if (principal == null)
+            throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED, "unauthorized");
+
+        return new ResponseEntity<>(
+                userService.refreshToken(principal.getName()),
                 HttpStatus.OK
         );
     }
