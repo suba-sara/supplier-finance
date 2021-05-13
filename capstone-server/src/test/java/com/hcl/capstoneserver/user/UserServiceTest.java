@@ -59,7 +59,7 @@ public class UserServiceTest {
                 "Sheldon",
                 userService.signUpClient(
                         new Client(
-                                "shel",
+                                "shel2",
                                 "sdfdsfds",
                                 "Sheldon",
                                 "Colombo",

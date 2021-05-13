@@ -1,6 +1,5 @@
 package com.hcl.capstoneserver.user;
 
-import com.hcl.capstoneserver.user.dto.ClientDTO;
 import com.hcl.capstoneserver.user.dto.PersonWithPasswordDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -102,7 +101,7 @@ public class UserControllerTest {
     @DisplayName("It should generate client id")
     public void shouldGenerateClientId() {
         PersonWithPasswordDTO person = new PersonWithPasswordDTO();
-        person.setUserId("Tester");
+        person.setUserId("Tester2");
         person.setPassword("sdsdfsdfs");
         person.setName("Sheldon");
         person.setAddress("colombo");
