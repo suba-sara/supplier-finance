@@ -6,6 +6,7 @@ import com.hcl.capstoneserver.user.dto.SupplierDTO;
 import com.hcl.capstoneserver.user.entities.AppUser;
 import com.hcl.capstoneserver.user.entities.Client;
 import com.hcl.capstoneserver.user.entities.Supplier;
+import com.hcl.capstoneserver.user.exceptions.EmailAlreadyExistsException;
 import com.hcl.capstoneserver.user.exceptions.UserAlreadyExistsException;
 import com.hcl.capstoneserver.user.repositories.AppUserRepository;
 import com.hcl.capstoneserver.user.repositories.ClientRepository;
@@ -105,6 +106,10 @@ public class UserService implements UserDetailsService {
             throw new UserAlreadyExistsException(supplier.getUserId());
         }
 
+        //check if the supplier provided email is already exists or not
+        if (clientRepository.existsByEmail(supplier.getEmail())) {
+            throw new EmailAlreadyExistsException(supplier.getEmail());
+        }
 
         return mapper.map(supplierRepository.save(new Supplier(
                 supplier.getUserId(),
@@ -120,8 +125,13 @@ public class UserService implements UserDetailsService {
 
     public ClientDTO signUpClient(Client client) {
         //check if the client is already exists or not
-        if (clientRepository.existsById((client.getUserId()))) {
-            throw new UserAlreadyExistsException((client.getUserId()));
+        if (clientRepository.existsById(client.getUserId())) {
+            throw new UserAlreadyExistsException(client.getUserId());
+        }
+
+        //check if the client provided email is already exists or not
+        if (clientRepository.existsByEmail(client.getEmail())) {
+            throw new EmailAlreadyExistsException(client.getEmail());
         }
 
         return mapper.map(clientRepository.save(new Client(
