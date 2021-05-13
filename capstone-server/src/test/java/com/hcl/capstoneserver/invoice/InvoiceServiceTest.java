@@ -42,7 +42,7 @@ public class InvoiceServiceTest {
                                 "s001"
                         ),
                         1234567891,
-                        Date.valueOf("2021-04-23"),
+                        "2021-04-23",
                         25000.23,
                         1
                 )));

@@ -18,7 +18,7 @@ public class Invoice {
     @JoinColumn(name = "supplierId", nullable = false)
     private Supplier supplierId;
     private Integer invoiceNumber;
-    private Date invoiceDate;
+    private String invoiceDate;
     private Double amount;
     private Integer status;
 
@@ -29,7 +29,7 @@ public class Invoice {
             Client clientId,
             Supplier supplierId,
             Integer invoiceNumber,
-            Date invoiceDate, Double amount, Integer status
+            String invoiceDate, Double amount, Integer status
     ) {
         this.clientId = clientId;
         this.supplierId = supplierId;
@@ -71,11 +71,11 @@ public class Invoice {
         this.invoiceNumber = invoiceNumber;
     }
 
-    public Date getInvoiceDate() {
+    public String getInvoiceDate() {
         return invoiceDate;
     }
 
-    public void setInvoiceDate(Date invoiceDate) {
+    public void setInvoiceDate(String invoiceDate) {
         this.invoiceDate = invoiceDate;
     }
 

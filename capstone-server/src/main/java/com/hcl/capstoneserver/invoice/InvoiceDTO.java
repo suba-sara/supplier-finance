@@ -17,8 +17,8 @@ public class InvoiceDTO {
     @NotBlank(message = "invoice number is required")
     private Integer invoiceNumber;
     @NotBlank(message = "date is required")
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private Date invoiceDate;
+    //@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private String invoiceDate;
     @NotBlank(message = "amount is required")
     @Currency(value = "0", message = "amount is must be greater than")
     private Double amount;
@@ -32,7 +32,7 @@ public class InvoiceDTO {
             Client clientId,
             Supplier supplierId,
             Integer invoiceNumber,
-            Date invoiceDate, Double amount, Integer status
+            String invoiceDate, Double amount, Integer status
     ) {
         this.clientId = clientId;
         this.supplierId = supplierId;
@@ -74,11 +74,11 @@ public class InvoiceDTO {
         this.invoiceNumber = invoiceNumber;
     }
 
-    public Date getInvoiceDate() {
+    public String getInvoiceDate() {
         return invoiceDate;
     }
 
-    public void setInvoiceDate(Date invoiceDate) {
+    public void setInvoiceDate(String invoiceDate) {
         this.invoiceDate = invoiceDate;
     }
 
