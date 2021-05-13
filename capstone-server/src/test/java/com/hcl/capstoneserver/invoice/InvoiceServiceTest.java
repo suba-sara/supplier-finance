@@ -1,5 +1,7 @@
 package com.hcl.capstoneserver.invoice;
 
+import com.hcl.capstoneserver.user.entities.Client;
+import com.hcl.capstoneserver.user.entities.Supplier;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,8 +20,27 @@ public class InvoiceServiceTest {
     public void shouldCreateNewInvoice() {
         Assertions.assertNotNull(invoiceService.createInvoice(
                 new InvoiceDTO(
-                        null,
-                        null,
+                        new Client(
+                                "shel",
+                                "sdfdsfds",
+                                "Sheldon",
+                                "Colombo",
+                                "shel@gmail.com",
+                                "071-2314538",
+                                2.5f,
+                                "1001",
+                                1234567891
+                        ),
+                        new Supplier(
+                                "sup1",
+                                "password",
+                                "ma",
+                                "konoha",
+                                "madara@konoha.org",
+                                "123456",
+                                5.0F,
+                                "s001"
+                        ),
                         1234567891,
                         Date.valueOf("2021-04-23"),
                         25000.23,
