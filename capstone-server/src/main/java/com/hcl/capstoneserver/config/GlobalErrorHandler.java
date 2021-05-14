@@ -88,13 +88,5 @@ public class GlobalErrorHandler extends ResponseEntityExceptionHandler {
                 HttpStatus.UNAUTHORIZED
         );
     }
-
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public final ResponseEntity<DefaultErrorResponse> handleConstraintViolatedErrors(DataIntegrityViolationException ex) {
-        return new ResponseEntity<>(
-                new DefaultErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage()),
-                HttpStatus.BAD_REQUEST
-        );
-    }
 }
 
