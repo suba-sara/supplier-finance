@@ -14,7 +14,7 @@ export class TopNavbarComponent implements OnInit {
 
   toggleMenu = (hide?: boolean): void => {
     if (hide) {
-      this.isMobileMenuOpen = hide;
+      this.isMobileMenuOpen = false;
     } else {
       this.isMobileMenuOpen = !this.isMobileMenuOpen;
     }
