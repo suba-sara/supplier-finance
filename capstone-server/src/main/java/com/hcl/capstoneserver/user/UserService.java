@@ -14,6 +14,7 @@ import com.hcl.capstoneserver.user.repositories.SupplierRepository;
 import com.hcl.capstoneserver.util.JWTUtil;
 import com.hcl.capstoneserver.util.SequenceGenerator;
 import org.modelmapper.ModelMapper;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -107,9 +108,9 @@ public class UserService implements UserDetailsService {
         }
 
         //check if the supplier provided email is already exists or not
-        if (supplierRepository.existsByEmail(supplier.getEmail())) {
-            throw new EmailAlreadyExistsException(supplier.getEmail());
-        }
+//        if (supplierRepository.existsByEmail(supplier.getEmail())) {
+//            throw new EmailAlreadyExistsException(supplier.getEmail());
+//        }
 
         return mapper.map(supplierRepository.save(new Supplier(
                 supplier.getUserId(),
@@ -124,27 +125,26 @@ public class UserService implements UserDetailsService {
     }
 
     public ClientDTO signUpClient(Client client) {
-        //check if the client is already exists or not
-        if (clientRepository.existsById(client.getUserId())) {
-            throw new UserAlreadyExistsException(client.getUserId());
-        }
+        try {
+            //check if the client is already exists or not
+            if (clientRepository.existsById(client.getUserId())) {
+                throw new UserAlreadyExistsException(client.getUserId());
+            }
 
-        //check if the client provided email is already exists or not
-        if (clientRepository.existsByEmail(client.getEmail())) {
+            return mapper.map(clientRepository.save(new Client(
+                    client.getUserId(),
+                    bCryptPasswordEncoder.encode(client.getPassword()),
+                    client.getName(),
+                    client.getAddress(),
+                    client.getEmail(),
+                    client.getPhone(),
+                    client.getInterestRate(),
+                    sequenceGenerator.getClientSequence(),
+                    client.getAccountNumber()
+            )), ClientDTO.class);
+        } catch (DataIntegrityViolationException e) {
             throw new EmailAlreadyExistsException(client.getEmail());
         }
-
-        return mapper.map(clientRepository.save(new Client(
-                client.getUserId(),
-                bCryptPasswordEncoder.encode(client.getPassword()),
-                client.getName(),
-                client.getAddress(),
-                client.getEmail(),
-                client.getPhone(),
-                client.getInterestRate(),
-                sequenceGenerator.getClientSequence(),
-                client.getAccountNumber()
-        )), ClientDTO.class);
     }
 }
 
