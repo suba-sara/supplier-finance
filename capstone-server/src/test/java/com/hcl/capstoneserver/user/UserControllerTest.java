@@ -107,8 +107,8 @@ public class UserControllerTest {
                      .expectStatus()
                      .isBadRequest()
                      .expectBody()
-                     .jsonPath("$.message")
-                     .isEqualTo(String.format("400 User with username %s already exits", dto.getUserId()));
+                     .jsonPath("$.errors[0].message")
+                     .isEqualTo(String.format("User with username %s already exits", dto.getUserId()));
     }
 
     @Test
@@ -175,8 +175,8 @@ public class UserControllerTest {
                      .expectStatus()
                      .isBadRequest()
                      .expectBody()
-                     .jsonPath("$.message")
-                     .isEqualTo(String.format("400 User with email %s already exits", dto.getEmail()));
+                     .jsonPath("$.errors[0].message")
+                     .isEqualTo(String.format("User with email %s already exits", dto.getEmail()));
     }
 
     // Client Testings
@@ -258,8 +258,8 @@ public class UserControllerTest {
                      .expectStatus()
                      .isBadRequest()
                      .expectBody()
-                     .jsonPath("$.message")
-                     .isEqualTo(String.format("400 User with username %s already exits", person.getUserId()));
+                     .jsonPath("$.errors[0].message")
+                     .isEqualTo(String.format("User with username %s already exits", person.getUserId()));
     }
 
     @Test
@@ -326,7 +326,7 @@ public class UserControllerTest {
                      .expectStatus()
                      .isBadRequest()
                      .expectBody()
-                     .jsonPath("$.message")
-                     .isEqualTo(String.format("400 User with email %s already exits", person.getEmail()));
+                     .jsonPath("$.errors[0].message")
+                     .isEqualTo(String.format("User with email %s already exits", person.getEmail()));
     }
 }
