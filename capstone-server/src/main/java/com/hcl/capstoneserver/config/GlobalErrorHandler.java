@@ -2,8 +2,9 @@ package com.hcl.capstoneserver.config;
 
 import com.hcl.capstoneserver.config.error_responses.DefaultErrorResponse;
 import com.hcl.capstoneserver.config.error_responses.DefaultValidationErrorResponse;
+import com.hcl.capstoneserver.user.exceptions.EmailAlreadyExistsException;
+import com.hcl.capstoneserver.user.exceptions.UserAlreadyExistsException;
 import io.jsonwebtoken.JwtException;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @ControllerAdvice
 public class GlobalErrorHandler extends ResponseEntityExceptionHandler {
@@ -87,6 +89,33 @@ public class GlobalErrorHandler extends ResponseEntityExceptionHandler {
                 new DefaultErrorResponse(HttpStatus.UNAUTHORIZED, ex.getMessage()),
                 HttpStatus.UNAUTHORIZED
         );
+    }
+
+    @ExceptionHandler(EmailAlreadyExistsException.class)
+    public final ResponseEntity<Object> handleEmailExistsException(EmailAlreadyExistsException ex) {
+        ArrayList<Map<String, String>> errors = errorsMap("email", ex.getMessage());
+        return new ResponseEntity<>(
+                new DefaultValidationErrorResponse(HttpStatus.BAD_REQUEST, "User Already Exists", errors),
+                HttpStatus.BAD_REQUEST
+        );
+    }
+
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    protected final ResponseEntity<Object> handleUserIdExistsException(UserAlreadyExistsException ex) {
+        ArrayList<Map<String, String>> errors = errorsMap("userId", ex.getMessage());
+        return new ResponseEntity<>(
+                new DefaultValidationErrorResponse(HttpStatus.BAD_REQUEST, "User Already Exists", errors),
+                HttpStatus.BAD_REQUEST
+        );
+    }
+
+    private ArrayList<Map<String, String>> errorsMap(String field, String message) {
+        ArrayList<Map<String, String>> errors = new ArrayList<>();
+        Map<String, String> error = new LinkedHashMap<>();
+        error.put("field", field);
+        error.put("message", message);
+        errors.add(error);
+        return errors;
     }
 }
 
