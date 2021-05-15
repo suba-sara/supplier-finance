@@ -102,26 +102,25 @@ public class UserService implements UserDetailsService {
 
 
     public SupplierDTO signUpSupplier(Supplier supplier) {
-        //check if user already exists
-        if (supplierRepository.existsById(supplier.getUserId())) {
-            throw new UserAlreadyExistsException(supplier.getUserId());
+        try {
+            //check if user already exists
+            if (supplierRepository.existsById(supplier.getUserId())) {
+                throw new UserAlreadyExistsException(supplier.getUserId());
+            }
+
+            return mapper.map(supplierRepository.save(new Supplier(
+                    supplier.getUserId(),
+                    bCryptPasswordEncoder.encode(supplier.getPassword()),
+                    supplier.getName(),
+                    supplier.getAddress(),
+                    supplier.getEmail(),
+                    supplier.getPhone(),
+                    supplier.getInterestRate(),
+                    sequenceGenerator.getSupplierSequence()
+            )), SupplierDTO.class);
+        } catch (DataIntegrityViolationException e) {
+            throw new EmailAlreadyExistsException(supplier.getEmail());
         }
-
-        //check if the supplier provided email is already exists or not
-//        if (supplierRepository.existsByEmail(supplier.getEmail())) {
-//            throw new EmailAlreadyExistsException(supplier.getEmail());
-//        }
-
-        return mapper.map(supplierRepository.save(new Supplier(
-                supplier.getUserId(),
-                bCryptPasswordEncoder.encode(supplier.getPassword()),
-                supplier.getName(),
-                supplier.getAddress(),
-                supplier.getEmail(),
-                supplier.getPhone(),
-                supplier.getInterestRate(),
-                sequenceGenerator.getSupplierSequence()
-        )), SupplierDTO.class);
     }
 
     public ClientDTO signUpClient(Client client) {
