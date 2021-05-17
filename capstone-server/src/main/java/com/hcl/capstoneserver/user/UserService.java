@@ -56,17 +56,22 @@ public class UserService implements UserDetailsService {
     }
 
     public JwtWithTypeDTO signIn(AppUser user) {
-        UserDetails userDetails = loadUserByUsername(user.getUserId());
-        if (!bCryptPasswordEncoder.matches(user.getPassword(), userDetails.getPassword()))
+        try {
+
+            UserDetails userDetails = loadUserByUsername(user.getUserId());
+            if (!bCryptPasswordEncoder.matches(user.getPassword(), userDetails.getPassword()))
+                throw new BadCredentialsException("Invalid username or password");
+
+            String jwt = jwtUtil.generateToken(userDetails);
+
+            return new JwtWithTypeDTO(
+                    jwt,
+                    userDetails.getAuthorities().toArray()[0].toString(),
+                    user.getUserId()
+            );
+        } catch (UsernameNotFoundException ex) {
             throw new BadCredentialsException("Invalid username or password");
-
-        String jwt = jwtUtil.generateToken(userDetails);
-
-        return new JwtWithTypeDTO(
-                jwt,
-                userDetails.getAuthorities().toArray()[0].toString(),
-                user.getUserId()
-        );
+        }
     }
 
     public JwtWithTypeDTO refreshToken(String username) {
