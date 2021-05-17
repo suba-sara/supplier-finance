@@ -21,7 +21,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Objects;
 
 @ControllerAdvice
 public class GlobalErrorHandler extends ResponseEntityExceptionHandler {
@@ -68,9 +67,9 @@ public class GlobalErrorHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    public final ResponseEntity<DefaultErrorResponse> handleBadCredentials() {
+    public final ResponseEntity<DefaultErrorResponse> handleBadCredentials(BadCredentialsException ex) {
         return new ResponseEntity<>(
-                new DefaultErrorResponse(HttpStatus.UNAUTHORIZED, "Invalid username or password"),
+                new DefaultErrorResponse(HttpStatus.UNAUTHORIZED, ex.getMessage()),
                 HttpStatus.UNAUTHORIZED
         );
     }
