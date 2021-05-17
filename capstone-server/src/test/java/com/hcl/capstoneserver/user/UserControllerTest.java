@@ -1,5 +1,6 @@
 package com.hcl.capstoneserver.user;
 
+import com.hcl.capstoneserver.user.dto.AppUserWithPasswordDTO;
 import com.hcl.capstoneserver.user.dto.PersonWithPasswordDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -328,5 +329,22 @@ public class UserControllerTest {
                      .expectBody()
                      .jsonPath("$.errors[0].message")
                      .isEqualTo(String.format("User with email %s already exits", person.getEmail()));
+    }
+
+    @Test
+    @DisplayName("It should give appropriate error on bad credentials")
+    public void handleBadCredentialsException() {
+        AppUserWithPasswordDTO user = new AppUserWithPasswordDTO("aaa", "bbb");
+
+        webTestClient.post()
+                     .uri(String.format("http://localhost:%d/api/sign-in", port))
+                     .contentType(MediaType.APPLICATION_JSON)
+                     .body(Mono.just(user), AppUserWithPasswordDTO.class)
+                     .exchange()
+                     .expectStatus()
+                     .isForbidden()
+                     .expectBody()
+                     .jsonPath("$")
+                     .isEqualTo("Invalid username or password");
     }
 }
