@@ -1,5 +1,6 @@
 package com.hcl.capstoneserver.user;
 
+import com.hcl.capstoneserver.user.dto.JwtWithTypeDTO;
 import com.hcl.capstoneserver.user.dto.SupplierDTO;
 import com.hcl.capstoneserver.user.entities.AppUser;
 import com.hcl.capstoneserver.user.entities.Client;
@@ -44,7 +45,7 @@ public class UserServiceTest {
 
     @Nested
     @DisplayName("Sign in tests")
-    class SignInTest {
+    class SignInTests {
         @Test
         @DisplayName("It should sign in a user on correct credentials")
         public void shouldSignInOnCorrectCredentials() {
@@ -84,9 +85,11 @@ public class UserServiceTest {
             user.setUserId("shel4555");
             user.setPassword("sdfdsfds");
 
-            assertEquals("shel4555", userService.signIn(user).getUsername());
-            assertEquals("CLIENT", userService.signIn(user).getUserType());
-            assertNotNull(userService.signIn(user).getJwt());
+            JwtWithTypeDTO response = userService.signIn(user);
+
+            assertEquals("shel4555", response.getUsername());
+            assertEquals("CLIENT", response.getUserType());
+            assertNotNull(response.getJwt());
         }
 
 
@@ -128,10 +131,34 @@ public class UserServiceTest {
         }
     }
 
+    @Nested
+    @DisplayName("refresh token tests")
+    class RefreshTokenTests {
+        @Test
+        @DisplayName("it should return a valid response")
+        public void shouldReturnValidResponse() {
+            userService.signUpClient(new Client(
+                    "shel4555",
+                    "sdfdsfds",
+                    "Sheldon",
+                    "Colombo",
+                    "shel4555@gmail.com",
+                    "071-2314538",
+                    2.5f,
+                    1234567891
+            ));
+
+            JwtWithTypeDTO response = userService.refreshToken("shel4555");
+            assertEquals("shel4555", response.getUsername());
+            assertEquals("CLIENT", response.getUserType());
+            assertNotNull(response.getJwt());
+
+        }
+    }
 
     @Nested
     @DisplayName("Supplier Signup Tests")
-    class SignUpSupplierTest {
+    class SignUpSupplierTests {
         @Test
         @DisplayName("it should create a new supplier")
         public void createNewSupplier() {
@@ -216,7 +243,7 @@ public class UserServiceTest {
 
     @Nested
     @DisplayName("Client Signup Tests")
-    class SignUpClientTest {
+    class SignUpClientTests {
         @Test
         @DisplayName("It should create new client")
         public void shouldCreateNewClient() {
