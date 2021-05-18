@@ -5,7 +5,7 @@ export type PersonalDetails = {
   firstName: string;
   lastName: string;
   email: string;
-  mobileNumber: string;
+  phone: string;
   addressLine1: string;
   city: string;
   state: string;

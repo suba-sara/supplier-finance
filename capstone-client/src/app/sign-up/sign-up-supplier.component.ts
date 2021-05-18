@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PersonalDetails } from './personal-data-form/personal-data-form.component';
 import { UserDetails } from './user-data-form/user-data-form.component';
+import { SignUpService } from './sign-up.service';
 
 type SupplierAccDetail = {
   creditAccNumber?: number;
@@ -20,12 +21,12 @@ export class SignUpSupplierComponent implements OnInit {
   supplierAccDetail: SupplierAccDetail;
   userDetails: UserDetails;
 
-  constructor() {
+  constructor(private signUpService: SignUpService) {
     this.personalDetails = {
       firstName: '',
       lastName: '',
       email: '',
-      mobileNumber: '',
+      phone: '',
       addressLine1: '',
       city: '',
       state: '',
@@ -35,7 +36,7 @@ export class SignUpSupplierComponent implements OnInit {
     this.pageNumber = 1;
 
     this.supplierAccDetail = {};
-    this.userDetails = { password: '', username: '' };
+    this.userDetails = { password: '', userId: '' };
   }
 
   ngOnInit(): void {}
@@ -59,5 +60,14 @@ export class SignUpSupplierComponent implements OnInit {
     if (this.pageNumber < 3) {
       this.pageNumber = this.pageNumber + 1;
     }
+  };
+
+  register = (): void => {
+    this.signUpService
+      .signUpSupplier({
+        ...this.userDetails,
+        ...this.personalDetails,
+      })
+      .subscribe((x) => console.log(x));
   };
 }

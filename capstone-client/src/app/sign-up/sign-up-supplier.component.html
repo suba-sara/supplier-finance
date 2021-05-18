@@ -16,6 +16,7 @@
       <section *ngSwitchCase="3">
         <app-bank-account-details-form
           [goBack]="gotoPreviousPage"
+          (signUpEvent)="register()"
         ></app-bank-account-details-form>
       </section>
     </div>
