@@ -51,6 +51,6 @@ export class SignUpService {
 
     return this.http
       .post(`${API_PATH}/sign-up/supplier`, dto)
-      .pipe(map((response) => console.log(response)));
+      .pipe(map(() => {}));
   };
 }

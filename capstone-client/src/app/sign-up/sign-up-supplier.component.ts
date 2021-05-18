@@ -68,6 +68,8 @@ export class SignUpSupplierComponent implements OnInit {
         ...this.userDetails,
         ...this.personalDetails,
       })
-      .subscribe((x) => console.log(x));
+      .subscribe(() => {
+        this.pageNumber = 4;
+      });
   };
 }
