@@ -7,7 +7,7 @@ import {
 } from '@angular/forms';
 
 export type UserDetails = {
-  username: string;
+  userId: string;
   password: string;
 };
 
@@ -19,7 +19,7 @@ export type UserDetails = {
 export class UserDataFormComponent implements OnInit {
   userDataForm = new FormGroup(
     {
-      username: new FormControl('', [
+      userId: new FormControl('', [
         Validators.required,
         Validators.minLength(4),
       ]),
