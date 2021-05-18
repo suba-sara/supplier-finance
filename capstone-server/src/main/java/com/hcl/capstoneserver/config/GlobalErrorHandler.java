@@ -93,29 +93,34 @@ public class GlobalErrorHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(EmailAlreadyExistsException.class)
     public final ResponseEntity<Object> handleEmailExistsException(EmailAlreadyExistsException ex) {
-        ArrayList<Map<String, String>> errors = errorsMap("email", ex.getMessage());
+        ArrayList<Map<String, String>> errors = new ArrayList<>();
+        Map<String, String> error = new LinkedHashMap<>();
+        error.put("field", "email");
+        error.put("message", ex.getMessage());
+        errors.add(error);
+
         return new ResponseEntity<>(
-                new DefaultValidationErrorResponse(HttpStatus.BAD_REQUEST, "User Already Exists", errors),
+                new DefaultValidationErrorResponse(
+                        HttpStatus.BAD_REQUEST,
+                        "An account with this email address already exists. please sign in or use another email",
+                        errors
+                ),
                 HttpStatus.BAD_REQUEST
         );
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class)
     protected final ResponseEntity<Object> handleUserIdExistsException(UserAlreadyExistsException ex) {
-        ArrayList<Map<String, String>> errors = errorsMap("userId", ex.getMessage());
+        ArrayList<Map<String, String>> errors = new ArrayList<>();
+        Map<String, String> error = new LinkedHashMap<>();
+        error.put("field", "userId");
+        error.put("message", ex.getMessage());
+        errors.add(error);
+
         return new ResponseEntity<>(
                 new DefaultValidationErrorResponse(HttpStatus.BAD_REQUEST, "User Already Exists", errors),
                 HttpStatus.BAD_REQUEST
         );
-    }
-
-    private ArrayList<Map<String, String>> errorsMap(String field, String message) {
-        ArrayList<Map<String, String>> errors = new ArrayList<>();
-        Map<String, String> error = new LinkedHashMap<>();
-        error.put("field", field);
-        error.put("message", message);
-        errors.add(error);
-        return errors;
     }
 }
 
