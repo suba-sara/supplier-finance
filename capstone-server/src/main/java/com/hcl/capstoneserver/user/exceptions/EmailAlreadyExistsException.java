@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.client.HttpClientErrorException;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
-public class UserAlreadyExistsException extends RuntimeException {
-    public UserAlreadyExistsException(String username) {
-        super(String.format("User with username %s already exits", username));
+public class EmailAlreadyExistsException extends RuntimeException {
+    public EmailAlreadyExistsException(String email) {
+        super(String.format("User with email %s already exits", email));
     }
 }

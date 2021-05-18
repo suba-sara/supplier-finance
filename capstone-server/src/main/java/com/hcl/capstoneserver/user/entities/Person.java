@@ -2,12 +2,14 @@ package com.hcl.capstoneserver.user.entities;
 
 import com.hcl.capstoneserver.user.UserType;
 
+import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
 public class Person extends AppUser {
     private String name;
     private String address;
+    @Column(unique = true)
     private String email;
     private String phone;
     private Float interestRate;
@@ -15,7 +17,16 @@ public class Person extends AppUser {
     public Person() {
     }
 
-    public Person(String userId, String password, UserType userType, String name, String address, String email, String phone, Float interestRate) {
+    public Person(
+            String userId,
+            String password,
+            UserType userType,
+            String name,
+            String address,
+            String email,
+            String phone,
+            Float interestRate
+    ) {
         super(userId, password, userType);
         this.name = name;
         this.address = address;

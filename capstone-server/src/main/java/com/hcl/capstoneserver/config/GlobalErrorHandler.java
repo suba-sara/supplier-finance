@@ -2,7 +2,8 @@ package com.hcl.capstoneserver.config;
 
 import com.hcl.capstoneserver.config.error_responses.DefaultErrorResponse;
 import com.hcl.capstoneserver.config.error_responses.DefaultValidationErrorResponse;
-import io.jsonwebtoken.ExpiredJwtException;
+import com.hcl.capstoneserver.user.exceptions.EmailAlreadyExistsException;
+import com.hcl.capstoneserver.user.exceptions.UserAlreadyExistsException;
 import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -24,9 +25,11 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalErrorHandler extends ResponseEntityExceptionHandler {
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-                                                                  HttpHeaders headers, HttpStatus status,
-                                                                  WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException ex,
+            HttpHeaders headers, HttpStatus status,
+            WebRequest request
+    ) {
         ArrayList<Map<String, String>> errors = new ArrayList<>();
 
         for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
@@ -44,9 +47,11 @@ public class GlobalErrorHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
-                                                                  HttpHeaders headers, HttpStatus status,
-                                                                  WebRequest request) {
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(
+            HttpMessageNotReadableException ex,
+            HttpHeaders headers, HttpStatus status,
+            WebRequest request
+    ) {
         return new ResponseEntity<>(
                 new DefaultErrorResponse(HttpStatus.BAD_REQUEST, "Invalid request"),
                 HttpStatus.BAD_REQUEST
@@ -64,11 +69,10 @@ public class GlobalErrorHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(BadCredentialsException.class)
     public final ResponseEntity<DefaultErrorResponse> handleBadCredentials(BadCredentialsException ex) {
         return new ResponseEntity<>(
-                new DefaultErrorResponse(HttpStatus.UNAUTHORIZED, "Invalid username or password"),
+                new DefaultErrorResponse(HttpStatus.UNAUTHORIZED, ex.getMessage()),
                 HttpStatus.UNAUTHORIZED
         );
     }
-
 
     @ExceptionHandler(HttpClientErrorException.class)
     public final ResponseEntity<DefaultErrorResponse> handleClientErrors(HttpClientErrorException ex) {
@@ -83,6 +87,38 @@ public class GlobalErrorHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(
                 new DefaultErrorResponse(HttpStatus.UNAUTHORIZED, ex.getMessage()),
                 HttpStatus.UNAUTHORIZED
+        );
+    }
+
+    @ExceptionHandler(EmailAlreadyExistsException.class)
+    public final ResponseEntity<Object> handleEmailExistsException(EmailAlreadyExistsException ex) {
+        ArrayList<Map<String, String>> errors = new ArrayList<>();
+        Map<String, String> error = new LinkedHashMap<>();
+        error.put("field", "email");
+        error.put("message", ex.getMessage());
+        errors.add(error);
+
+        return new ResponseEntity<>(
+                new DefaultValidationErrorResponse(
+                        HttpStatus.BAD_REQUEST,
+                        "An account with this email address already exists. please sign in or use another email",
+                        errors
+                ),
+                HttpStatus.BAD_REQUEST
+        );
+    }
+
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    protected final ResponseEntity<Object> handleUserIdExistsException(UserAlreadyExistsException ex) {
+        ArrayList<Map<String, String>> errors = new ArrayList<>();
+        Map<String, String> error = new LinkedHashMap<>();
+        error.put("field", "userId");
+        error.put("message", ex.getMessage());
+        errors.add(error);
+
+        return new ResponseEntity<>(
+                new DefaultValidationErrorResponse(HttpStatus.BAD_REQUEST, "User Already Exists", errors),
+                HttpStatus.BAD_REQUEST
         );
     }
 }

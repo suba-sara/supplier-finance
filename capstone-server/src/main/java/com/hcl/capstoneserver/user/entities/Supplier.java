@@ -1,7 +1,6 @@
 package com.hcl.capstoneserver.user.entities;
 
 import com.hcl.capstoneserver.user.UserType;
-import com.hcl.capstoneserver.util.SequenceGenerator;
 
 import javax.persistence.Entity;
 
@@ -13,10 +12,19 @@ public class Supplier extends Person {
     }
 
 
-    public Supplier(String userId, String password, String name, String address, String email,
-                    String phone, Float interestRate, String supplierId) {
+    public Supplier(
+            String userId, String password, String name, String address, String email,
+            String phone, Float interestRate, String supplierId
+    ) {
         super(userId, password, UserType.SUPPLIER, name, address, email, phone, interestRate);
         this.supplierId = supplierId;
+    }
+
+    public Supplier(
+            String userId, String password, String name, String address, String email,
+            String phone, Float interestRate
+    ) {
+        super(userId, password, UserType.SUPPLIER, name, address, email, phone, interestRate);
     }
 
     public String getSupplierId() {
