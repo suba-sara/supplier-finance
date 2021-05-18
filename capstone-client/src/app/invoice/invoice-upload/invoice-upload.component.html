@@ -1,0 +1,50 @@
+<app-title-panel>Upload Invoice</app-title-panel>
+<form [formGroup]="uploadInvoiceForm">
+  <div class="content-container">
+    <div class="input-container">
+      <mat-form-field appearance="outline">
+        <mat-label>Client Id</mat-label>
+        <input [value]="clientId" disabled matInput />
+      </mat-form-field>
+    </div>
+    <div class="input-container">
+      <mat-form-field appearance="outline">
+        <mat-label>Supplier Id</mat-label>
+        <input formControlName="supplierId" matInput />
+      </mat-form-field>
+    </div>
+    <div class="input-container">
+      <mat-form-field appearance="outline">
+        <mat-label>Invoice Number</mat-label>
+        <input formControlName="invoiceNumber" matInput />
+      </mat-form-field>
+    </div>
+    <div class="input-container">
+      <mat-form-field appearance="outline">
+        <mat-label>Invoice Date</mat-label>
+        <input formControlName="invoiceDate" matInput type="date" />
+      </mat-form-field>
+    </div>
+    <div class="input-container">
+      <mat-form-field appearance="outline">
+        <mat-label>Invoice Amount</mat-label>
+        <input formControlName="invoiceAmount" matInput />
+      </mat-form-field>
+    </div>
+    <div class="input-container">
+      <mat-form-field appearance="outline">
+        <mat-label>Currency</mat-label>
+        <input formControlName="invoiceAmount" matInput />
+      </mat-form-field>
+    </div>
+    <div class="input-container">
+      <mat-form-field appearance="outline">
+        <mat-label>Invoice Payment (early/sub)</mat-label>
+        <input formControlName="invoiceNumber" matInput />
+      </mat-form-field>
+    </div>
+    <div class="input-container">
+      <input formControlName="invoiceFile" type="file" />
+    </div>
+  </div>
+</form>
