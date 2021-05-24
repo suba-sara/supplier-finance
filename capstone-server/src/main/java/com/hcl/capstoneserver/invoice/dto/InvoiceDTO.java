@@ -1,14 +1,10 @@
 package com.hcl.capstoneserver.invoice.dto;
 
 import com.hcl.capstoneserver.invoice.CurrencyType;
-import com.hcl.capstoneserver.user.entities.Client;
-import com.hcl.capstoneserver.user.entities.Supplier;
 import org.hibernate.validator.constraints.Currency;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Lob;
 import javax.validation.constraints.NotBlank;
-import java.sql.Date;
 
 public class InvoiceDTO {
     private Integer invoiceId;
