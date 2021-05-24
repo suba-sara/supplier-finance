@@ -1,38 +1,48 @@
-package com.hcl.capstoneserver.invoice;
+package com.hcl.capstoneserver.invoice.dto;
 
+import com.hcl.capstoneserver.invoice.CurrencyType;
 import com.hcl.capstoneserver.user.entities.Client;
 import com.hcl.capstoneserver.user.entities.Supplier;
 import org.hibernate.validator.constraints.Currency;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.Lob;
 import javax.validation.constraints.NotBlank;
 import java.sql.Date;
 
 public class InvoiceDTO {
     private Integer invoiceId;
-    @NotBlank(message = "client is required")
-    private Client clientId;
-    @NotBlank(message = "supplier is required")
-    private Supplier supplierId;
+    @NotBlank(message = "client id is required")
+    private String clientId;
+    @NotBlank(message = "supplier id is required")
+    private String supplierId;
     @NotBlank(message = "invoice number is required")
     private Integer invoiceNumber;
     @NotBlank(message = "date is required")
-    //@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private String invoiceDate;
     @NotBlank(message = "amount is required")
     @Currency(value = "0", message = "amount is must be greater than")
     private Double amount;
     @NotBlank(message = "status is required")
     private Integer status;
+    @NotBlank(message = "currency is required")
+    private CurrencyType currencyType;
+    @NotBlank(message = "invoice is required")
+    private byte[] invoiceData;
 
     public InvoiceDTO() {
     }
 
     public InvoiceDTO(
-            Client clientId,
-            Supplier supplierId,
+            String clientId,
+            String supplierId,
             Integer invoiceNumber,
-            String invoiceDate, Double amount, Integer status
+            String invoiceDate,
+            Double amount,
+            Integer status,
+            CurrencyType currencyType,
+            byte[] invoiceData
     ) {
         this.clientId = clientId;
         this.supplierId = supplierId;
@@ -40,6 +50,8 @@ public class InvoiceDTO {
         this.invoiceDate = invoiceDate;
         this.amount = amount;
         this.status = status;
+        this.currencyType = currencyType;
+        this.invoiceData = invoiceData;
     }
 
     public Integer getInvoiceId() {
@@ -50,19 +62,19 @@ public class InvoiceDTO {
         this.invoiceId = invoiceId;
     }
 
-    public Client getClientId() {
+    public String getClientId() {
         return clientId;
     }
 
-    public void setClientId(Client clientId) {
+    public void setClientId(String clientId) {
         this.clientId = clientId;
     }
 
-    public Supplier getSupplierId() {
+    public String getSupplierId() {
         return supplierId;
     }
 
-    public void setSupplierId(Supplier supplierId) {
+    public void setSupplierId(String supplierId) {
         this.supplierId = supplierId;
     }
 
@@ -96,5 +108,21 @@ public class InvoiceDTO {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public CurrencyType getCurrencyType() {
+        return currencyType;
+    }
+
+    public void setCurrencyType(CurrencyType currencyType) {
+        this.currencyType = currencyType;
+    }
+
+    public byte[] getInvoiceData() {
+        return invoiceData;
+    }
+
+    public void setInvoiceData(byte[] invoiceData) {
+        this.invoiceData = invoiceData;
     }
 }
