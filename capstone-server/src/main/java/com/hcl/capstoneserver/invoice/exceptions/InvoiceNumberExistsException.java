@@ -5,6 +5,6 @@ import org.springframework.web.client.HttpClientErrorException;
 
 public class InvoiceNumberExistsException extends HttpClientErrorException {
     public InvoiceNumberExistsException(Integer invoiceNumber) {
-        super(HttpStatus.FORBIDDEN, String.format("Invoice number %s is not valid", invoiceNumber));
+        super(HttpStatus.FORBIDDEN, String.format("Invoice number %s is already exists", invoiceNumber));
     }
 }
