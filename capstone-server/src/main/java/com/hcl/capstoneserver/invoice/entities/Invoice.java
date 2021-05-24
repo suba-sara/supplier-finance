@@ -1,10 +1,11 @@
-package com.hcl.capstoneserver.invoice;
+package com.hcl.capstoneserver.invoice.entities;
 
+import com.hcl.capstoneserver.invoice.CurrencyType;
 import com.hcl.capstoneserver.user.entities.Client;
 import com.hcl.capstoneserver.user.entities.Supplier;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Arrays;
 
 @Entity
 public class Invoice {
@@ -12,15 +13,18 @@ public class Invoice {
     @GeneratedValue
     private Integer invoiceId;
     @ManyToOne
-    @JoinColumn(name = "clientId", nullable = false)
+    @JoinColumn(name = "CLIENT_ID", nullable = false)
     private Client clientId;
     @ManyToOne
-    @JoinColumn(name = "supplierId", nullable = false)
+    @JoinColumn(name = "SUPPLIER_ID", nullable = false)
     private Supplier supplierId;
     private Integer invoiceNumber;
     private String invoiceDate;
     private Double amount;
     private Integer status;
+    private CurrencyType currencyType;
+    @Lob
+    private byte[] invoiceData;
 
     public Invoice() {
     }
@@ -29,7 +33,11 @@ public class Invoice {
             Client clientId,
             Supplier supplierId,
             Integer invoiceNumber,
-            String invoiceDate, Double amount, Integer status
+            String invoiceDate,
+            Double amount,
+            Integer status,
+            CurrencyType currencyType,
+            byte[] invoiceData
     ) {
         this.clientId = clientId;
         this.supplierId = supplierId;
@@ -37,6 +45,8 @@ public class Invoice {
         this.invoiceDate = invoiceDate;
         this.amount = amount;
         this.status = status;
+        this.currencyType = currencyType;
+        this.invoiceData = invoiceData;
     }
 
     public Integer getInvoiceId() {
@@ -95,6 +105,22 @@ public class Invoice {
         this.status = status;
     }
 
+    public CurrencyType getCurrencyType() {
+        return currencyType;
+    }
+
+    public void setCurrencyType(CurrencyType currencyType) {
+        this.currencyType = currencyType;
+    }
+
+    public byte[] getInvoiceData() {
+        return invoiceData;
+    }
+
+    public void setInvoiceData(byte[] invoiceData) {
+        this.invoiceData = invoiceData;
+    }
+
     @Override
     public String toString() {
         return "Invoice{" +
@@ -102,9 +128,11 @@ public class Invoice {
                 ", clientId=" + clientId +
                 ", supplierId=" + supplierId +
                 ", invoiceNumber=" + invoiceNumber +
-                ", invoiceDate=" + invoiceDate +
+                ", invoiceDate='" + invoiceDate + '\'' +
                 ", amount=" + amount +
                 ", status=" + status +
+                ", currencyType=" + currencyType +
+                ", invoiceData=" + Arrays.toString(invoiceData) +
                 '}';
     }
 }
