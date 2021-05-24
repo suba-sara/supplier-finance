@@ -1,50 +1,51 @@
 package com.hcl.capstoneserver.invoice;
 
-import com.hcl.capstoneserver.user.entities.Client;
-import com.hcl.capstoneserver.user.entities.Supplier;
+import com.hcl.capstoneserver.invoice.dto.InvoiceDTO;
+import com.hcl.capstoneserver.user.UserTestUtils;
+import com.hcl.capstoneserver.user.UserType;
+import com.hcl.capstoneserver.user.repositories.ClientRepository;
+import com.hcl.capstoneserver.user.repositories.SupplierRepository;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.sql.Date;
 
 @SpringBootTest
 public class InvoiceServiceTest {
     @Autowired
     InvoiceService invoiceService;
 
-    @Test
-    @DisplayName("it should create new invoice")
-    public void shouldCreateNewInvoice() {
-        Assertions.assertNotNull(invoiceService.createInvoice(
-                new InvoiceDTO(
-                        new Client(
-                                "shel",
-                                "sdfdsfds",
-                                "Sheldon",
-                                "Colombo",
-                                "shel@gmail.com",
-                                "071-2314538",
-                                2.5f,
-                                "1001",
-                                1234567891
-                        ),
-                        new Supplier(
-                                "sup1",
-                                "password",
-                                "ma",
-                                "konoha",
-                                "madara@konoha.org",
-                                "123456",
-                                5.0F,
-                                "s001"
-                        ),
-                        1234567891,
-                        "2021-04-23",
-                        25000.23,
-                        1
-                )));
+    @Autowired
+    UserTestUtils userTestUtils;
+
+    @Autowired
+    SupplierRepository supplierRepository;
+
+    @Autowired
+    ClientRepository clientRepository;
+
+    @BeforeEach
+    public void beforeEach() {
+        supplierRepository.deleteAll();
+        clientRepository.deleteAll();
     }
+
+//    @Test
+//    @DisplayName("it should create new invoice")
+//    public void shouldCreateNewInvoice() {
+//        userTestUtils.createAUser(UserType.SUPPLIER);
+//        userTestUtils.createAUser(UserType.CLIENT);
+//        Assertions.assertNotNull(invoiceService.createInvoice(
+//                new InvoiceDTO(
+//                        "client",
+//                        "supplier",
+//                        1234567891,
+//                        "2021-04-23",
+//                        25000.23,
+//                        0,
+//                        CurrencyType.USD
+//                )));
+//    }
 }
