@@ -18,13 +18,12 @@ public class Invoice {
     @ManyToOne
     @JoinColumn(name = "SUPPLIER_ID", nullable = false)
     private Supplier supplierId;
+    @Column(unique = true)
     private Integer invoiceNumber;
     private String invoiceDate;
     private Double amount;
     private Integer status;
     private CurrencyType currencyType;
-    @Lob
-    private byte[] invoiceData;
 
     public Invoice() {
     }
@@ -36,8 +35,7 @@ public class Invoice {
             String invoiceDate,
             Double amount,
             Integer status,
-            CurrencyType currencyType,
-            byte[] invoiceData
+            CurrencyType currencyType
     ) {
         this.clientId = clientId;
         this.supplierId = supplierId;
@@ -46,7 +44,6 @@ public class Invoice {
         this.amount = amount;
         this.status = status;
         this.currencyType = currencyType;
-        this.invoiceData = invoiceData;
     }
 
     public Integer getInvoiceId() {
@@ -113,14 +110,6 @@ public class Invoice {
         this.currencyType = currencyType;
     }
 
-    public byte[] getInvoiceData() {
-        return invoiceData;
-    }
-
-    public void setInvoiceData(byte[] invoiceData) {
-        this.invoiceData = invoiceData;
-    }
-
     @Override
     public String toString() {
         return "Invoice{" +
@@ -132,7 +121,6 @@ public class Invoice {
                 ", amount=" + amount +
                 ", status=" + status +
                 ", currencyType=" + currencyType +
-                ", invoiceData=" + Arrays.toString(invoiceData) +
                 '}';
     }
 }

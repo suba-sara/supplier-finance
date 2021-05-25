@@ -24,8 +24,6 @@ public class InvoiceDTO {
     private Integer status;
     @NotBlank(message = "currency is required")
     private CurrencyType currencyType;
-    @NotBlank(message = "invoice is required")
-    private byte[] invoiceData;
 
     public InvoiceDTO() {
     }
@@ -37,8 +35,7 @@ public class InvoiceDTO {
             String invoiceDate,
             Double amount,
             Integer status,
-            CurrencyType currencyType,
-            byte[] invoiceData
+            CurrencyType currencyType
     ) {
         this.clientId = clientId;
         this.supplierId = supplierId;
@@ -47,7 +44,6 @@ public class InvoiceDTO {
         this.amount = amount;
         this.status = status;
         this.currencyType = currencyType;
-        this.invoiceData = invoiceData;
     }
 
     public Integer getInvoiceId() {
@@ -112,13 +108,5 @@ public class InvoiceDTO {
 
     public void setCurrencyType(CurrencyType currencyType) {
         this.currencyType = currencyType;
-    }
-
-    public byte[] getInvoiceData() {
-        return invoiceData;
-    }
-
-    public void setInvoiceData(byte[] invoiceData) {
-        this.invoiceData = invoiceData;
     }
 }
