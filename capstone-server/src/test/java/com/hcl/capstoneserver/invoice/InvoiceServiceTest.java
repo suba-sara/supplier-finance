@@ -1,6 +1,7 @@
 package com.hcl.capstoneserver.invoice;
 
 import com.hcl.capstoneserver.invoice.dto.InvoiceDTO;
+import com.hcl.capstoneserver.invoice.repositories.InvoiceRepository;
 import com.hcl.capstoneserver.user.UserTestUtils;
 import com.hcl.capstoneserver.user.UserType;
 import com.hcl.capstoneserver.user.dto.PersonWithPasswordDTO;
@@ -21,6 +22,9 @@ public class InvoiceServiceTest {
     InvoiceService invoiceService;
 
     @Autowired
+    InvoiceRepository invoiceRepository;
+
+    @Autowired
     UserTestUtils userTestUtils;
 
     @Autowired
@@ -31,6 +35,7 @@ public class InvoiceServiceTest {
 
     @BeforeEach
     public void beforeEach() {
+        invoiceRepository.deleteAll();
         supplierRepository.deleteAll();
         clientRepository.deleteAll();
     }
@@ -46,7 +51,7 @@ public class InvoiceServiceTest {
                         "supplier",
                         1234567891,
                         "2021-04-23",
-                        25000.23,
+                        25000.0,
                         0,
                         CurrencyType.USD
                 )));
