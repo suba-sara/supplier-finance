@@ -2,12 +2,7 @@ package com.hcl.capstoneserver.user.entities;
 
 import com.hcl.capstoneserver.user.UserType;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
+import javax.persistence.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -50,7 +45,10 @@ public class AppUser {
     }
 
     public String getUserType() {
-        return userType.toString();
+        if (userType != null)
+            return userType.toString();
+        else
+            return null;
     }
 
     public void setUserType(UserType userType) {
