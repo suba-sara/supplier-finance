@@ -53,7 +53,14 @@ export class InvoiceUploadComponent implements OnInit {
   constructor(private invoiceUploadService: InvoiceUploadService) {}
 
   ngOnInit(): void {
-    this.clientId = 'cl1001';
+    this.invoiceUploadService.fetchMyClientId().subscribe(
+      (res) => {
+        this.clientId = res.clientId;
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }
 
   checkSupplierId(): void {

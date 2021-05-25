@@ -158,5 +158,11 @@ public class UserService implements UserDetailsService {
         boolean exists = supplierRepository.exists(Example.of(supplier));
         return new CheckExistsDTO(exists);
     }
+
+    // get client id based on token
+    public String getClientId(String userId) {
+        Optional<Client> client = clientRepository.findById(userId);
+        return client.map(Client::getClientId).orElse(null);
+    }
 }
 

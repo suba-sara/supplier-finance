@@ -71,4 +71,21 @@ public class UserController {
                 existsDTO.isValid() ? HttpStatus.OK : HttpStatus.NOT_FOUND
         );
     }
+
+    // get the client id of the current user
+    @GetMapping("/api/users/myClientId")
+    public ResponseEntity<String> getMyClientId(Principal principal) {
+        String clientId = userService.getClientId(principal.getName());
+
+        if (clientId != null)
+            return new ResponseEntity<>(
+                    clientId,
+                    HttpStatus.OK
+            );
+        else
+            return new ResponseEntity<>(
+                    "Client Id Not Found",
+                    HttpStatus.NOT_FOUND
+            );
+    }
 }

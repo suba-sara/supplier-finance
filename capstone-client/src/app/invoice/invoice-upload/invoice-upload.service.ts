@@ -21,6 +21,10 @@ export type Invoice = {
 export class InvoiceUploadService {
   constructor(private http: HttpClient) {}
 
+  fetchMyClientId(): Observable<{ clientId: string }> {
+    return this.http.get<{ clientId: string }>(`${API_PATH}/users/myClientId`);
+  }
+
   checkSupplierId(supplierId: number): Observable<{ isValid: boolean }> {
     return this.http.get<{ isValid: boolean }>(
       `${API_PATH}/users/checkSupplierId?supplierId=${supplierId}`
