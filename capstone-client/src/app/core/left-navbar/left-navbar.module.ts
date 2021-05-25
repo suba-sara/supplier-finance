@@ -9,6 +9,7 @@ import { ExpandableNavLinkComponent } from './expandable-nav-link/expandable-nav
 import { MatRippleModule } from '@angular/material/core';
 import { NavLinkComponent } from './nav-link/nav-link.component';
 import { AuthModule } from '../auth/auth.module';
+import { SharedModule } from '../../shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { AuthModule } from '../auth/auth.module';
     MatButtonModule,
     MatTooltipModule,
     MatRippleModule,
+    SharedModule,
   ],
   exports: [LeftNavbarComponent],
 })

@@ -19,11 +19,12 @@
 }
 
 .left-panel {
+  max-width: 20em;
   flex-grow: 1;
 }
 
 .right-panel {
-  flex-grow: 5;
+  flex-grow: 7;
   min-height: 100%;
   display: flex;
   flex-direction: column;

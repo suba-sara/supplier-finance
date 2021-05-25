@@ -5,6 +5,7 @@
     <router-outlet></router-outlet>
   </div>
   <div class="right-panel" *ngIf="user">
+    <app-title-panel *ngIf="user"></app-title-panel>
     <router-outlet></router-outlet>
   </div>
 </div>
