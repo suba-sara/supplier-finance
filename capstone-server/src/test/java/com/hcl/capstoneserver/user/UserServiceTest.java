@@ -1,5 +1,6 @@
 package com.hcl.capstoneserver.user;
 
+import com.hcl.capstoneserver.invoice.repositories.InvoiceRepository;
 import com.hcl.capstoneserver.user.dto.JwtWithTypeDTO;
 import com.hcl.capstoneserver.user.dto.SupplierDTO;
 import com.hcl.capstoneserver.user.entities.AppUser;
@@ -34,8 +35,12 @@ public class UserServiceTest {
     @Autowired
     UserTestUtils userTestUtils;
 
+    @Autowired
+    InvoiceRepository invoiceRepository;
+
     @BeforeEach
     public void beforeEach() {
+        invoiceRepository.deleteAll();
         supplierRepository.deleteAll();
         clientRepository.deleteAll();
     }
