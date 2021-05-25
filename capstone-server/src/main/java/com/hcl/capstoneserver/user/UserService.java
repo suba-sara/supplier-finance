@@ -1,5 +1,6 @@
 package com.hcl.capstoneserver.user;
 
+import com.hcl.capstoneserver.user.dto.CheckExistsDTO;
 import com.hcl.capstoneserver.user.dto.ClientDTO;
 import com.hcl.capstoneserver.user.dto.JwtWithTypeDTO;
 import com.hcl.capstoneserver.user.dto.SupplierDTO;
@@ -14,7 +15,6 @@ import com.hcl.capstoneserver.user.repositories.SupplierRepository;
 import com.hcl.capstoneserver.util.JWTUtil;
 import com.hcl.capstoneserver.util.SequenceGenerator;
 import org.modelmapper.ModelMapper;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -149,6 +149,14 @@ public class UserService implements UserDetailsService {
         } catch (DataIntegrityViolationException e) {
             throw new EmailAlreadyExistsException(client.getEmail());
         }
+    }
+
+    //check if supplier id exists
+    public CheckExistsDTO checkSupplierId(String supplierId) {
+        Supplier supplier = new Supplier();
+        supplier.setSupplierId(supplierId);
+        boolean exists = supplierRepository.exists(Example.of(supplier));
+        return new CheckExistsDTO(exists);
     }
 }
 
