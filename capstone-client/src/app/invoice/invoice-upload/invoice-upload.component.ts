@@ -123,4 +123,65 @@ export class InvoiceUploadComponent implements OnInit {
         );
     }
   }
+
+  checkSupplierId(): void {
+    this.supplierIdIsValid = false;
+    const supplierIdControl = this.uploadInvoiceForm.get('supplierId');
+
+    this.invoiceUploadService
+      .checkSupplierId(supplierIdControl?.value)
+      .subscribe(
+        () => {
+          supplierIdControl?.setErrors(null);
+          this.supplierIdIsValid = true;
+        },
+        (error) => {
+          if (!error.isValid) {
+            supplierIdControl?.setErrors({
+              ...supplierIdControl?.errors,
+              invalid: true,
+            });
+            this.supplierIdIsValid = false;
+          }
+          console.log(error);
+        }
+      );
+  }
+
+  validateFile(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    if (target.files) {
+      const { name, size } = target.files[0];
+      this.selectedFile = {
+        fileName: name,
+        size: Math.floor(size / 1024),
+      };
+
+      if (this.selectedFile.size > 1024) {
+        this.uploadInvoiceForm.get('invoiceFile')?.setErrors({ size: true });
+      } else {
+        this.uploadInvoiceForm.get('invoiceFile')?.setErrors({});
+      }
+    } else {
+      this.selectedFile = undefined;
+    }
+  }
+
+  createInvoice(): void {
+    this.uploadInvoiceForm.markAllAsTouched();
+    console.log('😂');
+
+    if (!this.uploadInvoiceForm.errors) {
+      this.invoiceUploadService
+        .uploadInvoice(this.uploadInvoiceForm.value)
+        .subscribe(
+          (res) => {
+            console.log(res);
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+    }
+  }
 }
