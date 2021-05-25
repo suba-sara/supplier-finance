@@ -13,6 +13,7 @@ public class Person extends AppUser {
     private Float interestRate;
 
     public Person() {
+        super();
     }
 
     public Person(String userId, String password, UserType userType, String name, String address, String email, String phone, Float interestRate) {
