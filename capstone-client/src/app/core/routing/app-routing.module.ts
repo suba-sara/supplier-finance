@@ -14,6 +14,8 @@ import { SignUpModule } from '../../sign-up/sign-up.module';
 import { ForgotPasswordModule } from '../../forgot-password/forgot-password.module';
 import { DashboardModule } from '../../dashboard/dashboard.module';
 import { UserModule } from '../../user/user.module';
+import { InvoiceUploadComponent } from '../../invoice/invoice-upload/invoice-upload.component';
+import { InvoiceModule } from '../../invoice/invoice.module';
 
 const routes: Routes = [
   {
@@ -72,6 +74,14 @@ const routes: Routes = [
       roles: ['SUPPLIER', 'CLIENT', 'BANK'],
     },
   },
+  {
+    path: 'invoice/upload',
+    component: InvoiceUploadComponent,
+    canActivate: [AuthGuard],
+    data: {
+      roles: ['SUPPLIER', 'CLIENT', 'BANK'],
+    },
+  },
 ];
 
 @NgModule({
@@ -83,6 +93,7 @@ const routes: Routes = [
     ForgotPasswordModule,
     DashboardModule,
     UserModule,
+    InvoiceModule,
   ],
   exports: [RouterModule],
   declarations: [],

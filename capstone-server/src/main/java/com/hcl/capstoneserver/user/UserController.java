@@ -7,10 +7,7 @@ import com.hcl.capstoneserver.user.entities.Supplier;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
 import javax.validation.Valid;
@@ -63,5 +60,32 @@ public class UserController {
                 userService.signUpClient(mapper.map(dto, Client.class)),
                 HttpStatus.CREATED
         );
+    }
+
+    //check if supplier id exists
+    @GetMapping("/api/users/checkSupplierId")
+    public ResponseEntity<CheckExistsDTO> checkSupplierId(@RequestParam(name = "supplierId") String supplierId) {
+        CheckExistsDTO existsDTO = userService.checkSupplierId(supplierId);
+        return new ResponseEntity<>(
+                existsDTO,
+                existsDTO.isValid() ? HttpStatus.OK : HttpStatus.NOT_FOUND
+        );
+    }
+
+    // get the client id of the current user
+    @GetMapping("/api/users/myClientId")
+    public ResponseEntity<String> getMyClientId(Principal principal) {
+        String clientId = userService.getClientId(principal.getName());
+
+        if (clientId != null)
+            return new ResponseEntity<>(
+                    clientId,
+                    HttpStatus.OK
+            );
+        else
+            return new ResponseEntity<>(
+                    "Client Id Not Found",
+                    HttpStatus.NOT_FOUND
+            );
     }
 }

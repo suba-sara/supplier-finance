@@ -9,6 +9,7 @@ public class Supplier extends Person {
     private String supplierId;
 
     public Supplier() {
+        super();
     }
 
 

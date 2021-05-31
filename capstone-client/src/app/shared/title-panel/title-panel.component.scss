@@ -2,7 +2,6 @@
 
 .title-panel {
   width: 100%;
-  background: white;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -13,5 +12,41 @@
     font-weight: bold;
     margin-bottom: 0;
     color: $primary-color-dark;
+  }
+}
+
+.user-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.user-avatar {
+  width: 2em;
+  height: 2em;
+  border-radius: 50%;
+  background: purple;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  color: white;
+  font-weight: bold;
+  font-size: 1.5em;
+}
+
+.user-name {
+  margin-left: 0.4em;
+  font-size: 1.4em;
+  font-weight: bold;
+}
+
+.user-action-container {
+  display: flex;
+  justify-content: center;
+
+  mat-icon {
+    color: #817474;
   }
 }

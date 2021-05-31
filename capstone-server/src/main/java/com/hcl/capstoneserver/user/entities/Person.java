@@ -15,6 +15,7 @@ public class Person extends AppUser {
     private Float interestRate;
 
     public Person() {
+        super();
     }
 
     public Person(
