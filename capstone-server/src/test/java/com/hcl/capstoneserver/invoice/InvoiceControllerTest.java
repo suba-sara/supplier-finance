@@ -2,8 +2,10 @@ package com.hcl.capstoneserver.invoice;
 
 import com.hcl.capstoneserver.invoice.dto.InvoiceDTO;
 import com.hcl.capstoneserver.invoice.repositories.InvoiceRepository;
+import com.hcl.capstoneserver.user.UserService;
 import com.hcl.capstoneserver.user.UserTestUtils;
 import com.hcl.capstoneserver.user.UserType;
+import com.hcl.capstoneserver.user.entities.AppUser;
 import com.hcl.capstoneserver.user.repositories.ClientRepository;
 import com.hcl.capstoneserver.user.repositories.SupplierRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +14,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
@@ -36,6 +41,9 @@ public class InvoiceControllerTest {
     @Autowired
     ClientRepository clientRepository;
 
+    @Autowired
+    UserService userService;
+
     @BeforeEach
     public void beforeEach() {
         invoiceRepository.deleteAll();
@@ -49,8 +57,9 @@ public class InvoiceControllerTest {
         userTestUtils.createAUser(UserType.SUPPLIER);
         userTestUtils.createAUser(UserType.CLIENT);
 
+        String token = userTestUtils.loginAUser(UserType.CLIENT);
+
         InvoiceDTO invoice = new InvoiceDTO(
-                "client",
                 "supplier",
                 1234567891,
                 "2021-04-23",
@@ -61,6 +70,7 @@ public class InvoiceControllerTest {
 
         webTestClient.post()
                      .uri(String.format("http://localhost:%d/api/invoices/create", port))
+                     .header(HttpHeaders.AUTHORIZATION, token)
                      .contentType(MediaType.APPLICATION_JSON)
                      .body(Mono.just(invoice), InvoiceDTO.class)
                      .exchange()
