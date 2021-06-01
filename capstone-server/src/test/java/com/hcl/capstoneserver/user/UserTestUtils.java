@@ -1,5 +1,6 @@
 package com.hcl.capstoneserver.user;
 
+import com.hcl.capstoneserver.user.entities.AppUser;
 import com.hcl.capstoneserver.user.entities.Client;
 import com.hcl.capstoneserver.user.entities.Supplier;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,5 +37,17 @@ public class UserTestUtils {
                 ));
         }
 
+    }
+
+    public String loginAUser(UserType userType) {
+        String token = "Bearer ";
+        switch (userType) {
+            case CLIENT:
+                token += userService.signIn(new AppUser("client", "password", UserType.CLIENT)).getJwt();
+                break;
+            case SUPPLIER:
+                token += userService.signIn(new AppUser("supplier", "password", UserType.SUPPLIER)).getJwt();
+        }
+        return token;
     }
 }
