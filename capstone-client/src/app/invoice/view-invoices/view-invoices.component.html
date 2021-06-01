@@ -1,3 +1,24 @@
 <div class="content-container">
   <h1>Invoices</h1>
+  <div class="table-container">
+    <table [dataSource]="dataSource" mat-table>
+      <ng-container matColumnDef="invoiceId">
+        <th *matHeaderCellDef mat-header-cell>ID</th>
+        <td *matCellDef="let element" mat-cell>{{ element.invoiceId }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="invoiceNumber">
+        <th *matHeaderCellDef mat-header-cell>Invoice Number</th>
+        <td *matCellDef="let element" mat-cell>{{ element.invoiceNumber }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="amount">
+        <th *matHeaderCellDef mat-header-cell>Amount</th>
+        <td *matCellDef="let element" mat-cell>{{ element.amount }}</td>
+      </ng-container>
+
+      <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+      <tr *matRowDef="let row; columns: displayedColumns" mat-row></tr>
+    </table>
+  </div>
 </div>
