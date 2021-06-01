@@ -8,8 +8,6 @@ import javax.validation.constraints.NotBlank;
 
 public class InvoiceDTO {
     private Integer invoiceId;
-    @NotBlank(message = "client id is required")
-    private String clientId;
     @NotBlank(message = "supplier id is required")
     private String supplierId;
     @NotBlank(message = "invoice number is required")
@@ -29,7 +27,6 @@ public class InvoiceDTO {
     }
 
     public InvoiceDTO(
-            String clientId,
             String supplierId,
             Integer invoiceNumber,
             String invoiceDate,
@@ -37,7 +34,6 @@ public class InvoiceDTO {
             Integer status,
             CurrencyType currencyType
     ) {
-        this.clientId = clientId;
         this.supplierId = supplierId;
         this.invoiceNumber = invoiceNumber;
         this.invoiceDate = invoiceDate;
@@ -52,14 +48,6 @@ public class InvoiceDTO {
 
     public void setInvoiceId(Integer invoiceId) {
         this.invoiceId = invoiceId;
-    }
-
-    public String getClientId() {
-        return clientId;
-    }
-
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
     }
 
     public String getSupplierId() {
