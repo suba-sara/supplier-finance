@@ -47,13 +47,12 @@ public class InvoiceServiceTest {
         userTestUtils.createAUser(UserType.CLIENT);
         Assertions.assertNotNull(invoiceService.createInvoice(
                 new InvoiceDTO(
-                        "client",
                         "supplier",
                         1234567891,
                         "2021-04-23",
                         25000.0,
                         0,
                         CurrencyType.USD
-                )));
+                ), "client"));
     }
 }
