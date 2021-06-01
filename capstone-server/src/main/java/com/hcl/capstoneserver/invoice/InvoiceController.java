@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @CrossOrigin
 @RestController
@@ -25,7 +26,7 @@ public class InvoiceController {
     }
 
     @PostMapping("/api/invoices/create")
-    public ResponseEntity<Invoice> createInvoice(@RequestBody InvoiceDTO dto) {
-        return new ResponseEntity<>(invoiceService.createInvoice(dto), HttpStatus.CREATED);
+    public ResponseEntity<Invoice> createInvoice(@RequestBody InvoiceDTO dto, Principal principal) {
+        return new ResponseEntity<>(invoiceService.createInvoice(dto, principal.getName()), HttpStatus.CREATED);
     }
 }
