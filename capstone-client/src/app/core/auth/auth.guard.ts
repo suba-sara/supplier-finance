@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import {
-  CanActivate,
   ActivatedRouteSnapshot,
+  CanActivate,
+  Router,
   RouterStateSnapshot,
   UrlTree,
-  Router,
 } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
@@ -29,11 +29,16 @@ export class AuthGuard implements CanActivate {
       route.data.roles.length === 1 && route.data.roles[0] === 'UNAUTHORIZED';
 
     const redirectRoute = isUnauthorizedOnly ? '/dashboard' : '/sign-in';
+    const forbiddenRoute = '/forbidden';
 
     return this.authService.user$.pipe(
       map((user) => {
         if (user && !isUnauthorizedOnly) {
-          return true;
+          if (route.data.roles.includes(user.userType)) {
+            return true;
+          }
+          this.router.navigate([forbiddenRoute]);
+          return false;
         } else if (!user && isUnauthorizedOnly) {
           return true;
         } else {
