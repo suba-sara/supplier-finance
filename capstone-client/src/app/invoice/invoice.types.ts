@@ -1,7 +1,7 @@
 export type Invoice = {
   invoiceId: number;
-  clientId: number;
-  supplierId: number;
+  clientId: string;
+  supplierId: string;
   invoiceNumber: number;
   invoiceDate: Date;
   amount: number;
