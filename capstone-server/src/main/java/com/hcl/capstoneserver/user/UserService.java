@@ -166,5 +166,13 @@ public class UserService implements UserDetailsService {
         Optional<Client> client = clientRepository.findById(userId);
         return client.map(Client::getClientId).orElse(null);
     }
+
+    public Optional<Client> fetchClientById(String clientId) {
+        return clientRepository.findById(clientId);
+    }
+
+    public Optional<Supplier> fetchSupplierById(String supplierId) {
+        return supplierRepository.findById(supplierId);
+    }
 }
 
