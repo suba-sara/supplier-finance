@@ -16,6 +16,7 @@ import { DashboardModule } from '../../dashboard/dashboard.module';
 import { UserModule } from '../../user/user.module';
 import { InvoiceUploadComponent } from '../../invoice/invoice-upload/invoice-upload.component';
 import { InvoiceModule } from '../../invoice/invoice.module';
+import { ViewInvoicesComponent } from '../../invoice/view-invoices/view-invoices.component';
 
 const routes: Routes = [
   {
@@ -77,6 +78,14 @@ const routes: Routes = [
   {
     path: 'invoice/upload',
     component: InvoiceUploadComponent,
+    canActivate: [AuthGuard],
+    data: {
+      roles: ['CLIENT'],
+    },
+  },
+  {
+    path: 'invoice/view-invoices',
+    component: ViewInvoicesComponent,
     canActivate: [AuthGuard],
     data: {
       roles: ['SUPPLIER', 'CLIENT', 'BANK'],

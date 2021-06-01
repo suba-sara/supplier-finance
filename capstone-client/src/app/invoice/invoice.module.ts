@@ -9,9 +9,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { HttpClientModule } from '@angular/common/http';
+import { ViewInvoicesComponent } from './view-invoices/view-invoices.component';
 
 @NgModule({
-  declarations: [InvoiceUploadComponent],
+  declarations: [InvoiceUploadComponent, ViewInvoicesComponent],
   imports: [
     CommonModule,
     SharedModule,
