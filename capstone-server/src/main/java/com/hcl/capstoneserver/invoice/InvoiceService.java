@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 
+import java.security.Principal;
 import java.util.Optional;
 
 @Service
@@ -28,13 +29,16 @@ public class InvoiceService {
         this.userService = userService;
     }
 
-    public Invoice createInvoice(InvoiceDTO invoice) {
+    public Invoice createInvoice(InvoiceDTO invoice, String userId) {
         try {
-            Optional<Client> client = userService.fetchClientById(invoice.getClientId());
+            Optional<Client> client = userService.fetchClientById(userId);
             Optional<Supplier> supplier = userService.fetchSupplierById(invoice.getSupplierId());
 
-            if (!client.isPresent() || !supplier.isPresent()) {
-                throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "Client or Supplier not found");
+            if (!client.isPresent()) {
+                throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "Client not found");
+            }
+            if (!supplier.isPresent()) {
+                throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "Supplier not found");
             }
 
             return mapper.map(invoiceRepository.save(
