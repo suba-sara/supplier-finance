@@ -5,9 +5,10 @@ import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from './shared/shared.module';
+import { ForbiddenComponent } from './forbidden/forbidden.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, ForbiddenComponent],
   imports: [CommonModule, BrowserModule, CoreModule, SharedModule],
   providers: [],
   bootstrap: [AppComponent],
