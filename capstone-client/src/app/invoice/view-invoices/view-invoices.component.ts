@@ -50,6 +50,9 @@ const fakeData: Invoice[] = [
   styleUrls: ['./view-invoices.component.scss'],
 })
 export class ViewInvoicesComponent implements OnInit {
+  dataSource = fakeData;
+  displayedColumns: string[] = ['invoiceId', 'invoiceNumber', 'amount'];
+
   constructor() {}
 
   ngOnInit(): void {}

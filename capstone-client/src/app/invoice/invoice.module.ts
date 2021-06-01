@@ -10,6 +10,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { HttpClientModule } from '@angular/common/http';
 import { ViewInvoicesComponent } from './view-invoices/view-invoices.component';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
   declarations: [InvoiceUploadComponent, ViewInvoicesComponent],
@@ -23,6 +24,7 @@ import { ViewInvoicesComponent } from './view-invoices/view-invoices.component';
     MatIconModule,
     MatSelectModule,
     MatButtonModule,
+    MatTableModule,
   ],
 })
 export class InvoiceModule {}
