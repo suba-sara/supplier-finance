@@ -6,10 +6,17 @@ import { CoreModule } from './core/core.module';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from './shared/shared.module';
 import { ForbiddenComponent } from './forbidden/forbidden.component';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [AppComponent, ForbiddenComponent],
-  imports: [CommonModule, BrowserModule, CoreModule, SharedModule],
+  imports: [
+    CommonModule,
+    BrowserModule,
+    CoreModule,
+    SharedModule,
+    MatButtonModule,
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })

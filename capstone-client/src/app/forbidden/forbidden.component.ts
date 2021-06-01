@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-forbidden',
@@ -6,7 +7,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./forbidden.component.scss'],
 })
 export class ForbiddenComponent implements OnInit {
-  constructor() {}
+  constructor(private location: Location) {}
 
   ngOnInit(): void {}
+
+  goBack = (): void => {
+    this.location.back();
+  };
 }

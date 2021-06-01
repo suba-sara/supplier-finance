@@ -17,6 +17,7 @@ import { UserModule } from '../../user/user.module';
 import { InvoiceUploadComponent } from '../../invoice/invoice-upload/invoice-upload.component';
 import { InvoiceModule } from '../../invoice/invoice.module';
 import { ViewInvoicesComponent } from '../../invoice/view-invoices/view-invoices.component';
+import { ForbiddenComponent } from '../../forbidden/forbidden.component';
 
 const routes: Routes = [
   {
@@ -26,6 +27,10 @@ const routes: Routes = [
     data: {
       roles: ['UNAUTHORIZED'],
     },
+  },
+  {
+    path: 'forbidden',
+    component: ForbiddenComponent,
   },
   {
     path: 'sign-in',
