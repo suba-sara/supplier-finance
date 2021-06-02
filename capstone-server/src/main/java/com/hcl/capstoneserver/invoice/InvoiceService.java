@@ -7,6 +7,7 @@ import com.hcl.capstoneserver.invoice.entities.Invoice;
 import com.hcl.capstoneserver.invoice.exceptions.InvoiceNumberExistsException;
 import com.hcl.capstoneserver.invoice.repositories.InvoiceRepository;
 import com.hcl.capstoneserver.user.UserService;
+import com.hcl.capstoneserver.user.UserType;
 import com.hcl.capstoneserver.user.entities.Client;
 import com.hcl.capstoneserver.user.entities.Supplier;
 import org.modelmapper.ModelMapper;
@@ -64,12 +65,7 @@ public class InvoiceService {
     // This function use Client for get his/ her all invoice
     public List<Invoice> getClientAllInvoice(String userId) {
         Optional<Client> client = userService.fetchClientIdByUserId(userId);
-        List<Invoice> invoices = null;
-        for (Invoice invoice : getAllInvoice()) {
-            if (invoice.getClientId().equals(client.get().getClientId())) {
-                invoices.add(invoice);
-            }
-        }
+        List<Invoice> invoices = getUserOwnInvoices(UserType.CLIENT, client.get().getClientId());
         return invoices;
     }
 
@@ -114,5 +110,24 @@ public class InvoiceService {
 
     public Optional<Invoice> fetchInvoiceById(Integer invoiceId) {
         return invoiceRepository.findById(invoiceId);
+    }
+
+    public List<Invoice> getUserOwnInvoices(UserType userType, String userId) {
+        List<Invoice> invoices = null;
+        for (Invoice invoice : getAllInvoice()) {
+            switch (userType) {
+                case CLIENT:
+                    if (invoice.getClientId().equals(userId)) {
+                        invoices.add(invoice);
+                    }
+                    break;
+                case SUPPLIER:
+                    if (invoice.getSupplierId().equals(userId)) {
+                        invoices.add(invoice);
+                    }
+                    break;
+            }
+        }
+        return invoices;
     }
 }
