@@ -4,19 +4,18 @@ import com.hcl.capstoneserver.invoice.dto.CreateInvoiceDTO;
 import com.hcl.capstoneserver.invoice.dto.StatusUpdateInvoiceDTO;
 import com.hcl.capstoneserver.invoice.dto.UpdateInvoiceDTO;
 import com.hcl.capstoneserver.invoice.entities.Invoice;
-import com.hcl.capstoneserver.invoice.exceptions.InvoiceNumberExistsException;
 import com.hcl.capstoneserver.invoice.repositories.InvoiceRepository;
 import com.hcl.capstoneserver.user.UserService;
 import com.hcl.capstoneserver.user.UserType;
 import com.hcl.capstoneserver.user.entities.Client;
 import com.hcl.capstoneserver.user.entities.Supplier;
 import org.modelmapper.ModelMapper;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Example;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,7 +39,7 @@ public class InvoiceService {
         invoiceQry.setSupplierId(supplier.get());
         if (invoiceRepository.exists(Example.of(invoiceQry))) {
             throw new HttpClientErrorException(
-                    HttpStatus.BAD_REQUEST,
+                    HttpStatus.FORBIDDEN,
                     "Invoice number all ready exists for this supplier"
             );
         }
@@ -51,9 +50,12 @@ public class InvoiceService {
         Optional<Supplier> supplier = userService.fetchSupplierIdByUserId(dto.getSupplierId());
 
         if (!supplier.isPresent()) {
-            throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "Supplier not found");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Supplier not found");
         }
 
+        if (LocalDate.now().isAfter(LocalDate.parse((CharSequence) dto.getInvoiceDate()))) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Invoice date is expired");
+        }
         _checkInvoiceNumberExistsInSupplier(dto, supplier);
 
         return mapper.map(invoiceRepository.save(
@@ -84,30 +86,23 @@ public class InvoiceService {
 
     //Client invoice update
     public Invoice updateInvoice(UpdateInvoiceDTO dto, String userId) {
-        try {
-            Optional<Client> client = userService.fetchClientIdByUserId(userId);
-            Optional<Supplier> supplier = userService.fetchSupplierIdByUserId(dto.getSupplierId());
+        Optional<Client> client = userService.fetchClientIdByUserId(userId);
+        Optional<Supplier> supplier = userService.fetchSupplierIdByUserId(dto.getSupplierId());
 
-            if (!supplier.isPresent()) {
-                throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "Supplier not found");
-            }
-            Optional<Invoice> invoice = fetchInvoiceById(dto.getInvoiceId());
-            if (!invoice.isPresent()) {
-
-            }
-            return mapper.map(invoiceRepository.save(
-                    new Invoice(
-                            client.get(),
-                            supplier.get(),
-                            dto.getInvoiceNumber(),
-                            dto.getInvoiceDate(),
-                            dto.getAmount(),
-                            dto.getCurrencyType()
-                    )
-            ), Invoice.class);
-        } catch (DataIntegrityViolationException e) {
-            throw new InvoiceNumberExistsException(dto.getInvoiceNumber());
+        if (!supplier.isPresent()) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Supplier not found");
         }
+
+        Optional<Invoice> invoice = fetchInvoiceById(dto.getInvoiceId());
+        if (!invoice.isPresent()) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Invoice not found");
+        }
+        invoice.get().setSupplierId(supplier.get());
+        invoice.get().setInvoiceNumber(dto.getInvoiceNumber());
+        invoice.get().setInvoiceDate(dto.getInvoiceDate());
+        invoice.get().setAmount(dto.getAmount());
+        invoice.get().setCurrencyType(dto.getCurrencyType());
+        return mapper.map(invoiceRepository.save(invoice.get()), Invoice.class);
     }
 
     //Bank invoice status update
