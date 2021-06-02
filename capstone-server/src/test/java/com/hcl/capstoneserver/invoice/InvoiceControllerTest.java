@@ -1,11 +1,10 @@
 package com.hcl.capstoneserver.invoice;
 
-import com.hcl.capstoneserver.invoice.dto.InvoiceDTO;
+import com.hcl.capstoneserver.invoice.dto.CreateInvoiceDTO;
 import com.hcl.capstoneserver.invoice.repositories.InvoiceRepository;
 import com.hcl.capstoneserver.user.UserService;
 import com.hcl.capstoneserver.user.UserTestUtils;
 import com.hcl.capstoneserver.user.UserType;
-import com.hcl.capstoneserver.user.entities.AppUser;
 import com.hcl.capstoneserver.user.repositories.ClientRepository;
 import com.hcl.capstoneserver.user.repositories.SupplierRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,10 +15,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
+
+import java.time.LocalDate;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class InvoiceControllerTest {
@@ -59,10 +58,10 @@ public class InvoiceControllerTest {
 
         String token = userTestUtils.loginAUser(UserType.CLIENT);
 
-        InvoiceDTO invoice = new InvoiceDTO(
+        CreateInvoiceDTO invoice = new CreateInvoiceDTO(
                 "supplier",
-                1234567891,
-                "2021-04-23",
+                "1234567891",
+                LocalDate.now().toString(),
                 25000.0,
                 CurrencyType.USD
         );
@@ -71,7 +70,7 @@ public class InvoiceControllerTest {
                      .uri(String.format("http://localhost:%d/api/invoices/create", port))
                      .header(HttpHeaders.AUTHORIZATION, token)
                      .contentType(MediaType.APPLICATION_JSON)
-                     .body(Mono.just(invoice), InvoiceDTO.class)
+                     .body(Mono.just(invoice), CreateInvoiceDTO.class)
                      .exchange()
                      .expectStatus()
                      .is2xxSuccessful();
