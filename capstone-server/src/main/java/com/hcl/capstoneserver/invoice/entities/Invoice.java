@@ -47,6 +47,22 @@ public class Invoice {
         this.currencyType = currencyType;
     }
 
+    public Invoice(
+            Client clientId,
+            Supplier supplierId,
+            Integer invoiceNumber,
+            String invoiceDate,
+            Double amount,
+            CurrencyType currencyType
+    ) {
+        this.clientId = clientId;
+        this.supplierId = supplierId;
+        this.invoiceNumber = invoiceNumber;
+        this.invoiceDate = invoiceDate;
+        this.amount = amount;
+        this.currencyType = currencyType;
+    }
+
     public Invoice(Integer invoiceId, InvoiceStatus status) {
         this.invoiceId = invoiceId;
         this.status = status;
