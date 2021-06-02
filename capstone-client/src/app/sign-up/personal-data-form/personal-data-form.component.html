@@ -113,7 +113,7 @@
     </mat-form-field>
     <mat-form-field appearance="outline">
       <mat-label>Country</mat-label>
-      <input matInput formControlName="country" />
+      <input matInput formControlName="country"/>
       <mat-error *ngIf="personalDataForm.get('country')?.hasError('required')">
         required
       </mat-error>
@@ -122,7 +122,10 @@
       </mat-error>
     </mat-form-field>
   </div>
-  <div class="button-container button-container-end">
+  <div class="button-container">
+    <div>
+      <button (click)="goBack()" mat-flat-button>Previous</button>
+    </div>
     <div>
       <button mat-flat-button (click)="confirmPersonalData()">Next</button>
     </div>
