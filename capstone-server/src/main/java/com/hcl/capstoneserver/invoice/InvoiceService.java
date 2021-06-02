@@ -106,6 +106,14 @@ public class InvoiceService {
         if (!invoice.isPresent()) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Invoice not found");
         }
+
+        if (invoice.get().getClientId().equals(client.get().getClientId())) {
+            throw new HttpClientErrorException(
+                    HttpStatus.BAD_REQUEST,
+                    String.format("%s you do not have permission to update this", userId)
+            );
+        }
+
         invoice.get().setSupplierId(supplier.get());
         invoice.get().setInvoiceNumber(dto.getInvoiceNumber());
         invoice.get().setInvoiceDate(dto.getInvoiceDate());
