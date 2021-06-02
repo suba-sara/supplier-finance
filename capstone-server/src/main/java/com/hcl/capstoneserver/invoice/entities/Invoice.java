@@ -1,6 +1,7 @@
 package com.hcl.capstoneserver.invoice.entities;
 
 import com.hcl.capstoneserver.invoice.CurrencyType;
+import com.hcl.capstoneserver.invoice.InvoiceStatus;
 import com.hcl.capstoneserver.user.entities.Client;
 import com.hcl.capstoneserver.user.entities.Supplier;
 
@@ -22,7 +23,7 @@ public class Invoice {
     private Integer invoiceNumber;
     private String invoiceDate;
     private Double amount;
-    private Integer status;
+    private InvoiceStatus status;
     private CurrencyType currencyType;
 
     public Invoice() {
@@ -34,7 +35,7 @@ public class Invoice {
             Integer invoiceNumber,
             String invoiceDate,
             Double amount,
-            Integer status,
+            InvoiceStatus status,
             CurrencyType currencyType
     ) {
         this.clientId = clientId;
@@ -44,6 +45,11 @@ public class Invoice {
         this.amount = amount;
         this.status = status;
         this.currencyType = currencyType;
+    }
+
+    public Invoice(Integer invoiceId, InvoiceStatus status) {
+        this.invoiceId = invoiceId;
+        this.status = status;
     }
 
     public Integer getInvoiceId() {
@@ -94,11 +100,11 @@ public class Invoice {
         this.amount = amount;
     }
 
-    public Integer getStatus() {
+    public InvoiceStatus getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(InvoiceStatus status) {
         this.status = status;
     }
 
