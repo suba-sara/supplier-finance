@@ -86,6 +86,16 @@ public class InvoiceService {
         }
     }
 
+    //Bank invoice status update
+    public Invoice setStatus(StatusUpdateInvoiceDTO dto) {
+        return mapper.map(invoiceRepository.save(
+                new Invoice(
+                        dto.getInvoiceId(),
+                        dto.getStatus()
+                )
+        ), Invoice.class);
+    }
+
     public void deleteInvoice(Integer invoiceId) {
         invoiceRepository.deleteById(invoiceId);
     }
