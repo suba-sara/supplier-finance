@@ -33,6 +33,19 @@ public class InvoiceService {
         this.userService = userService;
     }
 
+    private void _checkInvoiceNumberExistsInSupplier(CreateInvoiceDTO dto, Optional<Supplier> supplier) {
+        // check the supplier has same invoice Number
+        Invoice invoiceQry = new Invoice();
+        invoiceQry.setInvoiceNumber(dto.getInvoiceNumber());
+        invoiceQry.setSupplierId(supplier.get());
+        if (invoiceRepository.exists(Example.of(invoiceQry))) {
+            throw new HttpClientErrorException(
+                    HttpStatus.BAD_REQUEST,
+                    "Invoice number all ready exists for this supplier"
+            );
+        }
+    }
+
     public Invoice createInvoice(CreateInvoiceDTO dto, String userId) {
         try {
 
@@ -61,18 +74,6 @@ public class InvoiceService {
         }
     }
 
-    private void _checkInvoiceNumberExistsInSupplier(CreateInvoiceDTO dto, Optional<Supplier> supplier) {
-        // check the supplier has same invoice Number
-        Invoice invoiceQry = new Invoice();
-        invoiceQry.setInvoiceNumber(dto.getInvoiceNumber());
-        invoiceQry.setSupplierId(supplier.get());
-        if (invoiceRepository.exists(Example.of(invoiceQry))) {
-            throw new HttpClientErrorException(
-                    HttpStatus.BAD_REQUEST,
-                    "Invoice number allready exists for this supplier"
-            );
-        }
-    }
 
     // This function use Bank for get all invoice
     public List<Invoice> getAllInvoice() {
