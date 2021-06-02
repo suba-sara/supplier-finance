@@ -6,7 +6,6 @@ import com.hcl.capstoneserver.user.entities.Client;
 import com.hcl.capstoneserver.user.entities.Supplier;
 
 import javax.persistence.*;
-import java.util.Arrays;
 
 @Entity
 public class Invoice {
