@@ -113,7 +113,7 @@
     </mat-form-field>
     <mat-form-field appearance="outline">
       <mat-label>Country</mat-label>
-      <input matInput formControlName="country"/>
+      <input formControlName="country" matInput/>
       <mat-error *ngIf="personalDataForm.get('country')?.hasError('required')">
         required
       </mat-error>
