@@ -1,6 +1,6 @@
 package com.hcl.capstoneserver.invoice;
 
-import com.hcl.capstoneserver.invoice.dto.InvoiceDTO;
+import com.hcl.capstoneserver.invoice.dto.CreateInvoiceDTO;
 import com.hcl.capstoneserver.invoice.dto.StatusUpdateInvoiceDTO;
 import com.hcl.capstoneserver.invoice.dto.UpdateInvoiceDTO;
 import com.hcl.capstoneserver.invoice.entities.Invoice;
@@ -12,6 +12,7 @@ import com.hcl.capstoneserver.user.entities.Client;
 import com.hcl.capstoneserver.user.entities.Supplier;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Example;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -32,28 +33,44 @@ public class InvoiceService {
         this.userService = userService;
     }
 
-    public Invoice createInvoice(InvoiceDTO invoice, String userId) {
+    public Invoice createInvoice(CreateInvoiceDTO dto, String userId) {
         try {
+
             Optional<Client> client = userService.fetchClientIdByUserId(userId);
-            Optional<Supplier> supplier = userService.fetchSupplierIdByUserId(invoice.getSupplierId());
+            Optional<Supplier> supplier = userService.fetchSupplierIdByUserId(dto.getSupplierId());
 
             if (!supplier.isPresent()) {
                 throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "Supplier not found");
             }
 
+            _checkInvoiceNumberExistsInSupplier(dto, supplier);
+
             return mapper.map(invoiceRepository.save(
                     new Invoice(
                             client.get(),
                             supplier.get(),
-                            invoice.getInvoiceNumber(),
-                            invoice.getInvoiceDate(),
-                            invoice.getAmount(),
-                            invoice.getStatus(),
-                            invoice.getCurrencyType()
+                            dto.getInvoiceNumber(),
+                            dto.getInvoiceDate(),
+                            dto.getAmount(),
+                            dto.getStatus(),
+                            dto.getCurrencyType()
                     )
             ), Invoice.class);
         } catch (DataIntegrityViolationException e) {
-            throw new InvoiceNumberExistsException(invoice.getInvoiceNumber());
+            throw new InvoiceNumberExistsException(dto.getInvoiceNumber());
+        }
+    }
+
+    private void _checkInvoiceNumberExistsInSupplier(CreateInvoiceDTO dto, Optional<Supplier> supplier) {
+        // check the supplier has same invoice Number
+        Invoice invoiceQry = new Invoice();
+        invoiceQry.setInvoiceNumber(dto.getInvoiceNumber());
+        invoiceQry.setSupplierId(supplier.get());
+        if (invoiceRepository.exists(Example.of(invoiceQry))) {
+            throw new HttpClientErrorException(
+                    HttpStatus.BAD_REQUEST,
+                    "Invoice number allready exists for this supplier"
+            );
         }
     }
 
@@ -70,27 +87,30 @@ public class InvoiceService {
     }
 
     //Client invoice update
-    public Invoice updateInvoice(UpdateInvoiceDTO invoice, String userId) {
+    public Invoice updateInvoice(UpdateInvoiceDTO dto, String userId) {
         try {
             Optional<Client> client = userService.fetchClientIdByUserId(userId);
-            Optional<Supplier> supplier = userService.fetchSupplierIdByUserId(invoice.getSupplierId());
+            Optional<Supplier> supplier = userService.fetchSupplierIdByUserId(dto.getSupplierId());
 
             if (!supplier.isPresent()) {
                 throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "Supplier not found");
             }
+            Optional<Invoice> invoice = fetchInvoiceById(dto.getInvoiceId());
+            if (!invoice.isPresent()) {
 
+            }
             return mapper.map(invoiceRepository.save(
                     new Invoice(
                             client.get(),
                             supplier.get(),
-                            invoice.getInvoiceNumber(),
-                            invoice.getInvoiceDate(),
-                            invoice.getAmount(),
-                            invoice.getCurrencyType()
+                            dto.getInvoiceNumber(),
+                            dto.getInvoiceDate(),
+                            dto.getAmount(),
+                            dto.getCurrencyType()
                     )
             ), Invoice.class);
         } catch (DataIntegrityViolationException e) {
-            throw new InvoiceNumberExistsException(invoice.getInvoiceNumber());
+            throw new InvoiceNumberExistsException(dto.getInvoiceNumber());
         }
     }
 
