@@ -61,6 +61,18 @@ public class InvoiceService {
         return invoiceRepository.findAll();
     }
 
+    // This function use Client for get his/ her all invoice
+    public List<Invoice> getClientAllInvoice(String userId) {
+        Optional<Client> client = userService.fetchClientIdByUserId(userId);
+        List<Invoice> invoices = null;
+        for (Invoice invoice : getAllInvoice()) {
+            if (invoice.getClientId().equals(client.get().getClientId())) {
+                invoices.add(invoice);
+            }
+        }
+        return invoices;
+    }
+
     //Client invoice update
     public Invoice updateInvoice(UpdateInvoiceDTO invoice, String userId) {
         try {
