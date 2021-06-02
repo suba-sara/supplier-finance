@@ -1,6 +1,8 @@
 package com.hcl.capstoneserver.invoice;
 
 import com.hcl.capstoneserver.invoice.dto.InvoiceDTO;
+import com.hcl.capstoneserver.invoice.dto.StatusUpdateInvoiceDTO;
+import com.hcl.capstoneserver.invoice.dto.UpdateInvoiceDTO;
 import com.hcl.capstoneserver.invoice.entities.Invoice;
 import com.hcl.capstoneserver.invoice.exceptions.InvoiceNumberExistsException;
 import com.hcl.capstoneserver.invoice.repositories.InvoiceRepository;
@@ -13,7 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 
-import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -31,12 +33,9 @@ public class InvoiceService {
 
     public Invoice createInvoice(InvoiceDTO invoice, String userId) {
         try {
-            Optional<Client> client = userService.fetchClientById(userId);
-            Optional<Supplier> supplier = userService.fetchSupplierById(invoice.getSupplierId());
+            Optional<Client> client = userService.fetchClientIdByUserId(userId);
+            Optional<Supplier> supplier = userService.fetchSupplierIdByUserId(invoice.getSupplierId());
 
-            if (!client.isPresent()) {
-                throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "Client not found");
-            }
             if (!supplier.isPresent()) {
                 throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "Supplier not found");
             }
@@ -55,5 +54,39 @@ public class InvoiceService {
         } catch (DataIntegrityViolationException e) {
             throw new InvoiceNumberExistsException(invoice.getInvoiceNumber());
         }
+    }
+
+    // This function use Bank for get all invoice
+    public List<Invoice> getAllInvoice() {
+        return invoiceRepository.findAll();
+    }
+
+    //Client invoice update
+    public Invoice updateInvoice(UpdateInvoiceDTO invoice, String userId) {
+        try {
+            Optional<Client> client = userService.fetchClientIdByUserId(userId);
+            Optional<Supplier> supplier = userService.fetchSupplierIdByUserId(invoice.getSupplierId());
+
+            if (!supplier.isPresent()) {
+                throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "Supplier not found");
+            }
+
+            return mapper.map(invoiceRepository.save(
+                    new Invoice(
+                            client.get(),
+                            supplier.get(),
+                            invoice.getInvoiceNumber(),
+                            invoice.getInvoiceDate(),
+                            invoice.getAmount(),
+                            invoice.getCurrencyType()
+                    )
+            ), Invoice.class);
+        } catch (DataIntegrityViolationException e) {
+            throw new InvoiceNumberExistsException(invoice.getInvoiceNumber());
+        }
+    }
+
+    public void deleteInvoice(Integer invoiceId) {
+        invoiceRepository.deleteById(invoiceId);
     }
 }
