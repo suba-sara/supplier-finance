@@ -177,7 +177,7 @@ public class UserService implements UserDetailsService {
         return clientRepository.findById(userId);
     }
 
-    public Optional<Supplier> fetchSupplierDataByUserID(String userId) {
+    public Optional<Supplier> fetchSupplierDataByUserId(String userId) {
         return supplierRepository.findById(userId);
     }
 }
