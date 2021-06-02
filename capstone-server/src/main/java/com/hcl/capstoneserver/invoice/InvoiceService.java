@@ -99,4 +99,8 @@ public class InvoiceService {
     public void deleteInvoice(Integer invoiceId) {
         invoiceRepository.deleteById(invoiceId);
     }
+
+    public Optional<Invoice> fetchInvoiceById(Integer invoiceId) {
+        return invoiceRepository.findById(invoiceId);
+    }
 }
