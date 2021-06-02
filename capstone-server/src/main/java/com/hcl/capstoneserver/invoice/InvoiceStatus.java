@@ -1,8 +1,8 @@
 package com.hcl.capstoneserver.invoice;
 
 public enum InvoiceStatus {
-    SENT,
-    PAID,
-    OVERDUE,
-    CANCELED
+    UPLOADED,
+    IN_REVIEW,
+    APPROVED,
+    REJECTED
 }
