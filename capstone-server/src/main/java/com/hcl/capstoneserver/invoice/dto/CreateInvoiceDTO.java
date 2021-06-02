@@ -6,13 +6,13 @@ import org.hibernate.validator.constraints.Currency;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
+import java.util.Date;
 
-public class InvoiceDTO {
-    private Integer invoiceId;
+public class CreateInvoiceDTO {
     @NotBlank(message = "supplier id is required")
     private String supplierId;
     @NotBlank(message = "invoice number is required")
-    private Integer invoiceNumber;
+    private String invoiceNumber;
     @NotBlank(message = "date is required")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private String invoiceDate;
@@ -24,12 +24,12 @@ public class InvoiceDTO {
     @NotBlank(message = "currency is required")
     private CurrencyType currencyType;
 
-    public InvoiceDTO() {
+    public CreateInvoiceDTO() {
     }
 
-    public InvoiceDTO(
+    public CreateInvoiceDTO(
             String supplierId,
-            Integer invoiceNumber,
+            String invoiceNumber,
             String invoiceDate,
             Double amount,
             CurrencyType currencyType
@@ -38,16 +38,8 @@ public class InvoiceDTO {
         this.invoiceNumber = invoiceNumber;
         this.invoiceDate = invoiceDate;
         this.amount = amount;
-        this.status = InvoiceStatus.SENT;
+        this.status = InvoiceStatus.UPLOADED;
         this.currencyType = currencyType;
-    }
-
-    public Integer getInvoiceId() {
-        return invoiceId;
-    }
-
-    public void setInvoiceId(Integer invoiceId) {
-        this.invoiceId = invoiceId;
     }
 
     public String getSupplierId() {
@@ -58,11 +50,11 @@ public class InvoiceDTO {
         this.supplierId = supplierId;
     }
 
-    public Integer getInvoiceNumber() {
+    public String getInvoiceNumber() {
         return invoiceNumber;
     }
 
-    public void setInvoiceNumber(Integer invoiceNumber) {
+    public void setInvoiceNumber(String invoiceNumber) {
         this.invoiceNumber = invoiceNumber;
     }
 

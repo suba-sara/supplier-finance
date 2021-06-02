@@ -1,6 +1,6 @@
 package com.hcl.capstoneserver.invoice;
 
-import com.hcl.capstoneserver.invoice.dto.InvoiceDTO;
+import com.hcl.capstoneserver.invoice.dto.CreateInvoiceDTO;
 import com.hcl.capstoneserver.invoice.entities.Invoice;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -23,7 +23,7 @@ public class InvoiceController {
     }
 
     @PostMapping("/api/invoices/create")
-    public ResponseEntity<Invoice> createInvoice(@RequestBody InvoiceDTO dto, Principal principal) {
+    public ResponseEntity<Invoice> createInvoice(@RequestBody CreateInvoiceDTO dto, Principal principal) {
         return new ResponseEntity<>(invoiceService.createInvoice(dto, principal.getName()), HttpStatus.CREATED);
     }
 
@@ -33,12 +33,12 @@ public class InvoiceController {
     }
 
     @PutMapping("/api/invoices/update")
-    public ResponseEntity<Invoice> updateInvoice(@RequestBody InvoiceDTO dto, Principal principal) {
+    public ResponseEntity<Invoice> updateInvoice(@RequestBody CreateInvoiceDTO dto, Principal principal) {
         return new ResponseEntity<>(invoiceService.createInvoice(dto, principal.getName()), HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/api/invoices/delete")
-    public void deleteInvoice(@RequestBody InvoiceDTO dto) {
-        return invoiceService.deleteInvoice(dto);
-    }
+//    @DeleteMapping("/api/invoices/delete")
+//    public void deleteInvoice(@RequestBody InvoiceDTO dto) {
+//        return invoiceService.deleteInvoice(dto);
+//    }
 }

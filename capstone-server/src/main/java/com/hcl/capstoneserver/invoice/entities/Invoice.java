@@ -6,6 +6,7 @@ import com.hcl.capstoneserver.user.entities.Client;
 import com.hcl.capstoneserver.user.entities.Supplier;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 public class Invoice {
@@ -18,8 +19,7 @@ public class Invoice {
     @ManyToOne
     @JoinColumn(name = "SUPPLIER_ID", nullable = false)
     private Supplier supplierId;
-    @Column(unique = true)
-    private Integer invoiceNumber;
+    private String invoiceNumber;
     private String invoiceDate;
     private Double amount;
     private InvoiceStatus status;
@@ -31,7 +31,7 @@ public class Invoice {
     public Invoice(
             Client clientId,
             Supplier supplierId,
-            Integer invoiceNumber,
+            String invoiceNumber,
             String invoiceDate,
             Double amount,
             InvoiceStatus status,
@@ -49,7 +49,7 @@ public class Invoice {
     public Invoice(
             Client clientId,
             Supplier supplierId,
-            Integer invoiceNumber,
+            String invoiceNumber,
             String invoiceDate,
             Double amount,
             CurrencyType currencyType
@@ -71,10 +71,6 @@ public class Invoice {
         return invoiceId;
     }
 
-    public void setInvoiceId(Integer invoiceId) {
-        this.invoiceId = invoiceId;
-    }
-
     public Client getClientId() {
         return clientId;
     }
@@ -91,11 +87,11 @@ public class Invoice {
         this.supplierId = supplierId;
     }
 
-    public Integer getInvoiceNumber() {
+    public String getInvoiceNumber() {
         return invoiceNumber;
     }
 
-    public void setInvoiceNumber(Integer invoiceNumber) {
+    public void setInvoiceNumber(String invoiceNumber) {
         this.invoiceNumber = invoiceNumber;
     }
 
