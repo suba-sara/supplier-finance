@@ -10,6 +10,7 @@
       </section>
       <section *ngSwitchCase="2">
         <app-personal-data-form
+          [goBack]="gotoPreviousPage"
           (formSubmitEvent)="submitPersonalData($event)"
         ></app-personal-data-form>
       </section>

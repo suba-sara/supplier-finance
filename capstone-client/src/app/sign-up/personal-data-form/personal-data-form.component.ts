@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 export type PersonalDetails = {
@@ -19,6 +19,9 @@ export type PersonalDetails = {
   styleUrls: ['./personal-data-form.component.scss'],
 })
 export class PersonalDataFormComponent implements OnInit {
+  @Input()
+  goBack!: () => void;
+
   personalDataForm = new FormGroup({
     firstName: new FormControl('', [
       Validators.required,
