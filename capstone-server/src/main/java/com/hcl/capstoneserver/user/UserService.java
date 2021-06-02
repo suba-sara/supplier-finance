@@ -167,12 +167,18 @@ public class UserService implements UserDetailsService {
         return client.map(Client::getClientId).orElse(null);
     }
 
-    public Optional<Client> fetchClientIdByUserId(String clientId) {
-        return clientRepository.findById(clientId);
+    // get supplier id based on token
+    public String getSupplierId(String userId) {
+        Optional<Supplier> supplier = supplierRepository.findById(userId);
+        return supplier.map(Supplier::getSupplierId).orElse(null);
     }
 
-    public Optional<Supplier> fetchSupplierIdByUserId(String supplierId) {
-        return supplierRepository.findById(supplierId);
+    public Optional<Client> fetchClientDataByUserId(String userId) {
+        return clientRepository.findById(userId);
+    }
+
+    public Optional<Supplier> fetchSupplierDataByUserID(String userId) {
+        return supplierRepository.findById(userId);
     }
 }
 
