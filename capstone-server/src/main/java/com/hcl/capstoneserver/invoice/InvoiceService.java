@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,78 +46,14 @@ public class InvoiceService {
         }
     }
 
-    public Invoice createInvoice(CreateInvoiceDTO dto, String userId) {
-        Optional<Client> client = userService.fetchClientIdByUserId(userId);
-        Optional<Supplier> supplier = userService.fetchSupplierIdByUserId(dto.getSupplierId());
-
+    private void _checkInvoiceData(Optional<Supplier> supplier, Date invoiceDate) {
         if (!supplier.isPresent()) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Supplier not found");
         }
 
-        if (LocalDate.now().isAfter(LocalDate.parse((CharSequence) dto.getInvoiceDate()))) {
+        if (LocalDate.now().isAfter(LocalDate.parse((CharSequence) invoiceDate))) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Invoice date is expired");
         }
-        _checkInvoiceNumberExistsInSupplier(dto, supplier);
-
-        return mapper.map(invoiceRepository.save(
-                new Invoice(
-                        client.get(),
-                        supplier.get(),
-                        dto.getInvoiceNumber(),
-                        dto.getInvoiceDate(),
-                        dto.getAmount(),
-                        dto.getStatus(),
-                        dto.getCurrencyType()
-                )
-        ), Invoice.class);
-    }
-
-
-    // This function use Bank for get all invoice
-    public List<Invoice> getAllInvoice() {
-        return invoiceRepository.findAll();
-    }
-
-    // This function use Client for get his/ her all invoice
-    public List<Invoice> getClientAllInvoice(String userId) {
-        Optional<Client> client = userService.fetchClientIdByUserId(userId);
-        List<Invoice> invoices = getUserOwnInvoices(UserType.CLIENT, client.get().getClientId());
-        return invoices;
-    }
-
-    //Client invoice update
-    public Invoice updateInvoice(UpdateInvoiceDTO dto, String userId) {
-        Optional<Client> client = userService.fetchClientIdByUserId(userId);
-        Optional<Supplier> supplier = userService.fetchSupplierIdByUserId(dto.getSupplierId());
-
-        if (!supplier.isPresent()) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Supplier not found");
-        }
-
-        Optional<Invoice> invoice = fetchInvoiceById(dto.getInvoiceId());
-        if (!invoice.isPresent()) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Invoice not found");
-        }
-        invoice.get().setSupplierId(supplier.get());
-        invoice.get().setInvoiceNumber(dto.getInvoiceNumber());
-        invoice.get().setInvoiceDate(dto.getInvoiceDate());
-        invoice.get().setAmount(dto.getAmount());
-        invoice.get().setCurrencyType(dto.getCurrencyType());
-        return mapper.map(invoiceRepository.save(invoice.get()), Invoice.class);
-    }
-
-    //Bank invoice status update
-    public Invoice setStatus(StatusUpdateInvoiceDTO dto) {
-        return mapper.map(invoiceRepository.save(
-                new Invoice(
-                        dto.getInvoiceId(),
-                        dto.getStatus()
-                )
-        ), Invoice.class);
-    }
-
-    public void deleteInvoice(Integer invoiceId) {
-        invoiceRepository.deleteById(invoiceId);
     }
 
     public Optional<Invoice> fetchInvoiceById(Integer invoiceId) {
@@ -140,5 +77,66 @@ public class InvoiceService {
             }
         }
         return invoices;
+    }
+
+    public Invoice createInvoice(CreateInvoiceDTO dto, String userId) {
+        Optional<Supplier> supplier = userService.fetchSupplierIdByUserId(dto.getSupplierId());
+        _checkInvoiceData(supplier, dto.getInvoiceDate());
+        _checkInvoiceNumberExistsInSupplier(dto, supplier);
+
+        return mapper.map(invoiceRepository.save(
+                new Invoice(
+                        userService.fetchClientIdByUserId(userId).get(),
+                        supplier.get(),
+                        dto.getInvoiceNumber(),
+                        dto.getInvoiceDate(),
+                        dto.getAmount(),
+                        dto.getStatus(),
+                        dto.getCurrencyType()
+                )
+        ), Invoice.class);
+    }
+
+    //Client invoice update
+    public Invoice updateInvoice(UpdateInvoiceDTO dto, String userId) {
+        Optional<Client> client = userService.fetchClientIdByUserId(userId);
+        Optional<Supplier> supplier = userService.fetchSupplierIdByUserId(dto.getSupplierId());
+
+        Optional<Invoice> invoice = fetchInvoiceById(dto.getInvoiceId());
+        if (!invoice.isPresent()) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Invoice not found");
+        }
+        invoice.get().setSupplierId(supplier.get());
+        invoice.get().setInvoiceNumber(dto.getInvoiceNumber());
+        invoice.get().setInvoiceDate(dto.getInvoiceDate());
+        invoice.get().setAmount(dto.getAmount());
+        invoice.get().setCurrencyType(dto.getCurrencyType());
+        return mapper.map(invoiceRepository.save(invoice.get()), Invoice.class);
+    }
+
+    // This function use Bank for get all invoice
+    public List<Invoice> getAllInvoice() {
+        return invoiceRepository.findAll();
+    }
+
+    // This function use Client for get his/ her all invoice
+    public List<Invoice> getClientAllInvoice(String userId) {
+        Optional<Client> client = userService.fetchClientIdByUserId(userId);
+        List<Invoice> invoices = getUserOwnInvoices(UserType.CLIENT, client.get().getClientId());
+        return invoices;
+    }
+
+    //Bank invoice status update
+    public Invoice setStatus(StatusUpdateInvoiceDTO dto) {
+        return mapper.map(invoiceRepository.save(
+                new Invoice(
+                        dto.getInvoiceId(),
+                        dto.getStatus()
+                )
+        ), Invoice.class);
+    }
+
+    public void deleteInvoice(Integer invoiceId) {
+        invoiceRepository.deleteById(invoiceId);
     }
 }
