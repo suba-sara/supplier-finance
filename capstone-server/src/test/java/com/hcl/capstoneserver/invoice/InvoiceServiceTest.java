@@ -51,7 +51,6 @@ public class InvoiceServiceTest {
                         1234567891,
                         "2021-04-23",
                         25000.0,
-                        0,
                         CurrencyType.USD
                 ), "client"));
     }
