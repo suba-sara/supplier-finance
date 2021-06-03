@@ -2,48 +2,64 @@ package com.hcl.capstoneserver.invoice.dto;
 
 import com.hcl.capstoneserver.invoice.CurrencyType;
 import com.hcl.capstoneserver.invoice.InvoiceStatus;
-import org.hibernate.validator.constraints.Currency;
-import org.springframework.format.annotation.DateTimeFormat;
+import com.hcl.capstoneserver.user.dto.SupplierDTO;
+import com.hcl.capstoneserver.user.entities.Client;
 
-import javax.validation.constraints.NotBlank;
-
-public class CreateInvoiceDTO {
-    @NotBlank(message = "supplier id is required")
-    private String supplierId;
-    @NotBlank(message = "invoice number is required")
+public class ClientViewInvoiceDTO {
+    private Integer invoiceId;
+    private Client client;
+    private SupplierDTO supplier;
     private String invoiceNumber;
-    @NotBlank(message = "date is required")
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private String invoiceDate;
-    @NotBlank(message = "amount is required")
-    @Currency(value = "0", message = "amount is must be greater than")
     private Double amount;
-    @NotBlank(message = "status is required")
     private InvoiceStatus status;
-    @NotBlank(message = "currency is required")
     private CurrencyType currencyType;
 
-    public CreateInvoiceDTO(
-            String supplierId,
+    public ClientViewInvoiceDTO() {
+    }
+
+    public ClientViewInvoiceDTO(
+            Integer invoiceId,
+            Client client,
+            SupplierDTO supplier,
             String invoiceNumber,
             String invoiceDate,
             Double amount,
+            InvoiceStatus status,
             CurrencyType currencyType
     ) {
-        this.supplierId = supplierId;
+        this.invoiceId = invoiceId;
+        this.client = client;
+        this.supplier = supplier;
         this.invoiceNumber = invoiceNumber;
         this.invoiceDate = invoiceDate;
         this.amount = amount;
-        this.status = InvoiceStatus.UPLOADED;
+        this.status = status;
         this.currencyType = currencyType;
     }
 
-    public String getSupplierId() {
-        return supplierId;
+    public Integer getInvoiceId() {
+        return invoiceId;
     }
 
-    public void setSupplierId(String supplierId) {
-        this.supplierId = supplierId;
+    public void setInvoiceId(Integer invoiceId) {
+        this.invoiceId = invoiceId;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+    public SupplierDTO getSupplier() {
+        return supplier;
+    }
+
+    public void setSupplier(SupplierDTO supplier) {
+        this.supplier = supplier;
     }
 
     public String getInvoiceNumber() {
@@ -72,6 +88,10 @@ public class CreateInvoiceDTO {
 
     public InvoiceStatus getStatus() {
         return status;
+    }
+
+    public void setStatus(InvoiceStatus status) {
+        this.status = status;
     }
 
     public CurrencyType getCurrencyType() {

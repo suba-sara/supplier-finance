@@ -1,9 +1,6 @@
 package com.hcl.capstoneserver.invoice;
 
-import com.hcl.capstoneserver.config.GlobalErrorHandler;
-import com.hcl.capstoneserver.invoice.dto.CreateInvoiceDTO;
-import com.hcl.capstoneserver.invoice.dto.StatusUpdateInvoiceDTO;
-import com.hcl.capstoneserver.invoice.dto.UpdateInvoiceDTO;
+import com.hcl.capstoneserver.invoice.dto.*;
 import com.hcl.capstoneserver.invoice.entities.Invoice;
 import com.hcl.capstoneserver.invoice.repositories.InvoiceRepository;
 import com.hcl.capstoneserver.user.UserService;
@@ -11,14 +8,13 @@ import com.hcl.capstoneserver.user.UserType;
 import com.hcl.capstoneserver.user.entities.Client;
 import com.hcl.capstoneserver.user.entities.Supplier;
 import org.modelmapper.ModelMapper;
-import org.springframework.core.MethodParameter;
 import org.springframework.data.domain.Example;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,58 +25,53 @@ public class InvoiceService {
     private final ModelMapper mapper;
     private final UserService userService;
 
-    public InvoiceService(InvoiceRepository invoiceRepository, ModelMapper mapper, UserService userService) {
+    /*
+     * userId - current login user userId
+     * */
+
+    public InvoiceService(
+            InvoiceRepository invoiceRepository,
+            ModelMapper mapper,
+            UserService userService
+    ) {
         this.invoiceRepository = invoiceRepository;
         this.mapper = mapper;
         this.userService = userService;
     }
 
-    private void _checkInvoiceNumberExistsInSupplier(CreateInvoiceDTO dto, Supplier supplier) {
-        // check the supplier has same invoice Number
-        Invoice invoiceQry = new Invoice();
-        invoiceQry.setInvoiceNumber(dto.getInvoiceNumber());
-        invoiceQry.setSupplierId(supplier);
-        if (invoiceRepository.exists(Example.of(invoiceQry))) {
-            throw new HttpClientErrorException(
-                    HttpStatus.FORBIDDEN,
-                    "Invoice number all ready exists for this supplier"
-            );
-        }
-    }
-
-    private void _checkInvoiceOwnerIsClient(String invoiceNumber, String invoiceDate, Client client) {
-        // check the current invoice owner is client/ supplier or not
+    private void _checkSupplierWithExistsInvoiceNumber(Optional<Supplier> supplier, String invoiceNumber) {
         Invoice invoice = new Invoice();
+        invoice.setSupplier(supplier.get());
         invoice.setInvoiceNumber(invoiceNumber);
-        invoice.setInvoiceDate(invoiceDate);
-        invoice.setClientId(client);
         if (invoiceRepository.exists(Example.of(invoice))) {
             throw new HttpClientErrorException(
-                    HttpStatus.FORBIDDEN,
-                    String.format(
-                            "%s you do not have permission to update this",
-                            client.getUserId()
-                    )
+                    HttpStatus.BAD_REQUEST,
+                    "An invoice number already exists for this supplier."
             );
         }
     }
 
-    private void _checkInvoiceData(
-            Optional<Client> client,
-            Optional<Supplier> supplier,
-            String invoiceDate,
-            InvoiceStatus status,
+    private void _checkInvoiceDate(String invoiceDate) {
+        if (LocalDate.now().isAfter(LocalDate.parse(invoiceDate))) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "The invoice date is an older date.");
+        }
+    }
+
+    private Optional<Invoice> _fetchInvoiceById(Integer invoiceId) {
+        Optional<Invoice> invoice = invoiceRepository.findById(invoiceId);
+        if (!invoice.isPresent()) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Invoice is not found.");
+        }
+        return invoice;
+    }
+
+    private Optional<Invoice> _checkInvoiceOwnershipAndFetchInvoice(
+            String userId,
+            Integer invoiceId,
             String field
     ) {
-        // check the invoice data valid or not
-        if (!client.isPresent()) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Client not found");
-        }
-
-        if (!supplier.isPresent()) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Supplier not found");
-        }
-
+        Optional<Invoice> invoice = _fetchInvoiceById(invoiceId);
+        InvoiceStatus status = invoice.get().getStatus();
         switch (status) {
             case IN_REVIEW:
             case APPROVED:
@@ -92,27 +83,36 @@ public class InvoiceService {
                         )
                 );
         }
-
-        if (LocalDate.now().isAfter(LocalDate.parse(invoiceDate))) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Invoice date is expired");
+        if (!invoice.get().getClient().getUserId().equals(userId)) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, String.format(
+                    "%s you do not have permission to %s this invoice.",
+                    userId, field
+            )
+            );
         }
+        return invoice;
     }
 
-    public Optional<Invoice> fetchInvoiceById(Integer invoiceId) {
-        return invoiceRepository.findById(invoiceId);
+    private Invoice _fetchAllInvoiceByInvoiceStatus(InvoiceStatus status, Integer invoiceId) {
+        return invoiceRepository.findAll((Invoice, cq, cb) -> {
+                                             cb.equal(Invoice.get("status"), status);
+                                             cb.equal(Invoice.get("invoiceId"), invoiceId);
+                                             return null;
+                                         }
+        ).get(0);
     }
 
-    public List<Invoice> getUserOwnInvoices(UserType userType, String userId) {
+    public List<Invoice> _getUserOwnAllInvoices(UserType userType, String userId) {
         List<Invoice> invoices = null;
         for (Invoice invoice : getAllInvoice()) {
             switch (userType) {
                 case CLIENT:
-                    if (invoice.getClientId().equals(userId)) {
+                    if (invoice.getClient().equals(userId)) {
                         invoices.add(invoice);
                     }
                     break;
                 case SUPPLIER:
-                    if (invoice.getSupplierId().equals(userId)) {
+                    if (invoice.getSupplier().equals(userId)) {
                         invoices.add(invoice);
                     }
                     break;
@@ -121,46 +121,63 @@ public class InvoiceService {
         return invoices;
     }
 
-    public Invoice createInvoice(CreateInvoiceDTO dto, String userId) {
+    public ClientViewInvoiceDTO createInvoice(CreateInvoiceDTO dto, String userId) {
         Optional<Client> client = userService.fetchClientDataByUserId(userId);
-        Optional<Supplier> supplier = userService.fetchSupplierDataByUserId(dto.getSupplierId());
-        _checkInvoiceData(client, supplier, dto.getInvoiceDate(), dto.getStatus(), "create");
-        _checkInvoiceNumberExistsInSupplier(dto, supplier.get());
+        Optional<Supplier> supplier = userService.fetchSupplierDataBySupplierId(dto.getSupplierId());
+        if (!supplier.isPresent()) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "This Supplier is not found.");
+        }
+        _checkSupplierWithExistsInvoiceNumber(supplier, dto.getInvoiceNumber());
+        _checkInvoiceDate(dto.getInvoiceDate());
 
-        return mapper.map(invoiceRepository.save(
-                new Invoice(
-                        client.get(),
-                        supplier.get(),
-                        dto.getInvoiceNumber(),
-                        dto.getInvoiceDate(),
-                        dto.getAmount(),
-                        dto.getStatus(),
-                        dto.getCurrencyType()
-                )
-        ), Invoice.class);
+        return mapper.map(invoiceRepository.save(new Invoice(
+                client.get(),
+                supplier.get(),
+                dto.getInvoiceNumber(),
+                dto.getInvoiceDate(),
+                dto.getAmount(),
+                dto.getStatus(),
+                dto.getCurrencyType()
+        )), ClientViewInvoiceDTO.class);
     }
 
-    //Client invoice update
-    public Invoice updateInvoice(UpdateInvoiceDTO dto, String userId) {
+    // This update method for client
+    public ClientViewInvoiceDTO updateInvoice(UpdateInvoiceDTO dto, String userId) {
         Optional<Client> client = userService.fetchClientDataByUserId(userId);
-        Optional<Supplier> supplier = userService.fetchSupplierDataByUserId(dto.getSupplierId());
-        Optional<Invoice> invoice = fetchInvoiceById(dto.getInvoiceId());
+        Optional<Supplier> supplier = userService.fetchSupplierDataBySupplierId(dto.getSupplierId());
 
-        _checkInvoiceData(client, supplier, dto.getInvoiceDate(), invoice.get().getStatus(), "update");
-
-        if (!invoice.isPresent()) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Invoice not found");
+        if (!supplier.isPresent()) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "This Supplier is not found");
         }
 
-        _checkInvoiceOwnerIsClient(dto.getInvoiceNumber(), dto.getInvoiceDate(), client.get());
+        Optional<Invoice> invoice = _checkInvoiceOwnershipAndFetchInvoice(userId, dto.getInvoiceId(), "update");
 
-        invoice.get().setSupplierId(supplier.get());
-        invoice.get().setInvoiceNumber(dto.getInvoiceNumber());
-        invoice.get().setInvoiceDate(dto.getInvoiceDate());
-        invoice.get().setAmount(dto.getAmount());
-        invoice.get().setCurrencyType(dto.getCurrencyType());
-        return mapper.map(invoiceRepository.save(invoice.get()), Invoice.class);
+        _checkSupplierWithExistsInvoiceNumber(supplier, dto.getInvoiceNumber());
+        _checkInvoiceDate(dto.getInvoiceDate());
+
+        mapper.map(dto, invoice.get());
+        return mapper.map(invoiceRepository.save(invoice.get()), ClientViewInvoiceDTO.class);
     }
+
+    // This method use only Bank
+    public BankViewInvoiceDTO statusUpdate(StatusUpdateInvoiceDTO dto, String userId) {
+        // need to check userId account type -> This feature currently unavailable
+        Optional<Invoice> invoice = _fetchInvoiceById(dto.getInvoiceId());
+        mapper.map(dto, invoice.get());
+        return mapper.map(invoiceRepository.save(invoice.get()), BankViewInvoiceDTO.class);
+    }
+
+    public long deleteInvoice(Integer invoiceId, String userId) {
+
+        invoiceRepository.delete(_checkInvoiceOwnershipAndFetchInvoice(userId, invoiceId, "delete").get());
+        return invoiceRepository.count();
+    }
+
+    // This function used by BANK
+    public List<Invoice> fetchAllInvoices() {
+        return invoiceRepository.findAll();
+    }
+
 
     // This function use Bank for get all invoice
     public List<Invoice> getAllInvoice() {
@@ -170,32 +187,25 @@ public class InvoiceService {
     // This function use Client for get his/ her all invoice
     public List<Invoice> getClientAllInvoice(String userId) {
         Optional<Client> client = userService.fetchClientDataByUserId(userId);
-        List<Invoice> invoices = getUserOwnInvoices(UserType.CLIENT, client.get().getClientId());
+        List<Invoice> invoices = _getUserOwnAllInvoices(UserType.CLIENT, client.get().getClientId());
         return invoices;
     }
+
 
     // This function use Supplier for get his/ her all invoice
     public List<Invoice> getSupplierAllInvoice(String userId) {
         Optional<Supplier> supplier = userService.fetchSupplierDataByUserId(userId);
-        List<Invoice> invoices = getUserOwnInvoices(UserType.SUPPLIER, supplier.get().getSupplierId());
+        List<Invoice> invoices = _getUserOwnAllInvoices(UserType.SUPPLIER, supplier.get().getSupplierId());
         return invoices;
     }
 
-    // Bank invoice status update
-    public Invoice setStatus(StatusUpdateInvoiceDTO dto) {
-        return mapper.map(invoiceRepository.save(
-                new Invoice(
-                        dto.getInvoiceId(),
-                        dto.getStatus()
-                )
-        ), Invoice.class);
-    }
-
-    public void deleteInvoice(Integer invoiceId, String userId) {
-        Optional<Client> client = userService.fetchClientDataByUserId(userId);
-        Optional<Invoice> invoice = invoiceRepository.findById(invoiceId);
-        _checkInvoiceData(client, null, null, invoice.get().getStatus(), "delete");
-        _checkInvoiceOwnerIsClient(invoice.get().getInvoiceNumber(), invoice.get().getInvoiceDate(), client.get());
-        invoiceRepository.deleteById(invoiceId);
+    // This method can use client and supplier for get their invoice filter by status
+    public List<Invoice> getUserAllInvoiceByStatus(String userId, InvoiceStatus status) {
+        List<Invoice> invoiceAll = getClientAllInvoice(userId);
+        List<Invoice> invoicesFilter = new ArrayList<>();
+        for (Invoice invoice : invoiceAll) {
+            invoicesFilter.add(_fetchAllInvoiceByInvoiceStatus(status, invoiceAll.get(0).getInvoiceId()));
+        }
+        return invoicesFilter;
     }
 }

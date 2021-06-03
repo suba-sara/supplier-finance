@@ -5,6 +5,7 @@ import com.hcl.capstoneserver.invoice.InvoiceStatus;
 import javax.validation.constraints.NotBlank;
 
 public class StatusUpdateInvoiceDTO {
+    @NotBlank(message = "invoice id is required")
     private Integer invoiceId;
     @NotBlank(message = "status is required")
     private InvoiceStatus status;

@@ -1,21 +1,26 @@
 package com.hcl.capstoneserver.invoice.dto;
 
 import com.hcl.capstoneserver.invoice.CurrencyType;
+import com.hcl.capstoneserver.invoice.InvoiceStatus;
 import org.hibernate.validator.constraints.Currency;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
-import java.util.Date;
 
 public class UpdateInvoiceDTO {
     @NotBlank(message = "invoice id is required")
     private Integer invoiceId;
+    @NotBlank(message = "supplier id is required")
     private String supplierId;
+    @NotBlank(message = "invoice number is required")
     private String invoiceNumber;
+    @NotBlank(message = "date is required")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private String invoiceDate;
+    @NotBlank(message = "amount is required")
     @Currency(value = "0", message = "amount is must be greater than")
     private Double amount;
+    @NotBlank(message = "currency is required")
     private CurrencyType currencyType;
 
     public UpdateInvoiceDTO(

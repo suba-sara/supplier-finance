@@ -1,8 +1,6 @@
 package com.hcl.capstoneserver.invoice;
 
-import com.hcl.capstoneserver.invoice.dto.CreateInvoiceDTO;
-import com.hcl.capstoneserver.invoice.dto.StatusUpdateInvoiceDTO;
-import com.hcl.capstoneserver.invoice.dto.UpdateInvoiceDTO;
+import com.hcl.capstoneserver.invoice.dto.*;
 import com.hcl.capstoneserver.invoice.entities.Invoice;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -25,33 +23,38 @@ public class InvoiceController {
     }
 
     @PostMapping("/api/invoices/create")
-    public ResponseEntity<Invoice> createInvoice(@RequestBody CreateInvoiceDTO dto, Principal principal) {
+    public ResponseEntity<ClientViewInvoiceDTO> createInvoice(@RequestBody CreateInvoiceDTO dto, Principal principal) {
         return new ResponseEntity<>(invoiceService.createInvoice(dto, principal.getName()), HttpStatus.CREATED);
     }
 
-    @GetMapping("/api/invoices/invoices")
+    @GetMapping("/api/invoices/fetchInvoices")
     public List<Invoice> getAllInvoice() {
         return invoiceService.getAllInvoice();
     }
 
-    @GetMapping("/api/invoices/clinetInvoices")
+    @GetMapping("/api/invoices/fetchClientInvoices")
     public List<Invoice> getClientAllInvoice(Principal principal) {
         return invoiceService.getClientAllInvoice(principal.getName());
     }
 
-    @GetMapping("/api/invoices/supplierInvoices")
+    @GetMapping("/api/invoices/fetchSupplierInvoices")
     public List<Invoice> getSupplierAllInvoice(Principal principal) {
         return invoiceService.getSupplierAllInvoice(principal.getName());
     }
 
+    @GetMapping("/api/invoices/fetchUserInvoiceByStatus")
+    public List<Invoice> getUserAllInvoiceByStatus(@RequestBody InvoiceStatus status, Principal principal) {
+        return invoiceService.getUserAllInvoiceByStatus(principal.getName(), status);
+    }
+
     @PutMapping("/api/invoices/update")
-    public ResponseEntity<Invoice> updateInvoice(@RequestBody UpdateInvoiceDTO dto, Principal principal) {
+    public ResponseEntity<ClientViewInvoiceDTO> updateInvoice(@RequestBody UpdateInvoiceDTO dto, Principal principal) {
         return new ResponseEntity<>(invoiceService.updateInvoice(dto, principal.getName()), HttpStatus.CREATED);
     }
 
     @PutMapping("/api/invoices/setStatus")
-    public ResponseEntity<Invoice> setStatus(@RequestBody StatusUpdateInvoiceDTO dto) {
-        return new ResponseEntity<>(invoiceService.setStatus(dto), HttpStatus.CREATED);
+    public ResponseEntity<BankViewInvoiceDTO> setStatus(@RequestBody StatusUpdateInvoiceDTO dto, Principal principal) {
+        return new ResponseEntity<>(invoiceService.statusUpdate(dto, principal.getName()), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/api/invoices/delete")

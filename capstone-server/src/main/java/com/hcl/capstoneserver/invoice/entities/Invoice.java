@@ -6,7 +6,6 @@ import com.hcl.capstoneserver.user.entities.Client;
 import com.hcl.capstoneserver.user.entities.Supplier;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 public class Invoice {
@@ -15,10 +14,10 @@ public class Invoice {
     private Integer invoiceId;
     @ManyToOne
     @JoinColumn(name = "CLIENT_ID", nullable = false)
-    private Client clientId;
+    private Client client;
     @ManyToOne
     @JoinColumn(name = "SUPPLIER_ID", nullable = false)
-    private Supplier supplierId;
+    private Supplier supplier;
     private String invoiceNumber;
     private String invoiceDate;
     private Double amount;
@@ -29,62 +28,45 @@ public class Invoice {
     }
 
     public Invoice(
-            Client clientId,
-            Supplier supplierId,
+            Client client,
+            Supplier supplier,
             String invoiceNumber,
             String invoiceDate,
             Double amount,
             InvoiceStatus status,
             CurrencyType currencyType
     ) {
-        this.clientId = clientId;
-        this.supplierId = supplierId;
+        this.client = client;
+        this.supplier = supplier;
         this.invoiceNumber = invoiceNumber;
         this.invoiceDate = invoiceDate;
         this.amount = amount;
         this.status = status;
         this.currencyType = currencyType;
-    }
-
-    public Invoice(
-            Client clientId,
-            Supplier supplierId,
-            String invoiceNumber,
-            String invoiceDate,
-            Double amount,
-            CurrencyType currencyType
-    ) {
-        this.clientId = clientId;
-        this.supplierId = supplierId;
-        this.invoiceNumber = invoiceNumber;
-        this.invoiceDate = invoiceDate;
-        this.amount = amount;
-        this.currencyType = currencyType;
-    }
-
-    public Invoice(Integer invoiceId, InvoiceStatus status) {
-        this.invoiceId = invoiceId;
-        this.status = status;
     }
 
     public Integer getInvoiceId() {
         return invoiceId;
     }
 
-    public Client getClientId() {
-        return clientId;
+    public void setInvoiceId(Integer invoiceId) {
+        this.invoiceId = invoiceId;
     }
 
-    public void setClientId(Client clientId) {
-        this.clientId = clientId;
+    public Client getClient() {
+        return client;
     }
 
-    public Supplier getSupplierId() {
-        return supplierId;
+    public void setClient(Client client) {
+        this.client = client;
     }
 
-    public void setSupplierId(Supplier supplierId) {
-        this.supplierId = supplierId;
+    public Supplier getSupplier() {
+        return supplier;
+    }
+
+    public void setSupplier(Supplier supplier) {
+        this.supplier = supplier;
     }
 
     public String getInvoiceNumber() {
@@ -131,8 +113,8 @@ public class Invoice {
     public String toString() {
         return "Invoice{" +
                 "invoiceId=" + invoiceId +
-                ", clientId=" + clientId +
-                ", supplierId=" + supplierId +
+                ", clientId=" + client +
+                ", supplierId=" + supplier +
                 ", invoiceNumber=" + invoiceNumber +
                 ", invoiceDate='" + invoiceDate + '\'' +
                 ", amount=" + amount +
