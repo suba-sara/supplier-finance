@@ -102,7 +102,7 @@ public class UserService implements UserDetailsService {
                 user.get()
                     .getPassword(),
                 Collections.singleton(
-                        new SimpleGrantedAuthority(user.get().getUserType())
+                        new SimpleGrantedAuthority(user.get().getUserType().toString())
                 )
         );
     }
