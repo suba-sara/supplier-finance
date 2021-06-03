@@ -187,7 +187,7 @@ public class UserService implements UserDetailsService {
         return clientRepository.findOne(Example.of(client));
     }
 
-    public Optional<Supplier> fetchSupplierDataByClientId(String supplierId) {
+    public Optional<Supplier> fetchSupplierDataBySupplierId(String supplierId) {
         Supplier supplier = new Supplier();
         supplier.setSupplierId(supplierId);
         return supplierRepository.findOne(Example.of(supplier));
