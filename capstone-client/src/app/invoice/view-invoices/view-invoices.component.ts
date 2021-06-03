@@ -68,7 +68,8 @@ export class ViewInvoicesComponent implements OnInit {
     'amount',
     'invoiceNumber',
     'invoiceAge',
-    'invoiceId',
+    'invoiceStatus',
+    'options',
   ];
 
   constructor() {}

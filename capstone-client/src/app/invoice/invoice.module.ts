@@ -11,6 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { HttpClientModule } from '@angular/common/http';
 import { ViewInvoicesComponent } from './view-invoices/view-invoices.component';
 import { MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [InvoiceUploadComponent, ViewInvoicesComponent],
@@ -25,6 +26,7 @@ import { MatTableModule } from '@angular/material/table';
     MatSelectModule,
     MatButtonModule,
     MatTableModule,
+    MatTooltipModule,
   ],
 })
 export class InvoiceModule {}
