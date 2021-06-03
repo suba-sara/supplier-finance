@@ -1,5 +1,6 @@
 package com.hcl.capstoneserver.invoice;
 
+import com.hcl.capstoneserver.config.GlobalErrorHandler;
 import com.hcl.capstoneserver.invoice.dto.CreateInvoiceDTO;
 import com.hcl.capstoneserver.invoice.dto.StatusUpdateInvoiceDTO;
 import com.hcl.capstoneserver.invoice.dto.UpdateInvoiceDTO;
@@ -10,9 +11,11 @@ import com.hcl.capstoneserver.user.UserType;
 import com.hcl.capstoneserver.user.entities.Client;
 import com.hcl.capstoneserver.user.entities.Supplier;
 import org.modelmapper.ModelMapper;
+import org.springframework.core.MethodParameter;
 import org.springframework.data.domain.Example;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.time.LocalDate;
@@ -62,7 +65,13 @@ public class InvoiceService {
         }
     }
 
-    private void _checkInvoiceData(Optional<Client> client, Optional<Supplier> supplier, String invoiceDate) {
+    private void _checkInvoiceData(
+            Optional<Client> client,
+            Optional<Supplier> supplier,
+            String invoiceDate,
+            InvoiceStatus status,
+            String field
+    ) {
         // check the invoice data valid or not
         if (!client.isPresent()) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Client not found");
@@ -70,6 +79,18 @@ public class InvoiceService {
 
         if (!supplier.isPresent()) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Supplier not found");
+        }
+
+        switch (status) {
+            case IN_REVIEW:
+            case APPROVED:
+                throw new HttpClientErrorException(
+                        HttpStatus.BAD_REQUEST,
+                        String.format(
+                                "This invoice can not %s, because invoice is %s.",
+                                field, status.toString().toLowerCase()
+                        )
+                );
         }
 
         if (LocalDate.now().isAfter(LocalDate.parse(invoiceDate))) {
@@ -103,7 +124,7 @@ public class InvoiceService {
     public Invoice createInvoice(CreateInvoiceDTO dto, String userId) {
         Optional<Client> client = userService.fetchClientDataByUserId(userId);
         Optional<Supplier> supplier = userService.fetchSupplierDataByUserId(dto.getSupplierId());
-        _checkInvoiceData(client, supplier, dto.getInvoiceDate());
+        _checkInvoiceData(client, supplier, dto.getInvoiceDate(), dto.getStatus(), "create");
         _checkInvoiceNumberExistsInSupplier(dto, supplier.get());
 
         return mapper.map(invoiceRepository.save(
@@ -125,7 +146,7 @@ public class InvoiceService {
         Optional<Supplier> supplier = userService.fetchSupplierDataByUserId(dto.getSupplierId());
         Optional<Invoice> invoice = fetchInvoiceById(dto.getInvoiceId());
 
-        _checkInvoiceData(client, supplier, dto.getInvoiceDate());
+        _checkInvoiceData(client, supplier, dto.getInvoiceDate(), invoice.get().getStatus(), "update");
 
         if (!invoice.isPresent()) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Invoice not found");
@@ -173,6 +194,7 @@ public class InvoiceService {
     public void deleteInvoice(Integer invoiceId, String userId) {
         Optional<Client> client = userService.fetchClientDataByUserId(userId);
         Optional<Invoice> invoice = invoiceRepository.findById(invoiceId);
+        _checkInvoiceData(client, null, null, invoice.get().getStatus(), "delete");
         _checkInvoiceOwnerIsClient(invoice.get().getInvoiceNumber(), invoice.get().getInvoiceDate(), client.get());
         invoiceRepository.deleteById(invoiceId);
     }
