@@ -23,6 +23,15 @@ public class UserTestUtils {
                         "071-2314531a",
                         2.5f
                 ));
+                userService.signUpSupplier(new Supplier(
+                        "supplier9",
+                        "password",
+                        "supplier2",
+                        "Colombo",
+                        "supplier2@gmail.com",
+                        "071-2314531a",
+                        2.5f
+                ));
                 break;
             case CLIENT:
                 userService.signUpClient(new Client(
@@ -31,6 +40,16 @@ public class UserTestUtils {
                         "client",
                         "Colombo",
                         "client@gmail.com",
+                        "071-2314538",
+                        2.5f,
+                        1234567891
+                ));
+                userService.signUpClient(new Client(
+                        "client2",
+                        "password",
+                        "client2",
+                        "Colombo",
+                        "client2@gmail.com",
                         "071-2314538",
                         2.5f,
                         1234567891
