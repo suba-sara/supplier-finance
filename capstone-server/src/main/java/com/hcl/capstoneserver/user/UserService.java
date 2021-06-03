@@ -180,5 +180,17 @@ public class UserService implements UserDetailsService {
     public Optional<Supplier> fetchSupplierDataByUserId(String userId) {
         return supplierRepository.findById(userId);
     }
+
+    public Optional<Client> fetchClientDataByClientId(String clientId) {
+        Client client = new Client();
+        client.setClientId(clientId);
+        return clientRepository.findOne(Example.of(client));
+    }
+
+    public Optional<Supplier> fetchSupplierDataByClientId(String supplierId) {
+        Supplier supplier = new Supplier();
+        supplier.setSupplierId(supplierId);
+        return supplierRepository.findOne(Example.of(supplier));
+    }
 }
 
