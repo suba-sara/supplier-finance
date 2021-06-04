@@ -13,6 +13,7 @@ import { BankAccountDetailsFormComponent } from './bank-account-details-form/ban
 import { UserDataFormComponent } from './user-data-form/user-data-form.component';
 import { UserTypeButtonComponent } from './user-type-button/user-type-button.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('SignUpComponent', () => {
   let component: SignUpClientComponent;
@@ -23,6 +24,7 @@ describe('SignUpComponent', () => {
       imports: [
         CommonModule,
         RouterTestingModule,
+        HttpClientModule,
         MatInputModule,
         MatButtonModule,
         FormsModule,
