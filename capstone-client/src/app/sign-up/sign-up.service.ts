@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 
 const { API_PATH } = environment;
 
-type SupplierSignUpDTO = {
+type SignupBaseDto = {
   userId: string;
   password: string;
   name: string;
@@ -24,7 +24,47 @@ type SupplierSignUpDTO = {
 export class SignUpService {
   constructor(private http: HttpClient) {}
 
-  signUpSupplier = ({
+  signUpSupplier = (data: UserDetails & PersonalDetails): Observable<void> => {
+    // transform data
+    const dto: SignupBaseDto = {
+      ...this._prepareDto(data),
+      // adding default interest rate for now
+      interestRate: 5.0,
+    };
+
+    return this.http
+      .post(`${API_PATH}/sign-up/supplier`, dto)
+      .pipe(map(() => {}));
+  };
+
+  signUpClient = (data: UserDetails & PersonalDetails): Observable<void> => {
+    // transform data
+    const dto: SignupBaseDto = {
+      ...this._prepareDto(data),
+      // adding default interest rate for now
+      interestRate: 5.0,
+    };
+
+    return this.http
+      .post(`${API_PATH}/sign-up/client`, dto)
+      .pipe(map(() => {}));
+  };
+
+  _prepareAddress = ({
+    addressLine1,
+    city,
+    state,
+    province,
+    country,
+  }: {
+    addressLine1: string;
+    city: string;
+    state: string;
+    province: string;
+    country: string;
+  }) => `${addressLine1}, ${city}, ${state}, ${province}, ${country}`;
+
+  _prepareDto = ({
     userId,
     password,
     firstName,
@@ -36,21 +76,18 @@ export class SignUpService {
     country,
     email,
     phone,
-  }: UserDetails & PersonalDetails): Observable<void> => {
-    // transform data
-    const dto: SupplierSignUpDTO = {
-      userId,
-      password,
-      name: `${firstName} ${lastName}`,
-      address: `${addressLine1}, ${city}, ${state}, ${province}, ${country}`,
-      email,
-      phone,
-      // adding default interest rate for now
-      interestRate: 5.0,
-    };
-
-    return this.http
-      .post(`${API_PATH}/sign-up/supplier`, dto)
-      .pipe(map(() => {}));
-  };
+  }: UserDetails & PersonalDetails) => ({
+    userId,
+    password,
+    name: `${firstName} ${lastName}`,
+    address: this._prepareAddress({
+      addressLine1,
+      city,
+      state,
+      province,
+      country,
+    }),
+    email,
+    phone,
+  });
 }
