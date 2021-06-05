@@ -58,7 +58,7 @@ public class UserControllerTest {
         @Test
         @DisplayName("It should sign in a user on correct credentials")
         public void shouldSignInOnCorrectCredentials() {
-            userTestUtils.createAUser(UserType.CLIENT);
+            userTestUtils.createAClient();
 
             AppUserWithPasswordDTO user = new AppUserWithPasswordDTO("client", "password");
 
@@ -74,7 +74,7 @@ public class UserControllerTest {
         @Test
         @DisplayName("It should return required response on successful sign in")
         public void shouldReturnRequiredResponseOnSuccess() {
-            userTestUtils.createAUser(UserType.CLIENT);
+            userTestUtils.createAClient();
 
             AppUserWithPasswordDTO user = new AppUserWithPasswordDTO("client", "password");
 
@@ -116,7 +116,7 @@ public class UserControllerTest {
         @Test
         @DisplayName("It should give appropriate error on incorrect password")
         public void shouldGiveErrorOnIncorrectPassword() {
-            userTestUtils.createAUser(UserType.CLIENT);
+            userTestUtils.createAClient();
             AppUserWithPasswordDTO user = new AppUserWithPasswordDTO("client", "bbb");
 
             webTestClient.post()
@@ -138,7 +138,7 @@ public class UserControllerTest {
         @Test
         @DisplayName("It should return the correct response on success")
         public void refreshTokenSuccess() {
-            userTestUtils.createAUser(UserType.CLIENT);
+            userTestUtils.createAClient();
 
             // get jwt token for the user
             AppUserWithPasswordDTO user = new AppUserWithPasswordDTO("client", "password");
@@ -163,7 +163,7 @@ public class UserControllerTest {
         @Test
         @DisplayName("It should return appropriate error when jwt not provided")
         public void refreshTokenUnAothorized() {
-            userTestUtils.createAUser(UserType.CLIENT);
+            userTestUtils.createAClient();
 
             webTestClient.post()
                          .uri(String.format("http://localhost:%d/api/refresh-token", port))
@@ -250,7 +250,7 @@ public class UserControllerTest {
         @Test
         @DisplayName("It should throw an error when userId already exists")
         public void shouldCheckSupplierUserIdExisted() {
-            userTestUtils.createAUser(UserType.SUPPLIER);
+            userTestUtils.createASupplier();
 
             PersonWithPasswordDTO dto = new PersonWithPasswordDTO();
             dto.setUserId("supplier");

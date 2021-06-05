@@ -50,14 +50,13 @@ public class UserServiceTest {
         assertNotNull(userService);
     }
 
-
     @Nested
     @DisplayName("Sign in tests")
     class SignInTests {
         @Test
         @DisplayName("It should sign in a user on correct credentials")
         public void shouldSignInOnCorrectCredentials() {
-            userTestUtils.createAUser(UserType.CLIENT);
+            userTestUtils.createAClient();
 
             AppUser user = new AppUser();
             user.setUserId("client");
@@ -69,7 +68,7 @@ public class UserServiceTest {
         @Test
         @DisplayName("It should return data in required type on successful sign in")
         public void shouldReturnCorrectDataOnSignIn() {
-            userTestUtils.createAUser(UserType.CLIENT);
+            userTestUtils.createAClient();
 
             AppUser user = new AppUser();
             user.setUserId("client");
@@ -99,7 +98,7 @@ public class UserServiceTest {
         @Test
         @DisplayName("It should throw BadCredentialsException when password is invalid")
         public void shouldHandleInvalidCredentialsError() {
-            userTestUtils.createAUser(UserType.CLIENT);
+            userTestUtils.createAClient();
 
             AppUser user = new AppUser();
             user.setUserId("client");
@@ -117,7 +116,7 @@ public class UserServiceTest {
         @Test
         @DisplayName("it should return a valid response")
         public void shouldReturnValidResponse() {
-            userTestUtils.createAUser(UserType.CLIENT);
+            userTestUtils.createAClient();
 
             JwtWithTypeDTO response = userService.refreshToken("client");
             assertEquals("client", response.getUsername());
@@ -163,7 +162,7 @@ public class UserServiceTest {
         @Test
         @DisplayName("it should throw a UserAlreadyExistsException when username exists")
         public void shouldThrowUserAlreadyExistsException() {
-            userTestUtils.createAUser(UserType.SUPPLIER);
+            userTestUtils.createASupplier();
             assertThrows(UserAlreadyExistsException.class, () -> userService.signUpSupplier(new Supplier(
                     "supplier",
                     "passwor2d",
@@ -178,7 +177,7 @@ public class UserServiceTest {
         @Test
         @DisplayName("it should throw a EmailAlreadyExistsException when username exists")
         public void shouldThrowEmailAlreadyExistsException() {
-            userTestUtils.createAUser(UserType.SUPPLIER);
+            userTestUtils.createASupplier();
             assertThrows(EmailAlreadyExistsException.class, () -> userService.signUpSupplier(new Supplier(
                     "supplier2",
                     "password",
@@ -211,7 +210,6 @@ public class UserServiceTest {
                                     "shel@gmail.com",
                                     "071-2314538",
                                     2.5f,
-                                    "1001",
                                     1234567891
                             )).getName()
             );
@@ -235,7 +233,7 @@ public class UserServiceTest {
         @Test
         @DisplayName("it should throw a UserAlreadyExistsException when username exists")
         public void shouldThrowUserAlreadyExistsException() {
-            userTestUtils.createAUser(UserType.CLIENT);
+            userTestUtils.createAClient();
             assertThrows(UserAlreadyExistsException.class, () -> userService.signUpClient(new Client(
                     "client",
                     "sdfdsfds",
@@ -251,7 +249,7 @@ public class UserServiceTest {
         @Test
         @DisplayName("it should throw a EmailAlreadyExistsException when username exists")
         public void shouldThrowEmailAlreadyExistsException() {
-            userTestUtils.createAUser(UserType.CLIENT);
+            userTestUtils.createAClient();
             assertThrows(EmailAlreadyExistsException.class, () -> userService.signUpClient(new Client(
                     "shel11",
                     "sdfdsfds",
@@ -265,6 +263,4 @@ public class UserServiceTest {
         }
 
     }
-
-
 }
