@@ -20,14 +20,14 @@ public class InvoiceTestUtils {
         dtoList.add(invoiceService.createInvoice(new CreateInvoiceDTO(
                 "SP_00001",
                 "1234567898",
-                LocalDate.now().toString(),
+                LocalDate.now(),
                 25000.0,
                 CurrencyType.USD
         ), "client"));
         dtoList.add(invoiceService.createInvoice(new CreateInvoiceDTO(
                 "SP_00002",
                 "1234567899",
-                LocalDate.now().toString(),
+                LocalDate.now(),
                 25000.0,
                 CurrencyType.USD
         ), "client2"));

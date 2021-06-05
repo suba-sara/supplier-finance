@@ -51,8 +51,8 @@ public class InvoiceService {
         }
     }
 
-    private void _checkInvoiceDate(String invoiceDate) {
-        if (LocalDate.now().isAfter(LocalDate.parse(invoiceDate))) {
+    private void _checkInvoiceDate(LocalDate invoiceDate) {
+        if (LocalDate.now().isAfter(invoiceDate)) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "The invoice date is an older date.");
         }
     }

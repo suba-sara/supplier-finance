@@ -6,6 +6,7 @@ import com.hcl.capstoneserver.user.entities.Client;
 import com.hcl.capstoneserver.user.entities.Supplier;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 public class Invoice {
@@ -19,7 +20,7 @@ public class Invoice {
     @JoinColumn(name = "SUPPLIER_ID", nullable = false)
     private Supplier supplier;
     private String invoiceNumber;
-    private String invoiceDate;
+    private LocalDate invoiceDate;
     private Double amount;
     private InvoiceStatus status;
     private CurrencyType currencyType;
@@ -31,7 +32,7 @@ public class Invoice {
             Client client,
             Supplier supplier,
             String invoiceNumber,
-            String invoiceDate,
+            LocalDate invoiceDate,
             Double amount,
             InvoiceStatus status,
             CurrencyType currencyType
@@ -77,11 +78,11 @@ public class Invoice {
         this.invoiceNumber = invoiceNumber;
     }
 
-    public String getInvoiceDate() {
+    public LocalDate getInvoiceDate() {
         return invoiceDate;
     }
 
-    public void setInvoiceDate(String invoiceDate) {
+    public void setInvoiceDate(LocalDate invoiceDate) {
         this.invoiceDate = invoiceDate;
     }
 

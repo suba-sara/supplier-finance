@@ -6,15 +6,15 @@ import org.hibernate.validator.constraints.Currency;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDate;
 
 public class CreateInvoiceDTO {
     @NotBlank(message = "supplier id is required")
     private String supplierId;
     @NotBlank(message = "invoice number is required")
     private String invoiceNumber;
-    @NotBlank(message = "date is required")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private String invoiceDate;
+    private LocalDate invoiceDate;
     @NotBlank(message = "amount is required")
     @Currency(value = "0", message = "amount is must be greater than")
     private Double amount;
@@ -26,7 +26,7 @@ public class CreateInvoiceDTO {
     public CreateInvoiceDTO(
             String supplierId,
             String invoiceNumber,
-            String invoiceDate,
+            LocalDate invoiceDate,
             Double amount,
             CurrencyType currencyType
     ) {
@@ -54,11 +54,11 @@ public class CreateInvoiceDTO {
         this.invoiceNumber = invoiceNumber;
     }
 
-    public String getInvoiceDate() {
+    public LocalDate getInvoiceDate() {
         return invoiceDate;
     }
 
-    public void setInvoiceDate(String invoiceDate) {
+    public void setInvoiceDate(LocalDate invoiceDate) {
         this.invoiceDate = invoiceDate;
     }
 

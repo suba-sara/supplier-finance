@@ -62,7 +62,7 @@ public class InvoiceServiceTest {
                 new CreateInvoiceDTO(
                         "SP_00001",
                         "1234567891",
-                        LocalDate.now().toString(),
+                        LocalDate.now(),
                         25000.0,
                         CurrencyType.USD
                 ), "client"));
@@ -77,7 +77,7 @@ public class InvoiceServiceTest {
                                 new CreateInvoiceDTO(
                                         "SP_00001",
                                         "1234567898",
-                                        LocalDate.now().toString(),
+                                        LocalDate.now(),
                                         25000.0,
                                         CurrencyType.USD
                                 ), "client"), "400 An invoice number already exists for this supplier."
@@ -95,7 +95,7 @@ public class InvoiceServiceTest {
                                 new CreateInvoiceDTO(
                                         "SP_00001",
                                         "1234567892",
-                                        "2021-04-05",
+                                        LocalDate.parse("2021-04-05"),
                                         25000.0,
                                         CurrencyType.USD
                                 ), "client")
@@ -114,7 +114,7 @@ public class InvoiceServiceTest {
                                 new CreateInvoiceDTO(
                                         "SP_00003",
                                         "1234567893",
-                                        LocalDate.now().toString(),
+                                        LocalDate.now(),
                                         25000.0,
                                         CurrencyType.USD
                                 ), "client")
@@ -129,7 +129,7 @@ public class InvoiceServiceTest {
                 createInvoice.get(0).getInvoiceId(),
                 "SP_00001",
                 "1234567894",
-                LocalDate.now().toString(),
+                LocalDate.now(),
                 25000.0,
                 CurrencyType.USD
         ), "client").getInvoiceNumber());
@@ -146,7 +146,7 @@ public class InvoiceServiceTest {
                                 createInvoice.get(1).getInvoiceId(),
                                 "SP_00001",
                                 "1234567898",
-                                LocalDate.now().toString(),
+                                LocalDate.now(),
                                 25000.0,
                                 CurrencyType.USD
                         ), "client")
