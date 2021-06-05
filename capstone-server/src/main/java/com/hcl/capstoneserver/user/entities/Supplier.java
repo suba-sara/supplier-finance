@@ -35,11 +35,4 @@ public class Supplier extends Person {
     public void setSupplierId(String supplierId) {
         this.supplierId = supplierId;
     }
-
-    @Override
-    public String toString() {
-        return "Supplier{" +
-                "supplierId=" + supplierId +
-                "} " + super.toString();
-    }
 }
