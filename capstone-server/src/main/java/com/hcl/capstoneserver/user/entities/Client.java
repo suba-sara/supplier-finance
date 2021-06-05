@@ -1,14 +1,9 @@
 package com.hcl.capstoneserver.user.entities;
 
-import com.hcl.capstoneserver.generator.id.CustomIdGenerator;
 import com.hcl.capstoneserver.user.UserType;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 
 @Entity
 public class Client extends Person {
@@ -16,7 +11,7 @@ public class Client extends Person {
     @Column(unique = true)
     private String clientId;
 
-    private int accountNumber;
+    private Integer accountNumber;
 
     public Client() {
     }
@@ -59,19 +54,11 @@ public class Client extends Person {
         this.clientId = clientId;
     }
 
-    public int getAccountNumber() {
+    public Integer getAccountNumber() {
         return accountNumber;
     }
 
-    public void setAccountNumber(int accountNumber) {
+    public void setAccountNumber(Integer accountNumber) {
         this.accountNumber = accountNumber;
-    }
-
-    @Override
-    public String toString() {
-        return "Client{" +
-                "clientId=" + clientId +
-                ", accountNumber=" + accountNumber +
-                "} " + super.toString();
     }
 }
