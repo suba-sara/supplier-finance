@@ -2,13 +2,13 @@ package com.hcl.capstoneserver.invoice.dto;
 
 import com.hcl.capstoneserver.invoice.CurrencyType;
 import com.hcl.capstoneserver.invoice.InvoiceStatus;
-import com.hcl.capstoneserver.user.dto.ClientDTO;
-import com.hcl.capstoneserver.user.dto.SupplierDTO;
+import com.hcl.capstoneserver.user.dto.views.ClientDataViewDTO;
+import com.hcl.capstoneserver.user.dto.views.SupplierDataViewDTO;
 
 public class BankViewInvoiceDTO {
     private Integer invoiceId;
-    private ClientDTO client;
-    private SupplierDTO supplier;
+    private ClientDataViewDTO client;
+    private SupplierDataViewDTO supplier;
     private String invoiceNumber;
     private String invoiceDate;
     private Double amount;
@@ -20,8 +20,8 @@ public class BankViewInvoiceDTO {
 
     public BankViewInvoiceDTO(
             Integer invoiceId,
-            ClientDTO client,
-            SupplierDTO supplier,
+            ClientDataViewDTO client,
+            SupplierDataViewDTO supplier,
             String invoiceNumber,
             String invoiceDate,
             Double amount,
@@ -46,19 +46,19 @@ public class BankViewInvoiceDTO {
         this.invoiceId = invoiceId;
     }
 
-    public ClientDTO getClient() {
+    public ClientDataViewDTO getClient() {
         return client;
     }
 
-    public void setClient(ClientDTO client) {
+    public void setClient(ClientDataViewDTO client) {
         this.client = client;
     }
 
-    public SupplierDTO getSupplier() {
+    public SupplierDataViewDTO getSupplier() {
         return supplier;
     }
 
-    public void setSupplier(SupplierDTO supplier) {
+    public void setSupplier(SupplierDataViewDTO supplier) {
         this.supplier = supplier;
     }
 
