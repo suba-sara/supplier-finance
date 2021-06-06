@@ -24,7 +24,7 @@ public class Client extends Person {
             String email,
             String phone,
             Float interestRate,
-            int accountNumber
+            Integer accountNumber
     ) {
         super(userId, password, UserType.CLIENT, name, address, email, phone, interestRate);
         this.accountNumber = accountNumber;
@@ -39,7 +39,7 @@ public class Client extends Person {
             String phone,
             Float interestRate,
             String clientId,
-            int accountNumber
+            Integer accountNumber
     ) {
         super(userId, password, UserType.CLIENT, name, address, email, phone, interestRate);
         this.clientId = clientId;
