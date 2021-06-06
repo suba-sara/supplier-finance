@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -66,14 +65,14 @@ public class UserTestUtils {
         return clients;
     }
 
-    public String loginAUser(UserType userType) {
+    public String loginAUser(UserType userType, String username) {
         String token = "Bearer ";
         switch (userType) {
             case CLIENT:
-                token += userService.signIn(new AppUser("client", "password", UserType.CLIENT)).getJwt();
+                token += userService.signIn(new AppUser(username, "password", UserType.CLIENT)).getJwt();
                 break;
             case SUPPLIER:
-                token += userService.signIn(new AppUser("supplier", "password", UserType.SUPPLIER)).getJwt();
+                token += userService.signIn(new AppUser(username, "password", UserType.SUPPLIER)).getJwt();
         }
         return token;
     }
