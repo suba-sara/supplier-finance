@@ -189,7 +189,7 @@ public class InvoiceControllerTest {
                          .is4xxClientError()
                          .expectBody()
                          .jsonPath("$.errors[0].message")
-                         .isEqualTo("400 This SUPPLIER is not found.");
+                         .isEqualTo("400 This SUPPLIER is not exist.");
         }
     }
 

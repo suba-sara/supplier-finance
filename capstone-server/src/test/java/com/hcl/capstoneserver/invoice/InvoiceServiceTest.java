@@ -130,7 +130,7 @@ public class InvoiceServiceTest {
         @DisplayName("it should not create new invoice with not exists supplier")
         public void shouldNotCreateNewInvoiceWithNotExistsSupplier() {
             assertEquals(
-                    "400 This SUPPLIER is not found.",
+                    "400 This SUPPLIER is not exist.",
                     assertThrows(
                             HttpClientErrorException.class,
                             () -> invoiceService.createInvoice(
