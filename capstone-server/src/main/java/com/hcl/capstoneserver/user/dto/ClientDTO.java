@@ -11,7 +11,7 @@ public class ClientDTO extends PersonDTO {
     @NotBlank(message = "account number is required")
     @Length(max = 10, min = 10, message = "account number is not valid")
     @Pattern(regexp = "^[0-9]+$", message = "account number is not valid")
-    private int accountNumber;
+    private Integer accountNumber;
 
     public ClientDTO() {
     }
@@ -23,7 +23,8 @@ public class ClientDTO extends PersonDTO {
             String email,
             String phone,
             Float interestRate,
-            String clientId, int accountNumber
+            String clientId,
+            Integer accountNumber
     ) {
         super(userId, name, address, email, phone, interestRate);
         this.clientId = clientId;
@@ -38,11 +39,11 @@ public class ClientDTO extends PersonDTO {
         this.clientId = clientId;
     }
 
-    public int getAccountNumber() {
+    public Integer getAccountNumber() {
         return accountNumber;
     }
 
-    public void setAccountNumber(int accountNumber) {
+    public void setAccountNumber(Integer accountNumber) {
         this.accountNumber = accountNumber;
     }
 }
