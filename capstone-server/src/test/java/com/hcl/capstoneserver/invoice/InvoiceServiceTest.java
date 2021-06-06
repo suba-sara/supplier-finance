@@ -1,9 +1,6 @@
 package com.hcl.capstoneserver.invoice;
 
-import com.hcl.capstoneserver.invoice.dto.ClientViewInvoiceDTO;
-import com.hcl.capstoneserver.invoice.dto.CreateInvoiceDTO;
-import com.hcl.capstoneserver.invoice.dto.StatusUpdateInvoiceDTO;
-import com.hcl.capstoneserver.invoice.dto.UpdateInvoiceDTO;
+import com.hcl.capstoneserver.invoice.dto.*;
 import com.hcl.capstoneserver.invoice.entities.Invoice;
 import com.hcl.capstoneserver.invoice.repositories.InvoiceRepository;
 import com.hcl.capstoneserver.user.UserTestUtils;
@@ -20,8 +17,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -280,7 +280,7 @@ public class InvoiceServiceTest {
         @Test
         @DisplayName("it should delete invoice")
         public void shouldDeleteInvoice() {
-//            assertEquals(2, invoiceService.deleteInvoice(createInvoice.get(0).getInvoiceId(), "client"));
+            //            assertEquals(2, invoiceService.deleteInvoice(createInvoice.get(0).getInvoiceId(), "client"));
         }
 
         // Invoice can delete client only, suppliers and bank can not delete
@@ -314,10 +314,341 @@ public class InvoiceServiceTest {
     @Nested
     @DisplayName("invoice retrieve test")
     class InvoiceRetrieveTest {
-        @Test
-        @DisplayName("it should return all invoice")
-        public void shouldReturnAllInvoice() {
-            assertNotNull(invoiceService.getAllInvoice());
+
+        // BANK
+        @Nested
+        @DisplayName("invoice retrieve test: BANK")
+        class InvoiceRetrieveBank {
+            @Test
+            @DisplayName("it should return all invoice")
+            public void shouldReturnAllInvoice() {
+                InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
+                assertEquals(3, invoiceService.getBankInvoice(dto, "BANK").getNumberOfElements());
+            }
+
+            @Test
+            @DisplayName("it should return all invoice By clientId")
+            public void shouldReturnAllInvoiceByClientId() {
+                InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
+                dto.setClientId("CL_00001");
+                invoiceService.getBankInvoice(dto, "BANK")
+                              .getContent()
+                              .forEach(i -> assertEquals("CL_00001", i.getClient().getClientId()));
+            }
+
+            @Test
+            @DisplayName("it should return all invoice By supplierId")
+            public void shouldReturnAllInvoiceBySupplierId() {
+                InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
+                dto.setSupplierId("SP_00001");
+
+                invoiceService.getBankInvoice(dto, "BANK")
+                              .getContent()
+                              .forEach(i -> assertEquals("SP_00001", i.getSupplier().getSupplierId()));
+
+            }
+
+            @Test
+            @DisplayName("it should return all invoice By invoiceNumber")
+            public void shouldReturnAllInvoiceByInvoiceNumber() {
+                InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
+                dto.setInvoiceNumber("1234567898");
+
+                invoiceService.getBankInvoice(dto, "BANK")
+                              .getContent()
+                              .forEach(i -> assertEquals("1234567898", i.getInvoiceNumber()));
+
+            }
+
+            @Test
+            @DisplayName("it should return all invoice By dateFrom")
+            public void shouldReturnAllInvoiceByDateFrom() {
+                InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
+                dto.setDateFrom(LocalDate.parse("2021-05-01"));
+
+                invoiceService.getBankInvoice(dto, "BANK")
+                              .getContent()
+                              .forEach(i -> assertEquals(LocalDate.parse("2021-05-01"), i.getInvoiceDate()));
+
+            }
+
+            @Test
+            @DisplayName("it should return all invoice Between to date")
+            public void shouldReturnAllInvoiceBetweenDateFromAndDateTo() {
+                InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
+                dto.setDateFrom(LocalDate.parse("2021-05-01"));
+                dto.setDateTo(LocalDate.now());
+
+                invoiceService.getBankInvoice(dto, "BANK")
+                              .getContent()
+                              .forEach(i -> assertThat(
+                                      i.getInvoiceDate()
+                              ).isIn(LocalDate.parse("2021-05-01"), LocalDate.now()));
+
+            }
+
+            @Test
+            @DisplayName("it should return all invoice By ageing")
+            public void shouldReturnAllInvoiceByAgeing() {
+                InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
+                dto.setAgeing(ChronoUnit.DAYS.between(LocalDate.parse("2021-05-01"), LocalDate.now()));
+
+                invoiceService.getBankInvoice(dto, "BANK")
+                              .getContent()
+                              .forEach(i -> assertEquals(
+                                      LocalDate.parse("2021-05-01"),
+                                      i.getInvoiceDate()
+                              ));
+            }
+
+            @Test
+            @DisplayName("it should return all invoice By status")
+            public void shouldReturnAllInvoiceByStatus() {
+                List<InvoiceStatus> statuses = new ArrayList<>();
+                statuses.add(InvoiceStatus.IN_REVIEW);
+                InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
+                dto.setStatus(statuses);
+
+                invoiceService.getBankInvoice(dto, "BANK")
+                              .getContent()
+                              .forEach(i -> assertEquals(
+                                      InvoiceStatus.IN_REVIEW,
+                                      i.getStatus()
+                              ));
+            }
+
+            @Test
+            @DisplayName("it should return all invoice By currencyType")
+            public void shouldReturnAllInvoiceByCurrencyType() {
+                List<CurrencyType> currencyTypes = new ArrayList<>();
+                currencyTypes.add(CurrencyType.GBP);
+                InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
+                dto.setCurrencyType(currencyTypes);
+
+                assertEquals(1, invoiceService.getBankInvoice(dto, "BANK")
+                                              .getNumberOfElements());
+            }
+        }
+
+        // CLIENT
+        @Nested
+        @DisplayName("invoice retrieve test: CLIENT")
+        class InvoiceRetrieveClient {
+
+            private List<InvoiceStatus> _getStatusList() {
+                List<InvoiceStatus> statuses = new ArrayList<>();
+                statuses.add(InvoiceStatus.IN_REVIEW);
+                return statuses;
+            }
+
+            @Test
+            @DisplayName("it should return all invoice")
+            public void shouldReturnAllInvoice() {
+                InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
+                assertEquals(2, invoiceService.getClientInvoice(dto, "client").getNumberOfElements());
+            }
+
+            @Test
+            @DisplayName("it should return all invoice By supplierId and status")
+            public void shouldReturnAllInvoiceBySupplierId() {
+                InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
+                dto.setSupplierId("SP_00001");
+                dto.setStatus(_getStatusList());
+
+                invoiceService.getClientInvoice(dto, "client")
+                              .getContent()
+                              .forEach(i -> assertEquals("SP_00001", i.getSupplier().getSupplierId()));
+
+            }
+
+            @Test
+            @DisplayName("it should return all invoice By invoiceNumber")
+            public void shouldReturnAllInvoiceByInvoiceNumber() {
+                InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
+                dto.setInvoiceNumber("1234567898");
+                dto.setDateFrom(LocalDate.now());
+
+                invoiceService.getClientInvoice(dto, "client")
+                              .getContent()
+                              .forEach(i -> assertEquals("1234567898", i.getInvoiceNumber()));
+
+            }
+
+            @Test
+            @DisplayName("it should return all invoice By dateFrom")
+            public void shouldReturnAllInvoiceByDateFrom() {
+                InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
+                dto.setDateFrom(LocalDate.parse("2021-05-01"));
+
+                invoiceService.getClientInvoice(dto, "client")
+                              .getContent()
+                              .forEach(i -> assertEquals(LocalDate.parse("2021-05-01"), i.getInvoiceDate()));
+
+            }
+
+            @Test
+            @DisplayName("it should return all invoice Between to date")
+            public void shouldReturnAllInvoiceBetweenDateFromAndDateTo() {
+                InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
+                dto.setDateFrom(LocalDate.parse("2021-05-01"));
+                dto.setDateTo(LocalDate.now());
+
+                invoiceService.getClientInvoice(dto, "client")
+                              .getContent()
+                              .forEach(i -> assertThat(
+                                      i.getInvoiceDate()
+                              ).isIn(LocalDate.parse("2021-05-01"), LocalDate.now()));
+
+            }
+
+            @Test
+            @DisplayName("it should return all invoice By ageing")
+            public void shouldReturnAllInvoiceByAgeing() {
+                InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
+                dto.setAgeing(ChronoUnit.DAYS.between(LocalDate.parse("2021-05-01"), LocalDate.now()));
+
+                invoiceService.getClientInvoice(dto, "client")
+                              .getContent()
+                              .forEach(i -> assertEquals(
+                                      LocalDate.parse("2021-05-01"),
+                                      i.getInvoiceDate()
+                              ));
+            }
+
+            @Test
+            @DisplayName("it should return all invoice By status")
+            public void shouldReturnAllInvoiceByStatus() {
+                InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
+                dto.setStatus(_getStatusList());
+
+                invoiceService.getClientInvoice(dto, "client")
+                              .getContent()
+                              .forEach(i -> assertEquals(
+                                      InvoiceStatus.IN_REVIEW,
+                                      i.getStatus()
+                              ));
+            }
+
+            @Test
+            @DisplayName("it should return all invoice By currencyType")
+            public void shouldReturnAllInvoiceByCurrencyType() {
+                List<CurrencyType> currencyTypes = new ArrayList<>();
+                currencyTypes.add(CurrencyType.GBP);
+                InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
+                dto.setCurrencyType(currencyTypes);
+
+                assertEquals(1, invoiceService.getClientInvoice(dto, "client")
+                                              .getNumberOfElements());
+            }
+        }
+
+        //SUPPLIER
+        @Nested
+        @DisplayName("invoice retrieve test: SUPPLIER")
+        class InvoiceRetrieveSupplier {
+
+            private List<InvoiceStatus> _getStatusList() {
+                List<InvoiceStatus> statuses = new ArrayList<>();
+                statuses.add(InvoiceStatus.IN_REVIEW);
+                return statuses;
+            }
+
+            @Test
+            @DisplayName("it should return all invoice")
+            public void shouldReturnAllInvoice() {
+                InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
+                assertEquals(2, invoiceService.getSupplierInvoice(dto, "supplier").getNumberOfElements());
+            }
+
+            @Test
+            @DisplayName("it should return all invoice By clientId and supplierId")
+            public void shouldReturnAllInvoiceByClientId() {
+                InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
+                dto.setClientId("CL_00001");
+                invoiceService.getSupplierInvoice(dto, "supplier")
+                              .getContent()
+                              .forEach(i -> assertEquals("CL_00001", i.getClient().getClientId()));
+            }
+
+            @Test
+            @DisplayName("it should return all invoice By invoiceNumber")
+            public void shouldReturnAllInvoiceByInvoiceNumber() {
+                InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
+                dto.setInvoiceNumber("1234567898");
+                dto.setDateFrom(LocalDate.now());
+
+                invoiceService.getSupplierInvoice(dto, "supplier")
+                              .getContent()
+                              .forEach(i -> assertEquals("1234567898", i.getInvoiceNumber()));
+
+            }
+
+            @Test
+            @DisplayName("it should return all invoice By dateFrom")
+            public void shouldReturnAllInvoiceByDateFrom() {
+                InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
+                dto.setDateFrom(LocalDate.parse("2021-05-01"));
+
+                invoiceService.getSupplierInvoice(dto, "supplier")
+                              .getContent()
+                              .forEach(i -> assertEquals(LocalDate.parse("2021-05-01"), i.getInvoiceDate()));
+
+            }
+
+            @Test
+            @DisplayName("it should return all invoice Between to date")
+            public void shouldReturnAllInvoiceBetweenDateFromAndDateTo() {
+                InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
+                dto.setDateFrom(LocalDate.parse("2021-05-01"));
+                dto.setDateTo(LocalDate.now());
+
+                invoiceService.getSupplierInvoice(dto, "supplier")
+                              .getContent()
+                              .forEach(i -> assertThat(
+                                      i.getInvoiceDate()
+                              ).isIn(LocalDate.parse("2021-05-01"), LocalDate.now()));
+
+            }
+
+            @Test
+            @DisplayName("it should return all invoice By ageing")
+            public void shouldReturnAllInvoiceByAgeing() {
+                InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
+                dto.setAgeing(ChronoUnit.DAYS.between(LocalDate.parse("2021-05-01"), LocalDate.now()));
+
+                invoiceService.getSupplierInvoice(dto, "supplier")
+                              .getContent()
+                              .forEach(i -> assertEquals(
+                                      LocalDate.parse("2021-05-01"),
+                                      i.getInvoiceDate()
+                              ));
+            }
+
+            @Test
+            @DisplayName("it should return all invoice By status")
+            public void shouldReturnAllInvoiceByStatus() {
+                InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
+                dto.setStatus(_getStatusList());
+
+                invoiceService.getSupplierInvoice(dto, "supplier")
+                              .getContent()
+                              .forEach(i -> assertEquals(
+                                      InvoiceStatus.IN_REVIEW,
+                                      i.getStatus()
+                              ));
+            }
+
+            @Test
+            @DisplayName("it should return all invoice By currencyType")
+            public void shouldReturnAllInvoiceByCurrencyType() {
+                List<CurrencyType> currencyTypes = new ArrayList<>();
+                currencyTypes.add(CurrencyType.GBP);
+                InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
+                dto.setCurrencyType(currencyTypes);
+
+                assertEquals(1, invoiceService.getSupplierInvoice(dto, "supplier")
+                                              .getNumberOfElements());
+            }
         }
     }
 }

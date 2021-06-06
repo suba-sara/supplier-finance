@@ -1,9 +1,6 @@
 package com.hcl.capstoneserver.invoice;
 
-import com.hcl.capstoneserver.invoice.dto.ClientViewInvoiceDTO;
-import com.hcl.capstoneserver.invoice.dto.CreateInvoiceDTO;
-import com.hcl.capstoneserver.invoice.dto.StatusUpdateInvoiceDTO;
-import com.hcl.capstoneserver.invoice.dto.UpdateInvoiceDTO;
+import com.hcl.capstoneserver.invoice.dto.*;
 import com.hcl.capstoneserver.invoice.entities.Invoice;
 import com.hcl.capstoneserver.invoice.repositories.InvoiceRepository;
 import com.hcl.capstoneserver.user.UserService;
@@ -26,8 +23,12 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -266,181 +267,178 @@ public class InvoiceControllerTest {
                              .jsonPath("$.errors[0].message")
                              .isEqualTo("400 This invoice can not update, because invoice is REJECTED.");
             }
-
-            //Client
-            @Nested
-            @DisplayName("invoice update test: CLIENT")
-            class InvoiceUpdateClientTests {
-                @Test
-                @DisplayName("it should update invoice")
-                public void shouldUpdateInvoice() {
-                    UpdateInvoiceDTO dto = new UpdateInvoiceDTO(
-                            createInvoice.get(0).getInvoiceId(),
-                            suppliers.get(0).getSupplierId(),
-                            "1234567894",
-                            LocalDate.now(),
-                            25000.0,
-                            CurrencyType.USD
-                    );
-                    webTestClient.put()
-                                 .uri(String.format("http://localhost:%d/api/invoices/update", port))
-                                 .contentType(MediaType.APPLICATION_JSON)
-                                 .header(HttpHeaders.AUTHORIZATION, client1token)
-                                 .contentType(MediaType.APPLICATION_JSON)
-                                 .body(Mono.just(dto), UpdateInvoiceDTO.class)
-                                 .exchange()
-                                 .expectStatus()
-                                 .is2xxSuccessful();
-                }
-
-                @Test
-                @DisplayName("it should not update invoice when that invoice owner is not a same client")
-                public void shouldNotUpdateInvoiceWhenInvoiceOwnerIsNotEqual() {
-                    UpdateInvoiceDTO dto = new UpdateInvoiceDTO(
-                            createInvoice.get(1).getInvoiceId(),
-                            suppliers.get(0).getSupplierId(),
-                            "1234567898",
-                            LocalDate.now(),
-                            25000.0,
-                            CurrencyType.USD
-                    );
-                    webTestClient.put()
-                                 .uri(String.format("http://localhost:%d/api/invoices/update", port))
-                                 .contentType(MediaType.APPLICATION_JSON)
-                                 .header(HttpHeaders.AUTHORIZATION, client1token)
-                                 .contentType(MediaType.APPLICATION_JSON)
-                                 .body(Mono.just(dto), UpdateInvoiceDTO.class)
-                                 .exchange()
-                                 .expectStatus()
-                                 .is4xxClientError()
-                                 .expectBody()
-                                 .jsonPath("$.errors[0].message")
-                                 .isEqualTo("400 client you do not have permission to update this invoice.");
-                }
-
-                @Test
-                @DisplayName("it should not update invoice with old date")
-                public void shouldNotUpdateInvoiceWithOldDate() {
-                    UpdateInvoiceDTO dto = new UpdateInvoiceDTO(
-                            createInvoice.get(0).getInvoiceId(),
-                            suppliers.get(0).getSupplierId(),
-                            "1234567892",
-                            LocalDate.parse("2021-04-05"),
-                            25000.0,
-                            CurrencyType.USD
-                    );
-                    webTestClient.put()
-                                 .uri(String.format("http://localhost:%d/api/invoices/update", port))
-                                 .contentType(MediaType.APPLICATION_JSON)
-                                 .header(HttpHeaders.AUTHORIZATION, client1token)
-                                 .contentType(MediaType.APPLICATION_JSON)
-                                 .body(Mono.just(dto), UpdateInvoiceDTO.class)
-                                 .exchange()
-                                 .expectStatus()
-                                 .is4xxClientError()
-                                 .expectBody()
-                                 .jsonPath("$.errors[0].message")
-                                 .isEqualTo("400 The invoice date is an older date.");
-                }
-
-                @Test
-                @DisplayName("it should not update invoice with invoice status In_Review, Approved and Rejected")
-                public void shouldNotUpdateInvoiceWithInReviewAndApprovedAndRejected() {
-                    updateInvoiceStatus(InvoiceStatus.IN_REVIEW, createInvoice.get(0).getInvoiceId());
-                    UpdateInvoiceDTO dto = new UpdateInvoiceDTO(
-                            createInvoice.get(0).getInvoiceId(),
-                            suppliers.get(0).getSupplierId(),
-                            "1234567892",
-                            LocalDate.now(),
-                            25000.0,
-                            CurrencyType.EUR
-                    );
-                    webTestClient.put()
-                                 .uri(String.format("http://localhost:%d/api/invoices/update", port))
-                                 .contentType(MediaType.APPLICATION_JSON)
-                                 .header(HttpHeaders.AUTHORIZATION, client1token)
-                                 .contentType(MediaType.APPLICATION_JSON)
-                                 .body(Mono.just(dto), UpdateInvoiceDTO.class)
-                                 .exchange()
-                                 .expectStatus()
-                                 .is4xxClientError()
-                                 .expectBody()
-                                 .jsonPath("$.errors[0].message")
-                                 .isEqualTo("400 This invoice can not update, because invoice is IN_REVIEW.");
-                }
-            }
         }
 
+        //Client
         @Nested
-        @DisplayName("invoice delete test")
-        class InvoiceDeleteTest {
+        @DisplayName("invoice update test: CLIENT")
+        class InvoiceUpdateClientTests {
             @Test
-            @DisplayName("it should delete invoice")
-            public void shouldDeleteInvoice() {
-                webTestClient.delete()
-                             .uri(String.format(
-                                     "http://localhost:%d/api/invoices/delete/%d",
-                                     port,
-                                     createInvoice.get(0).getInvoiceId()
-                             ))
+            @DisplayName("it should update invoice")
+            public void shouldUpdateInvoice() {
+                UpdateInvoiceDTO dto = new UpdateInvoiceDTO(
+                        createInvoice.get(0).getInvoiceId(),
+                        suppliers.get(0).getSupplierId(),
+                        "1234567894",
+                        LocalDate.now(),
+                        25000.0,
+                        CurrencyType.USD
+                );
+                webTestClient.put()
+                             .uri(String.format("http://localhost:%d/api/invoices/update", port))
+                             .contentType(MediaType.APPLICATION_JSON)
                              .header(HttpHeaders.AUTHORIZATION, client1token)
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .body(Mono.just(dto), UpdateInvoiceDTO.class)
                              .exchange()
                              .expectStatus()
                              .is2xxSuccessful();
             }
 
-            // Invoice can delete client only, suppliers and bank can not delete
-            // This test checks the above point and below point (Display Name mentioned thing)
             @Test
-            @DisplayName("it should not delete invoice when that invoice owner is not a same client or user")
-            public void shouldNotDeleteInvoiceWhenInvoiceOwnerIsNotEqual() {
-                webTestClient.delete()
-                             .uri(String.format(
-                                     "http://localhost:%d/api/invoices/delete/%d",
-                                     port,
-                                     createInvoice.get(0).getInvoiceId()
-                             ))
-                             .header(HttpHeaders.AUTHORIZATION, client2token)
+            @DisplayName("it should not update invoice when that invoice owner is not a same client")
+            public void shouldNotUpdateInvoiceWhenInvoiceOwnerIsNotEqual() {
+                UpdateInvoiceDTO dto = new UpdateInvoiceDTO(
+                        createInvoice.get(1).getInvoiceId(),
+                        suppliers.get(0).getSupplierId(),
+                        "1234567898",
+                        LocalDate.now(),
+                        25000.0,
+                        CurrencyType.USD
+                );
+                webTestClient.put()
+                             .uri(String.format("http://localhost:%d/api/invoices/update", port))
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .header(HttpHeaders.AUTHORIZATION, client1token)
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .body(Mono.just(dto), UpdateInvoiceDTO.class)
                              .exchange()
                              .expectStatus()
                              .is4xxClientError()
                              .expectBody()
                              .jsonPath("$.errors[0].message")
-                             .isEqualTo("400 client2 you do not have permission to delete this invoice.");
+                             .isEqualTo("400 client you do not have permission to update this invoice.");
             }
 
             @Test
-            @DisplayName("it should not delete invoice with invoice status In_Review, Approved and Rejected")
-            public void shouldNotDeleteInvoiceWithInReviewAndApprovedAndRejected() {
+            @DisplayName("it should not update invoice with old date")
+            public void shouldNotUpdateInvoiceWithOldDate() {
+                UpdateInvoiceDTO dto = new UpdateInvoiceDTO(
+                        createInvoice.get(0).getInvoiceId(),
+                        suppliers.get(0).getSupplierId(),
+                        "1234567892",
+                        LocalDate.parse("2021-04-05"),
+                        25000.0,
+                        CurrencyType.USD
+                );
+                webTestClient.put()
+                             .uri(String.format("http://localhost:%d/api/invoices/update", port))
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .header(HttpHeaders.AUTHORIZATION, client1token)
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .body(Mono.just(dto), UpdateInvoiceDTO.class)
+                             .exchange()
+                             .expectStatus()
+                             .is4xxClientError()
+                             .expectBody()
+                             .jsonPath("$.errors[0].message")
+                             .isEqualTo("400 The invoice date is an older date.");
+            }
+
+            @Test
+            @DisplayName("it should not update invoice with invoice status In_Review, Approved and Rejected")
+            public void shouldNotUpdateInvoiceWithInReviewAndApprovedAndRejected() {
                 updateInvoiceStatus(InvoiceStatus.IN_REVIEW, createInvoice.get(0).getInvoiceId());
-                webTestClient.delete()
-                             .uri(String.format(
-                                     "http://localhost:%d/api/invoices/delete/%d",
-                                     port,
-                                     createInvoice.get(0).getInvoiceId()
-                             ))
+                UpdateInvoiceDTO dto = new UpdateInvoiceDTO(
+                        createInvoice.get(0).getInvoiceId(),
+                        suppliers.get(0).getSupplierId(),
+                        "1234567892",
+                        LocalDate.now(),
+                        25000.0,
+                        CurrencyType.EUR
+                );
+                webTestClient.put()
+                             .uri(String.format("http://localhost:%d/api/invoices/update", port))
+                             .contentType(MediaType.APPLICATION_JSON)
                              .header(HttpHeaders.AUTHORIZATION, client1token)
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .body(Mono.just(dto), UpdateInvoiceDTO.class)
                              .exchange()
                              .expectStatus()
                              .is4xxClientError()
                              .expectBody()
                              .jsonPath("$.errors[0].message")
-                             .isEqualTo("400 This invoice can not delete, because invoice is IN_REVIEW.");
+                             .isEqualTo("400 This invoice can not update, because invoice is IN_REVIEW.");
             }
+        }
+    }
+
+    @Nested
+    @DisplayName("invoice delete test")
+    class InvoiceDeleteTest {
+        @Test
+        @DisplayName("it should delete invoice")
+        public void shouldDeleteInvoice() {
+            webTestClient.delete()
+                         .uri(String.format(
+                                 "http://localhost:%d/api/invoices/delete/%d",
+                                 port,
+                                 createInvoice.get(0).getInvoiceId()
+                         ))
+                         .header(HttpHeaders.AUTHORIZATION, client1token)
+                         .exchange()
+                         .expectStatus()
+                         .is2xxSuccessful();
         }
 
-        @Nested
-        @DisplayName("invoice retrieve test")
-        class InvoiceRetrieveTest {
-            @Test
-            @DisplayName("it should return all invoice")
-            public void shouldReturnAllInvoice() {
-                webTestClient.get()
-                             .uri(String.format("http://localhost:%d/api/invoices/fetchAllInvoices", port))
-                             .exchange()
-                             .expectStatus()
-                             .is2xxSuccessful();
-            }
+        // Invoice can delete client only, suppliers and bank can not delete
+        // This test checks the above point and below point (Display Name mentioned thing)
+        @Test
+        @DisplayName("it should not delete invoice when that invoice owner is not a same client or user")
+        public void shouldNotDeleteInvoiceWhenInvoiceOwnerIsNotEqual() {
+            webTestClient.delete()
+                         .uri(String.format(
+                                 "http://localhost:%d/api/invoices/delete/%d",
+                                 port,
+                                 createInvoice.get(0).getInvoiceId()
+                         ))
+                         .header(HttpHeaders.AUTHORIZATION, client2token)
+                         .exchange()
+                         .expectStatus()
+                         .is4xxClientError()
+                         .expectBody()
+                         .jsonPath("$.errors[0].message")
+                         .isEqualTo("400 client2 you do not have permission to delete this invoice.");
         }
+
+        @Test
+        @DisplayName("it should not delete invoice with invoice status In_Review, Approved and Rejected")
+        public void shouldNotDeleteInvoiceWithInReviewAndApprovedAndRejected() {
+            updateInvoiceStatus(InvoiceStatus.IN_REVIEW, createInvoice.get(0).getInvoiceId());
+            webTestClient.delete()
+                         .uri(String.format(
+                                 "http://localhost:%d/api/invoices/delete/%d",
+                                 port,
+                                 createInvoice.get(0).getInvoiceId()
+                         ))
+                         .header(HttpHeaders.AUTHORIZATION, client1token)
+                         .exchange()
+                         .expectStatus()
+                         .is4xxClientError()
+                         .expectBody()
+                         .jsonPath("$.errors[0].message")
+                         .isEqualTo("400 This invoice can not delete, because invoice is IN_REVIEW.");
+        }
+    }
+
+    @Nested
+    @DisplayName("invoice retrieve test")
+    class InvoiceRetrieveTest {
+
+        // BANK
+
+        // CLIENT
+
+        //SUPPLIER
     }
 }
