@@ -1,13 +1,12 @@
 package com.hcl.capstoneserver.invoice;
 
 import com.hcl.capstoneserver.invoice.dto.*;
-import com.hcl.capstoneserver.invoice.entities.Invoice;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -39,23 +38,24 @@ public class InvoiceController {
         return new ResponseEntity<>(invoiceService.deleteInvoice(id, principal.getName()), HttpStatus.OK);
     }
 
-    @GetMapping("/api/invoices/fetchAllInvoices")
-    public List<Invoice> getAllInvoice() {
-        return invoiceService.getAllInvoice();
+    @GetMapping("/api/invoices/retrieve/bank")
+    public Page<BankViewInvoiceDTO> getAllInvoice(@RequestBody InvoiceSearchCriteriaDTO dto, Principal principal) {
+        return invoiceService.getBankInvoice(dto, principal.getName());
     }
 
-    @GetMapping("/api/invoices/fetchClientInvoices")
-    public List<Invoice> getClientAllInvoice(Principal principal) {
-        return invoiceService.getClientAllInvoice(principal.getName());
+    @GetMapping("/api/invoices/retrieve/client")
+    public Page<ClientViewInvoiceDTO> getClientAllInvoice(
+            @RequestBody InvoiceSearchCriteriaDTO dto,
+            Principal principal
+    ) {
+        return invoiceService.getClientInvoice(dto, principal.getName());
     }
 
-    @GetMapping("/api/invoices/fetchSupplierInvoices")
-    public List<Invoice> getSupplierAllInvoice(Principal principal) {
-        return invoiceService.getSupplierAllInvoice(principal.getName());
-    }
-
-    @GetMapping("/api/invoices/fetchUserInvoiceByStatus")
-    public List<Invoice> getUserAllInvoiceByStatus(@RequestBody InvoiceStatus status, Principal principal) {
-        return invoiceService.getUserAllInvoiceByStatus(principal.getName(), status);
+    @GetMapping("/api/invoices/retrieve/supplier")
+    public Page<SupplierVIewInvoiceDTO> getSupplierAllInvoice(
+            @RequestBody InvoiceSearchCriteriaDTO dto,
+            Principal principal
+    ) {
+        return invoiceService.getSupplierInvoice(dto, principal.getName());
     }
 }
