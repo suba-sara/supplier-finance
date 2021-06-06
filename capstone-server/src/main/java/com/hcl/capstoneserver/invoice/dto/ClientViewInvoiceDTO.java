@@ -2,14 +2,15 @@ package com.hcl.capstoneserver.invoice.dto;
 
 import com.hcl.capstoneserver.invoice.CurrencyType;
 import com.hcl.capstoneserver.invoice.InvoiceStatus;
-import com.hcl.capstoneserver.user.dto.views.ClientDataViewDTO;
 import com.hcl.capstoneserver.user.dto.views.SupplierDataViewDTO;
+
+import java.time.LocalDate;
 
 public class ClientViewInvoiceDTO {
     private Integer invoiceId;
     private SupplierDataViewDTO supplier;
     private String invoiceNumber;
-    private String invoiceDate;
+    private LocalDate invoiceDate;
     private Double amount;
     private InvoiceStatus status;
     private CurrencyType currencyType;
@@ -21,7 +22,7 @@ public class ClientViewInvoiceDTO {
             Integer invoiceId,
             SupplierDataViewDTO supplier,
             String invoiceNumber,
-            String invoiceDate,
+            LocalDate invoiceDate,
             Double amount,
             InvoiceStatus status,
             CurrencyType currencyType
@@ -59,11 +60,11 @@ public class ClientViewInvoiceDTO {
         this.invoiceNumber = invoiceNumber;
     }
 
-    public String getInvoiceDate() {
+    public LocalDate getInvoiceDate() {
         return invoiceDate;
     }
 
-    public void setInvoiceDate(String invoiceDate) {
+    public void setInvoiceDate(LocalDate invoiceDate) {
         this.invoiceDate = invoiceDate;
     }
 
