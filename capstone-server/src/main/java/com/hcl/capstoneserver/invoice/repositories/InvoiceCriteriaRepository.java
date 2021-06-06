@@ -71,7 +71,7 @@ public class InvoiceCriteriaRepository {
         if (Objects.nonNull(invoiceSearchCriteriaDTO.getAgeing())) {
             predicateList.add(criteriaBuilder.equal(
                     invoiceRoot.get("invoiceDate"),
-                    LocalDate.now().plusDays(invoiceSearchCriteriaDTO.getAgeing())
+                    LocalDate.now().plusDays(-invoiceSearchCriteriaDTO.getAgeing())
             ));
         }
 
