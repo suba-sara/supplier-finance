@@ -44,9 +44,9 @@ public class AppUser {
         this.password = password;
     }
 
-    public String getUserType() {
+    public UserType getUserType() {
         if (userType != null)
-            return userType.toString();
+            return userType;
         else
             return null;
     }

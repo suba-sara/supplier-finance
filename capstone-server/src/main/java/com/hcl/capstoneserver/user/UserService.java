@@ -9,6 +9,7 @@ import com.hcl.capstoneserver.user.entities.Client;
 import com.hcl.capstoneserver.user.entities.Supplier;
 import com.hcl.capstoneserver.user.exceptions.EmailAlreadyExistsException;
 import com.hcl.capstoneserver.user.exceptions.UserAlreadyExistsException;
+import com.hcl.capstoneserver.user.exceptions.UserDoesNotExistException;
 import com.hcl.capstoneserver.user.repositories.AppUserRepository;
 import com.hcl.capstoneserver.user.repositories.ClientRepository;
 import com.hcl.capstoneserver.user.repositories.SupplierRepository;
@@ -102,7 +103,7 @@ public class UserService implements UserDetailsService {
                 user.get()
                     .getPassword(),
                 Collections.singleton(
-                        new SimpleGrantedAuthority(user.get().getUserType())
+                        new SimpleGrantedAuthority(user.get().getUserType().toString())
                 )
         );
     }
@@ -165,6 +166,48 @@ public class UserService implements UserDetailsService {
     public String getClientId(String userId) {
         Optional<Client> client = clientRepository.findById(userId);
         return client.map(Client::getClientId).orElse(null);
+    }
+
+    // get supplier id based on token
+    public String getSupplierId(String userId) {
+        Optional<Supplier> supplier = supplierRepository.findById(userId);
+        return supplier.map(Supplier::getSupplierId).orElse(null);
+    }
+
+    public Client fetchClientDataByUserId(String userId) {
+        Optional<Client> client = clientRepository.findById(userId);
+        if (!client.isPresent()) {
+            throw new UserDoesNotExistException(UserType.CLIENT, "userId");
+        }
+        return client.get();
+    }
+
+    public Supplier fetchSupplierDataByUserId(String userId) {
+        Optional<Supplier> supplier = supplierRepository.findById(userId);
+        if (!supplier.isPresent()) {
+            throw new UserDoesNotExistException(UserType.SUPPLIER, "userId");
+        }
+        return supplier.get();
+    }
+
+    public Client fetchClientDataByClientId(String clientId) {
+        Client client = new Client();
+        client.setClientId(clientId);
+        Optional<Client> optionalClient = clientRepository.findOne(Example.of(client));
+        if (!optionalClient.isPresent()) {
+            throw new UserDoesNotExistException(UserType.SUPPLIER, "clientId");
+        }
+        return optionalClient.get();
+    }
+
+    public Supplier fetchSupplierDataBySupplierId(String supplierId) {
+        Supplier supplier = new Supplier();
+        supplier.setSupplierId(supplierId);
+        Optional<Supplier> optionalSupplier = supplierRepository.findOne(Example.of(supplier));
+        if (!optionalSupplier.isPresent()) {
+            throw new UserDoesNotExistException(UserType.SUPPLIER, "supplierId");
+        }
+        return optionalSupplier.get();
     }
 }
 
