@@ -17,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -41,6 +42,9 @@ public class InvoiceService {
         this.mapper = mapper;
         this.userService = userService;
         this.invoiceCriteriaRepository = invoiceCriteriaRepository;
+
+        // model mapper set to ignore the null values
+        this.mapper.getConfiguration().setSkipNullEnabled(true);
     }
 
     private void _checkSupplierWithExistsInvoiceNumber(Supplier supplier, String invoiceNumber) {
@@ -128,13 +132,24 @@ public class InvoiceService {
 
     // This update method for client
     public ClientViewInvoiceDTO updateInvoice(UpdateInvoiceDTO dto, String userId) {
-        Supplier supplier = userService.fetchSupplierDataBySupplierId(dto.getSupplierId());
-
         Invoice invoice = _checkInvoiceOwnershipAndFetchInvoice(userId, dto.getInvoiceId(), "update");
+        Supplier supplier = invoice.getSupplier();
+        String invoiceNumber = invoice.getInvoiceNumber();
+        if (Objects.nonNull(dto.getSupplierId())) {
+            supplier = userService.fetchSupplierDataBySupplierId(dto.getSupplierId());
+        }
 
-        _checkSupplierWithExistsInvoiceNumber(supplier, dto.getInvoiceNumber());
-        _checkInvoiceDate(dto.getInvoiceDate(), UserType.CLIENT);
+        if (Objects.nonNull(dto.getInvoiceNumber())) {
+            invoiceNumber = dto.getInvoiceNumber();
+        }
+
+        if (Objects.nonNull(dto.getInvoiceDate())) {
+            _checkInvoiceDate(dto.getInvoiceDate(), UserType.CLIENT);
+        }
+
+        _checkSupplierWithExistsInvoiceNumber(supplier, invoiceNumber);
         _checkInvoiceStatus(invoice.getStatus(), "update");
+
         mapper.map(dto, invoice);
         return mapper.map(invoiceRepository.save(invoice), ClientViewInvoiceDTO.class);
     }
