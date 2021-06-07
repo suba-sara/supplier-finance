@@ -1,7 +1,6 @@
 package com.hcl.capstoneserver.invoice.dto;
 
 import com.hcl.capstoneserver.invoice.CurrencyType;
-import com.hcl.capstoneserver.invoice.InvoiceStatus;
 import org.hibernate.validator.constraints.Currency;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -23,6 +22,9 @@ public class UpdateInvoiceDTO {
     @NotBlank(message = "currency is required")
     private CurrencyType currencyType;
 
+    public UpdateInvoiceDTO() {
+    }
+
     public UpdateInvoiceDTO(
             Integer invoiceId,
             String supplierId,
@@ -41,6 +43,10 @@ public class UpdateInvoiceDTO {
 
     public Integer getInvoiceId() {
         return invoiceId;
+    }
+
+    public void setInvoiceId(Integer invoiceId) {
+        this.invoiceId = invoiceId;
     }
 
     public String getSupplierId() {
