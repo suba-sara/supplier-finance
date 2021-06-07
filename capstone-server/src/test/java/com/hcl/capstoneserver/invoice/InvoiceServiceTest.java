@@ -202,14 +202,10 @@ public class InvoiceServiceTest {
             @Test
             @DisplayName("it should update invoice")
             public void shouldUpdateInvoice() {
-                assertEquals("1234567894", invoiceService.updateInvoice(new UpdateInvoiceDTO(
-                        createInvoice.get(0).getInvoiceId(),
-                        suppliers.get(0).getSupplierId(),
-                        "1234567894",
-                        LocalDate.now(),
-                        25000.0,
-                        CurrencyType.USD
-                ), "client").getInvoiceNumber());
+                UpdateInvoiceDTO dto = new UpdateInvoiceDTO();
+                dto.setInvoiceId(createInvoice.get(0).getInvoiceId());
+                dto.setInvoiceNumber("1234567894");
+                assertEquals("1234567894", invoiceService.updateInvoice(dto, "client").getInvoiceNumber());
             }
 
             @Test
