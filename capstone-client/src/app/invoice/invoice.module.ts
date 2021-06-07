@@ -12,6 +12,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ViewInvoicesComponent } from './view-invoices/view-invoices.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   declarations: [InvoiceUploadComponent, ViewInvoicesComponent],
@@ -27,6 +28,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatButtonModule,
     MatTableModule,
     MatTooltipModule,
+    MatPaginatorModule,
   ],
 })
 export class InvoiceModule {}
