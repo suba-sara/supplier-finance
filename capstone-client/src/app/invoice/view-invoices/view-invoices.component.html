@@ -1,5 +1,40 @@
 <div class="content-container">
   <h1>Invoices</h1>
+
+  <div class="filter-wrapper">
+    <h4>Filters</h4>
+    <div>
+      <mat-form-field appearance="outline">
+        <mat-label>Invoice Number</mat-label>
+        <input
+          (change)="filterInputChange($event)"
+          [value]="
+            viewInvoicesService.$filters.value.invoiceNumber
+              ? viewInvoicesService.$filters.value.invoiceNumber
+              : ''
+          "
+          matInput
+          name="invoiceNumber"
+        />
+        <mat-icon matPrefix>person_outline</mat-icon>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Supplier Code</mat-label>
+        <input
+          (change)="filterInputChange($event)"
+          [value]="
+            viewInvoicesService.$filters.value.invoiceNumber
+              ? viewInvoicesService.$filters.value.invoiceNumber
+              : ''
+          "
+          matInput
+          name="supplierCode"
+        />
+        <mat-icon matPrefix>person_outline</mat-icon>
+      </mat-form-field>
+    </div>
+  </div>
+
   <div class="table-container">
     <table [dataSource]="dataSource" mat-table>
       <ng-container matColumnDef="supplierId">
@@ -71,5 +106,13 @@
       <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
       <tr *matRowDef="let row; columns: displayedColumns" mat-row></tr>
     </table>
+    <mat-paginator
+      (page)="handlePageChange($event)"
+      [length]="dataSource.length"
+      [pageSizeOptions]="[10, 25, 50]"
+      [pageSize]="viewInvoicesService.$filters.value.pageSize"
+      [showFirstLastButtons]="true"
+    >
+    </mat-paginator>
   </div>
 </div>
