@@ -25,3 +25,14 @@
 .options-wrapper {
   display: flex;
 }
+
+.filter-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  h4 {
+    color: #999999;
+    font-size: 1.1rem;
+  }
+}
