@@ -7,8 +7,6 @@ import com.hcl.capstoneserver.invoice.repositories.InvoiceCriteriaRepository;
 import com.hcl.capstoneserver.invoice.repositories.InvoiceRepository;
 import com.hcl.capstoneserver.user.UserService;
 import com.hcl.capstoneserver.user.UserType;
-import com.hcl.capstoneserver.user.dto.views.ClientDataViewDTO;
-import com.hcl.capstoneserver.user.dto.views.SupplierDataViewDTO;
 import com.hcl.capstoneserver.user.entities.Client;
 import com.hcl.capstoneserver.user.entities.Supplier;
 import org.modelmapper.ModelMapper;
@@ -178,61 +176,18 @@ public class InvoiceService {
     public Page<BankViewInvoiceDTO> getBankInvoice(InvoiceSearchCriteriaDTO dto, String userId) {
         // need to check userId account type -> This feature currently unavailable
         // One feature needs to be check when BANK user is created: invoice status can update only by BANK
-
-        return _getInvoice(dto).map(invoice -> new BankViewInvoiceDTO(
-                invoice.getInvoiceId(),
-                new ClientDataViewDTO(
-                        invoice.getClient()
-                               .getClientId(),
-                        invoice.getClient()
-                               .getName()
-                ),
-                new SupplierDataViewDTO(
-                        invoice.getSupplier()
-                               .getSupplierId(),
-                        invoice.getSupplier()
-                               .getName()
-                ),
-                invoice.getInvoiceNumber(),
-                invoice.getInvoiceDate(),
-                invoice.getAmount(),
-                invoice.getStatus(),
-                invoice.getCurrencyType()
-        ));
+        return _getInvoice(dto).map(invoice -> mapper.map(invoice, BankViewInvoiceDTO.class));
     }
 
     // This function use Client for get his/ her all invoice
     public Page<ClientViewInvoiceDTO> getClientInvoice(InvoiceSearchCriteriaDTO dto, String userId) {
         dto.setClientId(userService.getClientId(userId));
-
-        return _getInvoice(dto).map(invoice -> new ClientViewInvoiceDTO(
-                invoice.getInvoiceId(),
-                new SupplierDataViewDTO(
-                        invoice.getSupplier().getSupplierId(),
-                        invoice.getSupplier().getName()
-                ),
-                invoice.getInvoiceNumber(),
-                invoice.getInvoiceDate(),
-                invoice.getAmount(),
-                invoice.getStatus(),
-                invoice.getCurrencyType()
-        ));
+        return _getInvoice(dto).map(invoice -> mapper.map(invoice, ClientViewInvoiceDTO.class));
     }
 
     // This function use Supplier for get his/ her all invoice
     public Page<SupplierVIewInvoiceDTO> getSupplierInvoice(InvoiceSearchCriteriaDTO dto, String userId) {
         dto.setSupplierId(userService.getSupplierId(userId));
-        return _getInvoice(dto).map(invoice -> new SupplierVIewInvoiceDTO(
-                invoice.getInvoiceId(),
-                new ClientDataViewDTO(
-                        invoice.getClient().getClientId(),
-                        invoice.getClient().getName()
-                ),
-                invoice.getInvoiceNumber(),
-                invoice.getInvoiceDate(),
-                invoice.getAmount(),
-                invoice.getStatus(),
-                invoice.getCurrencyType()
-        ));
+        return _getInvoice(dto).map(invoice -> mapper.map(invoice, SupplierVIewInvoiceDTO.class));
     }
 }
