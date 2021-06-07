@@ -3,18 +3,20 @@ package com.hcl.capstoneserver.invoice;
 import com.hcl.capstoneserver.invoice.dto.*;
 import com.hcl.capstoneserver.invoice.entities.Invoice;
 import com.hcl.capstoneserver.invoice.exception.*;
+import com.hcl.capstoneserver.invoice.repositories.InvoiceCriteriaRepository;
 import com.hcl.capstoneserver.invoice.repositories.InvoiceRepository;
 import com.hcl.capstoneserver.user.UserService;
 import com.hcl.capstoneserver.user.UserType;
+import com.hcl.capstoneserver.user.dto.views.ClientDataViewDTO;
+import com.hcl.capstoneserver.user.dto.views.SupplierDataViewDTO;
 import com.hcl.capstoneserver.user.entities.Client;
 import com.hcl.capstoneserver.user.entities.Supplier;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,6 +25,7 @@ public class InvoiceService {
     private final InvoiceRepository invoiceRepository;
     private final ModelMapper mapper;
     private final UserService userService;
+    private final InvoiceCriteriaRepository invoiceCriteriaRepository;
 
     /*
      * userId - current login user userId
@@ -31,11 +34,13 @@ public class InvoiceService {
     public InvoiceService(
             InvoiceRepository invoiceRepository,
             ModelMapper mapper,
-            UserService userService
+            UserService userService,
+            InvoiceCriteriaRepository invoiceCriteriaRepository
     ) {
         this.invoiceRepository = invoiceRepository;
         this.mapper = mapper;
         this.userService = userService;
+        this.invoiceCriteriaRepository = invoiceCriteriaRepository;
     }
 
     private void _checkSupplierWithExistsInvoiceNumber(Supplier supplier, String invoiceNumber) {
@@ -99,32 +104,8 @@ public class InvoiceService {
         }
     }
 
-    private Invoice _fetchAllInvoiceByInvoiceStatus(InvoiceStatus status, Integer invoiceId) {
-        return invoiceRepository.findAll((Invoice, cq, cb) -> {
-                                             cb.equal(Invoice.get("status"), status);
-                                             cb.equal(Invoice.get("invoiceId"), invoiceId);
-                                             return null;
-                                         }
-        ).get(0);
-    }
-
-    public List<Invoice> _getUserOwnAllInvoices(UserType userType, String userId) {
-        List<Invoice> invoiceList = new ArrayList<>();
-        for (Invoice invoice : getAllInvoice()) {
-            switch (userType) {
-                case CLIENT:
-                    if (invoice.getClient().getClientId().equals(userId)) {
-                        invoiceList.add(invoice);
-                    }
-                    break;
-                case SUPPLIER:
-                    if (invoice.getSupplier().getSupplierId().equals(userId)) {
-                        invoiceList.add(invoice);
-                    }
-                    break;
-            }
-        }
-        return invoiceList;
+    private Page<Invoice> _getInvoice(InvoiceSearchCriteriaDTO dto) {
+        return invoiceCriteriaRepository.findAllWithFilters(dto);
     }
 
     public ClientViewInvoiceDTO createInvoice(CreateInvoiceDTO dto, String userId) {
@@ -179,30 +160,64 @@ public class InvoiceService {
     }
 
     // This function use BANK for get all invoice
-    public List<Invoice> getAllInvoice() {
-        return invoiceRepository.findAll();
+    public Page<BankViewInvoiceDTO> getBankInvoice(InvoiceSearchCriteriaDTO dto, String userId) {
+        // need to check userId account type -> This feature currently unavailable
+        // One feature needs to be check when BANK user is created: invoice status can update only by BANK
+
+        return _getInvoice(dto).map(invoice -> new BankViewInvoiceDTO(
+                invoice.getInvoiceId(),
+                new ClientDataViewDTO(
+                        invoice.getClient()
+                               .getClientId(),
+                        invoice.getClient()
+                               .getName()
+                ),
+                new SupplierDataViewDTO(
+                        invoice.getSupplier()
+                               .getSupplierId(),
+                        invoice.getSupplier()
+                               .getName()
+                ),
+                invoice.getInvoiceNumber(),
+                invoice.getInvoiceDate(),
+                invoice.getAmount(),
+                invoice.getStatus(),
+                invoice.getCurrencyType()
+        ));
     }
 
     // This function use Client for get his/ her all invoice
-    public List<Invoice> getClientAllInvoice(String userId) {
-        Client client = userService.fetchClientDataByUserId(userId);
-        return _getUserOwnAllInvoices(UserType.CLIENT, client.getClientId());
-    }
+    public Page<ClientViewInvoiceDTO> getClientInvoice(InvoiceSearchCriteriaDTO dto, String userId) {
+        dto.setClientId(userService.getClientId(userId));
 
+        return _getInvoice(dto).map(invoice -> new ClientViewInvoiceDTO(
+                invoice.getInvoiceId(),
+                new SupplierDataViewDTO(
+                        invoice.getSupplier().getSupplierId(),
+                        invoice.getSupplier().getName()
+                ),
+                invoice.getInvoiceNumber(),
+                invoice.getInvoiceDate(),
+                invoice.getAmount(),
+                invoice.getStatus(),
+                invoice.getCurrencyType()
+        ));
+    }
 
     // This function use Supplier for get his/ her all invoice
-    public List<Invoice> getSupplierAllInvoice(String userId) {
-        Supplier supplier = userService.fetchSupplierDataByUserId(userId);
-        return _getUserOwnAllInvoices(UserType.SUPPLIER, supplier.getSupplierId());
-    }
-
-    // This method can use client and supplier for get their invoice filter by status
-    public List<Invoice> getUserAllInvoiceByStatus(String userId, InvoiceStatus status) {
-        List<Invoice> invoiceAll = getClientAllInvoice(userId);
-        List<Invoice> invoicesFilter = new ArrayList<>();
-        for (Invoice invoice : invoiceAll) {
-            invoicesFilter.add(_fetchAllInvoiceByInvoiceStatus(status, invoice.getInvoiceId()));
-        }
-        return invoicesFilter;
+    public Page<SupplierVIewInvoiceDTO> getSupplierInvoice(InvoiceSearchCriteriaDTO dto, String userId) {
+        dto.setSupplierId(userService.getSupplierId(userId));
+        return _getInvoice(dto).map(invoice -> new SupplierVIewInvoiceDTO(
+                invoice.getInvoiceId(),
+                new ClientDataViewDTO(
+                        invoice.getClient().getClientId(),
+                        invoice.getClient().getName()
+                ),
+                invoice.getInvoiceNumber(),
+                invoice.getInvoiceDate(),
+                invoice.getAmount(),
+                invoice.getStatus(),
+                invoice.getCurrencyType()
+        ));
     }
 }

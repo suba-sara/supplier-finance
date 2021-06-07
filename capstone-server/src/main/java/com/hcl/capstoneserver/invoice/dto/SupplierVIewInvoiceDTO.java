@@ -2,25 +2,25 @@ package com.hcl.capstoneserver.invoice.dto;
 
 import com.hcl.capstoneserver.invoice.CurrencyType;
 import com.hcl.capstoneserver.invoice.InvoiceStatus;
-import com.hcl.capstoneserver.user.dto.views.SupplierDataViewDTO;
+import com.hcl.capstoneserver.user.dto.views.ClientDataViewDTO;
 
 import java.time.LocalDate;
 
-public class ClientViewInvoiceDTO {
+public class SupplierVIewInvoiceDTO {
     private Integer invoiceId;
-    private SupplierDataViewDTO supplier;
+    private ClientDataViewDTO client;
     private String invoiceNumber;
     private LocalDate invoiceDate;
     private Double amount;
     private InvoiceStatus status;
     private CurrencyType currencyType;
 
-    public ClientViewInvoiceDTO() {
+    public SupplierVIewInvoiceDTO() {
     }
 
-    public ClientViewInvoiceDTO(
+    public SupplierVIewInvoiceDTO(
             Integer invoiceId,
-            SupplierDataViewDTO supplier,
+            ClientDataViewDTO client,
             String invoiceNumber,
             LocalDate invoiceDate,
             Double amount,
@@ -28,7 +28,7 @@ public class ClientViewInvoiceDTO {
             CurrencyType currencyType
     ) {
         this.invoiceId = invoiceId;
-        this.supplier = supplier;
+        this.client = client;
         this.invoiceNumber = invoiceNumber;
         this.invoiceDate = invoiceDate;
         this.amount = amount;
@@ -44,12 +44,12 @@ public class ClientViewInvoiceDTO {
         this.invoiceId = invoiceId;
     }
 
-    public SupplierDataViewDTO getSupplier() {
-        return supplier;
+    public ClientDataViewDTO getClient() {
+        return client;
     }
 
-    public void setSupplier(SupplierDataViewDTO supplier) {
-        this.supplier = supplier;
+    public void setClient(ClientDataViewDTO client) {
+        this.client = client;
     }
 
     public String getInvoiceNumber() {
