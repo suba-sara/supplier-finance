@@ -33,12 +33,8 @@ export class SignInComponent implements OnInit {
       () => {
         this.router.navigateByUrl('/dashboard');
       },
-      ({ error }) => {
-        if (error.status === 400) {
-          this.errorMessage = 'Invalid username or password';
-        } else {
-          this.errorMessage = error.message;
-        }
+      (error) => {
+        this.errorMessage = error;
       }
     );
   }
