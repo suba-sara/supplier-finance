@@ -9,59 +9,6 @@ import {
   ViewInvoicesService,
 } from './view-invoices.service';
 
-const fakeData: Invoice[] = [
-  {
-    invoiceId: 13,
-    invoiceDate: new Date('2021-11-23'),
-    invoiceNumber: 12131,
-    supplierId: 'aasd11',
-    clientId: 'wfass',
-    amount: 200,
-    currencyType: 'EUR',
-    status: 'pending',
-  },
-  {
-    invoiceId: 14,
-    invoiceDate: new Date('2021-07-23'),
-    invoiceNumber: 1222131,
-    supplierId: 'aaaasd11',
-    clientId: 'wferass',
-    amount: 200,
-    currencyType: 'EUR',
-    status: 'pending',
-  },
-  {
-    invoiceId: 15,
-    invoiceDate: new Date('2021-06-11'),
-    invoiceNumber: 12112431,
-    supplierId: 'aasd11',
-    clientId: 'wfass',
-    amount: 200,
-    currencyType: 'EUR',
-    status: 'pending',
-  },
-  {
-    invoiceId: 16,
-    invoiceDate: new Date('2023-05-30'),
-    invoiceNumber: 12325131,
-    supplierId: 'aasd11',
-    clientId: 'wfass',
-    amount: 200,
-    currencyType: 'EUR',
-    status: 'pending',
-  },
-  {
-    invoiceId: 121,
-    invoiceDate: new Date('2022-01-30'),
-    invoiceNumber: 12325131,
-    supplierId: 'aasd11',
-    clientId: 'wfass',
-    amount: 200,
-    currencyType: 'EUR',
-    status: 'pending',
-  },
-];
-
 @Component({
   selector: 'app-view-invoices',
   templateUrl: './view-invoices.component.html',
@@ -69,7 +16,7 @@ const fakeData: Invoice[] = [
 })
 export class ViewInvoicesComponent implements OnInit {
   viewInvoicesService: ViewInvoicesService;
-  dataSource = fakeData;
+  dataSource: Invoice[] = [];
   displayedColumns: string[] = [
     'supplierId',
     'invoiceDate',
@@ -87,6 +34,7 @@ export class ViewInvoicesComponent implements OnInit {
   ) {
     this.viewInvoicesService = viewInvoicesService;
     this.viewInvoicesService.$filters.subscribe((val) => console.log(val));
+    this.viewInvoicesService.$data.subscribe((sd) => (this.dataSource = sd));
   }
 
   ngOnInit(): void {
