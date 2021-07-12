@@ -74,17 +74,17 @@ public class UserController {
 
     // get the client id of the current user
     @GetMapping("/api/users/myClientId")
-    public ResponseEntity<String> getMyClientId(Principal principal) {
+    public ResponseEntity<ClientIdDTO> getMyClientId(Principal principal) {
         String clientId = userService.getClientId(principal.getName());
 
         if (clientId != null)
             return new ResponseEntity<>(
-                    clientId,
+                    new ClientIdDTO(clientId),
                     HttpStatus.OK
             );
         else
             return new ResponseEntity<>(
-                    "Client Id Not Found",
+                    new ClientIdDTO(null),
                     HttpStatus.NOT_FOUND
             );
     }
