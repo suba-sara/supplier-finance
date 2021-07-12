@@ -4,6 +4,7 @@ import com.hcl.capstoneserver.file.entities.UploadedFile;
 import com.hcl.capstoneserver.file.exceptions.UploadedFileInvalidTokenException;
 import com.hcl.capstoneserver.file.exceptions.UploadedFileNotFoundException;
 import com.hcl.capstoneserver.file.repositories.UploadedFileRepository;
+import com.hcl.capstoneserver.util.TokenGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,7 +17,19 @@ public class UploadedFileService {
     private UploadedFileRepository uploadedFileRepository;
 
     @Autowired
+    private TokenGenerator tokenGenerator;
+
+    @Autowired
     private FileStorageService fileStorageService;
+
+    public UploadedFile createInitialFile() {
+        UploadedFile uploadedFile = new UploadedFile();
+        uploadedFile.setUploaded(false);
+        uploadedFile.setToken(tokenGenerator.generateToken());
+
+        uploadedFileRepository.save(uploadedFile);
+        return uploadedFile;
+    }
 
     public String uploadFile(Integer id, String token, MultipartFile file) {
         Optional<UploadedFile> uploadedFileObject = uploadedFileRepository.findById(id);

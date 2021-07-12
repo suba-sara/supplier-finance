@@ -19,7 +19,7 @@ public class InvoiceController {
     }
 
     @PostMapping("/api/invoices/create")
-    public ResponseEntity<ClientViewInvoiceDTO> createInvoice(@RequestBody CreateInvoiceDTO dto, Principal principal) {
+    public ResponseEntity<InvoiceCreatedDTO> createInvoice(@RequestBody CreateInvoiceDTO dto, Principal principal) {
         return new ResponseEntity<>(invoiceService.createInvoice(dto, principal.getName()), HttpStatus.CREATED);
     }
 

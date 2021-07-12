@@ -1,6 +1,9 @@
 package com.hcl.capstoneserver.invoice;
 
-import com.hcl.capstoneserver.invoice.dto.*;
+import com.hcl.capstoneserver.invoice.dto.CreateInvoiceDTO;
+import com.hcl.capstoneserver.invoice.dto.InvoiceCreatedDTO;
+import com.hcl.capstoneserver.invoice.dto.StatusUpdateInvoiceDTO;
+import com.hcl.capstoneserver.invoice.dto.UpdateInvoiceDTO;
 import com.hcl.capstoneserver.invoice.entities.Invoice;
 import com.hcl.capstoneserver.invoice.repositories.InvoiceRepository;
 import com.hcl.capstoneserver.user.UserService;
@@ -23,12 +26,8 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -60,7 +59,7 @@ public class InvoiceControllerTest {
     @Autowired
     InvoiceTestUtils invoiceTestUtils;
 
-    List<ClientViewInvoiceDTO> createInvoice; // invoiceNumber : 1234567898, 1234567899
+    List<InvoiceCreatedDTO> createInvoice; // invoiceNumber : 1234567898, 1234567899
     List<SupplierDTO> suppliers;
     List<ClientDTO> clients;
     Invoice expiredInvoice; // invoiceNumber : 999999999
@@ -208,7 +207,7 @@ public class InvoiceControllerTest {
             @DisplayName("it should update the invoice status")
             public void shouldUpdateInvoiceStatus() {
                 StatusUpdateInvoiceDTO dto = new StatusUpdateInvoiceDTO(
-                        createInvoice.get(0).getInvoiceId(),
+                        createInvoice.get(0).getInvoice().getInvoiceId(),
                         InvoiceStatus.IN_REVIEW
                 );
 
@@ -248,9 +247,9 @@ public class InvoiceControllerTest {
             @Test
             @DisplayName("it should not update when invoice status is REJECTED")
             public void shouldNotUpdateInvoiceWhenStatusIsRejected() {
-                updateInvoiceStatus(InvoiceStatus.REJECTED, createInvoice.get(0).getInvoiceId());
+                updateInvoiceStatus(InvoiceStatus.REJECTED, createInvoice.get(0).getInvoice().getInvoiceId());
                 StatusUpdateInvoiceDTO dto = new StatusUpdateInvoiceDTO(
-                        createInvoice.get(0).getInvoiceId(),
+                        createInvoice.get(0).getInvoice().getInvoiceId(),
                         InvoiceStatus.IN_REVIEW
                 );
 
@@ -277,7 +276,7 @@ public class InvoiceControllerTest {
             @DisplayName("it should update invoice")
             public void shouldUpdateInvoice() {
                 UpdateInvoiceDTO dto = new UpdateInvoiceDTO(
-                        createInvoice.get(0).getInvoiceId(),
+                        createInvoice.get(0).getInvoice().getInvoiceId(),
                         suppliers.get(0).getSupplierId(),
                         "1234567894",
                         LocalDate.now(),
@@ -299,7 +298,7 @@ public class InvoiceControllerTest {
             @DisplayName("it should not update invoice when that invoice owner is not a same client")
             public void shouldNotUpdateInvoiceWhenInvoiceOwnerIsNotEqual() {
                 UpdateInvoiceDTO dto = new UpdateInvoiceDTO(
-                        createInvoice.get(1).getInvoiceId(),
+                        createInvoice.get(1).getInvoice().getInvoiceId(),
                         suppliers.get(0).getSupplierId(),
                         "1234567898",
                         LocalDate.now(),
@@ -324,7 +323,7 @@ public class InvoiceControllerTest {
             @DisplayName("it should not update invoice with old date")
             public void shouldNotUpdateInvoiceWithOldDate() {
                 UpdateInvoiceDTO dto = new UpdateInvoiceDTO(
-                        createInvoice.get(0).getInvoiceId(),
+                        createInvoice.get(0).getInvoice().getInvoiceId(),
                         suppliers.get(0).getSupplierId(),
                         "1234567892",
                         LocalDate.parse("2021-04-05"),
@@ -348,9 +347,9 @@ public class InvoiceControllerTest {
             @Test
             @DisplayName("it should not update invoice with invoice status In_Review, Approved and Rejected")
             public void shouldNotUpdateInvoiceWithInReviewAndApprovedAndRejected() {
-                updateInvoiceStatus(InvoiceStatus.IN_REVIEW, createInvoice.get(0).getInvoiceId());
+                updateInvoiceStatus(InvoiceStatus.IN_REVIEW, createInvoice.get(0).getInvoice().getInvoiceId());
                 UpdateInvoiceDTO dto = new UpdateInvoiceDTO(
-                        createInvoice.get(0).getInvoiceId(),
+                        createInvoice.get(0).getInvoice().getInvoiceId(),
                         suppliers.get(0).getSupplierId(),
                         "1234567892",
                         LocalDate.now(),
@@ -383,7 +382,7 @@ public class InvoiceControllerTest {
                          .uri(String.format(
                                  "http://localhost:%d/api/invoices/delete/%d",
                                  port,
-                                 createInvoice.get(0).getInvoiceId()
+                                 createInvoice.get(0).getInvoice().getInvoiceId()
                          ))
                          .header(HttpHeaders.AUTHORIZATION, client1token)
                          .exchange()
@@ -400,7 +399,7 @@ public class InvoiceControllerTest {
                          .uri(String.format(
                                  "http://localhost:%d/api/invoices/delete/%d",
                                  port,
-                                 createInvoice.get(0).getInvoiceId()
+                                 createInvoice.get(0).getInvoice().getInvoiceId()
                          ))
                          .header(HttpHeaders.AUTHORIZATION, client2token)
                          .exchange()
@@ -414,12 +413,12 @@ public class InvoiceControllerTest {
         @Test
         @DisplayName("it should not delete invoice with invoice status In_Review, Approved and Rejected")
         public void shouldNotDeleteInvoiceWithInReviewAndApprovedAndRejected() {
-            updateInvoiceStatus(InvoiceStatus.IN_REVIEW, createInvoice.get(0).getInvoiceId());
+            updateInvoiceStatus(InvoiceStatus.IN_REVIEW, createInvoice.get(0).getInvoice().getInvoiceId());
             webTestClient.delete()
                          .uri(String.format(
                                  "http://localhost:%d/api/invoices/delete/%d",
                                  port,
-                                 createInvoice.get(0).getInvoiceId()
+                                 createInvoice.get(0).getInvoice().getInvoiceId()
                          ))
                          .header(HttpHeaders.AUTHORIZATION, client1token)
                          .exchange()
