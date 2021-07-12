@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -16,10 +17,13 @@ import java.nio.file.Paths;
 public class FileStorageServiceImpl implements FileStorageService {
     private final Path root = Paths.get("uploads");
 
-    @Override
-    public void init() {
+    @PostConstruct
+    public void initialize() {
         try {
-            Files.createDirectory(root);
+            // create root directory if does not exists
+            if (!Files.exists(root)) {
+                Files.createDirectory(root);
+            }
         } catch (IOException e) {
             throw new RuntimeException("Could not initialize folder for upload!");
         }
