@@ -3,7 +3,6 @@ package com.hcl.capstoneserver.file.entities;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
 
 @Entity
 public class UploadedFile {
@@ -11,19 +10,26 @@ public class UploadedFile {
     @GeneratedValue
     private Integer id;
 
-    @NotNull
     private String uri;
+
+    private boolean isUploaded = false;
+    private String token;
+
 
     public UploadedFile() {
     }
 
-    public UploadedFile(String uri) {
-        this.uri = uri;
-    }
 
     public UploadedFile(Integer id, String uri) {
         this.id = id;
         this.uri = uri;
+    }
+
+    public UploadedFile(Integer id, String uri, boolean isUploaded, String token) {
+        this.id = id;
+        this.uri = uri;
+        this.isUploaded = isUploaded;
+        this.token = token;
     }
 
     public Integer getId() {
@@ -40,5 +46,21 @@ public class UploadedFile {
 
     public void setUri(String uri) {
         this.uri = uri;
+    }
+
+    public boolean isUploaded() {
+        return isUploaded;
+    }
+
+    public void setUploaded(boolean uploaded) {
+        isUploaded = uploaded;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }
