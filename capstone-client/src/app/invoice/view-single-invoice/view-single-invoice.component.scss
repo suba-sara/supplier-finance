@@ -6,7 +6,7 @@
   flex-direction: column;
   border-radius: 15px;
   margin: 15px;
-  padding: 25px;
+  padding: 50px;
 }
 
 .header-container {
@@ -18,6 +18,7 @@
 
 .main-header-container {
   display: flex;
+  width: 100%;
 
   h1 {
     font-weight: bold;
@@ -28,7 +29,7 @@
 }
 
 .invoice-number-container {
-  margin-left: 1em;
+  margin-left: auto;
 
   h1 {
     font-weight: bold;
