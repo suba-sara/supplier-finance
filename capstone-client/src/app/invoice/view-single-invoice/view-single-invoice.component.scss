@@ -1,0 +1,10 @@
+@use "src/styles/variables";
+
+.content-container {
+  background: white;
+  display: flex;
+  flex-direction: column;
+  border-radius: 15px;
+  margin: 15px;
+  padding: 25px;
+}
