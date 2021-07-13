@@ -11,29 +11,33 @@
 
 .header-container {
   display: flex;
+  flex-direction: column;
   margin-top: 1.2em;
   margin-bottom: 1.5em;
+}
 
-  .main-header-container {
-    flex-direction: row;
+.main-header-container {
+  display: flex;
 
-    h1 {
-      font-weight: bold;
-      color: variables.$primary-color;
-      font-size: 2.4em;
-    }
-
-    h3 {
-      font-weight: bold;
-      color: variables.$gray-color;
-      font-size: 1.2em;
-    }
+  h1 {
+    font-weight: bold;
+    color: variables.$primary-color;
+    font-size: 2.4em;
+    margin-bottom: 0.2em;
   }
+}
 
-  .invoice-number-container {
-    h1 {
-      font-weight: bold;
-      color: variables.$gray-color;
-    }
+.invoice-number-container {
+  margin-left: 1em;
+
+  h1 {
+    font-weight: bold;
+    color: variables.$gray-color;
   }
+}
+
+.date {
+  font-weight: bold;
+  color: variables.$gray-color;
+  font-size: 1.2em;
 }

@@ -3,11 +3,11 @@
     <div class="header-container">
       <div class="main-header-container">
         <h1>INVOICE</h1>
-        <h3>{{ dataSource[0].invoiceDate | date: "dd/MM/yyyy" }}</h3>
         <div class="invoice-number-container">
           <h1>#{{ dataSource[0].invoiceNumber | invoiceNumberFormat }}</h1>
         </div>
       </div>
+      <h3 class="date">{{ dataSource[0].invoiceDate | date: "dd/MM/yyyy" }}</h3>
     </div>
 
     <div class="button-container">
