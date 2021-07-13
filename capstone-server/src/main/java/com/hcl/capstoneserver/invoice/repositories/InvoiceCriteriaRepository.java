@@ -48,6 +48,13 @@ public class InvoiceCriteriaRepository {
             ));
         }
 
+        if (Objects.nonNull(invoiceSearchCriteriaDTO.getInvoiceId())) {
+            predicateList.add(criteriaBuilder.equal(
+                    invoiceRoot.get("invoiceId"),
+                    invoiceSearchCriteriaDTO.getInvoiceId()
+            ));
+        }
+
         if (Objects.nonNull(invoiceSearchCriteriaDTO.getInvoiceNumber())) {
             predicateList.add(criteriaBuilder.equal(
                     invoiceRoot.get("invoiceNumber"),
