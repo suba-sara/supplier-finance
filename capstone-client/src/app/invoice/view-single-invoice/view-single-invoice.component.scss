@@ -42,3 +42,18 @@
   color: variables.$gray-color;
   font-size: 1.2em;
 }
+
+.table-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.left-container {
+  left: 0;
+  width: 50%;
+}
+
+.right-container {
+  right: 0;
+  width: 50%;
+}

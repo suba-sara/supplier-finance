@@ -10,6 +10,19 @@
       <h3 class="date">{{ dataSource[0].invoiceDate | date: "dd/MM/yyyy" }}</h3>
     </div>
 
+    <div class="table-container">
+      <div class="left-container">
+        <h1>Customer Details:</h1>
+        <h2>Id: {{ dataSource[0].client.clientId }}</h2>
+        <h2>Name: {{ dataSource[0].client.name }}</h2>
+      </div>
+      <div class="right-container">
+        <h1>Supplier Details:</h1>
+        <h2>Id: {{ dataSource[0].supplier.supplierId }}</h2>
+        <h2>Name: {{ dataSource[0].supplier.name }}</h2>
+      </div>
+    </div>
+
     <div class="button-container">
       <button color="primary" mat-raised-button>Back</button>
     </div>
