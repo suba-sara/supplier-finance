@@ -1,9 +1,17 @@
 <div class="content-container">
-  <h1>View Invoice</h1>
-
   <div class="body-container">
-    <div class="cutomer-info">
-      <p>{{ dataSource[0].invoiceId }}</p>
+    <div class="header-container">
+      <div class="main-header-container">
+        <h1>INVOICE</h1>
+        <h3>{{ dataSource[0].invoiceDate | date: "dd/MM/yyyy" }}</h3>
+        <div class="invoice-number-container">
+          <h1>#{{ dataSource[0].invoiceNumber | invoiceNumberFormat }}</h1>
+        </div>
+      </div>
+    </div>
+
+    <div class="button-container">
+      <button color="primary" mat-raised-button>Back</button>
     </div>
   </div>
 </div>
