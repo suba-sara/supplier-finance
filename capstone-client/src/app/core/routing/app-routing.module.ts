@@ -18,6 +18,7 @@ import { InvoiceUploadComponent } from '../../invoice/invoice-upload/invoice-upl
 import { InvoiceModule } from '../../invoice/invoice.module';
 import { ViewInvoicesComponent } from '../../invoice/view-invoices/view-invoices.component';
 import { ForbiddenComponent } from '../../forbidden/forbidden.component';
+import { ViewSingleInvoiceComponent } from '../../invoice/view-single-invoice/view-single-invoice.component';
 
 const routes: Routes = [
   {
@@ -91,6 +92,14 @@ const routes: Routes = [
   {
     path: 'invoice/view-invoices',
     component: ViewInvoicesComponent,
+    canActivate: [AuthGuard],
+    data: {
+      roles: ['SUPPLIER', 'CLIENT', 'BANK'],
+    },
+  },
+  {
+    path: 'invoice/view-invoice/:id',
+    component: ViewSingleInvoiceComponent,
     canActivate: [AuthGuard],
     data: {
       roles: ['SUPPLIER', 'CLIENT', 'BANK'],
