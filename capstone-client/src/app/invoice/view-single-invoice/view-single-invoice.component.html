@@ -23,6 +23,14 @@
       </div>
     </div>
 
+    <div class="">
+      <h1>Status: {{ dataSource[0].status }}</h1>
+      <h1>
+        Amount:
+        {{ dataSource[0].amount | currency: dataSource[0].currencyType }}
+      </h1>
+    </div>
+
     <div class="button-container">
       <button color="primary" mat-raised-button>Back</button>
     </div>
