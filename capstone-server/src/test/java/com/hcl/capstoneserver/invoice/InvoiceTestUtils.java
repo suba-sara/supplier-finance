@@ -1,7 +1,7 @@
 package com.hcl.capstoneserver.invoice;
 
-import com.hcl.capstoneserver.invoice.dto.ClientViewInvoiceDTO;
 import com.hcl.capstoneserver.invoice.dto.CreateInvoiceDTO;
+import com.hcl.capstoneserver.invoice.dto.InvoiceCreatedDTO;
 import com.hcl.capstoneserver.invoice.entities.Invoice;
 import com.hcl.capstoneserver.invoice.repositories.InvoiceRepository;
 import com.hcl.capstoneserver.user.UserService;
@@ -29,8 +29,8 @@ public class InvoiceTestUtils {
     @Autowired
     ClientRepository clientRepository;
 
-    public List<ClientViewInvoiceDTO> createInvoice(List<SupplierDTO> supplier) {
-        List<ClientViewInvoiceDTO> dtoList = new ArrayList<>();
+    public List<InvoiceCreatedDTO> createInvoice(List<SupplierDTO> supplier) {
+        List<InvoiceCreatedDTO> dtoList = new ArrayList<>();
         dtoList.add(invoiceService.createInvoice(new CreateInvoiceDTO(
                 supplier.get(0).getSupplierId(),
                 "1234567898",

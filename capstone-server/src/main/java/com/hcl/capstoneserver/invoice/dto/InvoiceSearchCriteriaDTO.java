@@ -11,6 +11,7 @@ import java.util.List;
 public class InvoiceSearchCriteriaDTO extends InvoicePage {
     private String clientId;
     private String supplierId;
+    private Integer invoiceId;
     private String invoiceNumber;
     private LocalDate dateFrom;
     private LocalDate dateTo;
@@ -29,6 +30,7 @@ public class InvoiceSearchCriteriaDTO extends InvoicePage {
             String sortBy,
             String clientId,
             String supplierId,
+            Integer invoiceId,
             String invoiceNumber,
             LocalDate dateFrom,
             LocalDate dateTo,
@@ -39,6 +41,7 @@ public class InvoiceSearchCriteriaDTO extends InvoicePage {
         super(pageIndex, pageSize, direction, sortBy);
         this.clientId = clientId;
         this.supplierId = supplierId;
+        this.invoiceId = invoiceId;
         this.invoiceNumber = invoiceNumber;
         this.dateFrom = dateFrom;
         this.dateTo = dateTo;
@@ -61,6 +64,14 @@ public class InvoiceSearchCriteriaDTO extends InvoicePage {
 
     public void setSupplierId(String supplierId) {
         this.supplierId = supplierId;
+    }
+
+    public Integer getInvoiceId() {
+        return invoiceId;
+    }
+
+    public void setInvoiceId(Integer invoiceId) {
+        this.invoiceId = invoiceId;
     }
 
     public String getInvoiceNumber() {

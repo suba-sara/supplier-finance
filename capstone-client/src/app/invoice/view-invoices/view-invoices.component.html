@@ -1,0 +1,118 @@
+<div class="content-container">
+  <h1>Invoices</h1>
+
+  <div class="filter-wrapper">
+    <h4>Filters</h4>
+    <div>
+      <mat-form-field appearance="outline">
+        <mat-label>Invoice Number</mat-label>
+        <input
+          (change)="filterInputChange($event)"
+          [value]="
+            viewInvoicesService.$filters.value.invoiceNumber
+              ? viewInvoicesService.$filters.value.invoiceNumber
+              : ''
+          "
+          matInput
+          name="invoiceNumber"
+        />
+        <mat-icon matPrefix>person_outline</mat-icon>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Supplier Code</mat-label>
+        <input
+          (change)="filterInputChange($event)"
+          [value]="
+            viewInvoicesService.$filters.value.invoiceNumber
+              ? viewInvoicesService.$filters.value.invoiceNumber
+              : ''
+          "
+          matInput
+          name="supplierCode"
+        />
+        <mat-icon matPrefix>person_outline</mat-icon>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="table-container">
+    <table [dataSource]="dataSource" mat-table>
+      <ng-container matColumnDef="supplierId">
+        <th *matHeaderCellDef mat-header-cell>Supplier Code</th>
+        <td *matCellDef="let element" mat-cell>{{ element.supplierId }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="invoiceDate">
+        <th *matHeaderCellDef mat-header-cell>Invoice Date</th>
+        <td *matCellDef="let element" mat-cell>
+          {{ formatDate(element.invoiceDate) }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="amount">
+        <th *matHeaderCellDef mat-header-cell>Invoice Amount</th>
+        <td *matCellDef="let element" mat-cell>
+          {{ element.amount }} {{ element.currencyType }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="invoiceNumber">
+        <th *matHeaderCellDef mat-header-cell>Invoice Number</th>
+        <td *matCellDef="let element" mat-cell>{{ element.invoiceNumber }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="invoiceAge">
+        <th *matHeaderCellDef mat-header-cell>Invoice Ageing</th>
+        <td *matCellDef="let element" mat-cell>
+          {{ invoiceAge(element.invoiceDate) }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="invoiceStatus">
+        <th *matHeaderCellDef mat-header-cell>Invoice Status</th>
+        <td *matCellDef="let element" mat-cell>{{ element.status }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="options">
+        <th *matHeaderCellDef mat-header-cell>Options</th>
+        <td *matCellDef="let element" mat-cell>
+          <div class="options-wrapper">
+            <a
+              aria-label="View Invoice"
+              href="/invoice/view-invoice/{{ element.invoiceId }}"
+              mat-icon-button
+              matTooltip="View Invoice"
+            >
+              <mat-icon>preview</mat-icon>
+            </a>
+            <button
+              aria-label="Edit Invoice"
+              mat-icon-button
+              matTooltip="Edit Invoice"
+            >
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button
+              aria-label="Delete Invoice"
+              mat-icon-button
+              matTooltip="Delete Invoice"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+      <tr *matRowDef="let row; columns: displayedColumns" mat-row></tr>
+    </table>
+    <mat-paginator
+      (page)="handlePageChange($event)"
+      [length]="dataSource.length"
+      [pageSizeOptions]="[10, 25, 50]"
+      [pageSize]="viewInvoicesService.$filters.value.pageSize"
+      [showFirstLastButtons]="true"
+    >
+    </mat-paginator>
+  </div>
+</div>

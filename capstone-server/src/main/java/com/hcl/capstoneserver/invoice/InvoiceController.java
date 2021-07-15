@@ -19,7 +19,7 @@ public class InvoiceController {
     }
 
     @PostMapping("/api/invoices/create")
-    public ResponseEntity<ClientViewInvoiceDTO> createInvoice(@RequestBody CreateInvoiceDTO dto, Principal principal) {
+    public ResponseEntity<InvoiceCreatedDTO> createInvoice(@RequestBody CreateInvoiceDTO dto, Principal principal) {
         return new ResponseEntity<>(invoiceService.createInvoice(dto, principal.getName()), HttpStatus.CREATED);
     }
 
@@ -39,13 +39,13 @@ public class InvoiceController {
     }
 
     @GetMapping("/api/invoices/retrieve/bank")
-    public Page<BankViewInvoiceDTO> getAllInvoice(@RequestBody InvoiceSearchCriteriaDTO dto, Principal principal) {
-        return invoiceService.getBankInvoice(dto, principal.getName());
+    public Page<BankViewInvoiceDTO> getAllInvoice(InvoiceSearchCriteriaDTO dto) {
+        return invoiceService.getBankInvoice(dto, "Bank");
     }
 
     @GetMapping("/api/invoices/retrieve/client")
     public Page<ClientViewInvoiceDTO> getClientAllInvoice(
-            @RequestBody InvoiceSearchCriteriaDTO dto,
+            InvoiceSearchCriteriaDTO dto,
             Principal principal
     ) {
         return invoiceService.getClientInvoice(dto, principal.getName());
@@ -53,7 +53,7 @@ public class InvoiceController {
 
     @GetMapping("/api/invoices/retrieve/supplier")
     public Page<SupplierVIewInvoiceDTO> getSupplierAllInvoice(
-            @RequestBody InvoiceSearchCriteriaDTO dto,
+            InvoiceSearchCriteriaDTO dto,
             Principal principal
     ) {
         return invoiceService.getSupplierInvoice(dto, principal.getName());

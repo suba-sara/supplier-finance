@@ -9,9 +9,20 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { HttpClientModule } from '@angular/common/http';
+import { ViewInvoicesComponent } from './view-invoices/view-invoices.component';
+import { MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { ViewSingleInvoiceComponent } from './view-single-invoice/view-single-invoice.component';
+import { InvoiceNumberFormatPipe } from './view-invoices/invoice-number-format.pipe';
 
 @NgModule({
-  declarations: [InvoiceUploadComponent],
+  declarations: [
+    InvoiceUploadComponent,
+    ViewInvoicesComponent,
+    ViewSingleInvoiceComponent,
+    InvoiceNumberFormatPipe,
+  ],
   imports: [
     CommonModule,
     SharedModule,
@@ -22,6 +33,9 @@ import { HttpClientModule } from '@angular/common/http';
     MatIconModule,
     MatSelectModule,
     MatButtonModule,
+    MatTableModule,
+    MatTooltipModule,
+    MatPaginatorModule,
   ],
 })
 export class InvoiceModule {}

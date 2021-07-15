@@ -1,5 +1,6 @@
 package com.hcl.capstoneserver.invoice.entities;
 
+import com.hcl.capstoneserver.file.entities.UploadedFile;
 import com.hcl.capstoneserver.invoice.CurrencyType;
 import com.hcl.capstoneserver.invoice.InvoiceStatus;
 import com.hcl.capstoneserver.user.entities.Client;
@@ -19,11 +20,17 @@ public class Invoice {
     @ManyToOne
     @JoinColumn(name = "SUPPLIER_ID", nullable = false)
     private Supplier supplier;
+
+    @OneToOne
+    @JoinColumn(name = "FILE_ID")
+    private UploadedFile file;
+
     private String invoiceNumber;
     private LocalDate invoiceDate;
     private Double amount;
     private InvoiceStatus status;
     private CurrencyType currencyType;
+
 
     public Invoice() {
     }
@@ -39,6 +46,26 @@ public class Invoice {
     ) {
         this.client = client;
         this.supplier = supplier;
+        this.invoiceNumber = invoiceNumber;
+        this.invoiceDate = invoiceDate;
+        this.amount = amount;
+        this.status = status;
+        this.currencyType = currencyType;
+    }
+
+    public Invoice(
+            Client client,
+            Supplier supplier,
+            UploadedFile file,
+            String invoiceNumber,
+            LocalDate invoiceDate,
+            Double amount,
+            InvoiceStatus status,
+            CurrencyType currencyType
+    ) {
+        this.client = client;
+        this.supplier = supplier;
+        this.file = file;
         this.invoiceNumber = invoiceNumber;
         this.invoiceDate = invoiceDate;
         this.amount = amount;
@@ -108,6 +135,14 @@ public class Invoice {
 
     public void setCurrencyType(CurrencyType currencyType) {
         this.currencyType = currencyType;
+    }
+
+    public UploadedFile getFile() {
+        return file;
+    }
+
+    public void setFile(UploadedFile file) {
+        this.file = file;
     }
 
     @Override

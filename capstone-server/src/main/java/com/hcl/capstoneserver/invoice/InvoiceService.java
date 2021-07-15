@@ -1,5 +1,7 @@
 package com.hcl.capstoneserver.invoice;
 
+import com.hcl.capstoneserver.file.UploadedFileService;
+import com.hcl.capstoneserver.file.entities.UploadedFile;
 import com.hcl.capstoneserver.invoice.dto.*;
 import com.hcl.capstoneserver.invoice.entities.Invoice;
 import com.hcl.capstoneserver.invoice.exception.*;
@@ -25,6 +27,7 @@ public class InvoiceService {
     private final ModelMapper mapper;
     private final UserService userService;
     private final InvoiceCriteriaRepository invoiceCriteriaRepository;
+    private final UploadedFileService uploadedFileService;
 
     /*
      * userId - current login user userId
@@ -34,12 +37,14 @@ public class InvoiceService {
             InvoiceRepository invoiceRepository,
             ModelMapper mapper,
             UserService userService,
-            InvoiceCriteriaRepository invoiceCriteriaRepository
+            InvoiceCriteriaRepository invoiceCriteriaRepository,
+            UploadedFileService uploadedFileService
     ) {
         this.invoiceRepository = invoiceRepository;
         this.mapper = mapper;
         this.userService = userService;
         this.invoiceCriteriaRepository = invoiceCriteriaRepository;
+        this.uploadedFileService = uploadedFileService;
 
         // model mapper set to ignore the null values
         this.mapper.getConfiguration().setSkipNullEnabled(true);
@@ -110,14 +115,15 @@ public class InvoiceService {
         return invoiceCriteriaRepository.findAllWithFilters(dto);
     }
 
-    public ClientViewInvoiceDTO createInvoice(CreateInvoiceDTO dto, String userId) {
+    public InvoiceCreatedDTO createInvoice(CreateInvoiceDTO dto, String userId) {
         Client client = userService.fetchClientDataByUserId(userId);
         Supplier supplier = userService.fetchSupplierDataBySupplierId(dto.getSupplierId());
 
         _checkSupplierWithExistsInvoiceNumber(supplier, dto.getInvoiceNumber());
         _checkInvoiceDate(dto.getInvoiceDate(), UserType.CLIENT);
 
-        return mapper.map(invoiceRepository.save(new Invoice(
+        //create invoice
+        Invoice invoice = new Invoice(
                 client,
                 supplier,
                 dto.getInvoiceNumber(),
@@ -125,7 +131,24 @@ public class InvoiceService {
                 dto.getAmount(),
                 dto.getStatus(),
                 dto.getCurrencyType()
-        )), ClientViewInvoiceDTO.class);
+        );
+
+        //create invoice
+        invoiceRepository.save(invoice);
+
+        //create invoice file
+        UploadedFile initialFile = uploadedFileService.createInitialFile(String.format(
+                "invoice-%s-%s",
+                invoice.getInvoiceId(),
+                invoice.getInvoiceNumber()
+        ));
+
+
+        return new InvoiceCreatedDTO(
+                initialFile.getId(),
+                initialFile.getToken(),
+                mapper.map(invoice, ClientViewInvoiceDTO.class)
+        );
     }
 
     // This update method for client

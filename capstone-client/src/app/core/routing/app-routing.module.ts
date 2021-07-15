@@ -16,6 +16,9 @@ import { DashboardModule } from '../../dashboard/dashboard.module';
 import { UserModule } from '../../user/user.module';
 import { InvoiceUploadComponent } from '../../invoice/invoice-upload/invoice-upload.component';
 import { InvoiceModule } from '../../invoice/invoice.module';
+import { ViewInvoicesComponent } from '../../invoice/view-invoices/view-invoices.component';
+import { ForbiddenComponent } from '../../forbidden/forbidden.component';
+import { ViewSingleInvoiceComponent } from '../../invoice/view-single-invoice/view-single-invoice.component';
 
 const routes: Routes = [
   {
@@ -25,6 +28,10 @@ const routes: Routes = [
     data: {
       roles: ['UNAUTHORIZED'],
     },
+  },
+  {
+    path: 'forbidden',
+    component: ForbiddenComponent,
   },
   {
     path: 'sign-in',
@@ -77,6 +84,22 @@ const routes: Routes = [
   {
     path: 'invoice/upload',
     component: InvoiceUploadComponent,
+    canActivate: [AuthGuard],
+    data: {
+      roles: ['CLIENT'],
+    },
+  },
+  {
+    path: 'invoice/view-invoices',
+    component: ViewInvoicesComponent,
+    canActivate: [AuthGuard],
+    data: {
+      roles: ['SUPPLIER', 'CLIENT', 'BANK'],
+    },
+  },
+  {
+    path: 'invoice/view-invoice/:id',
+    component: ViewSingleInvoiceComponent,
     canActivate: [AuthGuard],
     data: {
       roles: ['SUPPLIER', 'CLIENT', 'BANK'],

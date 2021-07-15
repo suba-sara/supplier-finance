@@ -1,0 +1,38 @@
+.content-container {
+  background: white;
+  display: flex;
+  flex-direction: column;
+  border-radius: 15px;
+  margin: 15px;
+  padding: 25px;
+
+  h1 {
+    font-size: 2rem;
+    font-weight: bold;
+  }
+}
+
+.table-container {
+  width: 100%;
+}
+
+.mat-cell,
+.mat-header-cell {
+  padding: 1em 2em;
+  text-align: center;
+}
+
+.options-wrapper {
+  display: flex;
+}
+
+.filter-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  h4 {
+    color: #999999;
+    font-size: 1.1rem;
+  }
+}

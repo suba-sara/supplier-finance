@@ -44,7 +44,7 @@ public class InvoiceServiceTest {
     @Autowired
     ClientRepository clientRepository;
 
-    List<ClientViewInvoiceDTO> createInvoice; // invoiceNumber : 1234567898, 1234567899
+    List<InvoiceCreatedDTO> createInvoice; // invoiceNumber : 1234567898, 1234567899
     List<SupplierDTO> suppliers;
     List<ClientDTO> clients;
     Invoice expiredInvoice;
@@ -162,7 +162,7 @@ public class InvoiceServiceTest {
             public void shouldUpdateInvoiceStatus() {
                 assertEquals(
                         InvoiceStatus.IN_REVIEW,
-                        updateInvoiceStatus(InvoiceStatus.IN_REVIEW, createInvoice.get(0).getInvoiceId())
+                        updateInvoiceStatus(InvoiceStatus.IN_REVIEW, createInvoice.get(0).getInvoice().getInvoiceId())
                 );
             }
 
@@ -181,14 +181,14 @@ public class InvoiceServiceTest {
             @Test
             @DisplayName("it should not update when invoice status is REJECTED")
             public void shouldNotUpdateInvoiceWhenStatusIsRejected() {
-                updateInvoiceStatus(InvoiceStatus.REJECTED, createInvoice.get(0).getInvoiceId());
+                updateInvoiceStatus(InvoiceStatus.REJECTED, createInvoice.get(0).getInvoice().getInvoiceId());
                 assertEquals(
                         "400 This invoice can not update, because invoice is REJECTED.",
                         assertThrows(
                                 HttpClientErrorException.class, () ->
                                         updateInvoiceStatus(
                                                 InvoiceStatus.IN_REVIEW,
-                                                createInvoice.get(0).getInvoiceId()
+                                                createInvoice.get(0).getInvoice().getInvoiceId()
                                         )
                         ).getMessage()
                 );
@@ -203,7 +203,7 @@ public class InvoiceServiceTest {
             @DisplayName("it should update invoice")
             public void shouldUpdateInvoice() {
                 UpdateInvoiceDTO dto = new UpdateInvoiceDTO();
-                dto.setInvoiceId(createInvoice.get(0).getInvoiceId());
+                dto.setInvoiceId(createInvoice.get(0).getInvoice().getInvoiceId());
                 dto.setInvoiceNumber("1234567894");
                 assertEquals("1234567894", invoiceService.updateInvoice(dto, "client").getInvoiceNumber());
             }
@@ -216,7 +216,7 @@ public class InvoiceServiceTest {
                         assertThrows(
                                 HttpClientErrorException.class,
                                 () -> invoiceService.updateInvoice(new UpdateInvoiceDTO(
-                                        createInvoice.get(1).getInvoiceId(),
+                                        createInvoice.get(1).getInvoice().getInvoiceId(),
                                         suppliers.get(0).getSupplierId(),
                                         "1234567898",
                                         LocalDate.now(),
@@ -236,7 +236,7 @@ public class InvoiceServiceTest {
                                 HttpClientErrorException.class,
                                 () -> invoiceService.updateInvoice(
                                         new UpdateInvoiceDTO(
-                                                createInvoice.get(0).getInvoiceId(),
+                                                createInvoice.get(0).getInvoice().getInvoiceId(),
                                                 suppliers.get(0).getSupplierId(),
                                                 "1234567892",
                                                 LocalDate.parse("2021-04-05"),
@@ -250,14 +250,14 @@ public class InvoiceServiceTest {
             @Test
             @DisplayName("it should not update invoice with invoice status In_Review, Approved and Rejected")
             public void shouldNotUpdateInvoiceWithInReviewAndApprovedAndRejected() {
-                updateInvoiceStatus(InvoiceStatus.IN_REVIEW, createInvoice.get(0).getInvoiceId());
+                updateInvoiceStatus(InvoiceStatus.IN_REVIEW, createInvoice.get(0).getInvoice().getInvoiceId());
                 assertEquals(
                         "400 This invoice can not update, because invoice is IN_REVIEW.",
                         assertThrows(
                                 HttpClientErrorException.class,
                                 () -> invoiceService.updateInvoice(
                                         new UpdateInvoiceDTO(
-                                                createInvoice.get(0).getInvoiceId(),
+                                                createInvoice.get(0).getInvoice().getInvoiceId(),
                                                 suppliers.get(0).getSupplierId(),
                                                 "1234567892",
                                                 LocalDate.now(),
@@ -276,7 +276,8 @@ public class InvoiceServiceTest {
         @Test
         @DisplayName("it should delete invoice")
         public void shouldDeleteInvoice() {
-            //            assertEquals(2, invoiceService.deleteInvoice(createInvoice.get(0).getInvoiceId(), "client"));
+            //            assertEquals(2, invoiceService.deleteInvoice(createInvoice.get(0).getInvoice().getInvoiceId
+            //            (), "client"));
         }
 
         // Invoice can delete client only, suppliers and bank can not delete
@@ -288,7 +289,10 @@ public class InvoiceServiceTest {
                     "400 client2 you do not have permission to delete this invoice.",
                     assertThrows(
                             HttpClientErrorException.class,
-                            () -> invoiceService.deleteInvoice(createInvoice.get(0).getInvoiceId(), "client2")
+                            () -> invoiceService.deleteInvoice(
+                                    createInvoice.get(0).getInvoice().getInvoiceId(),
+                                    "client2"
+                            )
                     ).getMessage()
             );
         }
@@ -296,12 +300,15 @@ public class InvoiceServiceTest {
         @Test
         @DisplayName("it should not delete invoice with invoice status In_Review, Approved and Rejected")
         public void shouldNotDeleteInvoiceWithInReviewAndApprovedAndRejected() {
-            updateInvoiceStatus(InvoiceStatus.IN_REVIEW, createInvoice.get(0).getInvoiceId());
+            updateInvoiceStatus(InvoiceStatus.IN_REVIEW, createInvoice.get(0).getInvoice().getInvoiceId());
             assertEquals(
                     "400 This invoice can not delete, because invoice is IN_REVIEW.",
                     assertThrows(
                             HttpClientErrorException.class,
-                            () -> invoiceService.deleteInvoice(createInvoice.get(0).getInvoiceId(), "client")
+                            () -> invoiceService.deleteInvoice(
+                                    createInvoice.get(0).getInvoice().getInvoiceId(),
+                                    "client"
+                            )
                     ).getMessage()
             );
         }

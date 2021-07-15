@@ -12,7 +12,6 @@ export type Invoice = {
   invoiceTitle: string;
   invoiceAmount: string;
   currency: string;
-  invoiceFile: string;
 };
 
 @Injectable({
@@ -31,16 +30,27 @@ export class InvoiceUploadService {
     );
   }
 
-  uploadInvoice(invoice: Invoice): Observable<Invoice> {
-    const formData = new FormData();
-    formData.append('supplierId', invoice.supplierId);
-    formData.append('invoiceNumber', invoice.invoiceNumber);
-    formData.append('invoiceDate', invoice.invoiceDate);
-    formData.append('invoiceTitle', invoice.invoiceTitle);
-    formData.append('invoiceAmount', invoice.invoiceAmount);
-    formData.append('currency', invoice.currency);
-    formData.append('invoiceFile', invoice.invoiceFile);
+  async createInvoice(
+    invoice: Invoice & {
+      invoiceFile: string;
+      invoiceFileSrc: string;
+    }
+  ): Promise<any> {
+    const { invoiceFile, invoiceFileSrc, ...rest } = invoice;
+    const res = await this.http
+      .post<{ fileId: string; token: string; invoice: Invoice }>(
+        `${API_PATH}/invoices/create`,
+        rest
+      )
+      .toPromise();
 
-    return this.http.post<Invoice>(`${API_PATH}/invoices/create`, formData);
+    const formData = new FormData();
+    formData.append('token', res.token);
+    formData.append('file', invoiceFileSrc);
+
+    await this.http
+      .post<Invoice>(`${API_PATH}/files/upload/${res.fileId}`, formData)
+      .toPromise();
+    return res;
   }
 }
