@@ -11,7 +11,6 @@ public class UploadedFile {
     private Integer id;
 
     private String uri;
-
     private boolean isUploaded = false;
     private String token;
 

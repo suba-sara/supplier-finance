@@ -15,8 +15,8 @@ public class UploadFileController {
     @PostMapping("/api/files/upload/{id}")
     public ResponseEntity<String> uploadFile(
             @PathVariable Integer id,
-            @RequestParam("token") String token,
-            @RequestParam("file") MultipartFile file
+            @RequestParam MultipartFile file,
+            @RequestParam String token
     ) {
         return new ResponseEntity<>(uploadedFileService.uploadFile(id, token, file), HttpStatus.CREATED);
     }
