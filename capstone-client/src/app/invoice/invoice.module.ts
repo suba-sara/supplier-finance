@@ -14,8 +14,8 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { ViewSingleInvoiceComponent } from './view-single-invoice/view-single-invoice.component';
-import { InvoiceNumberFormatPipe } from './view-invoices/invoice-number-format.pipe';
-import { DateFormatPipe } from './date-format.pipe';
+import { InvoiceNumberFormatPipe } from './pipes/invoice-number-format.pipe';
+import { DateFormatPipe } from './pipes/date-format.pipe';
 
 @NgModule({
   declarations: [

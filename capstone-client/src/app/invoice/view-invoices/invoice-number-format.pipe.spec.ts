@@ -1,4 +1,4 @@
-import { InvoiceNumberFormatPipe } from './invoice-number-format.pipe';
+import { InvoiceNumberFormatPipe } from '../pipes/invoice-number-format.pipe';
 
 describe('InvoiceNumberFormatPipe', () => {
   it('create an instance', () => {
