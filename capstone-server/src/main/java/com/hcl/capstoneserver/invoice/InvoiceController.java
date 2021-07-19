@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.security.Principal;
 
 @CrossOrigin
@@ -19,7 +20,11 @@ public class InvoiceController {
     }
 
     @PostMapping("/api/invoices/create")
-    public ResponseEntity<InvoiceCreatedDTO> createInvoice(@RequestBody CreateInvoiceDTO dto, Principal principal) {
+    public ResponseEntity<InvoiceCreatedDTO> createInvoice(
+            @Valid @RequestBody CreateInvoiceDTO dto,
+            Principal principal
+    ) {
+        System.out.println("here");
         return new ResponseEntity<>(invoiceService.createInvoice(dto, principal.getName()), HttpStatus.CREATED);
     }
 

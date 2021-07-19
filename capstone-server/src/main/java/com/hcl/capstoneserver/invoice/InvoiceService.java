@@ -129,7 +129,7 @@ public class InvoiceService {
                 dto.getInvoiceNumber(),
                 dto.getInvoiceDate(),
                 dto.getAmount(),
-                dto.getStatus(),
+                InvoiceStatus.UPLOADED,
                 dto.getCurrencyType()
         );
 

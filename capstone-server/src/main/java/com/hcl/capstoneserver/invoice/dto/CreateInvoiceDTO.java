@@ -5,6 +5,7 @@ import org.hibernate.validator.constraints.Currency;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
 
 public class CreateInvoiceDTO {
@@ -14,7 +15,7 @@ public class CreateInvoiceDTO {
     private String invoiceNumber;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate invoiceDate;
-    @NotBlank(message = "amount is required")
+    @NotEmpty(message = "amount is required")
     @Currency(value = "0", message = "amount is must be greater than")
     private Double amount;
     @NotBlank(message = "currency is required")
