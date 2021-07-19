@@ -45,10 +45,10 @@ export class InvoiceUploadComponent implements OnInit {
       ],
     }),
     invoiceTitle: new FormControl('', { validators: [Validators.required] }),
-    invoiceAmount: new FormControl('', {
+    amount: new FormControl('', {
       validators: [Validators.required, Validators.min(0)],
     }),
-    currency: new FormControl('USD', { validators: [Validators.required] }),
+    currencyType: new FormControl('USD', { validators: [Validators.required] }),
     invoiceFile: new FormControl('', { validators: [Validators.required] }),
     invoiceFileSrc: new FormControl('', { validators: [Validators.required] }),
   });

@@ -10,8 +10,8 @@ export type Invoice = {
   invoiceNumber: string;
   invoiceDate: string;
   invoiceTitle: string;
-  invoiceAmount: string;
-  currency: string;
+  amount: string;
+  currencyType: string;
 };
 
 @Injectable({

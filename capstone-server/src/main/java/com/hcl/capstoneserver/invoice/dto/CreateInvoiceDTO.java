@@ -1,10 +1,11 @@
 package com.hcl.capstoneserver.invoice.dto;
 
 import com.hcl.capstoneserver.invoice.CurrencyType;
-import org.hibernate.validator.constraints.Currency;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 public class CreateInvoiceDTO {
@@ -14,9 +15,10 @@ public class CreateInvoiceDTO {
     private String invoiceNumber;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate invoiceDate;
-    @Currency(value = "0", message = "amount is must be greater than")
+    @NotNull(message = "amount is required")
+    @Min(value = 0, message = "amount  must be greater than")
     private Double amount;
-    @NotBlank(message = "currency is required")
+    @NotNull
     private CurrencyType currencyType;
 
     public CreateInvoiceDTO(

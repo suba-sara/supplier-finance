@@ -49,9 +49,9 @@
           <div class="long-input">
             <mat-form-field appearance="outline">
               <mat-label>Invoice Amount</mat-label>
-              <input formControlName="invoiceAmount" matInput type="number" />
+              <input formControlName="amount" matInput type="number"/>
               <mat-error
-                *ngIf="uploadInvoiceForm.get('invoiceAmount')?.getError('min')"
+                *ngIf="uploadInvoiceForm.get('amount')?.getError('min')"
               >
                 Invoice amount cannot be less than 0
               </mat-error>
@@ -60,7 +60,7 @@
           <div>
             <mat-form-field>
               <mat-label>Currency</mat-label>
-              <mat-select formControlName="currency">
+              <mat-select formControlName="currencyType">
                 <mat-option value="USD">USD</mat-option>
                 <mat-option value="GBP">GBP</mat-option>
                 <mat-option value="EUR">EUR</mat-option>
