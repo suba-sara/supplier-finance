@@ -39,13 +39,15 @@
     <table [dataSource]="dataSource" mat-table>
       <ng-container matColumnDef="supplierId">
         <th *matHeaderCellDef mat-header-cell>Supplier Code</th>
-        <td *matCellDef="let element" mat-cell>{{ element.supplierId }}</td>
+        <td *matCellDef="let element" mat-cell>
+          {{ element.supplier.supplierId }}
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="invoiceDate">
         <th *matHeaderCellDef mat-header-cell>Invoice Date</th>
         <td *matCellDef="let element" mat-cell>
-          {{ formatDate(element.invoiceDate) }}
+          {{ element.invoiceDate | DateFormat }}
         </td>
       </ng-container>
 

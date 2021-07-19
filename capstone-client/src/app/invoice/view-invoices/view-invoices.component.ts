@@ -66,10 +66,6 @@ export class ViewInvoicesComponent implements OnInit {
     });
   }
 
-  formatDate(date: Date): string {
-    return dayjs(date).format('DD-MMM-YYYY');
-  }
-
   invoiceAge(date: Date): string {
     const formatOutput = (value: number, unit: string) =>
       value === 1 ? `${value} ${unit}` : `${value} ${unit}s`;
