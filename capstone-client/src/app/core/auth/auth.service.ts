@@ -6,6 +6,8 @@ import { map } from 'rxjs/operators';
 
 const { API_PATH } = environment;
 
+export type UserType = 'CLIENT' | 'SUPPLIER' | 'BANK';
+
 export type SignInData = {
   userId: string;
   password: string;
@@ -14,12 +16,12 @@ export type SignInData = {
 export type SignInResponse = {
   jwt: string;
   username: string;
-  userType: string;
+  userType: UserType;
 };
 
 export type ApplicationUser = {
   username: string;
-  userType: string;
+  userType: UserType;
 };
 
 @Injectable({

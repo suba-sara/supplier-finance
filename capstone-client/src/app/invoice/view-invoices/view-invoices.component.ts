@@ -15,7 +15,6 @@ import {
   styleUrls: ['./view-invoices.component.scss'],
 })
 export class ViewInvoicesComponent implements OnInit {
-  viewInvoicesService: ViewInvoicesService;
   dataSource: Invoice[] = [];
   displayedColumns: string[] = [
     'supplierId',
@@ -30,9 +29,9 @@ export class ViewInvoicesComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    viewInvoicesService: ViewInvoicesService
+    public viewInvoicesService: ViewInvoicesService
   ) {
-    this.viewInvoicesService = viewInvoicesService;
+    console.log(this.viewInvoicesService.userTypeApiPath);
     this.viewInvoicesService.$filters.subscribe((val) => console.log(val));
     this.viewInvoicesService.$data.subscribe((sd) => (this.dataSource = sd));
   }
