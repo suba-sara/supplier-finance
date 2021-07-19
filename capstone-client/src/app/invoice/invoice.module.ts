@@ -16,6 +16,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { ViewSingleInvoiceComponent } from './view-single-invoice/view-single-invoice.component';
 import { InvoiceNumberFormatPipe } from './pipes/invoice-number-format.pipe';
 import { DateFormatPipe } from './pipes/date-format.pipe';
+import { InvoiceAgePipe } from './pipes/invoice-age.pipe';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { DateFormatPipe } from './pipes/date-format.pipe';
     ViewSingleInvoiceComponent,
     InvoiceNumberFormatPipe,
     DateFormatPipe,
+    InvoiceAgePipe,
   ],
   imports: [
     CommonModule,

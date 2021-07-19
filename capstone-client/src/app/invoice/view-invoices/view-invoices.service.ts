@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { InvoicePageType } from '../invoice.page.type';
 import { environment } from '../../../environments/environment';
 import { AuthService } from '../../core/auth/auth.service';
+import { skip } from 'rxjs/operators';
 
 const { API_PATH } = environment;
 
@@ -19,8 +20,9 @@ export type InvoiceFiltersOptional = {
   status?: string;
 };
 
-export type dataSD = {
-  clientId: string;
+export type InvoiceFetchResults = {
+  invoices: Invoice[];
+  total: number;
 };
 
 export type InvoiceFilters = InvoiceFiltersOptional & {
@@ -34,19 +36,15 @@ export type InvoiceFilters = InvoiceFiltersOptional & {
 export class ViewInvoicesService {
   userTypeApiPath?: string;
 
-  $dataSD: dataSD = {
-    clientId: 'client',
-  };
   $filters = new BehaviorSubject<InvoiceFilters>({
     pageSize: 10,
     pageIndex: 0,
   });
 
-  $data = new BehaviorSubject<Invoice[]>([]);
+  $data = new BehaviorSubject<InvoiceFetchResults>({ invoices: [], total: 0 });
 
   constructor(private authService: AuthService, private http: HttpClient) {
     authService.user$.subscribe((user) => {
-      console.log(user);
       if (!user) {
         this.userTypeApiPath = undefined;
       } else {
@@ -66,11 +64,33 @@ export class ViewInvoicesService {
       }
     });
 
-    this.http
-      .get<InvoicePageType>(`${API_PATH}/invoices/retrieve/client`)
-      .subscribe((inData: InvoicePageType) => {
-        console.log(inData.content);
-        this.$data.next(inData.content);
+    /*
+     fetch invoices on filter change
+     initial value will be skipped because this will be updated from the
+     ngOnInit function in the component
+     */
+    this.$filters.pipe(skip(1)).subscribe((filters) => {
+      const params: { [p: string]: string | string[] } = {};
+      Object.keys(filters).forEach((key) => {
+        const value = filters[key as keyof InvoiceFilters];
+        if (value || value === 0) {
+          params[key] = value.toString();
+        }
       });
+      this.http
+        .get<InvoicePageType>(
+          `${API_PATH}/invoices/retrieve/${this.userTypeApiPath}`,
+          {
+            params,
+          }
+        )
+        .subscribe((inData: InvoicePageType) => {
+          console.log(inData);
+          this.$data.next({
+            invoices: inData.content,
+            total: inData.totalElements,
+          });
+        });
+    });
   }
 }
