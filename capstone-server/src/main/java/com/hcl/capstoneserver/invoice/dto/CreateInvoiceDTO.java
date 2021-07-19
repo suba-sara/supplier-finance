@@ -1,7 +1,6 @@
 package com.hcl.capstoneserver.invoice.dto;
 
 import com.hcl.capstoneserver.invoice.CurrencyType;
-import com.hcl.capstoneserver.invoice.InvoiceStatus;
 import org.hibernate.validator.constraints.Currency;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -18,8 +17,6 @@ public class CreateInvoiceDTO {
     @NotBlank(message = "amount is required")
     @Currency(value = "0", message = "amount is must be greater than")
     private Double amount;
-    @NotBlank(message = "status is required")
-    private InvoiceStatus status;
     @NotBlank(message = "currency is required")
     private CurrencyType currencyType;
 
@@ -34,7 +31,6 @@ public class CreateInvoiceDTO {
         this.invoiceNumber = invoiceNumber;
         this.invoiceDate = invoiceDate;
         this.amount = amount;
-        this.status = InvoiceStatus.UPLOADED;
         this.currencyType = currencyType;
     }
 
@@ -70,9 +66,6 @@ public class CreateInvoiceDTO {
         this.amount = amount;
     }
 
-    public InvoiceStatus getStatus() {
-        return status;
-    }
 
     public CurrencyType getCurrencyType() {
         return currencyType;
