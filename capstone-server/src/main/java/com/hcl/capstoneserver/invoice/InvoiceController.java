@@ -24,7 +24,6 @@ public class InvoiceController {
             @Valid @RequestBody CreateInvoiceDTO dto,
             Principal principal
     ) {
-        System.out.println("here");
         return new ResponseEntity<>(invoiceService.createInvoice(dto, principal.getName()), HttpStatus.CREATED);
     }
 

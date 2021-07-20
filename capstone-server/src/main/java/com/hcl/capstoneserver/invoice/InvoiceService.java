@@ -127,6 +127,7 @@ public class InvoiceService {
                 client,
                 supplier,
                 dto.getInvoiceNumber(),
+                LocalDate.now(),
                 dto.getInvoiceDate(),
                 dto.getAmount(),
                 InvoiceStatus.UPLOADED,
