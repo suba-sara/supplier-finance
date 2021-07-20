@@ -6,6 +6,7 @@ import {
   InvoiceFiltersOptional,
   ViewInvoicesService,
 } from './view-invoices.service';
+import { Sort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-view-invoices',
@@ -14,11 +15,13 @@ import {
 })
 export class ViewInvoicesComponent implements OnInit {
   displayedColumns: string[] = [
-    'supplierId',
-    'invoiceDate',
-    'amount',
+    'invoiceId',
     'invoiceNumber',
+    'uploadedDate',
+    'invoiceDate',
     'invoiceAge',
+    'supplierId',
+    'amount',
     'invoiceStatus',
     'options',
   ];
@@ -44,6 +47,8 @@ export class ViewInvoicesComponent implements OnInit {
         : undefined;
       const ageing = params['ageing'];
       const status = params['status'];
+      const sortBy = params['sortBy'] || 'uploadedDate';
+      const sortDirection = params['sortDirection'] || 'DESC';
 
       this.viewInvoicesService.$filters.next({
         pageSize,
@@ -54,6 +59,8 @@ export class ViewInvoicesComponent implements OnInit {
         dateTo,
         ageing,
         status,
+        sortBy,
+        sortDirection,
       });
     });
   }
@@ -90,4 +97,12 @@ export class ViewInvoicesComponent implements OnInit {
       queryParamsHandling: 'merge',
     });
   };
+
+  handleSortChange(e: Sort): void {
+    this._changeQuery({
+      sortBy: e.active,
+      sortDirection: e.direction.toUpperCase(),
+      pageIndex: 0,
+    });
+  }
 }

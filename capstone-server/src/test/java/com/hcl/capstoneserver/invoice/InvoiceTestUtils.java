@@ -53,6 +53,7 @@ public class InvoiceTestUtils {
                 userService.fetchClientDataByClientId(client.get(0).getClientId()),
                 userService.fetchSupplierDataBySupplierId(supplier.get(0).getSupplierId()),
                 "999999999",
+                LocalDate.parse("2021-04-01"),
                 LocalDate.parse("2021-05-01"),
                 40000.0,
                 InvoiceStatus.UPLOADED,

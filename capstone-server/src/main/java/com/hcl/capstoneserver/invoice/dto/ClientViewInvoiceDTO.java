@@ -10,6 +10,7 @@ public class ClientViewInvoiceDTO {
     private Integer invoiceId;
     private SupplierDataViewDTO supplier;
     private String invoiceNumber;
+    private LocalDate uploadedDate;
     private LocalDate invoiceDate;
     private Double amount;
     private InvoiceStatus status;
@@ -22,6 +23,7 @@ public class ClientViewInvoiceDTO {
             Integer invoiceId,
             SupplierDataViewDTO supplier,
             String invoiceNumber,
+            LocalDate uploadedDate,
             LocalDate invoiceDate,
             Double amount,
             InvoiceStatus status,
@@ -30,6 +32,7 @@ public class ClientViewInvoiceDTO {
         this.invoiceId = invoiceId;
         this.supplier = supplier;
         this.invoiceNumber = invoiceNumber;
+        this.uploadedDate = uploadedDate;
         this.invoiceDate = invoiceDate;
         this.amount = amount;
         this.status = status;
@@ -90,5 +93,13 @@ public class ClientViewInvoiceDTO {
 
     public void setCurrencyType(CurrencyType currencyType) {
         this.currencyType = currencyType;
+    }
+
+    public LocalDate getUploadedDate() {
+        return uploadedDate;
+    }
+
+    public void setUploadedDate(LocalDate uploadedDate) {
+        this.uploadedDate = uploadedDate;
     }
 }

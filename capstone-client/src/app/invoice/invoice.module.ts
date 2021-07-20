@@ -17,6 +17,7 @@ import { ViewSingleInvoiceComponent } from './view-single-invoice/view-single-in
 import { InvoiceNumberFormatPipe } from './pipes/invoice-number-format.pipe';
 import { DateFormatPipe } from './pipes/date-format.pipe';
 import { InvoiceAgePipe } from './pipes/invoice-age.pipe';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { InvoiceAgePipe } from './pipes/invoice-age.pipe';
     MatTableModule,
     MatTooltipModule,
     MatPaginatorModule,
+    MatSortModule,
   ],
 })
 export class InvoiceModule {}

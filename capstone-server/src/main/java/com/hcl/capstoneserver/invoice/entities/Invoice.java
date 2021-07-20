@@ -61,6 +61,7 @@ public class Invoice {
             Supplier supplier,
             UploadedFile file,
             String invoiceNumber,
+            LocalDate uploadedDate,
             LocalDate invoiceDate,
             Double amount,
             InvoiceStatus status,
@@ -70,6 +71,7 @@ public class Invoice {
         this.supplier = supplier;
         this.file = file;
         this.invoiceNumber = invoiceNumber;
+        this.invoiceDate = uploadedDate;
         this.invoiceDate = invoiceDate;
         this.amount = amount;
         this.status = status;

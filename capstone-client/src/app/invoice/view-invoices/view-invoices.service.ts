@@ -18,6 +18,8 @@ export type InvoiceFiltersOptional = {
   dateTo?: Date;
   ageing?: number;
   status?: string;
+  sortBy?: string;
+  sortDirection?: string;
 };
 
 export type InvoiceFetchResults = {
