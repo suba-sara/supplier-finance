@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from './shared/shared.module';
 import { ForbiddenComponent } from './forbidden/forbidden.component';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [AppComponent, ForbiddenComponent],
@@ -16,6 +17,7 @@ import { MatButtonModule } from '@angular/material/button';
     CoreModule,
     SharedModule,
     MatButtonModule,
+    MatSnackBarModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

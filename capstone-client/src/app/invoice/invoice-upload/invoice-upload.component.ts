@@ -8,6 +8,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { InvoiceUploadService } from './invoice-upload.service';
+import { Router } from '@angular/router';
+import { SnackbarService } from '../../util/snakbar.service';
 
 @Component({
   selector: 'app-invoice-upload',
@@ -48,9 +50,14 @@ export class InvoiceUploadComponent implements OnInit {
     }),
     currency: new FormControl('USD', { validators: [Validators.required] }),
     invoiceFile: new FormControl('', { validators: [Validators.required] }),
+    invoiceFileSrc: new FormControl('', { validators: [Validators.required] }),
   });
 
-  constructor(private invoiceUploadService: InvoiceUploadService) {}
+  constructor(
+    private invoiceUploadService: InvoiceUploadService,
+    private snackBarService: SnackbarService,
+    private _router: Router
+  ) {}
 
   ngOnInit(): void {
     this.invoiceUploadService.fetchMyClientId().subscribe(
@@ -90,7 +97,11 @@ export class InvoiceUploadComponent implements OnInit {
   validateFile(event: Event): void {
     const target = event.target as HTMLInputElement;
     if (target.files) {
-      const { name, size } = target.files[0];
+      const file = target.files[0];
+      const { name, size } = file;
+      this.uploadInvoiceForm.patchValue({
+        invoiceFileSrc: file,
+      });
       this.selectedFile = {
         fileName: name,
         size: Math.floor(size / 1024),
@@ -106,21 +117,26 @@ export class InvoiceUploadComponent implements OnInit {
     }
   }
 
-  createInvoice(): void {
+  async createInvoice(): Promise<void> {
     this.uploadInvoiceForm.markAllAsTouched();
-    console.log('😂');
+    console.log(this.uploadInvoiceForm.get('invoiceFile')?.value);
 
     if (!this.uploadInvoiceForm.errors) {
-      this.invoiceUploadService
-        .uploadInvoice(this.uploadInvoiceForm.value)
-        .subscribe(
-          (res) => {
-            console.log(res);
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
+      await this.invoiceUploadService
+        .createInvoice(this.uploadInvoiceForm.value)
+        .then((res) => {
+          this.snackBarService.snackBar?.open(
+            'Invoice Uploaded Successfully',
+            undefined,
+            {
+              duration: 2000,
+            }
+          );
+          this._router.navigate([
+            `invoice/view-invoice/${res.invoice.invoiceId}`,
+          ]);
+        })
+        .catch((e) => console.log(e));
     }
   }
 }

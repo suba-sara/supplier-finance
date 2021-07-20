@@ -123,7 +123,7 @@ public class InvoiceService {
         _checkInvoiceDate(dto.getInvoiceDate(), UserType.CLIENT);
 
         //create invoice
-        Invoice invoice = invoiceRepository.save(new Invoice(
+        Invoice invoice = new Invoice(
                 client,
                 supplier,
                 dto.getInvoiceNumber(),
@@ -131,10 +131,18 @@ public class InvoiceService {
                 dto.getAmount(),
                 dto.getStatus(),
                 dto.getCurrencyType()
-        ));
+        );
+
+        //create invoice
+        invoiceRepository.save(invoice);
 
         //create invoice file
-        UploadedFile initialFile = uploadedFileService.createInitialFile();
+        UploadedFile initialFile = uploadedFileService.createInitialFile(String.format(
+                "invoice-%s-%s",
+                invoice.getInvoiceId(),
+                invoice.getInvoiceNumber()
+        ));
+
 
         return new InvoiceCreatedDTO(
                 initialFile.getId(),

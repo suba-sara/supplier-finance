@@ -54,7 +54,6 @@ public class Invoice {
     }
 
     public Invoice(
-            Integer invoiceId,
             Client client,
             Supplier supplier,
             UploadedFile file,
@@ -64,7 +63,6 @@ public class Invoice {
             InvoiceStatus status,
             CurrencyType currencyType
     ) {
-        this.invoiceId = invoiceId;
         this.client = client;
         this.supplier = supplier;
         this.file = file;

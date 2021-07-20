@@ -22,9 +22,10 @@ public class UploadedFileService {
     @Autowired
     private FileStorageService fileStorageService;
 
-    public UploadedFile createInitialFile() {
+    public UploadedFile createInitialFile(String fileName) {
         UploadedFile uploadedFile = new UploadedFile();
         uploadedFile.setUploaded(false);
+        uploadedFile.setUri(fileName);
         uploadedFile.setToken(tokenGenerator.generateToken());
 
         uploadedFileRepository.save(uploadedFile);
@@ -40,12 +41,20 @@ public class UploadedFileService {
         }
 
         //check token
-        if (uploadedFileObject.get().getToken().isEmpty() || !uploadedFileObject.get().getToken().equals(token)) {
+        if (uploadedFileObject.get().getToken() == null || !uploadedFileObject.get().getToken().equals(token)) {
             throw new UploadedFileInvalidTokenException();
         }
 
+        String[] splittedName = file.getOriginalFilename().split("\\.");
         // save file
-        fileStorageService.save(file, id.toString());
+        fileStorageService.save(
+                file,
+                String.format(
+                        "%s.%s",
+                        uploadedFileObject.get().getUri(),
+                        splittedName[splittedName.length - 1]
+                )
+        );
 
         //update database
         uploadedFileObject.get().setToken("");
