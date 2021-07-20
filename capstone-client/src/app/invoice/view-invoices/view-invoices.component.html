@@ -36,40 +36,66 @@
   </div>
 
   <div class="table-container">
-    <table [dataSource]="dataSource" mat-table>
+    <table
+      [dataSource]="(viewInvoicesService.$data | async)?.invoices || []"
+      mat-table
+      (matSortChange)="handleSortChange($event)"
+      matSort
+    >
+      <ng-container matColumnDef="invoiceId">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>#</th>
+        <td *matCellDef="let element" mat-cell>
+          {{ element.invoiceId }}
+        </td>
+      </ng-container>
+
       <ng-container matColumnDef="supplierId">
-        <th *matHeaderCellDef mat-header-cell>Supplier Code</th>
-        <td *matCellDef="let element" mat-cell>{{ element.supplierId }}</td>
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>Supplier Code</th>
+        <td *matCellDef="let element" mat-cell>
+          {{ element.supplier.supplierId }}
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="invoiceDate">
-        <th *matHeaderCellDef mat-header-cell>Invoice Date</th>
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>Invoice Date</th>
         <td *matCellDef="let element" mat-cell>
-          {{ formatDate(element.invoiceDate) }}
+          {{ element.invoiceDate | DateFormat }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="uploadedDate">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>Uploaded Date</th>
+        <td *matCellDef="let element" mat-cell>
+          {{ element.uploadedDate | DateFormat }}
         </td>
       </ng-container>
 
       <ng-container matColumnDef="amount">
-        <th *matHeaderCellDef mat-header-cell>Invoice Amount</th>
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>
+          Invoice Amount
+        </th>
         <td *matCellDef="let element" mat-cell>
           {{ element.amount }} {{ element.currencyType }}
         </td>
       </ng-container>
 
       <ng-container matColumnDef="invoiceNumber">
-        <th *matHeaderCellDef mat-header-cell>Invoice Number</th>
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>
+          Invoice Number
+        </th>
         <td *matCellDef="let element" mat-cell>{{ element.invoiceNumber }}</td>
       </ng-container>
 
       <ng-container matColumnDef="invoiceAge">
         <th *matHeaderCellDef mat-header-cell>Invoice Ageing</th>
         <td *matCellDef="let element" mat-cell>
-          {{ invoiceAge(element.invoiceDate) }}
+          {{ element.invoiceDate | InvoiceAge }}
         </td>
       </ng-container>
 
       <ng-container matColumnDef="invoiceStatus">
-        <th *matHeaderCellDef mat-header-cell>Invoice Status</th>
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>
+          Invoice Status
+        </th>
         <td *matCellDef="let element" mat-cell>{{ element.status }}</td>
       </ng-container>
 
@@ -108,10 +134,11 @@
     </table>
     <mat-paginator
       (page)="handlePageChange($event)"
-      [length]="dataSource.length"
+      [length]="(viewInvoicesService.$data | async)?.total"
       [pageSizeOptions]="[10, 25, 50]"
-      [pageSize]="viewInvoicesService.$filters.value.pageSize"
+      [pageIndex]="(viewInvoicesService.$filters | async)?.pageIndex"
       [showFirstLastButtons]="true"
+      [pageSize]="(viewInvoicesService.$filters | async)?.pageSize || 10"
     >
     </mat-paginator>
   </div>

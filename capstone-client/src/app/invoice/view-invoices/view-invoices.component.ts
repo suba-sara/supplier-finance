@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Invoice } from '../invoice.types';
-import * as dayjs from 'dayjs';
 import { Dayjs } from 'dayjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PageEvent } from '@angular/material/paginator';
@@ -8,6 +6,7 @@ import {
   InvoiceFiltersOptional,
   ViewInvoicesService,
 } from './view-invoices.service';
+import { Sort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-view-invoices',
@@ -15,14 +14,14 @@ import {
   styleUrls: ['./view-invoices.component.scss'],
 })
 export class ViewInvoicesComponent implements OnInit {
-  viewInvoicesService: ViewInvoicesService;
-  dataSource: Invoice[] = [];
   displayedColumns: string[] = [
-    'supplierId',
-    'invoiceDate',
-    'amount',
+    'invoiceId',
     'invoiceNumber',
+    'uploadedDate',
+    'invoiceDate',
     'invoiceAge',
+    'supplierId',
+    'amount',
     'invoiceStatus',
     'options',
   ];
@@ -30,12 +29,8 @@ export class ViewInvoicesComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    viewInvoicesService: ViewInvoicesService
-  ) {
-    this.viewInvoicesService = viewInvoicesService;
-    this.viewInvoicesService.$filters.subscribe((val) => console.log(val));
-    this.viewInvoicesService.$data.subscribe((sd) => (this.dataSource = sd));
-  }
+    public viewInvoicesService: ViewInvoicesService
+  ) {}
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
@@ -52,6 +47,8 @@ export class ViewInvoicesComponent implements OnInit {
         : undefined;
       const ageing = params['ageing'];
       const status = params['status'];
+      const sortBy = params['sortBy'] || 'uploadedDate';
+      const sortDirection = params['sortDirection'] || 'DESC';
 
       this.viewInvoicesService.$filters.next({
         pageSize,
@@ -62,32 +59,10 @@ export class ViewInvoicesComponent implements OnInit {
         dateTo,
         ageing,
         status,
+        sortBy,
+        sortDirection,
       });
     });
-  }
-
-  formatDate(date: Date): string {
-    return dayjs(date).format('DD-MMM-YYYY');
-  }
-
-  invoiceAge(date: Date): string {
-    const formatOutput = (value: number, unit: string) =>
-      value === 1 ? `${value} ${unit}` : `${value} ${unit}s`;
-
-    const today = dayjs();
-
-    const diffYears = dayjs(date).diff(today, 'years');
-    if (diffYears) {
-      return formatOutput(diffYears, 'year');
-    }
-
-    const diffMonths = dayjs(date).diff(today, 'months');
-    if (diffMonths) {
-      return formatOutput(diffMonths, 'month');
-    }
-
-    const diffDays = dayjs(date).diff(today, 'days');
-    return formatOutput(diffDays, 'day');
   }
 
   filterInputChange = (e: any) => {
@@ -122,4 +97,12 @@ export class ViewInvoicesComponent implements OnInit {
       queryParamsHandling: 'merge',
     });
   };
+
+  handleSortChange(e: Sort): void {
+    this._changeQuery({
+      sortBy: e.active,
+      sortDirection: e.direction.toUpperCase(),
+      pageIndex: 0,
+    });
+  }
 }

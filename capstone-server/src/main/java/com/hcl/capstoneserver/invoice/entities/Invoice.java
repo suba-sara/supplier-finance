@@ -26,6 +26,7 @@ public class Invoice {
     private UploadedFile file;
 
     private String invoiceNumber;
+    private LocalDate uploadedDate;
     private LocalDate invoiceDate;
     private Double amount;
     private InvoiceStatus status;
@@ -39,6 +40,7 @@ public class Invoice {
             Client client,
             Supplier supplier,
             String invoiceNumber,
+            LocalDate uploadedDate,
             LocalDate invoiceDate,
             Double amount,
             InvoiceStatus status,
@@ -47,6 +49,7 @@ public class Invoice {
         this.client = client;
         this.supplier = supplier;
         this.invoiceNumber = invoiceNumber;
+        this.uploadedDate = uploadedDate;
         this.invoiceDate = invoiceDate;
         this.amount = amount;
         this.status = status;
@@ -58,6 +61,7 @@ public class Invoice {
             Supplier supplier,
             UploadedFile file,
             String invoiceNumber,
+            LocalDate uploadedDate,
             LocalDate invoiceDate,
             Double amount,
             InvoiceStatus status,
@@ -67,6 +71,7 @@ public class Invoice {
         this.supplier = supplier;
         this.file = file;
         this.invoiceNumber = invoiceNumber;
+        this.invoiceDate = uploadedDate;
         this.invoiceDate = invoiceDate;
         this.amount = amount;
         this.status = status;
@@ -143,6 +148,14 @@ public class Invoice {
 
     public void setFile(UploadedFile file) {
         this.file = file;
+    }
+
+    public LocalDate getUploadedDate() {
+        return uploadedDate;
+    }
+
+    public void setUploadedDate(LocalDate uploadedDate) {
+        this.uploadedDate = uploadedDate;
     }
 
     @Override
