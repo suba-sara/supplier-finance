@@ -20,7 +20,7 @@ public class InvoiceController {
         this.invoiceService = invoiceService;
     }
 
-    @GetMapping("/api/invoice/{id}")
+    @GetMapping("/api/invoices/{id}")
     public ResponseEntity<ViewInvoiceDTO> getInvoice(
             @RequestParam Integer id,
             Principal principal
