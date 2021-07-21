@@ -2,8 +2,8 @@ package com.hcl.capstoneserver.invoice.dto;
 
 import com.hcl.capstoneserver.invoice.CurrencyType;
 import com.hcl.capstoneserver.invoice.InvoiceStatus;
-import com.hcl.capstoneserver.user.entities.Client;
-import com.hcl.capstoneserver.user.entities.Supplier;
+import com.hcl.capstoneserver.user.dto.ViewClientNonSensitive;
+import com.hcl.capstoneserver.user.dto.ViewSupplierNonSensitive;
 
 import java.time.LocalDate;
 
@@ -11,8 +11,8 @@ public class ViewInvoiceDTO {
     private final String fileUriBase = "/api/invoice/file/";
 
     private Integer invoiceId;
-    private Client client;
-    private Supplier supplier;
+    private ViewClientNonSensitive client;
+    private ViewSupplierNonSensitive supplier;
     private String file;
     private String invoiceNumber;
     private LocalDate uploadedDate;
@@ -22,29 +22,6 @@ public class ViewInvoiceDTO {
     private CurrencyType currencyType;
 
     public ViewInvoiceDTO() {
-    }
-
-    public ViewInvoiceDTO(
-            Integer invoiceId,
-            Client client,
-            Supplier supplier,
-            String invoiceNumber,
-            LocalDate uploadedDate,
-            LocalDate invoiceDate,
-            Double amount,
-            InvoiceStatus status,
-            CurrencyType currencyType
-    ) {
-        this.invoiceId = invoiceId;
-        this.client = client;
-        this.supplier = supplier;
-        this.invoiceNumber = invoiceNumber;
-        this.uploadedDate = uploadedDate;
-        this.invoiceDate = invoiceDate;
-        this.amount = amount;
-        this.status = status;
-        this.currencyType = currencyType;
-        this.file = fileUriBase + invoiceId;
     }
 
 
@@ -59,19 +36,19 @@ public class ViewInvoiceDTO {
         this.file = fileUriBase + invoiceId;
     }
 
-    public Client getClient() {
+    public ViewClientNonSensitive getClient() {
         return client;
     }
 
-    public void setClient(Client client) {
+    public void setClient(ViewClientNonSensitive client) {
         this.client = client;
     }
 
-    public Supplier getSupplier() {
+    public ViewSupplierNonSensitive getSupplier() {
         return supplier;
     }
 
-    public void setSupplier(Supplier supplier) {
+    public void setSupplier(ViewSupplierNonSensitive supplier) {
         this.supplier = supplier;
     }
 
