@@ -162,6 +162,11 @@ public class InvoiceService {
         );
     }
 
+    public ViewInvoiceDTO getInvoice(Integer invoiceId, String userId) {
+        Invoice invoice = _checkInvoiceOwnershipAndFetchInvoice(userId, invoiceId, "read");
+        return mapper.map(invoice, ViewInvoiceDTO.class);
+    }
+
     // This update method for client
     public ClientViewInvoiceDTO updateInvoice(UpdateInvoiceDTO dto, String userId) {
         Invoice invoice = _checkInvoiceOwnershipAndFetchInvoice(userId, dto.getInvoiceId(), "update");
