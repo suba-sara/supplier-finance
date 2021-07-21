@@ -11,7 +11,7 @@ public class TokenGenerator {
     private static final Base64.Encoder base64Encoder = Base64.getUrlEncoder(); //threadsafe
 
     public String generateToken() {
-        byte[] randomBytes = new byte[24];
+        byte[] randomBytes = new byte[64];
         secureRandom.nextBytes(randomBytes);
         return base64Encoder.encodeToString(randomBytes);
     }

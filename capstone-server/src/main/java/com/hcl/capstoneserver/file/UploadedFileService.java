@@ -6,6 +6,7 @@ import com.hcl.capstoneserver.file.exceptions.UploadedFileNotFoundException;
 import com.hcl.capstoneserver.file.repositories.UploadedFileRepository;
 import com.hcl.capstoneserver.util.TokenGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,7 +33,7 @@ public class UploadedFileService {
         return uploadedFile;
     }
 
-    public String uploadFile(Integer id, String token, MultipartFile file) {
+    private UploadedFile _fetchAndCheckExists(Integer id) {
         Optional<UploadedFile> uploadedFileObject = uploadedFileRepository.findById(id);
 
         // check if file exists
@@ -40,29 +41,56 @@ public class UploadedFileService {
             throw new UploadedFileNotFoundException(id);
         }
 
+        return uploadedFileObject.get();
+    }
+
+    public String generateDownloadToken(Integer fileId) {
+        UploadedFile file = _fetchAndCheckExists(fileId);
+        String token = tokenGenerator.generateToken();
+
+        file.setDownloadToken(token);
+        uploadedFileRepository.save(file);
+        return token;
+    }
+
+    public String uploadInvoiceFile(Integer id, String token, MultipartFile file) {
+        UploadedFile uploadedFile = _fetchAndCheckExists(id);
+
         //check token
-        if (uploadedFileObject.get().getToken() == null || !uploadedFileObject.get().getToken().equals(token)) {
+        if (uploadedFile.getToken() == null || !uploadedFile.getToken().equals(token)) {
             throw new UploadedFileInvalidTokenException();
         }
 
         String[] splittedName = file.getOriginalFilename().split("\\.");
+        String fileUri = String.format(
+                "%s.%s",
+                uploadedFile.getUri(),
+                splittedName[splittedName.length - 1]
+        );
+
         // save file
         fileStorageService.save(
                 file,
-                String.format(
-                        "%s.%s",
-                        uploadedFileObject.get().getUri(),
-                        splittedName[splittedName.length - 1]
-                )
+                fileUri
         );
 
         //update database
-        uploadedFileObject.get().setToken("");
-        uploadedFileObject.get().setUploaded(true);
-        uploadedFileObject.get().setUri(id.toString());
-        uploadedFileRepository.save(uploadedFileObject.get());
+        uploadedFile.setToken(null);
+        uploadedFile.setUploaded(true);
+        uploadedFile.setUri(fileUri);
+        uploadedFileRepository.save(uploadedFile);
 
 
-        return uploadedFileObject.get().getUri();
+        return uploadedFile.getUri();
+    }
+
+    public Resource getFile(Integer fileId, String token) {
+        UploadedFile file = _fetchAndCheckExists(fileId);
+
+        if (file.getDownloadToken() == null || !file.getDownloadToken().equals(token)) {
+            throw new UploadedFileInvalidTokenException();
+        }
+
+        return fileStorageService.load(file.getUri());
     }
 }

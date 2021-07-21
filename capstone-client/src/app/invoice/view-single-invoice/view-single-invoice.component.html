@@ -4,35 +4,39 @@
       <div class="main-header-container">
         <h1>INVOICE</h1>
         <div class="invoice-number-container">
-          <h1>#{{ dataSource[0].invoiceNumber | invoiceNumberFormat }}</h1>
+          <h1>#{{ invoice?.invoiceNumber }}</h1>
         </div>
       </div>
-      <h3 class="date">{{ dataSource[0].invoiceDate | date: "dd/MM/yyyy" }}</h3>
+      <h3 class="date">{{ invoice?.invoiceDate | date: "dd/MM/yyyy" }}</h3>
     </div>
-
+    <div *ngIf="invoice" class="download-button-container">
+      <a href="{{ SERVER }}{{ invoice.fileUrl }}">
+        <button color="primary" mat-raised-button>Download File</button>
+      </a>
+    </div>
     <div class="table-container">
       <div class="left-container">
         <h1>Customer Details:</h1>
-        <h2>Id: {{ dataSource[0].client.clientId }}</h2>
-        <h2>Name: {{ dataSource[0].client.name }}</h2>
+        <h2>Id: {{ invoice?.client?.clientId }}</h2>
+        <h2>Name: {{ invoice?.client?.name }}</h2>
       </div>
       <div class="right-container">
         <h1>Supplier Details:</h1>
-        <h2>Id: {{ dataSource[0].supplier.supplierId }}</h2>
-        <h2>Name: {{ dataSource[0].supplier.name }}</h2>
+        <h2>Id: {{ invoice?.supplier?.supplierId }}</h2>
+        <h2>Name: {{ invoice?.supplier?.name }}</h2>
       </div>
     </div>
 
     <div class="">
-      <h1>Status: {{ dataSource[0].status }}</h1>
+      <h1>Status: {{ invoice?.status }}</h1>
       <h1>
         Amount:
-        {{ dataSource[0].amount | currency: dataSource[0].currencyType }}
+        {{ invoice?.amount | currency: invoice?.currencyType }}
       </h1>
     </div>
 
     <div class="button-container">
-      <button color="primary" mat-raised-button>Back</button>
+      <button color="primary" mat-stroked-button>Back</button>
     </div>
   </div>
 </div>

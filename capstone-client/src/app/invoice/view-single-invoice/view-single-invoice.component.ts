@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ViewSingleInvoicesService } from './view-single-invoice.service';
 import { Invoice } from '../invoice.types';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-view-single-invoice',
@@ -9,17 +10,8 @@ import { Invoice } from '../invoice.types';
   styleUrls: ['./view-single-invoice.component.scss'],
 })
 export class ViewSingleInvoiceComponent implements OnInit {
-  dataSource: Invoice[] = [];
-  displayedColumns: string[] = [
-    'supplierId',
-    'invoiceDate',
-    'amount',
-    'invoiceId',
-    'invoiceNumber',
-    'invoiceAge',
-    'invoiceStatus',
-    'options',
-  ];
+  SERVER = environment.SERVER;
+  invoice?: Invoice;
 
   constructor(
     private router: Router,
@@ -29,7 +21,7 @@ export class ViewSingleInvoiceComponent implements OnInit {
     const invoiceId = this.route.snapshot.params['id'];
     this.viewSingleInvoicesService
       .getInvoiceById(invoiceId)
-      ?.then((res) => (this.dataSource = res.content));
+      .then((invoice) => (this.invoice = invoice));
   }
 
   ngOnInit(): void {}

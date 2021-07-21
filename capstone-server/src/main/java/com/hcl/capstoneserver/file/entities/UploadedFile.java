@@ -13,6 +13,7 @@ public class UploadedFile {
     private String uri;
     private boolean isUploaded = false;
     private String token;
+    private String downloadToken;
 
 
     public UploadedFile() {
@@ -24,11 +25,12 @@ public class UploadedFile {
         this.uri = uri;
     }
 
-    public UploadedFile(Integer id, String uri, boolean isUploaded, String token) {
+    public UploadedFile(Integer id, String uri, boolean isUploaded, String token, String downloadToken) {
         this.id = id;
         this.uri = uri;
         this.isUploaded = isUploaded;
         this.token = token;
+        this.downloadToken = downloadToken;
     }
 
     public Integer getId() {
@@ -61,5 +63,13 @@ public class UploadedFile {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getDownloadToken() {
+        return downloadToken;
+    }
+
+    public void setDownloadToken(String downloadToken) {
+        this.downloadToken = downloadToken;
     }
 }

@@ -50,11 +50,13 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
             .antMatchers("/").permitAll()
+            .antMatchers("/favicon.ico").permitAll()
             .antMatchers("/api/sign-in").permitAll()
             .antMatchers("/api/refresh-token").permitAll()
             .antMatchers("/api/sign-up").permitAll()
             .antMatchers("/api/auth/sign-up/client").permitAll()
             .antMatchers("/api/auth/sign-up/supplier").permitAll()
+            .antMatchers("/api/getFile/**").permitAll()
             .and()
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS);

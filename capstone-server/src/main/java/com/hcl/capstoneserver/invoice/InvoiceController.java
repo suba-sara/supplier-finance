@@ -19,6 +19,14 @@ public class InvoiceController {
         this.invoiceService = invoiceService;
     }
 
+    @GetMapping("/api/invoices/getById/{invoiceId}")
+    public ResponseEntity<ViewInvoiceDTO> getInvoice(
+            @PathVariable Integer invoiceId,
+            Principal principal
+    ) {
+        return new ResponseEntity<>(invoiceService.getInvoice(invoiceId, principal.getName()), HttpStatus.OK);
+    }
+
     @PostMapping("/api/invoices/create")
     public ResponseEntity<InvoiceCreatedDTO> createInvoice(
             @Valid @RequestBody CreateInvoiceDTO dto,
@@ -62,4 +70,5 @@ public class InvoiceController {
     ) {
         return invoiceService.getSupplierInvoice(dto, principal.getName());
     }
+
 }

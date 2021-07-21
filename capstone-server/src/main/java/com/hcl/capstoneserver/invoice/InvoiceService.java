@@ -29,6 +29,7 @@ public class InvoiceService {
     private final InvoiceCriteriaRepository invoiceCriteriaRepository;
     private final UploadedFileService uploadedFileService;
 
+
     /*
      * userId - current login user userId
      * */
@@ -144,12 +145,28 @@ public class InvoiceService {
                 invoice.getInvoiceNumber()
         ));
 
+        //save file id
+        invoice.setFile(initialFile);
+        invoiceRepository.save(invoice);
+
 
         return new InvoiceCreatedDTO(
                 initialFile.getId(),
                 initialFile.getToken(),
                 mapper.map(invoice, ClientViewInvoiceDTO.class)
         );
+    }
+
+    public ViewInvoiceDTO getInvoice(Integer invoiceId, String userId) {
+        Invoice invoice = _checkInvoiceOwnershipAndFetchInvoice(userId, invoiceId, "read");
+
+        // generate file download token
+        String token = uploadedFileService.generateDownloadToken(invoice.getFile().getId());
+
+        ViewInvoiceDTO invoiceDto = mapper.map(invoice, ViewInvoiceDTO.class);
+        invoiceDto.setFileUrlWithToken(invoice.getFile().getId(), token);
+
+        return invoiceDto;
     }
 
     // This update method for client
@@ -214,4 +231,5 @@ public class InvoiceService {
         dto.setSupplierId(userService.getSupplierId(userId));
         return _getInvoice(dto).map(invoice -> mapper.map(invoice, SupplierVIewInvoiceDTO.class));
     }
+
 }

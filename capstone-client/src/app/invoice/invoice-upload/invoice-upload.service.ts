@@ -49,7 +49,7 @@ export class InvoiceUploadService {
     formData.append('file', invoiceFileSrc);
 
     await this.http
-      .post<Invoice>(`${API_PATH}/files/upload/${res.fileId}`, formData)
+      .post<Invoice>(`${API_PATH}/files/invoice/upload/${res.fileId}`, formData)
       .toPromise();
     return res;
   }
