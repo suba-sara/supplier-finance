@@ -10,11 +10,9 @@
       <h3 class="date">{{ invoice?.invoiceDate | date: "dd/MM/yyyy" }}</h3>
     </div>
     <div *ngIf="invoice" class="download-button-container">
-      <a href="{{ SERVER }}{{ invoice.fileUrl }}"
-      >
+      <a href="{{ SERVER }}{{ invoice.fileUrl }}">
         <button color="primary" mat-raised-button>Download File</button>
-      </a
-      >
+      </a>
     </div>
     <div class="table-container">
       <div class="left-container">
