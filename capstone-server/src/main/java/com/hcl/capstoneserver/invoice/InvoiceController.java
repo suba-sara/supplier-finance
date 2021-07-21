@@ -20,12 +20,12 @@ public class InvoiceController {
         this.invoiceService = invoiceService;
     }
 
-    @GetMapping("/api/invoices/getById/{id}")
+    @GetMapping("/api/invoices/getById/{invoiceId}")
     public ResponseEntity<ViewInvoiceDTO> getInvoice(
-            @RequestParam Integer id,
+            @PathVariable Integer invoiceId,
             Principal principal
     ) {
-        return new ResponseEntity<>(invoiceService.getInvoice(id, principal.getName()), HttpStatus.OK);
+        return new ResponseEntity<>(invoiceService.getInvoice(invoiceId, principal.getName()), HttpStatus.OK);
     }
 
     @PostMapping("/api/invoices/create")
