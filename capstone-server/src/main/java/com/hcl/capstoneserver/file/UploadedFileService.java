@@ -32,7 +32,7 @@ public class UploadedFileService {
         return uploadedFile;
     }
 
-    public String uploadFile(Integer id, String token, MultipartFile file) {
+    public String uploadInvoiceFile(Integer id, String token, MultipartFile file) {
         Optional<UploadedFile> uploadedFileObject = uploadedFileRepository.findById(id);
 
         // check if file exists
@@ -46,23 +46,26 @@ public class UploadedFileService {
         }
 
         String[] splittedName = file.getOriginalFilename().split("\\.");
+        String fileUri = String.format(
+                "%s.%s",
+                uploadedFileObject.get().getUri(),
+                splittedName[splittedName.length - 1]
+        );
+
         // save file
         fileStorageService.save(
                 file,
-                String.format(
-                        "%s.%s",
-                        uploadedFileObject.get().getUri(),
-                        splittedName[splittedName.length - 1]
-                )
+                fileUri
         );
 
         //update database
-        uploadedFileObject.get().setToken("");
+        uploadedFileObject.get().setToken(null);
         uploadedFileObject.get().setUploaded(true);
-        uploadedFileObject.get().setUri(id.toString());
+        uploadedFileObject.get().setUri(fileUri);
         uploadedFileRepository.save(uploadedFileObject.get());
 
 
         return uploadedFileObject.get().getUri();
     }
+
 }
