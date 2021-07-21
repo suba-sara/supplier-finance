@@ -55,6 +55,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/sign-up").permitAll()
             .antMatchers("/api/auth/sign-up/client").permitAll()
             .antMatchers("/api/auth/sign-up/supplier").permitAll()
+            .antMatchers("/api/getFile/").permitAll()
             .and()
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
