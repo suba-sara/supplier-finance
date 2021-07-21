@@ -2,6 +2,7 @@ package com.hcl.capstoneserver.file;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,10 +28,14 @@ public class UploadFileController {
 
     // get invoice file
     @GetMapping("/api/getFile/{fileId}")
-    public Resource getInvoiceFile(
+    public ResponseEntity<Resource> getInvoiceFile(
             @Valid @PathVariable Integer fileId,
             @Valid @RequestParam String token
     ) {
-        return uploadedFileService.getFile(fileId, token);
+        Resource file = uploadedFileService.getFile(fileId, token);
+        return ResponseEntity.ok().header(
+                HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=\"" + file.getFilename() + "\""
+        ).body(file);
     }
 }
