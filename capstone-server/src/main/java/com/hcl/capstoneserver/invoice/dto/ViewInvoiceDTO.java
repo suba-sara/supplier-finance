@@ -21,6 +21,9 @@ public class ViewInvoiceDTO {
     private InvoiceStatus status;
     private CurrencyType currencyType;
 
+    public ViewInvoiceDTO() {
+    }
+
     public ViewInvoiceDTO(
             Integer invoiceId,
             Client client,
@@ -41,13 +44,9 @@ public class ViewInvoiceDTO {
         this.amount = amount;
         this.status = status;
         this.currencyType = currencyType;
-
         this.file = fileUriBase + invoiceId;
     }
 
-    public String getFileUriBase() {
-        return fileUriBase;
-    }
 
     public Integer getInvoiceId() {
         return invoiceId;
@@ -55,6 +54,9 @@ public class ViewInvoiceDTO {
 
     public void setInvoiceId(Integer invoiceId) {
         this.invoiceId = invoiceId;
+
+        //update file url on id change
+        this.file = fileUriBase + invoiceId;
     }
 
     public Client getClient() {
