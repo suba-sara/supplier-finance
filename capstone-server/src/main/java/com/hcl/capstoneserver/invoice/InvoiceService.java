@@ -164,7 +164,7 @@ public class InvoiceService {
         String token = uploadedFileService.generateDownloadToken(invoice.getFile().getId());
 
         ViewInvoiceDTO invoiceDto = mapper.map(invoice, ViewInvoiceDTO.class);
-        invoiceDto.setFileUrlWithToken(token);
+        invoiceDto.setFileUrlWithToken(invoice.getFile().getId(), token);
 
         return invoiceDto;
     }

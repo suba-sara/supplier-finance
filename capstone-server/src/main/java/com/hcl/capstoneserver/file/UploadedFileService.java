@@ -87,7 +87,7 @@ public class UploadedFileService {
     public Resource getFile(Integer fileId, String token) {
         UploadedFile file = _fetchAndCheckExists(fileId);
 
-        if (file.getToken() == null || !file.getDownloadToken().equals(token)) {
+        if (file.getDownloadToken() == null || !file.getDownloadToken().equals(token)) {
             throw new UploadedFileInvalidTokenException();
         }
 

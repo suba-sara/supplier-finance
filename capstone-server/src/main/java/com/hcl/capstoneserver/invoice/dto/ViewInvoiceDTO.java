@@ -53,8 +53,8 @@ public class ViewInvoiceDTO {
         return fileUrl;
     }
 
-    public void setFileUrlWithToken(String token) {
-        this.fileUrl = fileUriBase + this.invoiceId + "?token=" + token;
+    public void setFileUrlWithToken(Integer fileId, String token) {
+        this.fileUrl = fileUriBase + fileId + "?token=" + token;
     }
 
     public String getInvoiceNumber() {
