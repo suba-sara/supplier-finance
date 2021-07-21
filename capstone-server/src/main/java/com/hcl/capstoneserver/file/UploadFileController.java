@@ -15,14 +15,6 @@ public class UploadFileController {
     @Autowired
     private UploadedFileService uploadedFileService;
 
-    // get invoice file
-    @GetMapping("/api/file/{fileId}")
-    public Resource getInvoiceFile(
-            @Valid @PathVariable Integer fileId,
-            @Valid @RequestParam String token
-    ) {
-        return uploadedFileService.getFile(fileId, token);
-    }
 
     @PostMapping("/api/files/invoice/upload/{id}")
     public ResponseEntity<String> uploadFile(
@@ -33,4 +25,12 @@ public class UploadFileController {
         return new ResponseEntity<>(uploadedFileService.uploadInvoiceFile(id, token, file), HttpStatus.CREATED);
     }
 
+    // get invoice file
+    @GetMapping("/api/getFile/{fileId}")
+    public Resource getInvoiceFile(
+            @Valid @PathVariable Integer fileId,
+            @Valid @RequestParam String token
+    ) {
+        return uploadedFileService.getFile(fileId, token);
+    }
 }

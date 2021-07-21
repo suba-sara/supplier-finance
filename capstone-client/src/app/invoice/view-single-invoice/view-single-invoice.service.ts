@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { InvoicePageType } from '../invoice.page.type';
 import { environment } from '../../../environments/environment';
+import { Invoice } from '../invoice.types';
 
 const { API_PATH } = environment;
 
@@ -11,10 +11,10 @@ const { API_PATH } = environment;
 export class ViewSingleInvoicesService {
   constructor(private http: HttpClient) {}
 
-  public getInvoiceById(invoiceId: number): Promise<InvoicePageType> {
+  public getInvoiceById(invoiceId: number): Promise<Invoice> {
     console.log(invoiceId);
     return this.http
-      .get<InvoicePageType>(`${API_PATH}/invoices/getById/${invoiceId}`)
+      .get<Invoice>(`${API_PATH}/invoices/getById/${invoiceId}`)
       .toPromise();
   }
 }

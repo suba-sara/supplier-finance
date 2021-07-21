@@ -1,6 +1,5 @@
 package com.hcl.capstoneserver.invoice;
 
-import com.hcl.capstoneserver.file.FileStorageService;
 import com.hcl.capstoneserver.file.UploadedFileService;
 import com.hcl.capstoneserver.file.entities.UploadedFile;
 import com.hcl.capstoneserver.invoice.dto.*;
@@ -13,8 +12,6 @@ import com.hcl.capstoneserver.user.UserType;
 import com.hcl.capstoneserver.user.entities.Client;
 import com.hcl.capstoneserver.user.entities.Supplier;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -32,8 +29,6 @@ public class InvoiceService {
     private final InvoiceCriteriaRepository invoiceCriteriaRepository;
     private final UploadedFileService uploadedFileService;
 
-    @Autowired
-    private FileStorageService fileStorageService;
 
     /*
      * userId - current login user userId
@@ -164,7 +159,14 @@ public class InvoiceService {
 
     public ViewInvoiceDTO getInvoice(Integer invoiceId, String userId) {
         Invoice invoice = _checkInvoiceOwnershipAndFetchInvoice(userId, invoiceId, "read");
-        return mapper.map(invoice, ViewInvoiceDTO.class);
+
+        // generate file download token
+        String token = uploadedFileService.generateDownloadToken(invoice.getFile().getId());
+
+        ViewInvoiceDTO invoiceDto = mapper.map(invoice, ViewInvoiceDTO.class);
+        invoiceDto.setFileUrlWithToken(token);
+
+        return invoiceDto;
     }
 
     // This update method for client
@@ -230,8 +232,4 @@ public class InvoiceService {
         return _getInvoice(dto).map(invoice -> mapper.map(invoice, SupplierVIewInvoiceDTO.class));
     }
 
-    public Resource getInvoiceFile(String userId, Integer invoiceId) {
-        Invoice invoice = _checkInvoiceOwnershipAndFetchInvoice(userId, invoiceId, "read");
-        return fileStorageService.load(invoice.getFile().getUri());
-    }
 }

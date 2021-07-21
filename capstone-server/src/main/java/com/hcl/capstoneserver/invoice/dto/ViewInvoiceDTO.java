@@ -8,12 +8,12 @@ import com.hcl.capstoneserver.user.dto.ViewSupplierNonSensitive;
 import java.time.LocalDate;
 
 public class ViewInvoiceDTO {
-    private final String fileUriBase = "/api/invoice/file/";
+    private final static String fileUriBase = "/api/getFile/";
 
     private Integer invoiceId;
     private ViewClientNonSensitive client;
     private ViewSupplierNonSensitive supplier;
-    private String file;
+    private String fileUrl;
     private String invoiceNumber;
     private LocalDate uploadedDate;
     private LocalDate invoiceDate;
@@ -31,9 +31,6 @@ public class ViewInvoiceDTO {
 
     public void setInvoiceId(Integer invoiceId) {
         this.invoiceId = invoiceId;
-
-        //update file url on id change
-        this.file = fileUriBase + invoiceId;
     }
 
     public ViewClientNonSensitive getClient() {
@@ -52,12 +49,12 @@ public class ViewInvoiceDTO {
         this.supplier = supplier;
     }
 
-    public String getFile() {
-        return file;
+    public String getFileUrl() {
+        return fileUrl;
     }
 
-    public void setFile(String file) {
-        this.file = file;
+    public void setFileUrlWithToken(String token) {
+        this.fileUrl = fileUriBase + this.invoiceId + "?token=" + token;
     }
 
     public String getInvoiceNumber() {

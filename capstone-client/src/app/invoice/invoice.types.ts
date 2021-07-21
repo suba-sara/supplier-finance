@@ -18,4 +18,5 @@ export type Invoice = {
   amount: number;
   status: string;
   currencyType: string;
+  file: string;
 };
