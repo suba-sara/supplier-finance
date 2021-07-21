@@ -1,7 +1,6 @@
 package com.hcl.capstoneserver.invoice;
 
 import com.hcl.capstoneserver.invoice.dto.*;
-import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -72,12 +71,4 @@ public class InvoiceController {
         return invoiceService.getSupplierInvoice(dto, principal.getName());
     }
 
-    // get invoice file
-    @GetMapping("/api/invoice/file/{invoiceId}")
-    public Resource getInvoiceFile(
-            @PathVariable Integer invoiceId,
-            Principal principle
-    ) {
-        return invoiceService.getInvoiceFile(principle.getName(), invoiceId);
-    }
 }
