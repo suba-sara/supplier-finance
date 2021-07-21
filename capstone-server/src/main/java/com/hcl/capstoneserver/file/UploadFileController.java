@@ -12,12 +12,13 @@ public class UploadFileController {
     @Autowired
     private UploadedFileService uploadedFileService;
 
-    @PostMapping("/api/files/upload/{id}")
+    @PostMapping("/api/files/invoice/upload/{id}")
     public ResponseEntity<String> uploadFile(
             @PathVariable Integer id,
             @RequestParam MultipartFile file,
             @RequestParam String token
     ) {
-        return new ResponseEntity<>(uploadedFileService.uploadFile(id, token, file), HttpStatus.CREATED);
+        return new ResponseEntity<>(uploadedFileService.uploadInvoiceFile(id, token, file), HttpStatus.CREATED);
     }
+
 }
