@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {AuthService} from '../auth/auth.service';
 
 @Component({
   selector: 'app-left-navbar',
@@ -6,7 +7,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./left-navbar.component.scss'],
 })
 export class LeftNavbarComponent implements OnInit {
-  constructor() {}
+  userTypeApiPath?: string;
 
-  ngOnInit(): void {}
+  constructor(private authService: AuthService) {
+    authService.user$.subscribe((res: any) => {
+      this.userTypeApiPath = res.userType;
+    });
+    console.log(this.userTypeApiPath);
+  }
+
+  ngOnInit(): void {
+  }
 }

@@ -11,6 +11,7 @@
         icon="note_add"
         link="/invoice/upload"
         title="Upload Invoice"
+        *ngIf="userTypeApiPath !== 'SUPPLIER'"
       >
       </app-nav-link>
       <app-nav-link
