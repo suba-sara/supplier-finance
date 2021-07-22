@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import * as dayjs from 'dayjs';
 import {
   AbstractControl,
@@ -7,9 +7,9 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { InvoiceUploadService } from './invoice-upload.service';
-import { Router } from '@angular/router';
-import { SnackbarService } from '../../util/snakbar.service';
+import {InvoiceUploadService} from './invoice-upload.service';
+import {Router} from '@angular/router';
+import {SnackbarService} from '../../util/snakbar.service';
 
 @Component({
   selector: 'app-invoice-upload',
@@ -22,13 +22,13 @@ export class InvoiceUploadComponent implements OnInit {
   selectedFile:
     | undefined
     | {
-        fileName: string;
-        size: number; // size in kb
-      } = undefined;
+    fileName: string;
+    size: number; // size in kb
+  } = undefined;
 
   uploadInvoiceForm = new FormGroup({
-    supplierId: new FormControl('', { validators: [Validators.required] }),
-    invoiceNumber: new FormControl('', { validators: [Validators.required] }),
+    supplierId: new FormControl('', {validators: [Validators.required]}),
+    invoiceNumber: new FormControl('', {validators: [Validators.required]}),
     invoiceDate: new FormControl('', {
       validators: [
         Validators.required,
@@ -44,20 +44,21 @@ export class InvoiceUploadComponent implements OnInit {
         },
       ],
     }),
-    invoiceTitle: new FormControl('', { validators: [Validators.required] }),
+    invoiceTitle: new FormControl('', {validators: [Validators.required]}),
     amount: new FormControl('', {
       validators: [Validators.required, Validators.min(0)],
     }),
-    currencyType: new FormControl('USD', { validators: [Validators.required] }),
-    invoiceFile: new FormControl('', { validators: [Validators.required] }),
-    invoiceFileSrc: new FormControl('', { validators: [Validators.required] }),
+    currencyType: new FormControl('USD', {validators: [Validators.required]}),
+    invoiceFile: new FormControl('', {validators: [Validators.required]}),
+    invoiceFileSrc: new FormControl('', {validators: [Validators.required]}),
   });
 
   constructor(
     private invoiceUploadService: InvoiceUploadService,
     private snackBarService: SnackbarService,
     private _router: Router
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.invoiceUploadService.fetchMyClientId().subscribe(
@@ -98,7 +99,7 @@ export class InvoiceUploadComponent implements OnInit {
     const target = event.target as HTMLInputElement;
     if (target.files) {
       const file = target.files[0];
-      const { name, size } = file;
+      const {name, size} = file;
       this.uploadInvoiceForm.patchValue({
         invoiceFileSrc: file,
       });
@@ -108,7 +109,7 @@ export class InvoiceUploadComponent implements OnInit {
       };
 
       if (this.selectedFile.size > 1024) {
-        this.uploadInvoiceForm.get('invoiceFile')?.setErrors({ size: true });
+        this.uploadInvoiceForm.get('invoiceFile')?.setErrors({size: true});
       } else {
         this.uploadInvoiceForm.get('invoiceFile')?.setErrors({});
       }
@@ -133,7 +134,7 @@ export class InvoiceUploadComponent implements OnInit {
             }
           );
           this._router.navigate([
-            `invoice/view-invoice/${res.invoice.invoiceId}`,
+            `invoice/view-invoice/${res.invoice.invoiceId}/view`,
           ]);
         })
         .catch((e) => console.log(e));
