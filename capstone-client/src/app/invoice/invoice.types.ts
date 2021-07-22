@@ -13,8 +13,8 @@ export type Invoice = {
   client: Client;
   supplier: Supplier;
   invoiceNumber: number;
-  uploadedDate: Date;
-  invoiceDate: Date;
+  uploadedDate: string;
+  invoiceDate: string;
   amount: number;
   status: string;
   currencyType: string;
