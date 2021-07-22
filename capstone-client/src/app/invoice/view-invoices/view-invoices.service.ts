@@ -1,13 +1,13 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { Invoice } from '../invoice.types';
-import { HttpClient } from '@angular/common/http';
-import { InvoicePageType } from '../invoice.page.type';
-import { environment } from '../../../environments/environment';
-import { AuthService } from '../../core/auth/auth.service';
-import { skip } from 'rxjs/operators';
+import {Injectable} from '@angular/core';
+import {BehaviorSubject} from 'rxjs';
+import {Invoice} from '../invoice.types';
+import {HttpClient} from '@angular/common/http';
+import {InvoicePageType} from '../invoice.page.type';
+import {environment} from '../../../environments/environment';
+import {AuthService} from '../../core/auth/auth.service';
+import {skip} from 'rxjs/operators';
 
-const { API_PATH } = environment;
+const {API_PATH} = environment;
 
 export type InvoiceFiltersOptional = {
   pageSize?: number;
@@ -43,7 +43,7 @@ export class ViewInvoicesService {
     pageIndex: 0,
   });
 
-  $data = new BehaviorSubject<InvoiceFetchResults>({ invoices: [], total: 0 });
+  $data = new BehaviorSubject<InvoiceFetchResults>({invoices: [], total: 0});
 
   constructor(private authService: AuthService, private http: HttpClient) {
     authService.user$.subscribe((user) => {
@@ -94,5 +94,13 @@ export class ViewInvoicesService {
           });
         });
     });
+  }
+
+  async deleteInvoice(invoiceId: number): Promise<any> {
+    return await this.http
+      .delete<{ token: string; }>(
+        `${API_PATH}/invoices/delete/${invoiceId}`,
+      )
+      .toPromise();
   }
 }
