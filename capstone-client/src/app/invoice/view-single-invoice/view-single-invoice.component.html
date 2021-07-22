@@ -27,7 +27,7 @@
       </div>
     </div>
 
-    <div class="">
+    <div *ngIf="!edit" class="">
       <h1>Status: {{ invoice?.status }}</h1>
       <h1>
         Amount:
@@ -35,8 +35,41 @@
       </h1>
     </div>
 
+    <div *ngIf="edit">
+      <form [formGroup]="invoiceForm">
+        <mat-form-field appearance="outline">
+          <mat-label>Status*</mat-label>
+          <mat-select formControlName="status">
+            <mat-option value="IN_REVIEW">IN_REVIEW</mat-option>
+            <mat-option value="APPROVED">APPROVED</mat-option>
+            <mat-option value="REJECTED">REJECTED</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Amount*</mat-label>
+          <input formControlName="amount" matInput type="text"/>
+          <mat-error
+            *ngIf="invoiceForm.get('amount')?.getError('required')"
+          >
+            Amount is required
+          </mat-error>
+          <mat-error
+            *ngIf="invoiceForm.get('amount')?.getError('min')"
+          >
+            Amount cannot be less than 0
+          </mat-error>
+          <mat-error
+            *ngIf="invoiceForm.get('amount')?.getError('pattern')"
+          >
+            Amount can only include numeric values.
+          </mat-error>
+        </mat-form-field>
+      </form>
+    </div>
+
     <div class="button-container">
       <button color="primary" mat-stroked-button>Back</button>
+      <button *ngIf="edit" style="float: right" color="primary" mat-stroked-button (click)="onClickSave()">Save</button>
     </div>
   </div>
 </div>
