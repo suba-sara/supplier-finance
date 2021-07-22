@@ -84,7 +84,7 @@
     </div>
 
     <div class="button-container">
-      <button color="primary" mat-stroked-button>Back</button>
+      <button color="primary" mat-stroked-button (click)="goBack()">Back</button>
       <button *ngIf="edit && userTypeApiPath !== 'SUPPLIER'" style="float: right" color="primary" mat-stroked-button
               (click)="onClickSave()">Save
       </button>
