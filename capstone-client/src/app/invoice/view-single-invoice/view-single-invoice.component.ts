@@ -7,6 +7,7 @@ import {FormBuilder, FormControl, Validators} from '@angular/forms';
 import {InvoiceUploadService} from '../invoice-upload/invoice-upload.service';
 import {SnackbarService} from '../../util/snakbar.service';
 import {AuthService} from '../../core/auth/auth.service';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-view-single-invoice',
@@ -43,7 +44,8 @@ export class ViewSingleInvoiceComponent implements OnInit {
     private fb: FormBuilder,
     private invoiceUploadService: InvoiceUploadService,
     private snackBarService: SnackbarService,
-    private authService: AuthService
+    private authService: AuthService,
+    private location: Location
   ) {
     const invoiceId = this.route.snapshot.params['id'];
     this.edit = this.route.snapshot.params['edit'] === 'edit';
@@ -56,8 +58,8 @@ export class ViewSingleInvoiceComponent implements OnInit {
   }
 
   invoiceForm = this.fb.group({
-    status: ['', Validators.required],
-    amount: ['', [Validators.required, Validators.min(0), Validators.pattern('\\^([\\\\d]{0,4})(\\\\.|$)([\\\\d]{2,2}|)$')]],
+    status: [this.invoice?.status, Validators.required],
+    amount: [this.invoice?.amount, [Validators.required, Validators.min(0), Validators.pattern(/^[0-9.,]+$/)]],
     currencyType: new FormControl(this.invoice?.currencyType, {validators: [Validators.required]}),
   });
 
@@ -81,5 +83,9 @@ export class ViewSingleInvoiceComponent implements OnInit {
         ]);
       }).catch(err => console.error(err));
     }
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 }
