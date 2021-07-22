@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {ViewSingleInvoicesService} from './view-single-invoice.service';
 import {Invoice} from '../invoice.types';
 import {environment} from '../../../environments/environment';
-import {FormBuilder, FormControl, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {InvoiceUploadService} from '../invoice-upload/invoice-upload.service';
 import {SnackbarService} from '../../util/snakbar.service';
 import {AuthService} from '../../core/auth/auth.service';
@@ -16,26 +16,10 @@ import {Location} from '@angular/common';
 })
 export class ViewSingleInvoiceComponent implements OnInit {
   SERVER = environment.SERVER;
-  invoice?: Invoice = {
-    invoiceId: 0,
-    client: {
-      clientId: '',
-      name: '',
-    },
-    supplier: {
-      supplierId: '',
-      name: '',
-    },
-    invoiceNumber: 0,
-    uploadedDate: '',
-    invoiceDate: '',
-    amount: 0,
-    status: '',
-    currencyType: 'USD',
-    fileUrl: ''
-  };
+  invoice?: Invoice;
   edit: boolean;
   userTypeApiPath = 'SUPPLIER';
+  invoiceForm: FormGroup;
 
   constructor(
     private _router: Router,
@@ -55,13 +39,12 @@ export class ViewSingleInvoiceComponent implements OnInit {
     authService.user$.subscribe((res: any) => {
       this.userTypeApiPath = res.userType;
     });
+    this.invoiceForm = this.fb.group({
+      status: [this.invoice?.status, Validators.required],
+      amount: [this.invoice?.amount, [Validators.required, Validators.min(0), Validators.pattern(/^[0-9.,]+$/)]],
+      currencyType: new FormControl(this.invoice?.currencyType, {validators: [Validators.required]}),
+    });
   }
-
-  invoiceForm = this.fb.group({
-    status: [this.invoice?.status, Validators.required],
-    amount: [this.invoice?.amount, [Validators.required, Validators.min(0), Validators.pattern(/^[0-9.,]+$/)]],
-    currencyType: new FormControl(this.invoice?.currencyType, {validators: [Validators.required]}),
-  });
 
   ngOnInit(): void {
   }

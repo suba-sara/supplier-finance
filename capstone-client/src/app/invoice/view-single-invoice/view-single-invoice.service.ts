@@ -23,10 +23,10 @@ export class ViewSingleInvoicesService {
     console.log(data);
     switch (userType) {
       case 'BANK': {
-        return this.http.put<any>(`${API_PATH}/invoices/retrieve/bank`, data).toPromise();
+        return this.http.put<any>(`${API_PATH}/invoices/update/status`, data).toPromise();
       }
       case 'CLIENT': {
-        return this.http.put<any>(`${API_PATH}/invoices/retrieve/bank`, data).toPromise();
+        return this.http.put<any>(`${API_PATH}/invoices/update`, data).toPromise();
       }
     }
     return null;
