@@ -105,23 +105,25 @@
           <div class="options-wrapper">
             <a
               aria-label="View Invoice"
-              href="/invoice/view-invoice/{{ element.invoiceId }}"
+              href="/invoice/view-invoice/{{ element.invoiceId }}/view"
               mat-icon-button
               matTooltip="View Invoice"
             >
               <mat-icon>preview</mat-icon>
             </a>
-            <button
+            <a
               aria-label="Edit Invoice"
               mat-icon-button
               matTooltip="Edit Invoice"
+              href="/invoice/view-invoice/{{ element.invoiceId }}/edit"
             >
               <mat-icon>edit</mat-icon>
-            </button>
+            </a>
             <button
               aria-label="Delete Invoice"
               mat-icon-button
               matTooltip="Delete Invoice"
+              (click)="onClickDelete(element.invoiceId)"
             >
               <mat-icon>delete</mat-icon>
             </button>

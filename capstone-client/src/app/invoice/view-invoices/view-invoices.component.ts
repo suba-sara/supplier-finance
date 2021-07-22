@@ -1,12 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { Dayjs } from 'dayjs';
-import { ActivatedRoute, Router } from '@angular/router';
-import { PageEvent } from '@angular/material/paginator';
-import {
-  InvoiceFiltersOptional,
-  ViewInvoicesService,
-} from './view-invoices.service';
-import { Sort } from '@angular/material/sort';
+import {Component, OnInit} from '@angular/core';
+import {Dayjs} from 'dayjs';
+import {ActivatedRoute, Router} from '@angular/router';
+import {PageEvent} from '@angular/material/paginator';
+import {InvoiceFiltersOptional, ViewInvoicesService} from './view-invoices.service';
+import {Sort} from '@angular/material/sort';
+import {SnackbarService} from '../../util/snakbar.service';
 
 @Component({
   selector: 'app-view-invoices',
@@ -29,8 +27,10 @@ export class ViewInvoicesComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    public viewInvoicesService: ViewInvoicesService
-  ) {}
+    public viewInvoicesService: ViewInvoicesService,
+    private snackBarService: SnackbarService,
+  ) {
+  }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
@@ -95,7 +95,7 @@ export class ViewInvoicesComponent implements OnInit {
       relativeTo: this.route,
       queryParams,
       queryParamsHandling: 'merge',
-    });
+    }).then();
   };
 
   handleSortChange(e: Sort): void {
@@ -104,5 +104,16 @@ export class ViewInvoicesComponent implements OnInit {
       sortDirection: e.direction.toUpperCase(),
       pageIndex: 0,
     });
+  }
+
+  onClickDelete(invoiceId: number): void {
+    console.log(invoiceId);
+    this.viewInvoicesService.deleteInvoice(invoiceId).then(() => this.snackBarService.snackBar?.open(
+      'Invoice Delete Successfully',
+      undefined,
+      {
+        duration: 2000,
+      }
+    )).catch((err) => console.error(err));
   }
 }
