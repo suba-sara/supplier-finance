@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {ViewSingleInvoicesService} from './view-single-invoice.service';
 import {Invoice} from '../invoice.types';
 import {environment} from '../../../environments/environment';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {InvoiceUploadService} from '../invoice-upload/invoice-upload.service';
 import {SnackbarService} from '../../util/snakbar.service';
 import {AuthService} from '../../core/auth/auth.service';
@@ -31,18 +31,23 @@ export class ViewSingleInvoiceComponent implements OnInit {
     private authService: AuthService,
     private location: Location
   ) {
+    this.invoiceForm = this.fb.group({
+      status: ['', Validators.required],
+      amount: ['', [Validators.required, Validators.min(0), Validators.pattern(/^[0-9.,]+$/)]],
+      currencyType: ['', Validators.required],
+    });
     const invoiceId = this.route.snapshot.params['id'];
     this.edit = this.route.snapshot.params['edit'] === 'edit';
     this.viewSingleInvoicesService
       .getInvoiceById(invoiceId)
-      .then((invoice) => (this.invoice = invoice));
+      .then((invoice) => {
+        this.invoice = invoice;
+        this.invoiceForm.controls.status.setValue(invoice.status);
+        this.invoiceForm.controls.amount.setValue(invoice.amount);
+        this.invoiceForm.controls.currencyType.setValue(invoice.currencyType);
+      });
     authService.user$.subscribe((res: any) => {
       this.userTypeApiPath = res.userType;
-    });
-    this.invoiceForm = this.fb.group({
-      status: [this.invoice?.status, Validators.required],
-      amount: [this.invoice?.amount, [Validators.required, Validators.min(0), Validators.pattern(/^[0-9.,]+$/)]],
-      currencyType: new FormControl(this.invoice?.currencyType, {validators: [Validators.required]}),
     });
   }
 
