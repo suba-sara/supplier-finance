@@ -40,6 +40,7 @@
 @media only screen and (max-width: $media-query-mobile) {
   .user-container {
     flex-direction: column;
+    align-items: center;
     margin-bottom: 2em;
   }
 
@@ -50,6 +51,7 @@
   }
 
   .user-name {
+    margin-left: 0;
     font-size: 1.8em;
     margin-bottom: 0.8em;
   }

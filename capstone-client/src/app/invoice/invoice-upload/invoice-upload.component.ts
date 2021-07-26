@@ -93,7 +93,6 @@ export class InvoiceUploadComponent implements OnInit {
             });
             this.supplierIdIsValid = false;
           }
-          console.log(error);
         }
       );
   }
@@ -123,10 +122,9 @@ export class InvoiceUploadComponent implements OnInit {
 
   async createInvoice(): Promise<void> {
     this.uploadInvoiceForm.markAllAsTouched();
-    console.log(this.uploadInvoiceForm.get('invoiceFile')?.value);
 
     if (!this.uploadInvoiceForm.errors) {
-      await this.invoiceUploadService
+      this.invoiceUploadService
         .createInvoice(this.uploadInvoiceForm.value)
         .then((res) => {
           this.snackBarService.snackBar?.open(
