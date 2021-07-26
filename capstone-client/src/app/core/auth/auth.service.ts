@@ -31,7 +31,7 @@ export class AuthService implements OnDestroy {
   /* to be used in future for refresh tokens */
   // private timer!: Subscription;
 
-  private user = new BehaviorSubject<ApplicationUser | null>(null);
+  user = new BehaviorSubject<ApplicationUser | null>(null);
   user$: Observable<ApplicationUser | null> = this.user.asObservable();
 
   private storageEventListener(event: StorageEvent): void {

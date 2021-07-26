@@ -7,6 +7,7 @@ import {
   ViewInvoicesService,
 } from './view-invoices.service';
 import { Sort } from '@angular/material/sort';
+import { AppService } from '../../app.service';
 
 @Component({
   selector: 'app-view-invoices',
@@ -29,7 +30,8 @@ export class ViewInvoicesComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    public viewInvoicesService: ViewInvoicesService
+    public viewInvoicesService: ViewInvoicesService,
+    private appService: AppService
   ) {}
 
   ngOnInit(): void {
@@ -63,6 +65,8 @@ export class ViewInvoicesComponent implements OnInit {
         sortDirection,
       });
     });
+
+    this.appService.setPageTitle('View Invoices');
   }
 
   filterInputChange = (e: any) => {

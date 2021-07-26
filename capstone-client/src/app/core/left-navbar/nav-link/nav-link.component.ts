@@ -15,6 +15,9 @@ export class NavLinkComponent implements OnInit {
   @Input()
   icon!: string;
 
+  @Input()
+  isExpanded = false;
+
   constructor() {}
 
   ngOnInit(): void {}

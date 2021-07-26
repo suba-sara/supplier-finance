@@ -10,6 +10,7 @@ import {
 import { InvoiceUploadService } from './invoice-upload.service';
 import { Router } from '@angular/router';
 import { SnackbarService } from '../../util/snakbar.service';
+import { AppService } from '../../app.service';
 
 @Component({
   selector: 'app-invoice-upload',
@@ -56,7 +57,8 @@ export class InvoiceUploadComponent implements OnInit {
   constructor(
     private invoiceUploadService: InvoiceUploadService,
     private snackBarService: SnackbarService,
-    private _router: Router
+    private _router: Router,
+    private appService: AppService
   ) {}
 
   ngOnInit(): void {
@@ -68,6 +70,8 @@ export class InvoiceUploadComponent implements OnInit {
         console.log(err);
       }
     );
+
+    this.appService.setPageTitle('Upload Invoice');
   }
 
   checkSupplierId(): void {

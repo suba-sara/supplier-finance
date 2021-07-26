@@ -10,12 +10,15 @@ import { MatRippleModule } from '@angular/material/core';
 import { NavLinkComponent } from './nav-link/nav-link.component';
 import { AuthModule } from '../auth/auth.module';
 import { SharedModule } from '../../shared/shared.module';
+import { NavbarMenuButtonComponent } from './navbar-menu-button/navbar-menu-button.component';
+import { UserInfoContainerModule } from '../user-info-container/user-info-container.module';
 
 @NgModule({
   declarations: [
     LeftNavbarComponent,
     ExpandableNavLinkComponent,
     NavLinkComponent,
+    NavbarMenuButtonComponent,
   ],
   imports: [
     CommonModule,
@@ -26,7 +29,8 @@ import { SharedModule } from '../../shared/shared.module';
     MatTooltipModule,
     MatRippleModule,
     SharedModule,
+    UserInfoContainerModule,
   ],
-  exports: [LeftNavbarComponent],
+  exports: [LeftNavbarComponent, NavbarMenuButtonComponent],
 })
 export class LeftNavbarModule {}

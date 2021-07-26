@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ApplicationUser, AuthService } from '../../core/auth/auth.service';
+import { ApplicationUser } from '../auth/auth.service';
+import { AppService } from '../../app.service';
 
 @Component({
   selector: 'app-title-panel',
@@ -9,16 +10,7 @@ import { ApplicationUser, AuthService } from '../../core/auth/auth.service';
 export class TitlePanelComponent implements OnInit {
   user!: ApplicationUser | null;
 
-  constructor(private authService: AuthService) {
-    this.authService.user$.subscribe((u) => {
-      this.user = u;
-    });
-  }
+  constructor(public appService: AppService) {}
 
   ngOnInit(): void {}
-
-  signOut(): void {
-    this.authService.signOut();
-    window.location.href = '/';
-  }
 }

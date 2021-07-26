@@ -1,5 +1,5 @@
 <a routerLink="/">
-  <div class="logo-container">
+  <div [ngClass]="{ 'full-logo': !logoOnly }" class="logo-container">
     <svg viewBox="0 0 748 748.05" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M1290.13,434.07,1065.9,209.86a149.71,149.71,0,0,0-211.8,0L629.86,434.07a149.85,149.85,0,0,0,0,211.86L854.1,870.16a149.73,149.73,0,0,0,211.8,0l224.23-224.21a149.83,149.83,0,0,0,0-211.86Zm-59.45,152.39L1006.45,810.69c-24.85,24.8-68.15,24.8-92.91,0L689.31,586.46a65.69,65.69,0,0,1,0-92.92L913.54,269.31a65.68,65.68,0,0,1,92.91,0l224.23,224.23a65.79,65.79,0,0,1,0,92.92Z"
@@ -10,7 +10,11 @@
         transform="translate(-586 -165.97)"
       />
     </svg>
-    <div class="title-container" [class.dark-title]="useDarkText">
+    <div
+      *ngIf="!logoOnly"
+      [class.dark-title]="useDarkText"
+      class="title-container"
+    >
       <h1>SHS Bank</h1>
     </div>
   </div>

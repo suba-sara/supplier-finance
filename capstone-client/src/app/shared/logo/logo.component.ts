@@ -9,6 +9,9 @@ export class LogoComponent implements OnInit {
   @Input()
   useDarkText!: boolean;
 
+  @Input()
+  logoOnly = false;
+
   constructor() {}
 
   ngOnInit(): void {}

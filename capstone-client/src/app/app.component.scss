@@ -1,5 +1,11 @@
 @import "src/styles/variables";
 
+.page-root {
+  width: 100%;
+  height: 100vh;
+  overflow: auto;
+}
+
 .app-root {
   display: flex;
   flex-direction: column;
@@ -15,11 +21,6 @@
 }
 
 .content-root {
-  flex-grow: 1;
-}
-
-.left-panel {
-  max-width: 20em;
   flex-grow: 1;
 }
 

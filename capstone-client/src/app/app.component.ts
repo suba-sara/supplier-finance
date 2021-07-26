@@ -21,6 +21,4 @@ export class AppComponent {
     });
     snackbarService.snackBar = snackBar;
   }
-
-  title = 'capstone-client';
 }

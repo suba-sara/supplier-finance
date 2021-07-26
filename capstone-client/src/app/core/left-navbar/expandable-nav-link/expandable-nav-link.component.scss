@@ -43,3 +43,12 @@
     transform: rotate(90deg);
   }
 }
+
+@media only screen and (max-width: $media-query-tablet) {
+  .title {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: $media-query-mobile) {
+}
