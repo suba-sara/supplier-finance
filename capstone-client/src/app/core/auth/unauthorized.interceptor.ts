@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
 import {
-  HttpRequest,
-  HttpHandler,
   HttpEvent,
+  HttpHandler,
   HttpInterceptor,
+  HttpRequest,
 } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
-import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class UnauthorizedInterceptor implements HttpInterceptor {
@@ -24,10 +23,6 @@ export class UnauthorizedInterceptor implements HttpInterceptor {
         if (err.status === 401) {
           this.authService.clearLocalStorage();
           this.router.navigateByUrl('/sign-in');
-        }
-
-        if (!environment.production) {
-          console.error(err);
         }
 
         const error = err?.error?.message || err.statusText;

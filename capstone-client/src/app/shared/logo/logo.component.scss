@@ -1,8 +1,6 @@
 @import "src/styles/variables";
 
 .logo-container {
-  width: 20%;
-  min-width: 200px;
   display: flex;
   align-items: center;
 
@@ -14,6 +12,10 @@
       fill: $secondary-color;
     }
   }
+}
+
+.full-logo {
+  min-width: 200px;
 }
 
 .title-container {

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AppService } from '../../app.service';
 
 @Component({
   selector: 'app-left-navbar',
@@ -6,7 +7,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./left-navbar.component.scss'],
 })
 export class LeftNavbarComponent implements OnInit {
-  constructor() {}
+  isExpanded = false;
+
+  constructor(private appService: AppService) {
+    appService.navbarExpanded$.subscribe((value) => (this.isExpanded = value));
+  }
 
   ngOnInit(): void {}
 }

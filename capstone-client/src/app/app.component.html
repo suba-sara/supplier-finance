@@ -1,11 +1,16 @@
-<div [class]="user ? 'main-container' : 'app-root'">
-  <app-top-navbar *ngIf="!user"></app-top-navbar>
-  <app-left-navbar class="left-panel" *ngIf="user"></app-left-navbar>
-  <div class="content-root" *ngIf="!user">
-    <router-outlet></router-outlet>
+<div class="page-root">
+  <div *ngIf="!user" class="app-root">
+    <app-top-navbar></app-top-navbar>
+    <div class="content-root">
+      <router-outlet></router-outlet>
+    </div>
   </div>
-  <div class="right-panel" *ngIf="user">
-    <app-title-panel *ngIf="user"></app-title-panel>
-    <router-outlet></router-outlet>
+
+  <div *ngIf="user" class="main-container">
+    <app-left-navbar class="left-panel"></app-left-navbar>
+    <div class="right-panel">
+      <app-title-panel></app-title-panel>
+      <router-outlet></router-outlet>
+    </div>
   </div>
 </div>

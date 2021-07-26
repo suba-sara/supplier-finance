@@ -8,6 +8,8 @@ import { AuthModule } from './auth/auth.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptor } from './auth/jwt.interceptor';
 import { UnauthorizedInterceptor } from './auth/unauthorized.interceptor';
+import { TitlePanelModule } from './title-panel/title-panel.module';
+import { UserInfoContainerModule } from './user-info-container/user-info-container.module';
 
 @NgModule({
   providers: [
@@ -24,6 +26,13 @@ import { UnauthorizedInterceptor } from './auth/unauthorized.interceptor';
       multi: true,
     },
   ],
-  exports: [TopNavbarModule, LeftNavbarModule, AppRoutingModule, AuthModule],
+  exports: [
+    TopNavbarModule,
+    LeftNavbarModule,
+    AppRoutingModule,
+    AuthModule,
+    TitlePanelModule,
+    UserInfoContainerModule,
+  ],
 })
 export class CoreModule {}
