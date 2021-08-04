@@ -6,7 +6,7 @@ import {map} from 'rxjs/operators';
 
 const {API_PATH} = environment;
 
-export type UserType = 'CLIENT' | 'SUPPLIER' | 'BANK';
+export type UserType = 'CLIENT' | 'SUPPLIER' | 'BANKER';
 
 export type SignInData = {
   userId: string;
