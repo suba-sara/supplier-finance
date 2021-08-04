@@ -67,7 +67,7 @@ public class InvoiceService {
                 case CLIENT:
                     msg = "The invoice date is an older date.";
                     break;
-                case BANK:
+                case BANKER:
                     msg = "You can not update the invoice status, because invoice is expire.";
             }
             throw new InvoiceDateOldException(msg);
@@ -198,7 +198,7 @@ public class InvoiceService {
         // need to check userId account type -> This feature currently unavailable
         // One feature needs to be check when BANK user is created: invoice status can update only by BANK
         Invoice invoice = _fetchInvoiceById(dto.getInvoiceId());
-        _checkInvoiceDate(invoice.getInvoiceDate(), UserType.BANK);
+        _checkInvoiceDate(invoice.getInvoiceDate(), UserType.BANKER);
         _checkInvoiceStatus(invoice.getStatus(), "update");
         mapper.map(dto, invoice);
         return mapper.map(invoiceRepository.save(invoice), BankViewInvoiceDTO.class);
