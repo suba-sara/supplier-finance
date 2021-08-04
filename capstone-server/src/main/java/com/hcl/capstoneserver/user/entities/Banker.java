@@ -14,7 +14,6 @@ public class Banker extends Person {
     public Banker(
             String userId,
             String password,
-            UserType userType,
             String name,
             String address,
             String email,
@@ -22,7 +21,7 @@ public class Banker extends Person {
             Float interestRate,
             String employeeId
     ) {
-        super(userId, password, userType, name, address, email, phone, interestRate);
+        super(userId, password, UserType.BANKER, name, address, email, phone, interestRate);
         this.employeeId = employeeId;
     }
 
