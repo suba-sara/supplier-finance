@@ -6,24 +6,15 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Entity
-public class Banker extends Person {
+public class Banker extends AppUser {
     @Column(unique = true)
     public String employeeId;
 
     public Banker() {
     }
 
-    public Banker(
-            String userId,
-            String password,
-            String name,
-            String address,
-            String email,
-            String phone,
-            Float interestRate,
-            String employeeId
-    ) {
-        super(userId, password, UserType.BANKER, name, address, email, phone, interestRate);
+    public Banker(String userId, String password, String employeeId) {
+        super(userId, password, UserType.BANKER);
         this.employeeId = employeeId;
     }
 
