@@ -13,3 +13,4 @@ spring.mail.username=s.h.s.bank.admail@gmail.com
 spring.mail.password=1234567890@#$shsbank
 spring.mail.properties.mail.smtp.auth=true
 spring.mail.properties.mail.smtp.starttls.enable=true
+otp.validity.time=10
