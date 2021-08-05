@@ -3,10 +3,7 @@ package com.hcl.capstoneserver.account;
 import com.hcl.capstoneserver.account.dto.AccountVerifiedDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -19,13 +16,13 @@ public class AccountController {
         this.accountService = accountService;
     }
 
-    @PostMapping("/api/account-check")
-    public ResponseEntity<Boolean> checkAccount(@Valid @RequestBody Integer accountNumber) {
-        return new ResponseEntity<>(accountService.checkAccount(accountNumber), HttpStatus.ACCEPTED);
+    @GetMapping("/api/account/get-otp/{accountNumber}")
+    public ResponseEntity<Boolean> getOTP(@PathVariable Integer accountNumber) {
+        return new ResponseEntity<>(accountService.getOTP(accountNumber), HttpStatus.ACCEPTED);
     }
 
-    @PostMapping("/api/account-verified")
-    public ResponseEntity<Boolean> verifiedAccount(@Valid @RequestBody AccountVerifiedDTO accountVerifiedDTO) {
-        return new ResponseEntity<>(accountService.verifiedAccount(accountVerifiedDTO), HttpStatus.OK);
+    @PostMapping("/api/account/verify")
+    public ResponseEntity<Boolean> verifyAccount(@Valid @RequestBody AccountVerifiedDTO accountVerifiedDTO) {
+        return new ResponseEntity<>(accountService.verifyAccount(accountVerifiedDTO), HttpStatus.OK);
     }
 }
