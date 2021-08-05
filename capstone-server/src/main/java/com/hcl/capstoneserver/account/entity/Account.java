@@ -1,33 +1,32 @@
 package com.hcl.capstoneserver.account.entity;
 
-import com.hcl.capstoneserver.AccountStatus;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
 public class Account {
     @Id
     private Integer accountNumber;
+    @NotNull
     private String name;
+    @NotNull
     private String email;
-    private Integer type;
     private Integer OTP;
     private Date otpExpiredDate;
-    private AccountStatus accountStatus;
+    private Boolean isVerified = false;
 
     public Account() {
     }
 
-    public Account(Integer accountNumber, String name, String email, Integer type, Integer OTP, Date otpExpiredDate, AccountStatus accountStatus) {
+    public Account(Integer accountNumber, String name, String email, Integer OTP, Date otpExpiredDate, Boolean isVerified) {
         this.accountNumber = accountNumber;
         this.name = name;
         this.email = email;
-        this.type = type;
         this.OTP = OTP;
         this.otpExpiredDate = otpExpiredDate;
-        this.accountStatus = accountStatus;
+        this.isVerified = isVerified;
     }
 
     public Integer getAccountNumber() {
@@ -54,14 +53,6 @@ public class Account {
         this.email = email;
     }
 
-    public Integer getType() {
-        return type;
-    }
-
-    public void setType(Integer type) {
-        this.type = type;
-    }
-
     public Integer getOTP() {
         return OTP;
     }
@@ -78,11 +69,11 @@ public class Account {
         this.otpExpiredDate = otpExpiredDate;
     }
 
-    public AccountStatus getAccountStatus() {
-        return accountStatus;
+    public Boolean getVerified() {
+        return isVerified;
     }
 
-    public void setAccountStatus(AccountStatus accountStatus) {
-        this.accountStatus = accountStatus;
+    public void setVerified(Boolean verified) {
+        isVerified = verified;
     }
 }
