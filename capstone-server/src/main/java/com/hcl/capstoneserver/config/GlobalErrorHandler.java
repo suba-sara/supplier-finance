@@ -1,5 +1,6 @@
 package com.hcl.capstoneserver.config;
 
+import com.hcl.capstoneserver.account.exception.AccountNotFoundException;
 import com.hcl.capstoneserver.config.error_responses.DefaultErrorResponse;
 import com.hcl.capstoneserver.config.error_responses.DefaultValidationErrorResponse;
 import com.hcl.capstoneserver.invoice.exception.*;
@@ -202,6 +203,11 @@ public class GlobalErrorHandler extends ResponseEntityExceptionHandler {
                 HttpStatus.BAD_REQUEST,
                 "Max file size exceeded"
         ), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(AccountNotFoundException.class)
+    protected final ResponseEntity<Object> handleAccountNotFoundException(AccountNotFoundException ex) {
+        return new ResponseEntity<>(new DefaultErrorResponse(HttpStatus.BAD_REQUEST, "Bank account not found."), HttpStatus.BAD_REQUEST);
     }
 }
 
