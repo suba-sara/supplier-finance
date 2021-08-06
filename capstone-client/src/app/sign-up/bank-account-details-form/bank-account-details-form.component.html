@@ -1,26 +1,50 @@
-<form>
+<form [formGroup]="BankDataFormSupplier">
   <div class="full-width-field2-container">
     <mat-form-field appearance="outline">
       <mat-label>Credit Account Number</mat-label>
-      <input matInput maxlength="255" />
+      <input matInput maxlength="255" formControlName="craditAccountNumber"/>
+      <mat-error *ngIf="BankDataFormSupplier.get('craditAccountNumber')?.hasError('required')">
+        required
+      </mat-error>
+      <mat-error *ngIf="BankDataFormSupplier.get('craditAccountNumber')?.hasError('maxLength')">
+        must be less than 255 characters
+      </mat-error>
     </mat-form-field>
   </div>
   <div class="full-width-field2-container">
     <mat-form-field appearance="outline">
       <mat-label>Bank Code</mat-label>
-      <input matInput maxlength="255" />
+      <input matInput maxlength="255" formControlName="bankCode"/>
+      <mat-error *ngIf="BankDataFormSupplier.get('bankCode')?.hasError('required')">
+        required
+      </mat-error>
+      <mat-error *ngIf="BankDataFormSupplier.get('bankCode')?.hasError('maxLength')">
+        must be less than 255 characters
+      </mat-error>
     </mat-form-field>
   </div>
   <div class="full-width-field2-container">
     <mat-form-field appearance="outline">
       <mat-label>Supplier Limit</mat-label>
-      <input matInput maxlength="255" />
+      <input matInput maxlength="255" formControlName="supplierLimit"/>
+      <mat-error *ngIf="BankDataFormSupplier.get('supplierLimit')?.hasError('required')">
+        required
+      </mat-error>
+      <mat-error *ngIf="BankDataFormSupplier.get('supplierLimit')?.hasError('maxLength')">
+        must be less than 255 characters
+      </mat-error>
     </mat-form-field>
   </div>
   <div class="full-width-field2-container">
     <mat-form-field appearance="outline">
       <mat-label>Invoice Payment</mat-label>
-      <input matInput maxlength="255" />
+      <input matInput maxlength="255" formControlName="invoicePayament"/>
+      <mat-error *ngIf="BankDataFormSupplier.get('invoicePayament')?.hasError('required')">
+        required
+      </mat-error>
+      <mat-error *ngIf="BankDataFormSupplier.get('invoicePayament')?.hasError('maxLength')">
+        must be less than 255 characters
+      </mat-error>
     </mat-form-field>
   </div>
   <div class="button-container">
@@ -28,7 +52,7 @@
       <button mat-flat-button (click)="goBack()">Previous</button>
     </div>
     <div>
-      <button (click)="signUp()" mat-flat-button>Sign Up</button>
+      <button (click)="signUp()" [disabled]="BankDataFormSupplier.pristine || BankDataFormSupplier.invalid"  mat-flat-button>Sign Up</button>
     </div>
   </div>
 </form>
