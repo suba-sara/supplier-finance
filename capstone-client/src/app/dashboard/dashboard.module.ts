@@ -6,9 +6,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
+import { InvoiceInfoComponent } from '../invoice/invoice-info/invoice-info.component';
+
+
+
+
 
 @NgModule({
-  declarations: [DashboardComponent],
+  declarations: [DashboardComponent,InvoiceInfoComponent],
   imports: [
     CommonModule,
     RouterModule,
