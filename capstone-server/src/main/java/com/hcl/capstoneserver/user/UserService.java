@@ -1,21 +1,21 @@
 package com.hcl.capstoneserver.user;
 
-import com.hcl.capstoneserver.user.dto.CheckExistsDTO;
-import com.hcl.capstoneserver.user.dto.ClientDTO;
-import com.hcl.capstoneserver.user.dto.JwtWithTypeDTO;
-import com.hcl.capstoneserver.user.dto.SupplierDTO;
+import com.hcl.capstoneserver.user.dto.*;
 import com.hcl.capstoneserver.user.entities.AppUser;
+import com.hcl.capstoneserver.user.entities.Banker;
 import com.hcl.capstoneserver.user.entities.Client;
 import com.hcl.capstoneserver.user.entities.Supplier;
 import com.hcl.capstoneserver.user.exceptions.EmailAlreadyExistsException;
 import com.hcl.capstoneserver.user.exceptions.UserAlreadyExistsException;
 import com.hcl.capstoneserver.user.exceptions.UserDoesNotExistException;
 import com.hcl.capstoneserver.user.repositories.AppUserRepository;
+import com.hcl.capstoneserver.user.repositories.BankerRepository;
 import com.hcl.capstoneserver.user.repositories.ClientRepository;
 import com.hcl.capstoneserver.user.repositories.SupplierRepository;
 import com.hcl.capstoneserver.util.JWTUtil;
 import com.hcl.capstoneserver.util.SequenceGenerator;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Example;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -39,6 +39,9 @@ public class UserService implements UserDetailsService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ModelMapper mapper;
     private final SequenceGenerator sequenceGenerator;
+
+    @Autowired
+    private BankerRepository bankerRepository;
 
     public UserService(
             AppUserRepository appUserRepository,
@@ -152,6 +155,20 @@ public class UserService implements UserDetailsService {
         } catch (DataIntegrityViolationException e) {
             throw new EmailAlreadyExistsException(client.getEmail());
         }
+    }
+
+    public BankerDTO createBanker(Banker banker) {
+        //check if the banker is already exists or not
+        if (bankerRepository.existsById(banker.getUserId())) {
+            throw new UserAlreadyExistsException(banker.getUserId());
+        }
+
+
+        return mapper.map(bankerRepository.save(new Banker(
+                banker.getUserId(),
+                bCryptPasswordEncoder.encode(banker.getPassword()),
+                banker.getEmployeeId()
+        )), BankerDTO.class);
     }
 
     //check if supplier id exists

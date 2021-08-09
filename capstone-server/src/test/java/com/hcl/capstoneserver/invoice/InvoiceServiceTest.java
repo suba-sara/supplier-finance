@@ -4,8 +4,10 @@ import com.hcl.capstoneserver.invoice.dto.*;
 import com.hcl.capstoneserver.invoice.entities.Invoice;
 import com.hcl.capstoneserver.invoice.repositories.InvoiceRepository;
 import com.hcl.capstoneserver.user.UserTestUtils;
+import com.hcl.capstoneserver.user.dto.BankerDTO;
 import com.hcl.capstoneserver.user.dto.ClientDTO;
 import com.hcl.capstoneserver.user.dto.SupplierDTO;
+import com.hcl.capstoneserver.user.repositories.BankerRepository;
 import com.hcl.capstoneserver.user.repositories.ClientRepository;
 import com.hcl.capstoneserver.user.repositories.SupplierRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,9 +46,13 @@ public class InvoiceServiceTest {
     @Autowired
     ClientRepository clientRepository;
 
+    @Autowired
+    BankerRepository bankerRepository;
+
     List<InvoiceCreatedDTO> createInvoice; // invoiceNumber : 1234567898, 1234567899
     List<SupplierDTO> suppliers;
     List<ClientDTO> clients;
+    List<BankerDTO> bankers;
     Invoice expiredInvoice;
 
     @Test
@@ -61,9 +67,11 @@ public class InvoiceServiceTest {
         invoiceRepository.deleteAll();
         supplierRepository.deleteAll();
         clientRepository.deleteAll();
+        bankerRepository.deleteAll();
 
         suppliers = userTestUtils.createASupplier();
         clients = userTestUtils.createAClient();
+        bankers = userTestUtils.createBankers();
         createInvoice = invoiceTestUtils.createInvoice(suppliers);
         expiredInvoice = invoiceTestUtils.createExpiredInvoice(suppliers, clients);
     }
@@ -652,6 +660,32 @@ public class InvoiceServiceTest {
                 assertEquals(1, invoiceService.getSupplierInvoice(dto, "supplier")
                                               .getNumberOfElements());
             }
+        }
+    }
+
+    @Nested
+    @DisplayName("Dashboard data test")
+    class DashboardDataTest {
+        @Test()
+        @DisplayName("should fetch client dashboard data")
+        public void shouldFetchClientData() {
+            DashboardDataDto dashboardData = invoiceService.getDashboardData(clients.get(0).getUserId());
+            assertEquals(2, dashboardData.getUploadedCount());
+        }
+
+        @Test()
+        @DisplayName("should fetch supplier dashboard data")
+        public void shouldFetchSupplierData() {
+            DashboardDataDto dashboardData = invoiceService.getDashboardData(suppliers.get(0).getUserId());
+            assertEquals(0, dashboardData.getInReviewCount());
+        }
+
+
+        @Test()
+        @DisplayName("should fetch all dashboard data as banker")
+        public void shouldFetchBankerData() {
+            DashboardDataDto dashboardData = invoiceService.getDashboardData(bankers.get(0).getUserId());
+            assertEquals(3, dashboardData.getUploadedCount());
         }
     }
 }
