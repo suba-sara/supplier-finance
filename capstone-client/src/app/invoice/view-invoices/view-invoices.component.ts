@@ -8,6 +8,8 @@ import {
 } from './view-invoices.service';
 import { Sort } from '@angular/material/sort';
 import { AppService } from '../../app.service';
+import { getDisplayColumns } from '../util/getDisplayColumns';
+import { AuthService } from '../../core/auth/auth.service';
 
 @Component({
   selector: 'app-view-invoices',
@@ -15,23 +17,16 @@ import { AppService } from '../../app.service';
   styleUrls: ['./view-invoices.component.scss'],
 })
 export class ViewInvoicesComponent implements OnInit {
-  displayedColumns: string[] = [
-    'invoiceId',
-    'invoiceNumber',
-    'uploadedDate',
-    'invoiceDate',
-    'invoiceAge',
-    'supplierId',
-    'amount',
-    'invoiceStatus',
-    'options',
-  ];
+  displayedColumns: string[] = getDisplayColumns(
+    this.authService.user.value?.userType
+  );
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     public viewInvoicesService: ViewInvoicesService,
-    private appService: AppService
+    private appService: AppService,
+    public authService: AuthService
   ) {}
 
   ngOnInit(): void {
