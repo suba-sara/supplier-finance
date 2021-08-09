@@ -12,14 +12,11 @@ import { InvoiceInfoService } from './invoice-info.service';
 })
 export class InvoiceInfoComponent implements OnInit {
   numberOfInvoice:any;
-  status:any;
-  statusUploaded:any = [];
-  statusAPPROVED:any = [];
-  statusREJECTED:any = [];
-  userType = localStorage.getItem('user_type');
-  constructor(private invoiceInfoService:InvoiceInfoService, private router: Router,
-    private route: ActivatedRoute,
-    public viewInvoicesService: ViewInvoicesService,) { }
+  uploadedCount:any;
+  inReviewCount:any;
+  approvedCount:any;
+  rejectedCount:any;
+  constructor(private invoiceInfoService:InvoiceInfoService) { }
 
   ngOnInit(): void {
     this.getInvoiceInfo();
@@ -27,26 +24,13 @@ export class InvoiceInfoComponent implements OnInit {
   }
 
 getInvoiceInfo(){
-  this.invoiceInfoService.getInvoiceDetails(this.userType).subscribe(res => {
-    this.numberOfInvoice = res;
-    this.status = this.numberOfInvoice.content;
-
-    for(var s of this.status){
-      if(s.status === "UPLOADED"){
-        this.statusUploaded.push(s.status)
-        console.log(this.statusUploaded.length);
-      }
-      if(s.status === "APPROVED"){
-        this.statusAPPROVED.push(s.status)
-        console.log(this.statusAPPROVED.length);
-      }
-      if(s.status === "REJECTED"){
-        this.statusREJECTED.push(s.status)
-        console.log(this.statusREJECTED.length);
-      }
-    }
-    
-    this.numberOfInvoice =this.numberOfInvoice.numberOfElements;
+  this.invoiceInfoService.getInvoiceDetails().subscribe(res => {
+    console.log(res);
+   this.numberOfInvoice = res;
+   this.uploadedCount = this.numberOfInvoice.uploadedCount;
+   this.inReviewCount = this.numberOfInvoice.inReviewCount;
+   this.approvedCount = this.numberOfInvoice.approvedCount;
+   this.rejectedCount = this.numberOfInvoice.rejectedCount;
   })
 }
 

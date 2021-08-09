@@ -12,9 +12,8 @@ export class InvoiceInfoService {
   userType:any;
   constructor(private http: HttpClient) { }
   
-  getInvoiceDetails(user:any){
-    let u = user.toLowerCase();
-    let url = `${API_PATH}/invoices/retrieve/${u}`
+  getInvoiceDetails(){
+    let url = `${API_PATH}/invoices/dashboard-data`
     return this.http.get(url);
   }
 }
