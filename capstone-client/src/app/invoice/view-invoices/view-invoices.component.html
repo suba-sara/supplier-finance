@@ -1,4 +1,5 @@
 <div class="content-container">
+  <app-invoice-status-filter></app-invoice-status-filter>
   <div class="filter-wrapper">
     <h4>Filters</h4>
     <div>
@@ -51,6 +52,13 @@
         <th *matHeaderCellDef mat-header-cell mat-sort-header>Supplier Code</th>
         <td *matCellDef="let element" mat-cell>
           {{ element.supplier.supplierId }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="clientId">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>Client Code</th>
+        <td *matCellDef="let element" mat-cell>
+          {{ element.client.clientId }}
         </td>
       </ng-container>
 
