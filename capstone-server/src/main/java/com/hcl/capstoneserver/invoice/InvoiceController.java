@@ -71,4 +71,8 @@ public class InvoiceController {
         return invoiceService.getSupplierInvoice(dto, principal.getName());
     }
 
+    @GetMapping("/api/invoices/dashboard-data")
+    public ResponseEntity<DashboardDataDto> getDashboardData(Principal principal) {
+        return new ResponseEntity<>(invoiceService.getDashboardData(principal.getName()), HttpStatus.OK);
+    }
 }
