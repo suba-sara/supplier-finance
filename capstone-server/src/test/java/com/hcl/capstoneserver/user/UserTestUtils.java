@@ -1,8 +1,10 @@
 package com.hcl.capstoneserver.user;
 
+import com.hcl.capstoneserver.user.dto.BankerDTO;
 import com.hcl.capstoneserver.user.dto.ClientDTO;
 import com.hcl.capstoneserver.user.dto.SupplierDTO;
 import com.hcl.capstoneserver.user.entities.AppUser;
+import com.hcl.capstoneserver.user.entities.Banker;
 import com.hcl.capstoneserver.user.entities.Client;
 import com.hcl.capstoneserver.user.entities.Supplier;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +67,22 @@ public class UserTestUtils {
         return clients;
     }
 
+    public List<BankerDTO> createBankers() {
+        List<BankerDTO> bankers = new ArrayList<>();
+        bankers.add(userService.createBanker(new Banker(
+                "banker1",
+                "password",
+                "E10001"
+        )));
+        bankers.add(userService.createBanker(new Banker(
+                "banker2",
+                "password",
+                "E10002"
+        )));
+
+        return bankers;
+    }
+
     public String loginAUser(UserType userType, String username) {
         String token = "Bearer ";
         switch (userType) {
@@ -73,6 +91,10 @@ public class UserTestUtils {
                 break;
             case SUPPLIER:
                 token += userService.signIn(new AppUser(username, "password", UserType.SUPPLIER)).getJwt();
+                break;
+            case BANKER:
+                token += userService.signIn(new AppUser(username, "password", UserType.BANKER)).getJwt();
+
         }
         return token;
     }

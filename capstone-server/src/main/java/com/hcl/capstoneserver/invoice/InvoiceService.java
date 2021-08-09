@@ -9,9 +9,14 @@ import com.hcl.capstoneserver.invoice.repositories.InvoiceCriteriaRepository;
 import com.hcl.capstoneserver.invoice.repositories.InvoiceRepository;
 import com.hcl.capstoneserver.user.UserService;
 import com.hcl.capstoneserver.user.UserType;
+import com.hcl.capstoneserver.user.entities.AppUser;
 import com.hcl.capstoneserver.user.entities.Client;
 import com.hcl.capstoneserver.user.entities.Supplier;
+import com.hcl.capstoneserver.user.repositories.AppUserRepository;
+import com.hcl.capstoneserver.user.repositories.ClientRepository;
+import com.hcl.capstoneserver.user.repositories.SupplierRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -28,6 +33,13 @@ public class InvoiceService {
     private final UserService userService;
     private final InvoiceCriteriaRepository invoiceCriteriaRepository;
     private final UploadedFileService uploadedFileService;
+
+    @Autowired
+    private AppUserRepository appUserRepository;
+    @Autowired
+    private ClientRepository clientRepository;
+    @Autowired
+    private SupplierRepository supplierRepository;
 
 
     /*
@@ -230,6 +242,69 @@ public class InvoiceService {
     public Page<SupplierVIewInvoiceDTO> getSupplierInvoice(InvoiceSearchCriteriaDTO dto, String userId) {
         dto.setSupplierId(userService.getSupplierId(userId));
         return _getInvoice(dto).map(invoice -> mapper.map(invoice, SupplierVIewInvoiceDTO.class));
+    }
+
+    public DashboardDataDto getDashboardData(String userId) {
+        Optional<AppUser> user = appUserRepository.findById(userId);
+        UserType userType = user.get().getUserType();
+
+        DashboardDataDto dashboardDataDto = new DashboardDataDto();
+        if (userType == UserType.CLIENT) {
+            Optional<Client> client = clientRepository.findById(userId);
+            dashboardDataDto.setUploadedCount(invoiceRepository.countAllByClientAndStatus(
+                    client.get(),
+                    InvoiceStatus.UPLOADED
+            ));
+            dashboardDataDto.setInReviewCount(invoiceRepository.countAllByClientAndStatus(
+                    client.get(),
+                    InvoiceStatus.IN_REVIEW
+            ));
+            dashboardDataDto.setInReviewCount(invoiceRepository.countAllByClientAndStatus(
+                    client.get(),
+                    InvoiceStatus.REJECTED
+            ));
+            dashboardDataDto.setApprovedCount(invoiceRepository.countAllByClientAndStatus(
+                    client.get(),
+                    InvoiceStatus.APPROVED
+            ));
+        }
+
+        if (userType == UserType.SUPPLIER) {
+            Optional<Supplier> supplier = supplierRepository.findById(userId);
+            dashboardDataDto.setUploadedCount(invoiceRepository.countAllBySupplierAndStatus(
+                    supplier.get(),
+                    InvoiceStatus.UPLOADED
+            ));
+            dashboardDataDto.setInReviewCount(invoiceRepository.countAllBySupplierAndStatus(
+                    supplier.get(),
+                    InvoiceStatus.IN_REVIEW
+            ));
+            dashboardDataDto.setInReviewCount(invoiceRepository.countAllBySupplierAndStatus(
+                    supplier.get(),
+                    InvoiceStatus.REJECTED
+            ));
+            dashboardDataDto.setApprovedCount(invoiceRepository.countAllBySupplierAndStatus(
+                    supplier.get(),
+                    InvoiceStatus.APPROVED
+            ));
+        }
+
+        if (userType == UserType.BANKER) {
+            dashboardDataDto.setUploadedCount(invoiceRepository.countAllByStatus(
+                    InvoiceStatus.UPLOADED
+            ));
+            dashboardDataDto.setInReviewCount(invoiceRepository.countAllByStatus(
+                    InvoiceStatus.IN_REVIEW
+            ));
+            dashboardDataDto.setInReviewCount(invoiceRepository.countAllByStatus(
+                    InvoiceStatus.REJECTED
+            ));
+            dashboardDataDto.setApprovedCount(invoiceRepository.countAllByStatus(
+                    InvoiceStatus.APPROVED
+            ));
+        }
+
+        return dashboardDataDto;
     }
 
 }

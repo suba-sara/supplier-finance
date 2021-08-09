@@ -9,8 +9,10 @@ import com.hcl.capstoneserver.invoice.repositories.InvoiceRepository;
 import com.hcl.capstoneserver.user.UserService;
 import com.hcl.capstoneserver.user.UserTestUtils;
 import com.hcl.capstoneserver.user.UserType;
+import com.hcl.capstoneserver.user.dto.BankerDTO;
 import com.hcl.capstoneserver.user.dto.ClientDTO;
 import com.hcl.capstoneserver.user.dto.SupplierDTO;
+import com.hcl.capstoneserver.user.repositories.BankerRepository;
 import com.hcl.capstoneserver.user.repositories.ClientRepository;
 import com.hcl.capstoneserver.user.repositories.SupplierRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,6 +50,9 @@ public class InvoiceControllerTest {
     ClientRepository clientRepository;
 
     @Autowired
+    BankerRepository bankerRepository;
+
+    @Autowired
     UserService userService;
 
     @Autowired
@@ -62,9 +67,12 @@ public class InvoiceControllerTest {
     List<InvoiceCreatedDTO> createInvoice; // invoiceNumber : 1234567898, 1234567899
     List<SupplierDTO> suppliers;
     List<ClientDTO> clients;
+    List<BankerDTO> bankers;
     Invoice expiredInvoice; // invoiceNumber : 999999999
     String client1token;
     String client2token;
+    String supplier1Token;
+    String banker1Token;
 
     @Test
     void contextLoads() {
@@ -78,14 +86,18 @@ public class InvoiceControllerTest {
         invoiceRepository.deleteAll();
         supplierRepository.deleteAll();
         clientRepository.deleteAll();
+        bankerRepository.deleteAll();
 
         suppliers = userTestUtils.createASupplier();
         clients = userTestUtils.createAClient();
+        bankers = userTestUtils.createBankers();
         createInvoice = invoiceTestUtils.createInvoice(suppliers);
         expiredInvoice = invoiceTestUtils.createExpiredInvoice(suppliers, clients);
 
         client1token = userTestUtils.loginAUser(UserType.CLIENT, "client");
         client2token = userTestUtils.loginAUser(UserType.CLIENT, "client2");
+        supplier1Token = userTestUtils.loginAUser(UserType.SUPPLIER, "supplier");
+        banker1Token = userTestUtils.loginAUser(UserType.BANKER, "banker1");
     }
 
     private void updateInvoiceStatus(InvoiceStatus status, Integer invoiceId) {
@@ -439,5 +451,55 @@ public class InvoiceControllerTest {
         // CLIENT
 
         //SUPPLIER
+    }
+
+    @Nested
+    @DisplayName("Dashboard data test")
+    class DashboardDataTest {
+        @Test()
+        @DisplayName("should fetch client dashboard data")
+        public void shouldFetchClientData() {
+            webTestClient.get()
+                         .uri(String.format(
+                                 "http://localhost:%d/api/invoices/dashboard-data",
+                                 port
+                         ))
+                         .header(HttpHeaders.AUTHORIZATION, client1token)
+                         .exchange()
+                         .expectBody()
+                         .jsonPath("$.uploadedCount")
+                         .isEqualTo(2);
+        }
+
+        @Test()
+        @DisplayName("should fetch supplier dashboard data")
+        public void shouldFetchSupplierData() {
+            webTestClient.get()
+                         .uri(String.format(
+                                 "http://localhost:%d/api/invoices/dashboard-data",
+                                 port
+                         ))
+                         .header(HttpHeaders.AUTHORIZATION, client1token)
+                         .exchange()
+                         .expectBody()
+                         .jsonPath("$.inReviewCount")
+                         .isEqualTo(0);
+        }
+
+
+        @Test()
+        @DisplayName("should fetch all dashboard data as banker")
+        public void shouldFetchBankerData() {
+            webTestClient.get()
+                         .uri(String.format(
+                                 "http://localhost:%d/api/invoices/dashboard-data",
+                                 port
+                         ))
+                         .header(HttpHeaders.AUTHORIZATION, banker1Token)
+                         .exchange()
+                         .expectBody()
+                         .jsonPath("$.uploadedCount")
+                         .isEqualTo(3);
+        }
     }
 }
