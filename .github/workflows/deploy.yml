@@ -1,0 +1,20 @@
+name: Deploy
+
+on: [push]
+
+jobs:
+  build:
+    
+    runs-on: ubuntu-latest
+    
+    steps:
+     - uses: actions/checkout@v2
+     
+     - name: build frontend
+       uses: actions/setup-node@v2
+       with:
+        node-version: '14'
+       working-directory: ./capstone-client
+       run: npm install
+       run: npm run build
+           
