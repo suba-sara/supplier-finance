@@ -19,5 +19,5 @@ jobs:
        working-directory: ./capstone-client
        run: |
             npm install
-            npm run build
+            npm run build:prod
            
