@@ -12,7 +12,10 @@ export type PersonalDetails = {
   province: string;
   country: string;
 };
-
+export interface DialogData {
+  animal: string;
+  name: string;
+}
 @Component({
   selector: 'app-personal-data-form',
   templateUrl: './personal-data-form.component.html',

@@ -1,42 +1,84 @@
-<form>
+<form [formGroup]="BankDataFormClient">
   <div class="full-width-field2-container">
     <mat-form-field appearance="outline">
       <mat-label>Loan Account Number</mat-label>
-      <input matInput maxlength="255" />
+      <input matInput maxlength="255" formControlName="loanAccountNumber"/>
+      <mat-error *ngIf="BankDataFormClient.get('loanAccountNumber')?.hasError('required')">
+        required
+      </mat-error>
+      <mat-error *ngIf="BankDataFormClient.get('loanAccountNumber')?.hasError('maxLength')">
+        must be less than 255 characters
+      </mat-error>
     </mat-form-field>
   </div>
   <div class="full-width-field2-container">
     <mat-form-field appearance="outline">
       <mat-label>Bank Account Number</mat-label>
-      <input matInput maxlength="255" />
+      <input matInput maxlength="255" formControlName="bankAccountNumber"/>
+      <mat-error *ngIf="BankDataFormClient.get('bankAccountNumber')?.hasError('required')">
+        required
+      </mat-error>
+      <mat-error *ngIf="BankDataFormClient.get('bankAccountNumber')?.hasError('maxLength')">
+        must be less than 255 characters
+      </mat-error>
     </mat-form-field>
   </div>
   <div class="full-width-field2-container">
     <mat-form-field appearance="outline">
       <mat-label>Client Limit</mat-label>
-      <input matInput maxlength="255" />
+      <input matInput maxlength="255" formControlName="clientLimit"/>
+      <mat-error *ngIf="BankDataFormClient.get('clientLimit')?.hasError('required')">
+        required
+      </mat-error>
+      <mat-error *ngIf="BankDataFormClient.get('clientLimit')?.hasError('maxLength')">
+        must be less than 255 characters
+      </mat-error>
     </mat-form-field>
   </div>
   <div class="double-input-container">
     <mat-form-field appearance="outline">
       <mat-label>Limit Validity From</mat-label>
-      <input matInput maxlength="255" type="date" />
+      <input matInput maxlength="255" type="date" formControlName="limitValidityFrom"/>
+      <mat-error *ngIf="BankDataFormClient.get('limitValidityFrom')?.hasError('required')">
+        required
+      </mat-error>
+      <mat-error *ngIf="BankDataFormClient.get('limitValidityFrom')?.hasError('maxLength')">
+        must be less than 255 characters
+      </mat-error>
     </mat-form-field>
     <mat-form-field appearance="outline">
       <mat-label>Limit Validity To</mat-label>
-      <input matInput maxlength="255" type="date" />
+      <input matInput maxlength="255" type="date" formControlName="limitValidityTo"/>
+      <mat-error *ngIf="BankDataFormClient.get('limitValidityTo')?.hasError('required')">
+        required
+      </mat-error>
+      <mat-error *ngIf="BankDataFormClient.get('limitValidityTo')?.hasError('maxLength')">
+        must be less than 255 characters
+      </mat-error>
     </mat-form-field>
   </div>
   <div class="full-width-field2-container">
     <mat-form-field appearance="outline">
       <mat-label>Rate of Interest</mat-label>
-      <input matInput maxlength="255" />
+      <input matInput maxlength="255" formControlName="rateOfInterest"/>
+      <mat-error *ngIf="BankDataFormClient.get('rateOfInterest')?.hasError('required')">
+        required
+      </mat-error>
+      <mat-error *ngIf="BankDataFormClient.get('rateOfInterest')?.hasError('maxLength')">
+        must be less than 255 characters
+      </mat-error>
     </mat-form-field>
   </div>
   <div class="full-width-field2-container">
     <mat-form-field appearance="outline">
       <mat-label>Credit Period</mat-label>
-      <input matInput maxlength="255" />
+      <input matInput maxlength="255" formControlName="creditPeriod"/>
+      <mat-error *ngIf="BankDataFormClient.get('creditPeriod')?.hasError('required')">
+        required
+      </mat-error>
+      <mat-error *ngIf="BankDataFormClient.get('creditPeriod')?.hasError('maxLength')">
+        must be less than 255 characters
+      </mat-error>
     </mat-form-field>
   </div>
   <div class="button-container">
@@ -44,7 +86,7 @@
       <button (click)="goBack()" mat-flat-button>Previous</button>
     </div>
     <div>
-      <button (click)="signUp()" mat-flat-button>Sign Up</button>
+      <button (click)="signUp()" [disabled]="BankDataFormClient.pristine || BankDataFormClient.invalid" mat-flat-button>Sign Up</button>
     </div>
   </div>
 </form>
