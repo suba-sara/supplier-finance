@@ -33,7 +33,7 @@ jobs:
             npm install
             npm run build:prod
             
-     - name: stop spring server
+     - name: stop spring server and delete previous build files
        uses: appleboy/ssh-action@master
        with:
         host: ${{ secrets.SERVER_HOST }}
@@ -43,6 +43,8 @@ jobs:
         script: |
           cd ${{ secrets.SERVER_PROJECT_DIR }}/capstone-server
           ./mvnw spring-boot:stop
+          rm -rf {{ secrets.SERVER_PROJECT_DIR }}/capstone-server/target
+          rm -rf {{ secrets.SERVER_PROJECT_DIR }}/capstone-client/dist
           
      - name: upload backend build files
        uses: appleboy/scp-action@master
@@ -51,9 +53,8 @@ jobs:
         username: ${{ secrets.SERVER_USERNAME }}
         key: ${{ secrets.SERVER_SSH_KEY }}
         port: ${{ secrets.SERVER_PORT }}
-        rm: true
         source: "capstone-server/target/*"
-        target: "${{ secrets.SERVER_PROJECT_DIR }}/capstone-server/target/"
+        target: "${{ secrets.SERVER_PROJECT_DIR }}"
             
      - name: restart spring server
        uses: appleboy/ssh-action@master
@@ -74,8 +75,7 @@ jobs:
         username: ${{ secrets.SERVER_USERNAME }}
         key: ${{ secrets.SERVER_SSH_KEY }}
         port: ${{ secrets.SERVER_PORT }}
-        rm: true
         source: "capstone-client/dist/*"
-        target: "${{ secrets.SERVER_PROJECT_DIR }}/capstone-client/dist/"
+        target: "${{ secrets.SERVER_PROJECT_DIR }}"
 
            
