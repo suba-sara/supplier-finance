@@ -211,8 +211,6 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    //check if supplier id exists
-
     /**
      * Method to check supplierID
      *
