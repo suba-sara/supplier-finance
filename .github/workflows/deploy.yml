@@ -52,8 +52,8 @@ jobs:
         key: ${{ secrets.SERVER_SSH_KEY }}
         port: ${{ secrets.SERVER_PORT }}
         rm: true
-        source: "./capstone-server/target"
-        target: "${{ secrets.SERVER_PROJECT_DIR }}/capstone-server/target"
+        source: "capstone-server/target/*"
+        target: "${{ secrets.SERVER_PROJECT_DIR }}/capstone-server/target/"
             
      - name: restart spring server
        uses: appleboy/ssh-action@master
@@ -75,7 +75,7 @@ jobs:
         key: ${{ secrets.SERVER_SSH_KEY }}
         port: ${{ secrets.SERVER_PORT }}
         rm: true
-        source: "./capstone-client/dist"
-        target: "${{ secrets.SERVER_PROJECT_DIR }}/capstone-client/dist"
+        source: "capstone-client/dist/*"
+        target: "${{ secrets.SERVER_PROJECT_DIR }}/capstone-client/dist/"
 
            
