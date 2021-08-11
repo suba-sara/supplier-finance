@@ -95,8 +95,4 @@ export class ViewInvoicesService {
         });
     });
   }
-
- 
- 
 }
-

@@ -17,7 +17,7 @@ export class BankAccountDetailsFormComponent implements OnInit {
   @Input()
   goBack!: () => void;
 
-  BankDataFormSupplier= new FormGroup({
+  BankDataFormSupplier = new FormGroup({
     craditAccountNumber: new FormControl('', [
       Validators.required,
       Validators.maxLength(255),
@@ -34,7 +34,6 @@ export class BankAccountDetailsFormComponent implements OnInit {
       Validators.required,
       Validators.maxLength(255),
     ]),
-    
   });
 
   @Output()
