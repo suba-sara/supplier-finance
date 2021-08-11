@@ -32,7 +32,7 @@ jobs:
           cd ${{ secrets.SERVER_PROJECT_DIR }}/capstone-server
           ./mvnw package -Dmaven.test.skip=true
           ./mvnw spring-boot:stop
-          ./mvnw spring-boot:start &
+          nohup ./mvnw spring-boot:start &>/dev/null
           echo "i was here" >> here.txt
           exit
           
