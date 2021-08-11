@@ -21,7 +21,6 @@ import { MatSortModule } from '@angular/material/sort';
 import { InvoiceInfoComponent } from './invoice-info/invoice-info.component';
 import { ViewInvoicesService } from './view-invoices/view-invoices.service';
 
-
 @NgModule({
   declarations: [
     InvoiceUploadComponent,
@@ -30,7 +29,6 @@ import { ViewInvoicesService } from './view-invoices/view-invoices.service';
     InvoiceNumberFormatPipe,
     DateFormatPipe,
     InvoiceAgePipe,
-    
   ],
   imports: [
     CommonModule,

@@ -20,7 +20,7 @@ export class ClientBankAccDetailsComponent implements OnInit {
   @Input()
   goBack!: () => void;
 
-  BankDataFormClient= new FormGroup({
+  BankDataFormClient = new FormGroup({
     loanAccountNumber: new FormControl('', [
       Validators.required,
       Validators.maxLength(255),
@@ -49,7 +49,6 @@ export class ClientBankAccDetailsComponent implements OnInit {
       Validators.required,
       Validators.maxLength(255),
     ]),
-    
   });
 
   @Output()
