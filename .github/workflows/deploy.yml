@@ -24,6 +24,7 @@ jobs:
      - name: build backend
        working-directory: ./capstone-server
        run: |
+            sudo chmod +x ./mvnw
             ./mvnw package -Dmaven.test.skip=true
      
      - name: build front end
