@@ -65,7 +65,7 @@ jobs:
         port: ${{ secrets.SERVER_PORT }}
         script: |
           cd ${{ secrets.SERVER_PROJECT_DIR }}/capstone-server
-          ./mvnw install -Dmaven.test.skip=true
+          ./mvnw dependency:resolve
           nohup ./mvnw spring-boot:start &>/dev/null
   
      
