@@ -9,11 +9,11 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.hcl</groupId>
-    <artifactId>capstone-server</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <artifactId>supplier-finance-server</artifactId>
+    <version>0.6.0-SNAPSHOT</version>
     <packaging>war</packaging>
-    <name>capstone-server</name>
-    <description>Demo project for Spring Boot</description>
+    <name>supplier-finance-server</name>
+    <description>Supplier Finance backend</description>
     <properties>
         <java.version>1.8</java.version>
     </properties>
