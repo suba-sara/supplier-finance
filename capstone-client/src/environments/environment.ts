@@ -4,6 +4,7 @@
 
 export const environment = {
   production: false,
+  SERVER: 'http://localhost:8088',
   API_PATH: 'http://localhost:8088/api',
 };
 

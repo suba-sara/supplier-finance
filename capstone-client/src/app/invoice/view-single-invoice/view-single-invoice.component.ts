@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ViewSingleInvoicesService } from './view-single-invoice.service';
 import { Invoice } from '../invoice.types';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-view-single-invoice',
@@ -9,6 +10,7 @@ import { Invoice } from '../invoice.types';
   styleUrls: ['./view-single-invoice.component.scss'],
 })
 export class ViewSingleInvoiceComponent implements OnInit {
+  SERVER = environment.SERVER;
   invoice?: Invoice;
 
   constructor(
