@@ -1,10 +1,10 @@
-import { Injectable, OnDestroy } from '@angular/core';
-import { environment } from '../../../environments/environment';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import {Injectable, OnDestroy} from '@angular/core';
+import {environment} from '../../../environments/environment';
+import {HttpClient} from '@angular/common/http';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
-const { API_PATH } = environment;
+const {API_PATH} = environment;
 
 export type UserType = 'CLIENT' | 'SUPPLIER' | 'BANK';
 
@@ -31,9 +31,13 @@ export class AuthService implements OnDestroy {
   /* to be used in future for refresh tokens */
   // private timer!: Subscription;
 
+  // Declare variables
   user = new BehaviorSubject<ApplicationUser | null>(null);
   user$: Observable<ApplicationUser | null> = this.user.asObservable();
 
+  /**
+   * Method to storage event listener
+   */
   private storageEventListener(event: StorageEvent): void {
     if (event.storageArea === localStorage) {
       if (event.key === 'logout-event') {
@@ -46,6 +50,9 @@ export class AuthService implements OnDestroy {
     }
   }
 
+  /**
+   * Constructor Method
+   */
   constructor(private http: HttpClient) {
     window.addEventListener('storage', this.storageEventListener.bind(this));
   }
@@ -54,18 +61,27 @@ export class AuthService implements OnDestroy {
     window.removeEventListener('storage', this.storageEventListener.bind(this));
   }
 
+  /**
+   * Method to handle sign in
+   *
+   * @param data send data from sign-in component
+   * @return SignInResponse observable
+   */
   signIn(data: SignInData): Observable<SignInResponse> {
     return this.http.post<SignInResponse>(`${API_PATH}/sign-in`, data).pipe(
       map((response) => {
+        // pass new user data to user stream
         this.user.next({
           username: response.username,
           userType: response.userType,
         });
+        // call setLocalStorage method
         this.setLocalStorage({
           accessToken: response.jwt,
           userName: response.username,
           userType: response.userType,
         });
+        // add a new login event so that other tabs will also get notified of the changed state
         localStorage.setItem('login-event', 'login ' + Date.now());
         /* to be used in future for refresh tokens */
         // this.startTokenTimer();
@@ -81,11 +97,18 @@ export class AuthService implements OnDestroy {
     localStorage.setItem('logout-event', 'logout ' + Date.now());
   }
 
+  /**
+   * Method to set local storage data
+   *
+   * @param accessToken JWT token
+   * @param userName
+   * @param userType
+   */
   setLocalStorage({
-    accessToken,
-    userName,
-    userType,
-  }: {
+                    accessToken,
+                    userName,
+                    userType,
+                  }: {
     accessToken: string;
     userName: string;
     userType: string;
@@ -96,6 +119,9 @@ export class AuthService implements OnDestroy {
     localStorage.setItem('user_type', userType);
   }
 
+  /**
+   *Method to clear local storage
+   */
   clearLocalStorage(): void {
     localStorage.removeItem('access_token');
     localStorage.removeItem('username');
