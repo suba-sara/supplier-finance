@@ -13,17 +13,29 @@ import org.springframework.web.client.HttpClientErrorException;
 import javax.validation.Valid;
 import java.security.Principal;
 
+/**
+ * Rest Controller for Users
+ */
 @CrossOrigin
 @RestController()
 public class UserController {
     private final UserService userService;
     private final ModelMapper mapper;
 
+    /**
+     * Constructor for UserController
+     */
     public UserController(UserService userService, ModelMapper mapper) {
         this.userService = userService;
         this.mapper = mapper;
     }
 
+    /**
+     * Method to signIn user
+     *
+     * @param dto the received data (username, password) to sign-in
+     * @return send JWT-with-type-dto response entity
+     */
     @PostMapping("/api/sign-in")
     public ResponseEntity<JwtWithTypeDTO> signIn(@Valid @RequestBody AppUserWithPasswordDTO dto) {
         return new ResponseEntity<>(
@@ -34,9 +46,18 @@ public class UserController {
         );
     }
 
+    /**
+     * Method to refresh JWT token
+     *
+     * @param principal the header comes with a request body
+     * @return send JWT-with-type-dto response entity
+     */
     @PostMapping("/api/refresh-token")
     public ResponseEntity<JwtWithTypeDTO> refreshToken(Principal principal) {
-        // throw unauthorized error if no user is defined
+        /*
+         * check principal(request has header or not) is null or not,
+         * if it is null, throw an unauthorized error
+         **/
         if (principal == null)
             throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED, "unauthorized");
 
@@ -46,6 +67,12 @@ public class UserController {
         );
     }
 
+    /**
+     * Method to sign-up supplier
+     *
+     * @param dto the data(type - PersonWithPasswordDTO) sent from front-end
+     * @return send supplier-dto response entity
+     */
     @PostMapping("/api/sign-up/supplier")
     public ResponseEntity<SupplierDTO> signUpSupplier(@Valid @RequestBody PersonWithPasswordDTO dto) {
         return new ResponseEntity<>(
@@ -54,6 +81,12 @@ public class UserController {
         );
     }
 
+    /**
+     * Method to sign-up client
+     *
+     * @param dto the data(type - PersonWithPasswordDTO) sent from front-end
+     * @return send client-dto response entity
+     */
     @PostMapping("/api/sign-up/client")
     public ResponseEntity<ClientDTO> signUpClient(@Valid @RequestBody PersonWithPasswordDTO dto) {
         return new ResponseEntity<>(
@@ -62,9 +95,17 @@ public class UserController {
         );
     }
 
-    //check if supplier id exists
+    /**
+     * Method to check supplier ID is exists or not
+     *
+     * @param supplierId the supplierId sent from front-end
+     * @return if the supplier is existing return true, false return otherwise
+     */
     @GetMapping("/api/users/checkSupplierId")
     public ResponseEntity<CheckExistsDTO> checkSupplierId(@RequestParam(name = "supplierId") String supplierId) {
+        /*
+         * send supplierId to checkSupplierId method, and it returns supplierId exist(true) or not(false)
+         * */
         CheckExistsDTO existsDTO = userService.checkSupplierId(supplierId);
         return new ResponseEntity<>(
                 existsDTO,
@@ -72,20 +113,30 @@ public class UserController {
         );
     }
 
-    // get the client id of the current user
+    /**
+     * Method to get the client id of the current user
+     *
+     * @param principal the header comes with a request body
+     * @return send client-id-dto response entity
+     */
     @GetMapping("/api/users/myClientId")
     public ResponseEntity<ClientIdDTO> getMyClientId(Principal principal) {
+        /*
+         * send the user_id to getClientId method and get clientId
+         **/
         String clientId = userService.getClientId(principal.getName());
 
+        // check client_Id is not null, then return below response entity
         if (clientId != null)
             return new ResponseEntity<>(
                     new ClientIdDTO(clientId),
                     HttpStatus.OK
             );
-        else
-            return new ResponseEntity<>(
-                    new ClientIdDTO(null),
-                    HttpStatus.NOT_FOUND
-            );
+
+        // if client_Id is null, then return bellow response entity
+        return new ResponseEntity<>(
+                new ClientIdDTO(null),
+                HttpStatus.NOT_FOUND
+        );
     }
 }
