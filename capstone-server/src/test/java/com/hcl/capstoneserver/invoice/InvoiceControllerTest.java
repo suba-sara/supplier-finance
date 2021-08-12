@@ -157,12 +157,12 @@ public class InvoiceControllerTest {
         }
 
         @Test
-        @DisplayName("it should not create new invoice with old date")
+        @DisplayName("it should not create new invoice with future date")
         public void shouldNotCreateNewInvoiceWithOldDate() {
             CreateInvoiceDTO dto = new CreateInvoiceDTO(
                     suppliers.get(0).getSupplierId(),
                     "1234567892",
-                    LocalDate.parse("2021-04-05"),
+                    LocalDate.parse("2921-04-05"),
                     25000.0,
                     CurrencyType.USD
             );
@@ -177,7 +177,7 @@ public class InvoiceControllerTest {
                          .isBadRequest()
                          .expectBody()
                          .jsonPath("$.errors[0].message")
-                         .isEqualTo("400 The invoice date is an older date.");
+                         .isEqualTo("400 The invoice date is a future date.");
         }
 
         @Test
@@ -234,27 +234,6 @@ public class InvoiceControllerTest {
                              .is2xxSuccessful();
             }
 
-            @Test
-            @DisplayName("it should not update when invoice is expired")
-            public void shouldNotUpdateInvoiceWhenInvoiceIsExpired() {
-                StatusUpdateInvoiceDTO dto = new StatusUpdateInvoiceDTO(
-                        expiredInvoice.getInvoiceId(),
-                        InvoiceStatus.IN_REVIEW
-                );
-
-                webTestClient.put()
-                             .uri(String.format("http://localhost:%d/api/invoices/update/status", port))
-                             .contentType(MediaType.APPLICATION_JSON)
-                             .header(HttpHeaders.AUTHORIZATION, client1token)
-                             .contentType(MediaType.APPLICATION_JSON)
-                             .body(Mono.just(dto), StatusUpdateInvoiceDTO.class)
-                             .exchange()
-                             .expectStatus()
-                             .is4xxClientError()
-                             .expectBody()
-                             .jsonPath("$.errors[0].message")
-                             .isEqualTo("400 You can not update the invoice status, because invoice is expire.");
-            }
 
             @Test
             @DisplayName("it should not update when invoice status is REJECTED")
@@ -332,13 +311,13 @@ public class InvoiceControllerTest {
             }
 
             @Test
-            @DisplayName("it should not update invoice with old date")
-            public void shouldNotUpdateInvoiceWithOldDate() {
+            @DisplayName("it should not update invoice with futre date")
+            public void shouldNotUpdateInvoiceWithFutureDate() {
                 UpdateInvoiceDTO dto = new UpdateInvoiceDTO(
                         createInvoice.get(0).getInvoice().getInvoiceId(),
                         suppliers.get(0).getSupplierId(),
                         "1234567892",
-                        LocalDate.parse("2021-04-05"),
+                        LocalDate.parse("2921-04-05"),
                         25000.0,
                         CurrencyType.USD
                 );
@@ -353,7 +332,7 @@ public class InvoiceControllerTest {
                              .is4xxClientError()
                              .expectBody()
                              .jsonPath("$.errors[0].message")
-                             .isEqualTo("400 The invoice date is an older date.");
+                             .isEqualTo("400 The invoice date is a future date.");
             }
 
             @Test
