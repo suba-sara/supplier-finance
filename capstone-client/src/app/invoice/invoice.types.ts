@@ -8,6 +8,8 @@ type Supplier = {
   name: string;
 };
 
+export type InvoiceStatus = 'UPLOADED' | 'IN_REVIEW' | 'APPROVED' | 'REJECTED';
+
 export type Invoice = {
   invoiceId: number;
   client: Client;
@@ -16,7 +18,7 @@ export type Invoice = {
   uploadedDate: Date;
   invoiceDate: Date;
   amount: number;
-  status: string;
+  status: InvoiceStatus;
   currencyType: string;
   fileUrl: string;
 };

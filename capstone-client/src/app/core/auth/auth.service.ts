@@ -1,12 +1,12 @@
-import { Injectable, OnDestroy } from '@angular/core';
-import { environment } from '../../../environments/environment';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import {Injectable, OnDestroy} from '@angular/core';
+import {environment} from '../../../environments/environment';
+import {HttpClient} from '@angular/common/http';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
-const { API_PATH } = environment;
+const {API_PATH} = environment;
 
-export type UserType = 'CLIENT' | 'SUPPLIER' | 'BANK';
+export type UserType = 'CLIENT' | 'SUPPLIER' | 'BANKER';
 
 export type SignInData = {
   userId: string;
