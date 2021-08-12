@@ -116,17 +116,17 @@ public class InvoiceServiceTest {
         }
 
         @Test
-        @DisplayName("it should not create new invoice with old date")
+        @DisplayName("it should not create new invoice with future date")
         public void shouldNotCreateNewInvoiceWithOldDate() {
             assertEquals(
-                    "400 The invoice date is an older date.",
+                    "400 The invoice date is a future date.",
                     assertThrows(
                             HttpClientErrorException.class,
                             () -> invoiceService.createInvoice(
                                     new CreateInvoiceDTO(
                                             suppliers.get(0).getSupplierId(),
                                             "1234567892",
-                                            LocalDate.parse("2021-04-05"),
+                                            LocalDate.parse("2999-04-05"),
                                             25000.0,
                                             CurrencyType.USD
                                     ), "client")
@@ -174,17 +174,6 @@ public class InvoiceServiceTest {
                 );
             }
 
-            @Test
-            @DisplayName("it should not update when invoice is expired")
-            public void shouldNotUpdateInvoiceWhenInvoiceIsExpired() {
-                assertEquals(
-                        "400 You can not update the invoice status, because invoice is expire.",
-                        assertThrows(
-                                HttpClientErrorException.class, () ->
-                                        updateInvoiceStatus(InvoiceStatus.IN_REVIEW, expiredInvoice.getInvoiceId())
-                        ).getMessage()
-                );
-            }
 
             @Test
             @DisplayName("it should not update when invoice status is REJECTED")
@@ -236,10 +225,10 @@ public class InvoiceServiceTest {
             }
 
             @Test
-            @DisplayName("it should not update invoice with old date")
+            @DisplayName("it should not update invoice with future date")
             public void shouldNotUpdateInvoiceWithOldDate() {
                 assertEquals(
-                        "400 The invoice date is an older date.",
+                        "400 The invoice date is a future date.",
                         assertThrows(
                                 HttpClientErrorException.class,
                                 () -> invoiceService.updateInvoice(
@@ -247,7 +236,7 @@ public class InvoiceServiceTest {
                                                 createInvoice.get(0).getInvoice().getInvoiceId(),
                                                 suppliers.get(0).getSupplierId(),
                                                 "1234567892",
-                                                LocalDate.parse("2021-04-05"),
+                                                LocalDate.parse("2921-04-05"),
                                                 25000.0,
                                                 CurrencyType.USD
                                         ), "client")
