@@ -1,16 +1,15 @@
 package com.hcl.capstoneserver.user;
 
-import com.hcl.capstoneserver.user.dto.CheckExistsDTO;
-import com.hcl.capstoneserver.user.dto.ClientDTO;
-import com.hcl.capstoneserver.user.dto.JwtWithTypeDTO;
-import com.hcl.capstoneserver.user.dto.SupplierDTO;
+import com.hcl.capstoneserver.user.dto.*;
 import com.hcl.capstoneserver.user.entities.AppUser;
+import com.hcl.capstoneserver.user.entities.Banker;
 import com.hcl.capstoneserver.user.entities.Client;
 import com.hcl.capstoneserver.user.entities.Supplier;
 import com.hcl.capstoneserver.user.exceptions.EmailAlreadyExistsException;
 import com.hcl.capstoneserver.user.exceptions.UserAlreadyExistsException;
 import com.hcl.capstoneserver.user.exceptions.UserDoesNotExistException;
 import com.hcl.capstoneserver.user.repositories.AppUserRepository;
+import com.hcl.capstoneserver.user.repositories.BankerRepository;
 import com.hcl.capstoneserver.user.repositories.ClientRepository;
 import com.hcl.capstoneserver.user.repositories.SupplierRepository;
 import com.hcl.capstoneserver.util.JWTUtil;
@@ -42,6 +41,7 @@ public class UserService implements UserDetailsService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ModelMapper mapper;
     private final SequenceGenerator sequenceGenerator;
+    private final BankerRepository bankerRepository;
 
     /**
      * Constructor for UserService
@@ -53,7 +53,8 @@ public class UserService implements UserDetailsService {
             JWTUtil jwtUtil,
             BCryptPasswordEncoder bCryptPasswordEncoder,
             ModelMapper mapper,
-            SequenceGenerator sequenceGenerator
+            SequenceGenerator sequenceGenerator,
+            BankerRepository bankerRepository
     ) {
         this.appUserRepository = appUserRepository;
         this.supplierRepository = supplierRepository;
@@ -62,6 +63,7 @@ public class UserService implements UserDetailsService {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.mapper = mapper;
         this.sequenceGenerator = sequenceGenerator;
+        this.bankerRepository = bankerRepository;
     }
 
 
@@ -184,7 +186,7 @@ public class UserService implements UserDetailsService {
     /**
      * Method to register new client
      *
-     * @param client client data to register new supplier
+     * @param client client data to register new client
      * @return if client is not exists, then return clientDTO object, otherwise throws error
      */
     public ClientDTO signUpClient(Client client) {
@@ -209,6 +211,25 @@ public class UserService implements UserDetailsService {
 //            if client email is already exists then throw DataIntegrityViolationException and catch form here and throw below error
             throw new EmailAlreadyExistsException(client.getEmail());
         }
+    }
+
+    /**
+     * Method to create Banker
+     *
+     * @param banker bank data to register new banker
+     * @return if bank is not exists, then return bankDTO object, otherwise throws error
+     */
+    public BankerDTO createBanker(Banker banker) {
+        //check if the banker is already exists or not, if user is exists throw UserAlreadyExistsException
+        if (bankerRepository.existsById(banker.getUserId())) {
+            throw new UserAlreadyExistsException(banker.getUserId());
+        }
+
+        return mapper.map(bankerRepository.save(new Banker(
+                banker.getUserId(),
+                bCryptPasswordEncoder.encode(banker.getPassword()),
+                banker.getEmployeeId()
+        )), BankerDTO.class);
     }
 
     /**
