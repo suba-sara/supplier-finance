@@ -5,7 +5,7 @@
       <div class="input-container">
         <mat-form-field appearance="outline">
           <mat-label>Client Id</mat-label>
-          <input [value]="clientId" disabled matInput/>
+          <input [value]="clientId" disabled matInput />
         </mat-form-field>
       </div>
       <div class="input-container">
@@ -40,7 +40,7 @@
           <mat-error
             *ngIf="uploadInvoiceForm.get('invoiceDate')?.getError('invalid')"
           >
-            Invoice date has to be a future date
+            Invoice date has to be a past date
           </mat-error>
         </mat-form-field>
       </div>
@@ -49,7 +49,7 @@
           <div class="long-input">
             <mat-form-field appearance="outline">
               <mat-label>Invoice Amount</mat-label>
-              <input formControlName="amount" matInput type="number"/>
+              <input formControlName="amount" matInput type="number" />
               <mat-error
                 *ngIf="uploadInvoiceForm.get('amount')?.getError('min')"
               >

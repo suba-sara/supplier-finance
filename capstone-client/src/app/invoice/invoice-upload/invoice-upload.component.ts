@@ -35,7 +35,7 @@ export class InvoiceUploadComponent implements OnInit {
         Validators.required,
         (control: AbstractControl): ValidationErrors | null => {
           // check if the invoice date is a future value or not
-          if (dayjs(control.value).isBefore(dayjs().startOf('day'))) {
+          if (dayjs(control.value).isAfter(dayjs().startOf('day'))) {
             return {
               invalid: true,
             };
