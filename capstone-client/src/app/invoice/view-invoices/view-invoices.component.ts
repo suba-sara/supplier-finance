@@ -10,6 +10,7 @@ import { Sort } from '@angular/material/sort';
 import { AppService } from '../../app.service';
 import { getDisplayColumns } from '../util/getDisplayColumns';
 import { AuthService } from '../../core/auth/auth.service';
+import { InvoiceStatus } from '../invoice.types';
 
 @Component({
   selector: 'app-view-invoices',
@@ -102,6 +103,12 @@ export class ViewInvoicesComponent implements OnInit {
       sortBy: e.active,
       sortDirection: e.direction.toUpperCase(),
       pageIndex: 0,
+    });
+  }
+
+  setInvoiceStatus(status?: InvoiceStatus): void {
+    this._changeQuery({
+      status,
     });
   }
 }

@@ -1,5 +1,68 @@
 <div class="content-container">
-  <app-invoice-status-filter></app-invoice-status-filter>
+  <div class="status-selector">
+    <button
+      (click)="setInvoiceStatus(undefined)"
+      [ngClass]="
+        viewInvoicesService.$filters.value.status === undefined
+          ? 'status-selector-btn-active'
+          : ''
+      "
+      color="primary"
+      mat-stroked-button
+    >
+      All
+    </button>
+    <button
+      (click)="setInvoiceStatus('UPLOADED')"
+      *ngIf="authService.user.value?.userType === 'CLIENT'"
+      [ngClass]="
+        viewInvoicesService.$filters.value.status === 'UPLOADED'
+          ? 'status-selector-btn-active'
+          : ''
+      "
+      class="status-selector-btn"
+      color="primary"
+      mat-stroked-button
+    >
+      Uploaded
+    </button>
+    <button
+      (click)="setInvoiceStatus('IN_REVIEW')"
+      [ngClass]="
+        viewInvoicesService.$filters.value.status === 'IN_REVIEW'
+          ? 'status-selector-btn-active'
+          : ''
+      "
+      color="primary"
+      mat-stroked-button
+    >
+      In Review
+    </button>
+    <button
+      (click)="setInvoiceStatus('APPROVED')"
+      [ngClass]="
+        viewInvoicesService.$filters.value.status === 'APPROVED'
+          ? 'status-selector-btn-active'
+          : ''
+      "
+      color="primary"
+      mat-stroked-button
+    >
+      Approved
+    </button>
+    <button
+      (click)="setInvoiceStatus('REJECTED')"
+      [ngClass]="
+        viewInvoicesService.$filters.value.status === 'REJECTED'
+          ? 'status-selector-btn-active'
+          : ''
+      "
+      color="primary"
+      mat-stroked-button
+    >
+      Rejected
+    </button>
+  </div>
   <div class="filter-wrapper">
     <h4>Filters</h4>
     <div>
