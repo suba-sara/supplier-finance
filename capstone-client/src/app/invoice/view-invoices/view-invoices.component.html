@@ -65,14 +65,14 @@
   </div>
   <div class="filter-wrapper">
     <h4>Filters</h4>
-    <div>
-      <mat-form-field appearance="outline">
+    <div class="filter-input-wrapper">
+      <mat-form-field appearance="outline" class="filter-input">
         <mat-label>Invoice Number</mat-label>
         <input
           (change)="filterInputChange($event)"
           [value]="
             viewInvoicesService.$filters.value.invoiceNumber
-              ? viewInvoicesService.$filters.value.invoiceNumber
+              ? (viewInvoicesService.$filters.value.invoiceNumber | uppercase)
               : ''
           "
           matInput
@@ -80,17 +80,39 @@
         />
         <mat-icon matPrefix>person_outline</mat-icon>
       </mat-form-field>
-      <mat-form-field appearance="outline">
+      <mat-form-field
+        *ngIf="authService.user.value?.userType !== 'CLIENT'"
+        appearance="outline"
+        class="filter-input"
+      >
+        <mat-label>Client Code</mat-label>
+        <input
+          (change)="filterInputChange($event)"
+          [value]="
+            viewInvoicesService.$filters.value.clientId
+              ? (viewInvoicesService.$filters.value.clientId | uppercase)
+              : ''
+          "
+          matInput
+          name="clientId"
+        />
+        <mat-icon matPrefix>person_outline</mat-icon>
+      </mat-form-field>
+      <mat-form-field
+        *ngIf="authService.user.value?.userType !== 'SUPPLIER'"
+        appearance="outline"
+        class="filter-input"
+      >
         <mat-label>Supplier Code</mat-label>
         <input
           (change)="filterInputChange($event)"
           [value]="
-            viewInvoicesService.$filters.value.invoiceNumber
-              ? viewInvoicesService.$filters.value.invoiceNumber
+            viewInvoicesService.$filters.value.supplierId
+              ? (viewInvoicesService.$filters.value.supplierId | uppercase)
               : ''
           "
           matInput
-          name="supplierCode"
+          name="supplierId"
         />
         <mat-icon matPrefix>person_outline</mat-icon>
       </mat-form-field>
