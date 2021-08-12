@@ -11,17 +11,17 @@ export class InvoiceAgePipe implements PipeTransform {
 
     const today = dayjs();
 
-    const diffYears = dayjs(date).diff(today, 'years');
+    const diffYears = dayjs(today).diff(date, 'years');
     if (diffYears) {
       return formatOutput(diffYears, 'year');
     }
 
-    const diffMonths = dayjs(date).diff(today, 'months');
+    const diffMonths = dayjs(today).diff(date, 'months');
     if (diffMonths) {
       return formatOutput(diffMonths, 'month');
     }
 
-    const diffDays = dayjs(date).diff(today, 'days');
+    const diffDays = dayjs(today).diff(date, 'days');
     return formatOutput(diffDays, 'day');
   }
 }
