@@ -18,8 +18,6 @@ import { InvoiceNumberFormatPipe } from './pipes/invoice-number-format.pipe';
 import { DateFormatPipe } from './pipes/date-format.pipe';
 import { InvoiceAgePipe } from './pipes/invoice-age.pipe';
 import { MatSortModule } from '@angular/material/sort';
-import { InvoiceStatusFilterComponent } from './invoice-status-filter/invoice-status-filter.component';
-import { FilterButtonComponent } from './invoice-status-filter/filter-button.component';
 
 @NgModule({
   declarations: [
@@ -29,8 +27,6 @@ import { FilterButtonComponent } from './invoice-status-filter/filter-button.com
     InvoiceNumberFormatPipe,
     DateFormatPipe,
     InvoiceAgePipe,
-    InvoiceStatusFilterComponent,
-    FilterButtonComponent,
   ],
   imports: [
     CommonModule,
