@@ -13,7 +13,8 @@ export type InvoiceFiltersOptional = {
   pageSize?: number;
   pageIndex?: number;
   invoiceNumber?: string;
-  supplierCode?: string;
+  supplierId?: string;
+  clientId?: string;
   dateFrom?: Date;
   dateTo?: Date;
   ageing?: number;

@@ -36,7 +36,8 @@ export class ViewInvoicesComponent implements OnInit {
       const pageSize = params['pageSize'] ? params['pageSize'] : 10;
       const pageIndex = params['pageNumber'] ? params['pageNumber'] - 1 : 0;
       const invoiceNumber = params['invoiceNumber'];
-      const supplierCode = params['supplierCode'];
+      const supplierId = params['supplierId'];
+      const clientId = params['clientId'];
       const dateFrom = params['dateFrom']
         ? new Dayjs(params['dateFrom']).startOf('date').toDate()
         : undefined;
@@ -52,7 +53,8 @@ export class ViewInvoicesComponent implements OnInit {
         pageSize,
         pageIndex,
         invoiceNumber,
-        supplierCode,
+        supplierId,
+        clientId,
         dateFrom,
         dateTo,
         ageing,
