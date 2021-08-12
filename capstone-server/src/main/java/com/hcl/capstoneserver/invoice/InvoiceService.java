@@ -73,11 +73,11 @@ public class InvoiceService {
     }
 
     private void _checkInvoiceDate(LocalDate invoiceDate, UserType userType) {
-        if (LocalDate.now().isAfter(invoiceDate)) {
+        if (invoiceDate.isAfter(LocalDate.now())) {
             String msg = null;
             switch (userType) {
                 case CLIENT:
-                    msg = "The invoice date is an older date.";
+                    msg = "The invoice date is a future date.";
                     break;
                 case BANKER:
                     msg = "You can not update the invoice status, because invoice is expire.";
