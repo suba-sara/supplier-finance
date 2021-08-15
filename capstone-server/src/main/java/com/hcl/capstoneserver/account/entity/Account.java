@@ -10,7 +10,7 @@ public class Account {
     @Id
     private Integer accountNumber;
     @NotNull
-    private String name;
+    private String accountHolderName;
     @NotNull
     private String email;
     private Integer OTP;
@@ -20,9 +20,15 @@ public class Account {
     public Account() {
     }
 
-    public Account(Integer accountNumber, String name, String email, Integer OTP, Date otpExpiredDate, Boolean isVerified) {
+    public Account(Integer accountNumber, String accountHolderName, String email) {
         this.accountNumber = accountNumber;
-        this.name = name;
+        this.accountHolderName = accountHolderName;
+        this.email = email;
+    }
+
+    public Account(Integer accountNumber, String accountHolderName, String email, Integer OTP, Date otpExpiredDate, Boolean isVerified) {
+        this.accountNumber = accountNumber;
+        this.accountHolderName = accountHolderName;
         this.email = email;
         this.OTP = OTP;
         this.otpExpiredDate = otpExpiredDate;
@@ -38,11 +44,11 @@ public class Account {
     }
 
     public String getName() {
-        return name;
+        return accountHolderName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String accountHolderName) {
+        this.accountHolderName = accountHolderName;
     }
 
     public String getEmail() {
