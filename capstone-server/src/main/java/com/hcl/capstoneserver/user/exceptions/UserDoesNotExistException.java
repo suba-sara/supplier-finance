@@ -10,7 +10,7 @@ public class UserDoesNotExistException extends HttpClientErrorException {
     private final String field;
 
     public UserDoesNotExistException(UserType userType, String field) {
-        super(HttpStatus.BAD_REQUEST, String.format("This %s is not exist.", userType));
+        super(String.format("This %s is not exist.", userType), HttpStatus.BAD_REQUEST, field, null, null, null);
         this.field = field;
     }
 

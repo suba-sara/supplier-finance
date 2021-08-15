@@ -296,7 +296,7 @@ public class UserService implements UserDetailsService {
 
         // check client variable is null or not, if its null throws UserDoesNotExistException
         if (!client.isPresent()) {
-            throw new UserDoesNotExistException(UserType.CLIENT, "userId");
+            throw new UserDoesNotExistException(UserType.CLIENT, "User Id");
         }
         return client.get();
     }
@@ -317,7 +317,7 @@ public class UserService implements UserDetailsService {
 
         // check supplier variable is null or not, if its null throws UserDoesNotExistException
         if (!supplier.isPresent()) {
-            throw new UserDoesNotExistException(UserType.SUPPLIER, "userId");
+            throw new UserDoesNotExistException(UserType.SUPPLIER, "User Id");
         }
         return supplier.get();
     }
@@ -340,7 +340,7 @@ public class UserService implements UserDetailsService {
 
         // check client variable is null or not, if its null throws UserDoesNotExistException
         if (!optionalClient.isPresent()) {
-            throw new UserDoesNotExistException(UserType.SUPPLIER, "clientId");
+            throw new UserDoesNotExistException(UserType.SUPPLIER, "Client Id");
         }
         return optionalClient.get();
     }
@@ -362,7 +362,7 @@ public class UserService implements UserDetailsService {
         Optional<Supplier> optionalSupplier = supplierRepository.findOne(Example.of(supplier));
         // check supplier variable is null or not, if its null throws UserDoesNotExistException
         if (!optionalSupplier.isPresent()) {
-            throw new UserDoesNotExistException(UserType.SUPPLIER, "supplierId");
+            throw new UserDoesNotExistException(UserType.SUPPLIER, "Supplier Id");
         }
         return optionalSupplier.get();
     }
