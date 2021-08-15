@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   AbstractControl,
-  FormBuilder,
   FormControl,
   FormGroup,
   Validators,
@@ -20,7 +19,7 @@ export class BankAccountDetailsFormComponent implements OnInit {
   @Output()
   signUpEvent: EventEmitter<void> = new EventEmitter<void>();
 
-  accountForm: FormGroup = this.fb.group({
+  accountForm: FormGroup = new FormGroup({
     accountNumber: new FormControl('', [
       Validators.required,
       Validators.maxLength(10),
@@ -33,10 +32,7 @@ export class BankAccountDetailsFormComponent implements OnInit {
   isAccountVerify = false;
   errorMessage = '';
 
-  constructor(
-    private fb: FormBuilder,
-    private bankAccountService: BankAccountService
-  ) {}
+  constructor(private bankAccountService: BankAccountService) {}
 
   ngOnInit(): void {}
 
