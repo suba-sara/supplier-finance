@@ -1,58 +1,62 @@
-<form [formGroup]="BankDataFormSupplier">
-  <div class="full-width-field2-container">
-    <mat-form-field appearance="outline">
-      <mat-label>Credit Account Number</mat-label>
-      <input matInput maxlength="255" formControlName="craditAccountNumber"/>
-      <mat-error *ngIf="BankDataFormSupplier.get('craditAccountNumber')?.hasError('required')">
-        required
-      </mat-error>
-      <mat-error *ngIf="BankDataFormSupplier.get('craditAccountNumber')?.hasError('maxLength')">
-        must be less than 255 characters
-      </mat-error>
-    </mat-form-field>
-  </div>
-  <div class="full-width-field2-container">
-    <mat-form-field appearance="outline">
-      <mat-label>Bank Code</mat-label>
-      <input matInput maxlength="255" formControlName="bankCode"/>
-      <mat-error *ngIf="BankDataFormSupplier.get('bankCode')?.hasError('required')">
-        required
-      </mat-error>
-      <mat-error *ngIf="BankDataFormSupplier.get('bankCode')?.hasError('maxLength')">
-        must be less than 255 characters
-      </mat-error>
-    </mat-form-field>
-  </div>
-  <div class="full-width-field2-container">
-    <mat-form-field appearance="outline">
-      <mat-label>Supplier Limit</mat-label>
-      <input matInput maxlength="255" formControlName="supplierLimit"/>
-      <mat-error *ngIf="BankDataFormSupplier.get('supplierLimit')?.hasError('required')">
-        required
-      </mat-error>
-      <mat-error *ngIf="BankDataFormSupplier.get('supplierLimit')?.hasError('maxLength')">
-        must be less than 255 characters
-      </mat-error>
-    </mat-form-field>
-  </div>
-  <div class="full-width-field2-container">
-    <mat-form-field appearance="outline">
-      <mat-label>Invoice Payment</mat-label>
-      <input matInput maxlength="255" formControlName="invoicePayament"/>
-      <mat-error *ngIf="BankDataFormSupplier.get('invoicePayament')?.hasError('required')">
-        required
-      </mat-error>
-      <mat-error *ngIf="BankDataFormSupplier.get('invoicePayament')?.hasError('maxLength')">
-        must be less than 255 characters
-      </mat-error>
-    </mat-form-field>
-  </div>
-  <div class="button-container">
-    <div>
-      <button mat-flat-button (click)="goBack()">Previous</button>
+<form [formGroup]="accountForm">
+  <div class="form-content-container">
+    <mat-card class="mat-elevation-z0 outline" *ngIf="errorMessage">
+      <div class="mat-card-warning">
+        <mat-icon>error_outline</mat-icon>
+        <mat-label>{{ errorMessage }}</mat-label>
+      </div>
+    </mat-card>
+    <div class="full-width-field2-container">
+      <mat-form-field appearance="outline">
+        <mat-label>Account Number</mat-label>
+        <input matInput maxlength="255" formControlName="accountNumber" />
+        <mat-error *ngIf="accountNumber?.dirty || accountNumber?.touched">
+          {{
+            accountNumber?.hasError("required")
+              ? "required"
+              : accountNumber?.hasError("pattern")
+              ? "account number must be numeric characters"
+              : "account number must be 10 characters"
+          }}
+        </mat-error>
+      </mat-form-field>
+      <button *ngIf="!isAccountChecked" (click)="checkAccountNumber()">
+        Check Account
+      </button>
     </div>
-    <div>
-      <button (click)="signUp()" [disabled]="BankDataFormSupplier.pristine || BankDataFormSupplier.invalid"  mat-flat-button>Sign Up</button>
+    <div *ngIf="isAccountChecked && !isAccountVerify">
+      <div class="full-width-field2-container">
+        <mat-form-field appearance="outline">
+          <mat-label>OTP Code</mat-label>
+          <input matInput maxlength="255" formControlName="OTP" />
+          <mat-error *ngIf="OTP?.dirty || OTP?.touched">
+            {{
+              OTP?.hasError("required")
+                ? "required"
+                : OTP?.hasError("pattern")
+                ? "OTP must be numeric characters"
+                : "OTP must be 10 characters"
+            }}
+          </mat-error>
+        </mat-form-field>
+        <button class="button-container" (click)="verifyOTP()">
+          Verify Account
+        </button>
+      </div>
+    </div>
+    <div class="button-container">
+      <div>
+        <button mat-flat-button (click)="goBack()">Previous</button>
+      </div>
+      <div>
+        <button
+          (click)="signUp()"
+          [disabled]="!isAccountVerify"
+          mat-flat-button
+        >
+          Sign Up
+        </button>
+      </div>
     </div>
   </div>
 </form>

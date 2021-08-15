@@ -14,8 +14,6 @@ export class SignUpClientComponent implements OnInit {
   pageNumber: number;
 
   constructor(private signUpService: SignUpService) {
-    this.pageNumber = 1;
-
     this.personalDetails = {
       firstName: '',
       lastName: '',

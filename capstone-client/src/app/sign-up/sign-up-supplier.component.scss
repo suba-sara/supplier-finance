@@ -6,7 +6,7 @@
   height: 100%;
 
   background: linear-gradient(0deg, rgba(12, 12, 12, 0.7), rgba(3, 3, 3, 0.4)),
-    url("../../assets/Images/home-gb.svg") no-repeat;
+  url("../../assets/Images/home-gb.svg") no-repeat;
   background-size: cover;
 }
 
@@ -149,6 +149,25 @@ button {
 
   mat-form-field {
     width: 48%;
+  }
+}
+
+.mat-card ::ng-deep {
+  padding: 16px 0;
+}
+
+.mat-card-warning {
+  display: flex;
+  align-items: center;
+  color: #d50000;
+  background: #ffebee;
+  width: 100%;
+  padding: 10px;
+  outline: none;
+  border-radius: 5px;
+
+  mat-icon {
+    margin-right: 2%;
   }
 }
 

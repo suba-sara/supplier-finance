@@ -6,13 +6,7 @@ import org.springframework.web.client.HttpClientErrorException;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class InvoiceOwnershipException extends HttpClientErrorException {
-    private final String FIELD = "User Id";
-
     public InvoiceOwnershipException(String message) {
-        super(HttpStatus.BAD_REQUEST, message);
-    }
-
-    public String getField() {
-        return FIELD;
+        super(message, HttpStatus.BAD_REQUEST, "User Id", null, null, null);
     }
 }
