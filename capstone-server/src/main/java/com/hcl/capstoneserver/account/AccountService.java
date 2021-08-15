@@ -51,7 +51,7 @@ public class AccountService {
         if (account.isPresent()) {
             Account acc = account.get();
             if (new Date().before(acc.getOtpExpiredDate())) {
-                if (Objects.equals(acc.getOTP(), accountVerifiedDTO.getOtp())) {
+                if (Objects.equals(acc.getOTP(), accountVerifiedDTO.getOTP())) {
                     acc.setVerified(true);
                     accountRepository.save(acc);
                     return true;

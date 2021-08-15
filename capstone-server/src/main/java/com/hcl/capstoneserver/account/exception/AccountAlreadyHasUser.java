@@ -8,6 +8,6 @@ import org.springframework.web.client.HttpClientErrorException;
 public class AccountAlreadyHasUser extends HttpClientErrorException {
 
     public AccountAlreadyHasUser() {
-        super(HttpStatus.BAD_REQUEST, "The bank account is already verified by a user.");
+        super(HttpStatus.BAD_REQUEST, "You already have a account, please login.");
     }
 }

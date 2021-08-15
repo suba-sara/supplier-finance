@@ -14,6 +14,8 @@ import { UserTypeButtonComponent } from './user-type-button/user-type-button.com
 import { FormHeaderComponent } from './form-header/form-header.component';
 import { SuccessFeedbackComponent } from './success-feedback/success-feedback.component';
 import { ClientBankAccDetailsComponent } from './client-bank-acc-details/client-bank-acc-details.component';
+import {MatCardModule} from "@angular/material/card";
+import {MatIconModule} from "@angular/material/icon";
 
 @NgModule({
   declarations: [
@@ -35,6 +37,8 @@ import { ClientBankAccDetailsComponent } from './client-bank-acc-details/client-
     MatButtonModule,
     FormsModule,
     ReactiveFormsModule,
+    MatCardModule,
+    MatIconModule,
   ],
 })
 export class SignUpModule {}
