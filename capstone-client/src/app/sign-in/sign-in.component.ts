@@ -1,6 +1,6 @@
-import {Component, OnInit} from '@angular/core';
-import {AuthService, SignInData} from '../core/auth/auth.service';
-import {Router} from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { AuthService, SignInData } from '../core/auth/auth.service';
+import { Router } from '@angular/router';
 
 export type SignInResponseType = {
   jwt: string;
@@ -20,9 +20,6 @@ export class SignInComponent implements OnInit {
 
   /**
    * Constructor Method
-   *
-   * @param authService
-   * @param router
    */
   constructor(private authService: AuthService, private router: Router) {
     // initialize variable
@@ -33,8 +30,7 @@ export class SignInComponent implements OnInit {
     this.isPasswordVisible = true;
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   /**
    * Method to handle Sign-in
