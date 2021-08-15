@@ -118,7 +118,7 @@ export class AuthService implements OnDestroy {
   }
 
   /**
-   *Method to clear local storage
+   * Method to clear local storage
    */
   clearLocalStorage(): void {
     localStorage.removeItem('access_token');
