@@ -153,7 +153,7 @@ public class InvoiceControllerTest {
                          .isBadRequest()
                          .expectBody()
                          .jsonPath("$.errors[0].message")
-                         .isEqualTo("400 An invoice number already exists for this supplier.");
+                         .isEqualTo("An invoice number already exists for this supplier.");
         }
 
         @Test
@@ -177,7 +177,7 @@ public class InvoiceControllerTest {
                          .isBadRequest()
                          .expectBody()
                          .jsonPath("$.errors[0].message")
-                         .isEqualTo("400 The invoice date is a future date.");
+                         .isEqualTo("The invoice date is a future date.");
         }
 
         @Test
@@ -201,7 +201,7 @@ public class InvoiceControllerTest {
                          .is4xxClientError()
                          .expectBody()
                          .jsonPath("$.errors[0].message")
-                         .isEqualTo("400 This SUPPLIER is not exist.");
+                         .isEqualTo("This SUPPLIER is not exist.");
         }
     }
 
@@ -255,7 +255,7 @@ public class InvoiceControllerTest {
                              .is4xxClientError()
                              .expectBody()
                              .jsonPath("$.errors[0].message")
-                             .isEqualTo("400 This invoice can not update, because invoice is REJECTED.");
+                             .isEqualTo("This invoice can not update, because invoice is REJECTED.");
             }
         }
 
@@ -307,7 +307,7 @@ public class InvoiceControllerTest {
                              .is4xxClientError()
                              .expectBody()
                              .jsonPath("$.errors[0].message")
-                             .isEqualTo("400 client you do not have permission to update this invoice.");
+                             .isEqualTo("client you do not have permission to update this invoice.");
             }
 
             @Test
@@ -332,7 +332,7 @@ public class InvoiceControllerTest {
                              .is4xxClientError()
                              .expectBody()
                              .jsonPath("$.errors[0].message")
-                             .isEqualTo("400 The invoice date is a future date.");
+                             .isEqualTo("The invoice date is a future date.");
             }
 
             @Test
@@ -358,7 +358,7 @@ public class InvoiceControllerTest {
                              .is4xxClientError()
                              .expectBody()
                              .jsonPath("$.errors[0].message")
-                             .isEqualTo("400 This invoice can not update, because invoice is IN_REVIEW.");
+                             .isEqualTo("This invoice can not update, because invoice is IN_REVIEW.");
             }
         }
     }
@@ -398,7 +398,7 @@ public class InvoiceControllerTest {
                          .is4xxClientError()
                          .expectBody()
                          .jsonPath("$.errors[0].message")
-                         .isEqualTo("400 client2 you do not have permission to delete this invoice.");
+                         .isEqualTo("client2 you do not have permission to delete this invoice.");
         }
 
         @Test
@@ -417,7 +417,7 @@ public class InvoiceControllerTest {
                          .is4xxClientError()
                          .expectBody()
                          .jsonPath("$.errors[0].message")
-                         .isEqualTo("400 This invoice can not delete, because invoice is IN_REVIEW.");
+                         .isEqualTo("This invoice can not delete, because invoice is IN_REVIEW.");
         }
     }
 

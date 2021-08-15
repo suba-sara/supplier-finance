@@ -119,7 +119,7 @@ public class InvoiceServiceTest {
         @DisplayName("it should not create new invoice with future date")
         public void shouldNotCreateNewInvoiceWithOldDate() {
             assertEquals(
-                    "400 The invoice date is a future date.",
+                    "The invoice date is a future date.",
                     assertThrows(
                             HttpClientErrorException.class,
                             () -> invoiceService.createInvoice(
@@ -138,7 +138,7 @@ public class InvoiceServiceTest {
         @DisplayName("it should not create new invoice with not exists supplier")
         public void shouldNotCreateNewInvoiceWithNotExistsSupplier() {
             assertEquals(
-                    "400 This SUPPLIER is not exist.",
+                    "This SUPPLIER is not exist.",
                     assertThrows(
                             HttpClientErrorException.class,
                             () -> invoiceService.createInvoice(
@@ -180,7 +180,7 @@ public class InvoiceServiceTest {
             public void shouldNotUpdateInvoiceWhenStatusIsRejected() {
                 updateInvoiceStatus(InvoiceStatus.REJECTED, createInvoice.get(0).getInvoice().getInvoiceId());
                 assertEquals(
-                        "400 This invoice can not update, because invoice is REJECTED.",
+                        "This invoice can not update, because invoice is REJECTED.",
                         assertThrows(
                                 HttpClientErrorException.class, () ->
                                         updateInvoiceStatus(
@@ -209,7 +209,7 @@ public class InvoiceServiceTest {
             @DisplayName("it should not update invoice when that invoice owner is not a same client")
             public void shouldNotUpdateInvoiceWhenInvoiceOwnerIsNotEqual() {
                 assertEquals(
-                        "400 client you do not have permission to update this invoice.",
+                        "client you do not have permission to update this invoice.",
                         assertThrows(
                                 HttpClientErrorException.class,
                                 () -> invoiceService.updateInvoice(new UpdateInvoiceDTO(
@@ -228,7 +228,7 @@ public class InvoiceServiceTest {
             @DisplayName("it should not update invoice with future date")
             public void shouldNotUpdateInvoiceWithOldDate() {
                 assertEquals(
-                        "400 The invoice date is a future date.",
+                        "The invoice date is a future date.",
                         assertThrows(
                                 HttpClientErrorException.class,
                                 () -> invoiceService.updateInvoice(
@@ -249,7 +249,7 @@ public class InvoiceServiceTest {
             public void shouldNotUpdateInvoiceWithInReviewAndApprovedAndRejected() {
                 updateInvoiceStatus(InvoiceStatus.IN_REVIEW, createInvoice.get(0).getInvoice().getInvoiceId());
                 assertEquals(
-                        "400 This invoice can not update, because invoice is IN_REVIEW.",
+                        "This invoice can not update, because invoice is IN_REVIEW.",
                         assertThrows(
                                 HttpClientErrorException.class,
                                 () -> invoiceService.updateInvoice(
@@ -283,7 +283,7 @@ public class InvoiceServiceTest {
         @DisplayName("it should not delete invoice when that invoice owner is not a same client")
         public void shouldNotDeleteInvoiceWhenInvoiceOwnerIsNotEqual() {
             assertEquals(
-                    "400 client2 you do not have permission to delete this invoice.",
+                    "client2 you do not have permission to delete this invoice.",
                     assertThrows(
                             HttpClientErrorException.class,
                             () -> invoiceService.deleteInvoice(
@@ -299,7 +299,7 @@ public class InvoiceServiceTest {
         public void shouldNotDeleteInvoiceWithInReviewAndApprovedAndRejected() {
             updateInvoiceStatus(InvoiceStatus.IN_REVIEW, createInvoice.get(0).getInvoice().getInvoiceId());
             assertEquals(
-                    "400 This invoice can not delete, because invoice is IN_REVIEW.",
+                    "This invoice can not delete, because invoice is IN_REVIEW.",
                     assertThrows(
                             HttpClientErrorException.class,
                             () -> invoiceService.deleteInvoice(
