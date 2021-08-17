@@ -11,8 +11,8 @@ const { API_PATH } = environment;
 export class BankAccountService {
   constructor(private http: HttpClient) {}
 
-  public getOTP(accountNumber: any): Observable<any> {
-    return this.http.get(`${API_PATH}/account/get-otp/${accountNumber}`);
+  public getOTP(accountNumber: number): Observable<any> {
+    return this.http.post(`${API_PATH}/account/get-otp/`, { accountNumber });
   }
 
   public verifyOTP(data: any): Promise<any> {
