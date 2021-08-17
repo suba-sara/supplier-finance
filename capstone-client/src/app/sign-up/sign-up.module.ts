@@ -15,6 +15,7 @@ import { FormHeaderComponent } from './form-header/form-header.component';
 import { SuccessFeedbackComponent } from './success-feedback/success-feedback.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { MatIconModule } from '@angular/material/icon';
     ReactiveFormsModule,
     MatCardModule,
     MatIconModule,
+    MatProgressSpinnerModule,
   ],
 })
 export class SignUpModule {}

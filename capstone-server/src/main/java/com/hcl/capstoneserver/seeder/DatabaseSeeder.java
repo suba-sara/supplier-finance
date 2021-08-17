@@ -4,6 +4,8 @@ import com.hcl.capstoneserver.account.entity.Account;
 import com.hcl.capstoneserver.account.repositories.AccountRepository;
 import com.hcl.capstoneserver.user.entities.Banker;
 import com.hcl.capstoneserver.user.repositories.BankerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -20,15 +22,24 @@ public class DatabaseSeeder {
         this.bankerRepository = bankerRepository;
         this.accountRepository = accountRepository;
     }
+    final static String _accNumberBase = "10000000";
+    @Autowired
+    private BankerRepository bankerRepository;
+    @Autowired
+    private AccountRepository accountRepository;
+    @Value("${seed.account.data}")
+    private boolean seedAccountData;
 
     @EventListener
     public void seed(ContextRefreshedEvent event) {
-        seedAccountTable();
-        seedBankTable();
+        if (seedAccountData) {
+            seedAccountTable();
+            seedBankerTable();
+        }
     }
 
-    private void seedBankTable() {
-        if (this.bankerRepository.findAll().size() == 0) {
+    private void seedBankerTable() {
+        if (this.bankerRepository.count() == 0) {
             List<Banker> bankerList = new ArrayList<>();
             bankerList.add(new Banker("shsbank1", "123456@shs", "EM_00001"));
             bankerList.add(new Banker("shsbank2", "123456@shs", "EM_00002"));
@@ -36,12 +47,28 @@ public class DatabaseSeeder {
         }
     }
 
+    private String _generateAccNumber(int n) throws RuntimeException {
+        String newPart = String.valueOf(n);
+        if (newPart.length() > _accNumberBase.length()) {
+            throw new RuntimeException("Maximum no of accounts exceeded");
+        }
+
+        StringBuilder accNumber = new StringBuilder(_accNumberBase);
+        for (int i = 0; i < newPart.length(); i++) {
+            accNumber.setCharAt(_accNumberBase.length() - 1 - i, newPart.charAt(newPart.length() - 1 - i));
+        }
+
+        return accNumber.toString();
+    }
+
     private void seedAccountTable() {
-        if (this.accountRepository.findAll().size() == 0) {
+        if (this.accountRepository.count() == 0) {
             List<Account> accountList = new ArrayList<>();
-            accountList.add(new Account(1234567891, "Shevan Fernando", "w.k.b.s.t.fernando@gmail.com"));
-            accountList.add(new Account(1234567892, "Shashi Sri Dharmasiri", "shashi@gmail.com"));
-            accountList.add(new Account(1234567893, "Mohomed Jesse", "jessel@gmail.com"));
+
+            for (int i = 1; i <= 10000; i++) {
+                String accNumber = _generateAccNumber(i);
+                accountList.add(new Account(accNumber, "ACO_" + accNumber, "shs_" + accNumber + "@mailinator.com"));
+            }
             this.accountRepository.saveAll(accountList);
         }
     }

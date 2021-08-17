@@ -25,8 +25,8 @@ public class AccountController {
         return new ResponseEntity<>(accountService.getOTP(dto.getAccountNumber()), HttpStatus.ACCEPTED);
     }
 
-    @PostMapping("/api/account/verify")
+    @PostMapping("/api/account/check-otp")
     public ResponseEntity<Boolean> verifyAccount(@Valid @RequestBody AccountVerifiedDTO accountVerifiedDTO) {
-        return new ResponseEntity<>(accountService.verifyAccount(accountVerifiedDTO), HttpStatus.OK);
+        return new ResponseEntity<>(accountService.checkOTP(accountVerifiedDTO), HttpStatus.OK);
     }
 }

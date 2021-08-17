@@ -8,25 +8,32 @@ import java.util.Date;
 @Entity
 public class Account {
     @Id
-    private Integer accountNumber;
+    private String accountNumber;
     @NotNull
     private String accountHolderName;
     @NotNull
     private String email;
-    private Integer OTP;
+    private String OTP;
     private Date otpExpiredDate;
     private Boolean isVerified = false;
 
     public Account() {
     }
 
-    public Account(Integer accountNumber, String accountHolderName, String email) {
+    public Account(String accountNumber, String accountHolderName, String email) {
         this.accountNumber = accountNumber;
         this.accountHolderName = accountHolderName;
         this.email = email;
     }
 
-    public Account(Integer accountNumber, String accountHolderName, String email, Integer OTP, Date otpExpiredDate, Boolean isVerified) {
+    public Account(
+            String accountNumber,
+            String accountHolderName,
+            String email,
+            String OTP,
+            Date otpExpiredDate,
+            Boolean isVerified
+    ) {
         this.accountNumber = accountNumber;
         this.accountHolderName = accountHolderName;
         this.email = email;
@@ -35,11 +42,11 @@ public class Account {
         this.isVerified = isVerified;
     }
 
-    public Integer getAccountNumber() {
+    public String getAccountNumber() {
         return accountNumber;
     }
 
-    public void setAccountNumber(Integer accountNumber) {
+    public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
     }
 
@@ -59,11 +66,11 @@ public class Account {
         this.email = email;
     }
 
-    public Integer getOTP() {
+    public String getOTP() {
         return OTP;
     }
 
-    public void setOTP(Integer OTP) {
+    public void setOTP(String OTP) {
         this.OTP = OTP;
     }
 

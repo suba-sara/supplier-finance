@@ -203,7 +203,7 @@ public class UserService implements UserDetailsService {
      */
     public ClientDTO signUpClient(Client client) {
         try {
-            //check if the client is already exists or not, if user is exists throw UserAlreadyExistsException
+            //check if the client is already exists or not, if user  exists throw UserAlreadyExistsException
             if (clientRepository.existsById(client.getUserId())) {
                 throw new UserAlreadyExistsException(client.getUserId());
             }
