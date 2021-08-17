@@ -48,7 +48,7 @@ export class BankAccountDetailsFormComponent implements OnInit {
     return this.accountForm.get('OTP');
   }
 
-  checkAccountNumber(): void {
+  getOTP(): void {
     this.accountForm?.addControl(
       'OTP',
       new FormControl(undefined, [
@@ -59,7 +59,7 @@ export class BankAccountDetailsFormComponent implements OnInit {
       ])
     );
     this.bankAccountService
-      .checkAccountNumber(this.accountForm?.controls['accountNumber'].value)
+      .getOTP(this.accountForm?.controls['accountNumber'].value)
       .subscribe(
         () => (this.isAccountChecked = true),
         (err) =>
