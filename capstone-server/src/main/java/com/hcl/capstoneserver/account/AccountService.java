@@ -24,6 +24,9 @@ public class AccountService {
     @Value("${otp.validity.time}")
     private Integer otpValidityTime;
 
+    @Value("${test.otp.seed}")
+    private Integer testOtpSeed;
+
     public AccountService(AccountRepository accountRepository, EmailService emailService) {
         this.accountRepository = accountRepository;
         this.emailService = emailService;
@@ -37,7 +40,14 @@ public class AccountService {
 
             if (!acc.getVerified()) {
                 // generate a six digit otp code
-                String otp = String.valueOf(100000 + new Random().nextInt(999999));
+                Random r;
+                if (testOtpSeed != null) {
+                    r = new Random(testOtpSeed);
+                } else {
+                    r = new Random();
+                }
+
+                String otp = String.valueOf(100000 + r.nextInt(999999));
 
                 emailService.sendOtp(acc.getEmail(), otp);
                 acc.setOTP(otp);
