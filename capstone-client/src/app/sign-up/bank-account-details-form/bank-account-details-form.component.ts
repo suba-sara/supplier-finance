@@ -28,6 +28,7 @@ export class BankAccountDetailsFormComponent implements OnInit {
   formSubmitEvent = new EventEmitter<AccountDetails>();
 
   getOtpLoading = false;
+  otpMessage?: string;
 
   accountForm: FormGroup = new FormGroup({
     accountNumber: new FormControl('', [
@@ -62,7 +63,7 @@ export class BankAccountDetailsFormComponent implements OnInit {
           this.errorMessage = 'Invalid Verification Code';
         }
       },
-      (error) => (this.errorMessage = 'Invalid Verification Code')
+      (_error) => (this.errorMessage = 'Invalid Verification Code')
     );
   }
 
@@ -88,9 +89,10 @@ export class BankAccountDetailsFormComponent implements OnInit {
     this.bankAccountService
       .getOTP(this.accountForm?.controls['accountNumber'].value)
       .subscribe(
-        () => {
+        (data) => {
           this.isAccountChecked = true;
           this.getOtpLoading = false;
+          this.otpMessage = data.message;
         },
         (err) => {
           this.errorMessage = err === 'OK' ? 'INTERNAL SERVER ERROR' : err;
