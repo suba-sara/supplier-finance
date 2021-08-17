@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ApplicationUser, AuthService } from './core/auth/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackbarService } from './util/snakbar.service';
+import { AppService } from './app.service';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +15,8 @@ export class AppComponent {
   constructor(
     private authService: AuthService,
     private snackBar: MatSnackBar,
-    private snackbarService: SnackbarService
+    private snackbarService: SnackbarService,
+    private _appService: AppService
   ) {
     authService.user$.subscribe((u) => {
       this.user = u;

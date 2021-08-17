@@ -8,14 +8,14 @@ const LEFT_NAVBAR_EXPANDED_STATE_KEY = 'IS_LEFT_NAVBAR_EXPANDED';
   providedIn: 'root',
 })
 export class AppService {
-  baseTitle = 'Supplier Finance';
+  baseTitle = `SHS Bank's Supplier Finance`;
   navbarExpanded$ = new BehaviorSubject(false);
   pageTitle$ = new BehaviorSubject<string | undefined>(undefined);
 
   constructor(private title: Title) {
     this.pageTitle$.subscribe((pageTitle) => {
       this.title.setTitle(
-        pageTitle ? `${this.baseTitle} | ${pageTitle}` : this.baseTitle
+        pageTitle ? `${pageTitle} - ${this.baseTitle} ` : this.baseTitle
       );
     });
 
@@ -34,7 +34,7 @@ export class AppService {
     this.navbarExpanded$.next(!this.navbarExpanded$.value);
   };
 
-  setPageTitle = (pageTitle: string) => {
+  setPageTitle = (pageTitle?: string) => {
     this.pageTitle$.next(pageTitle);
   };
 }

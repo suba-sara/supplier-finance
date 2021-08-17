@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PersonalDetails } from './personal-data-form/personal-data-form.component';
 import { UserDetails } from './user-data-form/user-data-form.component';
 import { SignUpService } from './sign-up.service';
+import { AppService } from '../app.service';
 
 type SupplierAccDetail = {
   creditAccNumber?: number;
@@ -21,7 +22,10 @@ export class SignUpSupplierComponent implements OnInit {
   supplierAccDetail: SupplierAccDetail;
   userDetails: UserDetails;
 
-  constructor(private signUpService: SignUpService) {
+  constructor(
+    private signUpService: SignUpService,
+    private appService: AppService
+  ) {
     this.personalDetails = {
       firstName: '',
       lastName: '',
@@ -39,7 +43,9 @@ export class SignUpSupplierComponent implements OnInit {
     this.userDetails = { password: '', userId: '' };
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.appService.setPageTitle('Sign Up Supplier');
+  }
 
   submitUserData = (value: UserDetails): void => {
     this.userDetails = value;

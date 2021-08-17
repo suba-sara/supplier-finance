@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserDetails } from './user-data-form/user-data-form.component';
 import { PersonalDetails } from './personal-data-form/personal-data-form.component';
 import { SignUpService } from './sign-up.service';
+import { AppService } from '../app.service';
 
 @Component({
   selector: 'app-sign-up-client',
@@ -13,7 +14,10 @@ export class SignUpClientComponent implements OnInit {
   userDetails: UserDetails;
   pageNumber: number;
 
-  constructor(private signUpService: SignUpService) {
+  constructor(
+    private signUpService: SignUpService,
+    private appService: AppService
+  ) {
     this.personalDetails = {
       firstName: '',
       lastName: '',
@@ -41,7 +45,9 @@ export class SignUpClientComponent implements OnInit {
     this.goToNextPage();
   };
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.appService.setPageTitle('Sign Up Client');
+  }
 
   gotoPreviousPage = (): void => {
     if (this.pageNumber > 1) {
