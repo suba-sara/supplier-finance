@@ -15,15 +15,13 @@
   transform: translate(-50%, -50%);
   background: white;
   width: 75vw;
-  height: 75vh;
+  height: 70vh;
   border-radius: 1px;
   display: flex;
   justify-content: space-between;
   overflow: hidden;
   margin: 0;
   padding: 0;
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px
-	rgba(0, 0, 0, 0.22);
 }
 
 .section {
@@ -34,13 +32,9 @@
   width: 55%;
   background-image: linear-gradient(to right, rgb(0, 139, 253),
   rgb(0, 84, 194));
-  text-align: center;
-  color: white;
+  background-size: cover;
 }
-.left-section{
-  font-size: 16px;
-  padding: 5px;
-}
+
 .right-section {
   display: flex;
   flex-direction: column;
