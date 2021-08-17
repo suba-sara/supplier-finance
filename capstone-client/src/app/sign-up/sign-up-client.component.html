@@ -15,10 +15,10 @@
         ></app-personal-data-form>
       </section>
       <section *ngSwitchCase="3">
-        <app-bank-acc-details
+        <app-bank-account-details-form
           (signUpEvent)="register()"
           [goBack]="gotoPreviousPage"
-        ></app-bank-acc-details>
+        ></app-bank-account-details-form>
       </section>
       <section *ngSwitchCase="4">
         <app-success-feedback></app-success-feedback>
