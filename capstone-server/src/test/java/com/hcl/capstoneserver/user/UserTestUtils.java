@@ -2,6 +2,7 @@ package com.hcl.capstoneserver.user;
 
 import com.hcl.capstoneserver.account.AccountService;
 import com.hcl.capstoneserver.account.repositories.AccountRepository;
+import com.hcl.capstoneserver.seeder.DatabaseSeeder;
 import com.hcl.capstoneserver.user.dto.BankerDTO;
 import com.hcl.capstoneserver.user.dto.ClientDTO;
 import com.hcl.capstoneserver.user.dto.PersonWithPasswordDTO;
@@ -23,6 +24,16 @@ public class UserTestUtils {
 
     @Autowired
     AccountService accountService;
+
+    @Autowired
+    DatabaseSeeder databaseSeeder;
+
+    public void accountCreate() {
+        databaseSeeder.seedTest();
+        for (int i = 5; i < 9; i++) {
+            accountService.getOTP("1000023" + i);
+        }
+    }
 
     public List<SupplierDTO> createASupplier() {
         List<SupplierDTO> suppliers = new ArrayList<>();

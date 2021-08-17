@@ -31,6 +31,13 @@ public class DatabaseSeeder {
         }
     }
 
+    public void seedTest() {
+        bankerRepository.deleteAll();
+        accountRepository.deleteAll();
+        seedAccountTable();
+        seedBankerTable();
+    }
+
     private void seedBankerTable() {
         if (this.bankerRepository.count() == 0) {
             List<Banker> bankerList = new ArrayList<>();
