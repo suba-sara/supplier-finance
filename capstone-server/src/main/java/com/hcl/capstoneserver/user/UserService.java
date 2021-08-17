@@ -3,7 +3,6 @@ package com.hcl.capstoneserver.user;
 import com.hcl.capstoneserver.account.exception.OTPTimedOut;
 import com.hcl.capstoneserver.mail.sender.EmailService;
 import com.hcl.capstoneserver.user.dto.*;
-import com.hcl.capstoneserver.user.dto.views.UserVerifiedDTO;
 import com.hcl.capstoneserver.user.entities.AppUser;
 import com.hcl.capstoneserver.user.entities.Banker;
 import com.hcl.capstoneserver.user.entities.Client;
@@ -380,43 +379,92 @@ public class UserService implements UserDetailsService {
         return optionalSupplier.get();
     }
 
+    /**
+     * Method to send OTP code for forgot password
+     *
+     * @param userId userId
+     * @return if OTP code is correct, then return true. and other hand return following exception
+     */
     public Boolean getOTP(String userId) {
+        // retrieve user from db
         Optional<AppUser> user = appUserRepository.findById(userId);
+
+        // check user object is null, then throw following exception
         if (!user.isPresent()) {
             throw new UsernameNotFoundException("User not found");
         }
 
+        int OTP;
+
+        // check the User account Type
         switch (user.get().getUserType()) {
             case CLIENT:
-                int OTP = emailService.send(fetchClientDataByUserId(userId).getEmail());
-                appUserRepository.save(_addOTPAndExpireDate(user, OTP));
+                // send OTP Code
+                OTP = emailService.send(fetchClientDataByUserId(userId).getEmail());
+                // Save OTP code and OTP Code expired date
+                appUserRepository.save(_addOTPAndExpireDate(user.get(), OTP));
                 break;
             case SUPPLIER:
-                int OTP = emailService.send(fetchSupplierDataByUserId(userId).getEmail());
-                appUserRepository.save(_addOTPAndExpireDate(user, OTP));
+                // send OTP Code
+                OTP = emailService.send(fetchSupplierDataByUserId(userId).getEmail());
+                // Save OTP code and OTP Code expired date
+                appUserRepository.save(_addOTPAndExpireDate(user.get(), OTP));
                 break;
         }
 
         return true;
     }
 
+    /**
+     * Method to verify OTP and update password
+     *
+     * @param dto UserVerifiedDto object -> for more information move on it
+     * @return if OTP code is correct, then return true. and other hand return following exception
+     */
     public Boolean verifyUser(UserVerifiedDTO dto) {
+        // retrieve user from db
         Optional<AppUser> user = appUserRepository.findById(dto.getUserId());
+
+        // check user object is null or not
         if (user.isPresent()) {
+            // check the OTP time is expired or not
             if (new Date().before(user.get().getOtpExpiredDate())) {
+                // check OTP is equal or not
                 if (Objects.equals(user.get().getOTP(), dto.getOTP())) {
+                    /*
+                     * set new password
+                     */
+                    user.get().setPassword(bCryptPasswordEncoder.encode(dto.getPassword()));
                     return true;
                 }
             } else {
+                // if OTP is expired then throw this exception
                 throw new OTPTimedOut();
             }
         }
+
+        // if user object is null then throw this exception
         throw new UsernameNotFoundException("User not found");
     }
 
+    /**
+     * Method to set OTP and OTP expired date
+     *
+     * @param user AppUser object
+     * @param OTP  One-time-password
+     * @return AppUser object
+     */
     private AppUser _addOTPAndExpireDate(AppUser user, Integer OTP) {
+        // set OTP
         user.setOTP(OTP);
-        user.setOtpExpiredDate(new Date(new System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(otpValidityTime)));
+
+        /*
+         * set OTP expired date
+         *
+         * logic -> take the system current time and add OTP validity time to it.
+         * this OTP validity time is in resource property file and can change it
+         */
+        user.setOtpExpiredDate(new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(otpValidityTime)));
         return user;
     }
 }
