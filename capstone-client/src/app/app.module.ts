@@ -7,9 +7,10 @@ import { SharedModule } from './shared/shared.module';
 import { ForbiddenComponent } from './forbidden/forbidden.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { AboutComponent } from './about/about.component';
 
 @NgModule({
-  declarations: [AppComponent, ForbiddenComponent],
+  declarations: [AppComponent, ForbiddenComponent, AboutComponent],
   imports: [
     CommonModule,
     BrowserModule,
