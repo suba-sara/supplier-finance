@@ -12,28 +12,19 @@ public class Person extends AppUser {
     @Column(unique = true)
     private String email;
     private String phone;
-    private Float interestRate;
+    private String accountNumber;
 
     public Person() {
         super();
     }
 
-    public Person(
-            String userId,
-            String password,
-            UserType userType,
-            String name,
-            String address,
-            String email,
-            String phone,
-            Float interestRate
-    ) {
+    public Person(String userId, String password, UserType userType, String name, String address, String email, String phone, String accountNumber) {
         super(userId, password, userType);
         this.name = name;
         this.address = address;
         this.email = email;
         this.phone = phone;
-        this.interestRate = interestRate;
+        this.accountNumber = accountNumber;
     }
 
     public String getName() {
@@ -68,12 +59,12 @@ public class Person extends AppUser {
         this.phone = phone;
     }
 
-    public Float getInterestRate() {
-        return interestRate;
+    public String getAccountNumber() {
+        return accountNumber;
     }
 
-    public void setInterestRate(Float interestRate) {
-        this.interestRate = interestRate;
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
     }
 
     @Override
@@ -83,7 +74,6 @@ public class Person extends AppUser {
                 ", address='" + address + '\'' +
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
-                ", interestRate=" + interestRate +
                 '}';
     }
 }

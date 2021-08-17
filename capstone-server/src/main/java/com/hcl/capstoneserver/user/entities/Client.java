@@ -11,8 +11,6 @@ public class Client extends Person {
     @Column(unique = true)
     private String clientId;
 
-    private Integer accountNumber;
-
     public Client() {
     }
 
@@ -23,11 +21,9 @@ public class Client extends Person {
             String address,
             String email,
             String phone,
-            Float interestRate,
-            Integer accountNumber
+            String accountNumber
     ) {
-        super(userId, password, UserType.CLIENT, name, address, email, phone, interestRate);
-        this.accountNumber = accountNumber;
+        super(userId, password, UserType.CLIENT, name, address, email, phone, accountNumber);
     }
 
     public Client(
@@ -37,13 +33,11 @@ public class Client extends Person {
             String address,
             String email,
             String phone,
-            Float interestRate,
             String clientId,
-            Integer accountNumber
+            String accountNumber
     ) {
-        super(userId, password, UserType.CLIENT, name, address, email, phone, interestRate);
+        super(userId, password, UserType.CLIENT, name, address, email, phone, accountNumber);
         this.clientId = clientId;
-        this.accountNumber = accountNumber;
     }
 
     public String getClientId() {
@@ -52,13 +46,5 @@ public class Client extends Person {
 
     public void setClientId(String clientId) {
         this.clientId = clientId;
-    }
-
-    public Integer getAccountNumber() {
-        return accountNumber;
-    }
-
-    public void setAccountNumber(Integer accountNumber) {
-        this.accountNumber = accountNumber;
     }
 }

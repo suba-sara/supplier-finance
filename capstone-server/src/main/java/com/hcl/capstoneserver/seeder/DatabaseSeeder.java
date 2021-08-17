@@ -60,7 +60,12 @@ public class DatabaseSeeder {
 
             for (int i = 1; i <= 10000; i++) {
                 String accNumber = _generateAccNumber(i);
-                accountList.add(new Account(accNumber, "ACO_" + accNumber, "shs_" + accNumber + "@mailinator.com"));
+                accountList.add(new Account(
+                        accNumber,
+                        "ACO_" + accNumber,
+                        "shs_" + accNumber + "@mailinator.com",
+                        2.5F
+                ));
             }
             this.accountRepository.saveAll(accountList);
         }

@@ -2,8 +2,6 @@ package com.hcl.capstoneserver.user;
 
 import com.hcl.capstoneserver.user.dto.*;
 import com.hcl.capstoneserver.user.entities.AppUser;
-import com.hcl.capstoneserver.user.entities.Client;
-import com.hcl.capstoneserver.user.entities.Supplier;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -76,7 +74,7 @@ public class UserController {
     @PostMapping("/api/sign-up/supplier")
     public ResponseEntity<SupplierDTO> signUpSupplier(@Valid @RequestBody PersonWithPasswordDTO dto) {
         return new ResponseEntity<>(
-                userService.signUpSupplier(mapper.map(dto, Supplier.class)),
+                userService.signUpSupplier(dto),
                 HttpStatus.CREATED
         );
     }
@@ -90,7 +88,7 @@ public class UserController {
     @PostMapping("/api/sign-up/client")
     public ResponseEntity<ClientDTO> signUpClient(@Valid @RequestBody PersonWithPasswordDTO dto) {
         return new ResponseEntity<>(
-                userService.signUpClient(mapper.map(dto, Client.class)),
+                userService.signUpClient(dto),
                 HttpStatus.CREATED
         );
     }

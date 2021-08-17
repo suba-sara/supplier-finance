@@ -1,5 +1,7 @@
 package com.hcl.capstoneserver.user;
 
+import com.hcl.capstoneserver.account.AccountService;
+import com.hcl.capstoneserver.account.dto.AccountVerifiedDTO;
 import com.hcl.capstoneserver.user.dto.*;
 import com.hcl.capstoneserver.user.entities.AppUser;
 import com.hcl.capstoneserver.user.entities.Banker;
@@ -42,6 +44,7 @@ public class UserService implements UserDetailsService {
     private final ModelMapper mapper;
     private final SequenceGenerator sequenceGenerator;
     private final BankerRepository bankerRepository;
+    private final AccountService accountService;
 
     /**
      * Constructor for UserService
@@ -54,7 +57,8 @@ public class UserService implements UserDetailsService {
             BCryptPasswordEncoder bCryptPasswordEncoder,
             ModelMapper mapper,
             SequenceGenerator sequenceGenerator,
-            BankerRepository bankerRepository
+            BankerRepository bankerRepository,
+            AccountService accountService
     ) {
         this.appUserRepository = appUserRepository;
         this.supplierRepository = supplierRepository;
@@ -64,8 +68,8 @@ public class UserService implements UserDetailsService {
         this.mapper = mapper;
         this.sequenceGenerator = sequenceGenerator;
         this.bankerRepository = bankerRepository;
+        this.accountService = accountService;
     }
-
 
     /**
      * Method to signIn user
@@ -144,72 +148,78 @@ public class UserService implements UserDetailsService {
 
         return new User(
                 user.get()
-                        .getUserId(),
+                    .getUserId(),
                 user.get()
-                        .getPassword(),
+                    .getPassword(),
                 Collections.singleton(
                         new SimpleGrantedAuthority(user.get().getUserType().toString())
                 )
         );
     }
 
-
     /**
      * Method to register new supplier
      *
-     * @param supplier supplier data to register new supplier
+     * @param dto supplier data to register new supplier
      * @return if suppler is not exists, then return supplierDTO object, otherwise throws error
      */
-    public SupplierDTO signUpSupplier(Supplier supplier) {
+    public SupplierDTO signUpSupplier(PersonWithPasswordDTO dto) {
         try {
             // check if user already exists or not, if user is exists throw UserAlreadyExistsException
-            if (supplierRepository.existsById(supplier.getUserId())) {
-                throw new UserAlreadyExistsException(supplier.getUserId());
+            if (supplierRepository.existsById(dto.getUserId())) {
+                throw new UserAlreadyExistsException(dto.getUserId());
             }
 
+            // check OTP
+            accountService.verifyAccount(new AccountVerifiedDTO(dto.getAccountNumber(), dto.getOTP()));
+
             return mapper.map(supplierRepository.save(new Supplier(
-                    supplier.getUserId(),
-                    bCryptPasswordEncoder.encode(supplier.getPassword()),
-                    supplier.getName(),
-                    supplier.getAddress(),
-                    supplier.getEmail(),
-                    supplier.getPhone(),
-                    supplier.getInterestRate(),
+                    dto.getUserId(),
+                    bCryptPasswordEncoder.encode(dto.getPassword()),
+                    dto.getName(),
+                    dto.getAddress(),
+                    dto.getEmail(),
+                    dto.getPhone(),
+                    dto.getAccountNumber(),
                     sequenceGenerator.getSupplierSequence()
             )), SupplierDTO.class);
         } catch (DataIntegrityViolationException e) {
-//            if supplier email is already exists then throw DataIntegrityViolationException and catch form here and throw below error
-            throw new EmailAlreadyExistsException(supplier.getEmail());
+            //            if supplier email is already exists then throw DataIntegrityViolationException and catch
+            //            form here and throw below error
+            throw new EmailAlreadyExistsException(dto.getEmail());
         }
     }
 
     /**
      * Method to register new client
      *
-     * @param client client data to register new client
+     * @param dto client data to register new client
      * @return if client is not exists, then return clientDTO object, otherwise throws error
      */
-    public ClientDTO signUpClient(Client client) {
+    public ClientDTO signUpClient(PersonWithPasswordDTO dto) {
         try {
             //check if the client is already exists or not, if user  exists throw UserAlreadyExistsException
-            if (clientRepository.existsById(client.getUserId())) {
-                throw new UserAlreadyExistsException(client.getUserId());
+            if (clientRepository.existsById(dto.getUserId())) {
+                throw new UserAlreadyExistsException(dto.getUserId());
             }
 
+            // check OTP
+            accountService.verifyAccount(new AccountVerifiedDTO(dto.getAccountNumber(), dto.getOTP()));
+
             return mapper.map(clientRepository.save(new Client(
-                    client.getUserId(),
-                    bCryptPasswordEncoder.encode(client.getPassword()),
-                    client.getName(),
-                    client.getAddress(),
-                    client.getEmail(),
-                    client.getPhone(),
-                    client.getInterestRate(),
+                    dto.getUserId(),
+                    bCryptPasswordEncoder.encode(dto.getPassword()),
+                    dto.getName(),
+                    dto.getAddress(),
+                    dto.getEmail(),
+                    dto.getPhone(),
                     sequenceGenerator.getClientSequence(),
-                    client.getAccountNumber()
+                    dto.getAccountNumber()
             )), ClientDTO.class);
         } catch (DataIntegrityViolationException e) {
-//            if client email is already exists then throw DataIntegrityViolationException and catch form here and throw below error
-            throw new EmailAlreadyExistsException(client.getEmail());
+            //            if client email is already exists then throw DataIntegrityViolationException and catch form
+            //            here and throw below error
+            throw new EmailAlreadyExistsException(dto.getEmail());
         }
     }
 
