@@ -7,6 +7,11 @@ import {
 } from '@angular/forms';
 import { BankAccountService } from './bank-account.service';
 
+export type AccountDetails = {
+  accountNumber: string;
+  otp: string;
+};
+
 @Component({
   selector: 'app-bank-account-details-form',
   templateUrl: './bank-account-details-form.component.html',
@@ -17,7 +22,7 @@ export class BankAccountDetailsFormComponent implements OnInit {
   goBack!: () => void;
 
   @Output()
-  signUpEvent: EventEmitter<void> = new EventEmitter<void>();
+  formSubmitEvent = new EventEmitter<AccountDetails>();
 
   getOtpLoading = false;
 
@@ -43,7 +48,7 @@ export class BankAccountDetailsFormComponent implements OnInit {
     this.bankAccountService.verifyOTP(this.accountForm.value).subscribe(
       (val) => {
         if (val) {
-          this.signUpEvent.emit();
+          this.formSubmitEvent.emit(this.accountForm.value);
         } else {
           this.errorMessage = 'Invalid Verification Code';
         }
