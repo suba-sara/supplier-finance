@@ -1,6 +1,9 @@
 package com.hcl.capstoneserver.user;
 
+import com.hcl.capstoneserver.account.exception.OTPTimedOut;
+import com.hcl.capstoneserver.mail.sender.EmailService;
 import com.hcl.capstoneserver.user.dto.*;
+import com.hcl.capstoneserver.user.dto.views.UserVerifiedDTO;
 import com.hcl.capstoneserver.user.entities.AppUser;
 import com.hcl.capstoneserver.user.entities.Banker;
 import com.hcl.capstoneserver.user.entities.Client;
@@ -15,6 +18,7 @@ import com.hcl.capstoneserver.user.repositories.SupplierRepository;
 import com.hcl.capstoneserver.util.JWTUtil;
 import com.hcl.capstoneserver.util.SequenceGenerator;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Example;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -27,7 +31,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.Date;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Service for Users
@@ -42,6 +49,10 @@ public class UserService implements UserDetailsService {
     private final ModelMapper mapper;
     private final SequenceGenerator sequenceGenerator;
     private final BankerRepository bankerRepository;
+    private final EmailService emailService;
+
+    @Value("${otp.validity.time}")
+    private Integer otpValidityTime;
 
     /**
      * Constructor for UserService
@@ -54,7 +65,8 @@ public class UserService implements UserDetailsService {
             BCryptPasswordEncoder bCryptPasswordEncoder,
             ModelMapper mapper,
             SequenceGenerator sequenceGenerator,
-            BankerRepository bankerRepository
+            BankerRepository bankerRepository,
+            EmailService emailService
     ) {
         this.appUserRepository = appUserRepository;
         this.supplierRepository = supplierRepository;
@@ -64,6 +76,7 @@ public class UserService implements UserDetailsService {
         this.mapper = mapper;
         this.sequenceGenerator = sequenceGenerator;
         this.bankerRepository = bankerRepository;
+        this.emailService = emailService;
     }
 
 
@@ -288,7 +301,7 @@ public class UserService implements UserDetailsService {
      */
     public Client fetchClientDataByUserId(String userId) {
         /*
-         * Client table primary key is username -> remember
+         * Client table primary key is userId -> remember
          *
          * find User using the client repository and assign it to client local variable
          * */
@@ -365,6 +378,46 @@ public class UserService implements UserDetailsService {
             throw new UserDoesNotExistException(UserType.SUPPLIER, "Supplier Id");
         }
         return optionalSupplier.get();
+    }
+
+    public Boolean getOTP(String userId) {
+        Optional<AppUser> user = appUserRepository.findById(userId);
+        if (!user.isPresent()) {
+            throw new UsernameNotFoundException("User not found");
+        }
+
+        switch (user.get().getUserType()) {
+            case CLIENT:
+                int OTP = emailService.send(fetchClientDataByUserId(userId).getEmail());
+                appUserRepository.save(_addOTPAndExpireDate(user, OTP));
+                break;
+            case SUPPLIER:
+                int OTP = emailService.send(fetchSupplierDataByUserId(userId).getEmail());
+                appUserRepository.save(_addOTPAndExpireDate(user, OTP));
+                break;
+        }
+
+        return true;
+    }
+
+    public Boolean verifyUser(UserVerifiedDTO dto) {
+        Optional<AppUser> user = appUserRepository.findById(dto.getUserId());
+        if (user.isPresent()) {
+            if (new Date().before(user.get().getOtpExpiredDate())) {
+                if (Objects.equals(user.get().getOTP(), dto.getOTP())) {
+                    return true;
+                }
+            } else {
+                throw new OTPTimedOut();
+            }
+        }
+        throw new UsernameNotFoundException("User not found");
+    }
+
+    private AppUser _addOTPAndExpireDate(AppUser user, Integer OTP) {
+        user.setOTP(OTP);
+        user.setOtpExpiredDate(new Date(new System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(otpValidityTime)));
+        return user;
     }
 }
 
