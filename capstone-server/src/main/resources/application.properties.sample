@@ -13,4 +13,4 @@ spring.mail.username=dfsdfsdf@gmail.com
 spring.mail.password=dsfsdfsdfsdfdsf
 spring.mail.properties.mail.smtp.auth=true
 spring.mail.properties.mail.smtp.starttls.enable=true
-otp.validity.time=10
+otp.validity.time=15
