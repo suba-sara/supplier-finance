@@ -36,10 +36,10 @@
       <div class="full-width-field2-container">
         <mat-form-field appearance="outline">
           <mat-label>Verification Code</mat-label>
-          <input matInput maxlength="255" formControlName="OTP" />
-          <mat-error *ngIf="OTP?.dirty || OTP?.touched">
+          <input formControlName="otp" matInput maxlength="255" />
+          <mat-error *ngIf="otp?.dirty || otp?.touched">
             {{
-              OTP?.hasError("required")
+              otp?.hasError("required")
                 ? "required"
                 : "Invalid Verification Code"
             }}

@@ -2,7 +2,6 @@ package com.hcl.capstoneserver.user.dto;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class PersonWithPasswordDTO extends PersonDTO implements WithPassword {
@@ -10,9 +9,8 @@ public class PersonWithPasswordDTO extends PersonDTO implements WithPassword {
     @Size(min = 4, max = 255, message = "password must be at least 4 characters long")
     private String password;
 
-    @NotNull(message = "OTP is required")
-    @Pattern(regexp = "[\\d]{6}", message = "accountNumber is invalid")
-    private String OTP = null;
+    @NotNull(message = "otp is required")
+    private String otp;
 
     public PersonWithPasswordDTO() {
     }
@@ -25,11 +23,11 @@ public class PersonWithPasswordDTO extends PersonDTO implements WithPassword {
             String phone,
             String accountNumber,
             String password,
-            String OTP
+            String otp
     ) {
         super(userId, name, address, email, phone, accountNumber);
         this.password = password;
-        this.OTP = OTP;
+        this.otp = otp;
     }
 
     @Override
@@ -42,11 +40,11 @@ public class PersonWithPasswordDTO extends PersonDTO implements WithPassword {
         this.password = password;
     }
 
-    public String getOTP() {
-        return OTP;
+    public String getOtp() {
+        return otp;
     }
 
-    public void setOTP(String OTP) {
-        this.OTP = OTP;
+    public void setOtp(String otp) {
+        this.otp = otp;
     }
 }

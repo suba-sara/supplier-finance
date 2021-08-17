@@ -70,14 +70,14 @@ export class BankAccountDetailsFormComponent implements OnInit {
     return this.accountForm.get('accountNumber');
   }
 
-  get OTP(): AbstractControl | null {
-    return this.accountForm.get('OTP');
+  get otp(): AbstractControl | null {
+    return this.accountForm.get('otp');
   }
 
   getOTP(): void {
     this.getOtpLoading = true;
     this.accountForm?.addControl(
-      'OTP',
+      'otp',
       new FormControl(undefined, [
         Validators.required,
         Validators.maxLength(6),
