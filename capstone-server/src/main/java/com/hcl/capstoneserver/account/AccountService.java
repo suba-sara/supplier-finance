@@ -1,6 +1,7 @@
 package com.hcl.capstoneserver.account;
 
 import com.hcl.capstoneserver.account.dto.AccountVerifiedDTO;
+import com.hcl.capstoneserver.account.dto.GetOtpResponseDTO;
 import com.hcl.capstoneserver.account.entity.Account;
 import com.hcl.capstoneserver.account.exception.AccountAlreadyHasUser;
 import com.hcl.capstoneserver.account.exception.AccountNotFoundException;
@@ -28,7 +29,7 @@ public class AccountService {
         this.emailService = emailService;
     }
 
-    public Boolean getOTP(String accountNumber) {
+    public GetOtpResponseDTO getOTP(String accountNumber) {
         Optional<Account> account = accountRepository.findById(accountNumber);
         if (account.isPresent()) {
             Account acc = account.get();
@@ -42,7 +43,17 @@ public class AccountService {
                 acc.setOTP(otp);
                 acc.setOtpExpiredDate(new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(otpValidityTime)));
                 accountRepository.save(acc);
-                return true;
+
+                // hide part of email address
+                String[] splitted = acc.getEmail().split("@");
+                StringBuilder encryptedEmail = new StringBuilder(splitted[0]);
+                for (int i = 3; i < encryptedEmail.length(); i++) {
+                    encryptedEmail.setCharAt(i, '*');
+                }
+                encryptedEmail.append('@');
+                encryptedEmail.append(splitted[1]);
+
+                return new GetOtpResponseDTO("We have sent the verification code to the registered email address: " + encryptedEmail);
             } else {
                 throw new AccountAlreadyHasUser();
             }

@@ -25,8 +25,8 @@ public class EmailService {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
             messageHelper.setTo(receiver);
             messageHelper.setFrom(emailSender);
-            messageHelper.setSubject("SHS BANK OTP CODE");
-            messageHelper.setText(String.format("Your OTP Code: %s", otp));
+            messageHelper.setSubject("SHS Bank's Supplier Finance Verification Code");
+            messageHelper.setText(String.format("Your Verification Code is: %s", otp));
         };
         this.javaMailSender.send(message);
     }

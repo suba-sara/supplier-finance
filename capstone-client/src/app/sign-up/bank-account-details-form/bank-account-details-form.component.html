@@ -32,6 +32,9 @@
         </div>
       </div>
     </div>
+    <div *ngIf="otpMessage" class="otp-message">
+      {{ otpMessage }}
+    </div>
     <div *ngIf="isAccountChecked && !isAccountVerify">
       <div class="full-width-field2-container">
         <mat-form-field appearance="outline">
