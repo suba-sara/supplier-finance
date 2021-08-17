@@ -1,17 +1,7 @@
 package com.hcl.capstoneserver.user.dto;
 
-import org.hibernate.validator.constraints.Length;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
-
 public class ClientDTO extends PersonDTO {
     private String clientId;
-
-    @NotBlank(message = "account number is required")
-    @Length(max = 10, min = 10, message = "account number is not valid")
-    @Pattern(regexp = "^[0-9]+$", message = "account number is not valid")
-    private Integer accountNumber;
 
     public ClientDTO() {
     }
@@ -22,13 +12,11 @@ public class ClientDTO extends PersonDTO {
             String address,
             String email,
             String phone,
-            Float interestRate,
-            String clientId,
-            Integer accountNumber
+            String accountNumber,
+            String clientId
     ) {
-        super(userId, name, address, email, phone, interestRate);
+        super(userId, name, address, email, phone, accountNumber);
         this.clientId = clientId;
-        this.accountNumber = accountNumber;
     }
 
     public String getClientId() {
@@ -37,13 +25,5 @@ public class ClientDTO extends PersonDTO {
 
     public void setClientId(String clientId) {
         this.clientId = clientId;
-    }
-
-    public Integer getAccountNumber() {
-        return accountNumber;
-    }
-
-    public void setAccountNumber(Integer accountNumber) {
-        this.accountNumber = accountNumber;
     }
 }

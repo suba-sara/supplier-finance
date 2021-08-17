@@ -1,5 +1,7 @@
 package com.hcl.capstoneserver.user;
 
+import com.hcl.capstoneserver.account.AccountService;
+import com.hcl.capstoneserver.account.dto.AccountVerifiedDTO;
 import com.hcl.capstoneserver.account.exception.OTPTimedOut;
 import com.hcl.capstoneserver.mail.sender.EmailService;
 import com.hcl.capstoneserver.user.dto.*;
@@ -48,6 +50,7 @@ public class UserService implements UserDetailsService {
     private final ModelMapper mapper;
     private final SequenceGenerator sequenceGenerator;
     private final BankerRepository bankerRepository;
+    private final AccountService accountService;
     private final EmailService emailService;
 
     @Value("${otp.validity.time}")
@@ -65,6 +68,8 @@ public class UserService implements UserDetailsService {
             ModelMapper mapper,
             SequenceGenerator sequenceGenerator,
             BankerRepository bankerRepository,
+            AccountService accountService
+            BankerRepository bankerRepository,
             EmailService emailService
     ) {
         this.appUserRepository = appUserRepository;
@@ -75,9 +80,9 @@ public class UserService implements UserDetailsService {
         this.mapper = mapper;
         this.sequenceGenerator = sequenceGenerator;
         this.bankerRepository = bankerRepository;
+        this.accountService = accountService;
         this.emailService = emailService;
     }
-
 
     /**
      * Method to signIn user
@@ -172,26 +177,30 @@ public class UserService implements UserDetailsService {
      * @param supplier supplier data to register new supplier
      * @return if suppler is not exists, then return supplierDTO object, otherwise throws error
      */
-    public SupplierDTO signUpSupplier(Supplier supplier) {
+    public SupplierDTO signUpSupplier(PersonWithPasswordDTO dto) {
         try {
             // check if user already exists or not, if user is exists throw UserAlreadyExistsException
-            if (supplierRepository.existsById(supplier.getUserId())) {
-                throw new UserAlreadyExistsException(supplier.getUserId());
+            if (supplierRepository.existsById(dto.getUserId())) {
+                throw new UserAlreadyExistsException(dto.getUserId());
             }
 
+            // check OTP
+            accountService.verifyAccount(new AccountVerifiedDTO(dto.getAccountNumber(), dto.getOTP()));
+
             return mapper.map(supplierRepository.save(new Supplier(
-                    supplier.getUserId(),
-                    bCryptPasswordEncoder.encode(supplier.getPassword()),
-                    supplier.getName(),
-                    supplier.getAddress(),
-                    supplier.getEmail(),
-                    supplier.getPhone(),
-                    supplier.getInterestRate(),
+                    dto.getUserId(),
+                    bCryptPasswordEncoder.encode(dto.getPassword()),
+                    dto.getName(),
+                    dto.getAddress(),
+                    dto.getEmail(),
+                    dto.getPhone(),
+                    dto.getAccountNumber(),
                     sequenceGenerator.getSupplierSequence()
             )), SupplierDTO.class);
         } catch (DataIntegrityViolationException e) {
-//            if supplier email is already exists then throw DataIntegrityViolationException and catch form here and throw below error
-            throw new EmailAlreadyExistsException(supplier.getEmail());
+            //            if supplier email is already exists then throw DataIntegrityViolationException and catch
+            //            form here and throw below error
+            throw new EmailAlreadyExistsException(dto.getEmail());
         }
     }
 
@@ -201,27 +210,30 @@ public class UserService implements UserDetailsService {
      * @param client client data to register new client
      * @return if client is not exists, then return clientDTO object, otherwise throws error
      */
-    public ClientDTO signUpClient(Client client) {
+    public ClientDTO signUpClient(PersonWithPasswordDTO dto) {
         try {
             //check if the client is already exists or not, if user  exists throw UserAlreadyExistsException
-            if (clientRepository.existsById(client.getUserId())) {
-                throw new UserAlreadyExistsException(client.getUserId());
+            if (clientRepository.existsById(dto.getUserId())) {
+                throw new UserAlreadyExistsException(dto.getUserId());
             }
 
+            // check OTP
+            accountService.verifyAccount(new AccountVerifiedDTO(dto.getAccountNumber(), dto.getOTP()));
+
             return mapper.map(clientRepository.save(new Client(
-                    client.getUserId(),
-                    bCryptPasswordEncoder.encode(client.getPassword()),
-                    client.getName(),
-                    client.getAddress(),
-                    client.getEmail(),
-                    client.getPhone(),
-                    client.getInterestRate(),
+                    dto.getUserId(),
+                    bCryptPasswordEncoder.encode(dto.getPassword()),
+                    dto.getName(),
+                    dto.getAddress(),
+                    dto.getEmail(),
+                    dto.getPhone(),
                     sequenceGenerator.getClientSequence(),
-                    client.getAccountNumber()
+                    dto.getAccountNumber()
             )), ClientDTO.class);
         } catch (DataIntegrityViolationException e) {
-//            if client email is already exists then throw DataIntegrityViolationException and catch form here and throw below error
-            throw new EmailAlreadyExistsException(client.getEmail());
+            //            if client email is already exists then throw DataIntegrityViolationException and catch form
+            //            here and throw below error
+            throw new EmailAlreadyExistsException(dto.getEmail());
         }
     }
 
@@ -300,7 +312,7 @@ public class UserService implements UserDetailsService {
      */
     public Client fetchClientDataByUserId(String userId) {
         /*
-         * Client table primary key is userId -> remember
+         * Client table primary key is username -> remember
          *
          * find User using the client repository and assign it to client local variable
          * */
