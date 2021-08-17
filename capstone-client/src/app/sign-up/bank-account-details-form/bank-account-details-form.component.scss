@@ -1,1 +1,12 @@
 @import "../sign-up-supplier.component";
+
+.otp-button-container {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+
+  button {
+    display: flex;
+    justify-content: center;
+  }
+}

@@ -1,23 +1,23 @@
 package com.hcl.capstoneserver.account.dto;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 public class GetOTP_DTO {
-    @NotNull
-    private Integer accountNumber;
+    @Pattern(regexp = "[\\d]{8}")
+    private String accountNumber;
 
     public GetOTP_DTO() {
     }
 
-    public GetOTP_DTO(Integer accountNumber) {
+    public GetOTP_DTO(String accountNumber) {
         this.accountNumber = accountNumber;
     }
 
-    public Integer getAccountNumber() {
+    public String getAccountNumber() {
         return accountNumber;
     }
 
-    public void setAccountNumber(Integer accountNumber) {
+    public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
     }
 }

@@ -19,12 +19,14 @@ export class BankAccountDetailsFormComponent implements OnInit {
   @Output()
   signUpEvent: EventEmitter<void> = new EventEmitter<void>();
 
+  getOtpLoading = false;
+
   accountForm: FormGroup = new FormGroup({
     accountNumber: new FormControl('', [
       Validators.required,
-      Validators.maxLength(10),
-      Validators.minLength(10),
-      Validators.pattern(/^-?(0|[1-9]\d*)?$/),
+      Validators.maxLength(8),
+      Validators.minLength(8),
+      Validators.pattern(/[\d]{8}/),
     ]),
   });
 
@@ -37,7 +39,17 @@ export class BankAccountDetailsFormComponent implements OnInit {
   ngOnInit(): void {}
 
   signUp(): void {
-    this.signUpEvent.emit();
+    // check verification
+    this.bankAccountService.verifyOTP(this.accountForm.value).subscribe(
+      (val) => {
+        if (val) {
+          this.signUpEvent.emit();
+        } else {
+          this.errorMessage = 'Invalid Verification Code';
+        }
+      },
+      (error) => (this.errorMessage = 'Invalid Verification Code')
+    );
   }
 
   get accountNumber(): AbstractControl | null {
@@ -49,28 +61,27 @@ export class BankAccountDetailsFormComponent implements OnInit {
   }
 
   getOTP(): void {
+    this.getOtpLoading = true;
     this.accountForm?.addControl(
       'OTP',
       new FormControl(undefined, [
         Validators.required,
         Validators.maxLength(6),
         Validators.minLength(6),
-        Validators.pattern(/^-?(0|[1-9]\d*)?$/),
+        Validators.pattern(/[\d]{6}/),
       ])
     );
     this.bankAccountService
       .getOTP(this.accountForm?.controls['accountNumber'].value)
       .subscribe(
-        () => (this.isAccountChecked = true),
-        (err) =>
-          (this.errorMessage = err === 'OK' ? 'INTERNAL SERVER ERROR' : err)
+        () => {
+          this.isAccountChecked = true;
+          this.getOtpLoading = false;
+        },
+        (err) => {
+          this.errorMessage = err === 'OK' ? 'INTERNAL SERVER ERROR' : err;
+          this.getOtpLoading = false;
+        }
       );
-  }
-
-  verifyOTP(): void {
-    this.bankAccountService
-      .verifyOTP(this.accountForm?.value)
-      .then(() => (this.isAccountVerify = true))
-      .catch((err) => (this.errorMessage = err));
   }
 }

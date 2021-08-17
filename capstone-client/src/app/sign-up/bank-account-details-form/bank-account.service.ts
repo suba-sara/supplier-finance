@@ -15,7 +15,7 @@ export class BankAccountService {
     return this.http.post(`${API_PATH}/account/get-otp/`, { accountNumber });
   }
 
-  public verifyOTP(data: any): Promise<any> {
-    return this.http.post(`${API_PATH}/account/verify`, data).toPromise();
+  public verifyOTP(data: any): Observable<boolean> {
+    return this.http.post<boolean>(`${API_PATH}/account/check-otp`, data);
   }
 }

@@ -7,8 +7,6 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Service;
 
-import java.util.Random;
-
 @Service
 public class EmailService {
 
@@ -22,17 +20,15 @@ public class EmailService {
         this.javaMailSender = javaMailSender;
     }
 
-    public Integer send(String receiver) {
-        Random random = new Random();
-        int OTP = 100000 + random.nextInt(900000);
+    public void sendOtp(String receiver, String otp) {
         MimeMessagePreparator message = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
             messageHelper.setTo(receiver);
             messageHelper.setFrom(emailSender);
             messageHelper.setSubject("SHS BANK OTP CODE");
-            messageHelper.setText(String.format("Your OTP Code: %d", OTP));
+            messageHelper.setText(String.format("Your OTP Code: %s", otp));
         };
         this.javaMailSender.send(message);
-        return OTP;
     }
+
 }

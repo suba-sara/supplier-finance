@@ -18,26 +18,33 @@
           }}
         </mat-error>
       </mat-form-field>
-      <button (click)="getOTP()" *ngIf="!isAccountChecked">Verify</button>
+      <div class="otp-button-container">
+        <div>
+          <button
+            (click)="getOTP()"
+            *ngIf="!isAccountChecked"
+            [disabled]="getOtpLoading"
+            mat-button
+          >
+            <mat-spinner *ngIf="getOtpLoading" [diameter]="40"></mat-spinner>
+            <span *ngIf="!getOtpLoading">Get Verification Code</span>
+          </button>
+        </div>
+      </div>
     </div>
     <div *ngIf="isAccountChecked && !isAccountVerify">
       <div class="full-width-field2-container">
         <mat-form-field appearance="outline">
-          <mat-label>OTP Code</mat-label>
+          <mat-label>Verification Code</mat-label>
           <input matInput maxlength="255" formControlName="OTP" />
           <mat-error *ngIf="OTP?.dirty || OTP?.touched">
             {{
               OTP?.hasError("required")
                 ? "required"
-                : OTP?.hasError("pattern")
-                ? "OTP must be numeric characters"
-                : "OTP must be 10 characters"
+                : "Invalid Verification Code"
             }}
           </mat-error>
         </mat-form-field>
-        <button class="button-container" (click)="verifyOTP()">
-          Verify Account
-        </button>
       </div>
     </div>
     <div class="button-container">
@@ -47,7 +54,7 @@
       <div>
         <button
           (click)="signUp()"
-          [disabled]="!isAccountVerify"
+          [disabled]="!isAccountChecked || !accountForm.valid"
           mat-flat-button
         >
           Sign Up
