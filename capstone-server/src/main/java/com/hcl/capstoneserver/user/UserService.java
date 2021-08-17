@@ -185,7 +185,7 @@ public class UserService implements UserDetailsService {
             }
 
             // check OTP
-            accountService.verifyAccount(new AccountVerifiedDTO(dto.getAccountNumber(), dto.getOTP()));
+            accountService.verifyAccount(new AccountVerifiedDTO(dto.getAccountNumber(), dto.getOtp()));
 
             return mapper.map(supplierRepository.save(new Supplier(
                     dto.getUserId(),
@@ -218,7 +218,7 @@ public class UserService implements UserDetailsService {
             }
 
             // check OTP
-            accountService.verifyAccount(new AccountVerifiedDTO(dto.getAccountNumber(), dto.getOTP()));
+            accountService.verifyAccount(new AccountVerifiedDTO(dto.getAccountNumber(), dto.getOtp()));
 
             return mapper.map(clientRepository.save(new Client(
                     dto.getUserId(),

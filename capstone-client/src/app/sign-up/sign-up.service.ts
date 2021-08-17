@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { UserDetails } from './user-data-form/user-data-form.component';
 import { PersonalDetails } from './personal-data-form/personal-data-form.component';
 import { Observable } from 'rxjs';
+import { AccountDetails } from './bank-account-details-form/bank-account-details-form.component';
 
 const { API_PATH } = environment;
 
@@ -15,7 +16,8 @@ type SignupBaseDto = {
   address: string;
   email: string;
   phone: string;
-  interestRate: number;
+  accountNumber: string;
+  otp: string;
 };
 
 @Injectable({
@@ -24,12 +26,12 @@ type SignupBaseDto = {
 export class SignUpService {
   constructor(private http: HttpClient) {}
 
-  signUpSupplier = (data: UserDetails & PersonalDetails): Observable<void> => {
+  signUpSupplier = (
+    data: UserDetails & PersonalDetails & AccountDetails
+  ): Observable<void> => {
     // transform data
     const dto: SignupBaseDto = {
       ...this._prepareDto(data),
-      // adding default interest rate for now
-      interestRate: 5.0,
     };
 
     return this.http
@@ -37,14 +39,11 @@ export class SignUpService {
       .pipe(map(() => {}));
   };
 
-  signUpClient = (data: UserDetails & PersonalDetails): Observable<void> => {
+  signUpClient = (
+    data: UserDetails & PersonalDetails & AccountDetails
+  ): Observable<void> => {
     // transform data
-    const dto: SignupBaseDto = {
-      ...this._prepareDto(data),
-      // adding default interest rate for now
-      interestRate: 5.0,
-    };
-
+    const dto: SignupBaseDto = this._prepareDto(data);
     return this.http
       .post(`${API_PATH}/sign-up/client`, dto)
       .pipe(map(() => {}));
@@ -76,7 +75,9 @@ export class SignUpService {
     country,
     email,
     phone,
-  }: UserDetails & PersonalDetails) => ({
+    accountNumber,
+    otp,
+  }: UserDetails & PersonalDetails & AccountDetails) => ({
     userId,
     password,
     name: `${firstName} ${lastName}`,
@@ -89,5 +90,7 @@ export class SignUpService {
     }),
     email,
     phone,
+    accountNumber,
+    otp,
   });
 }
