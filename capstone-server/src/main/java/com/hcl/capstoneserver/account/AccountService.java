@@ -24,7 +24,7 @@ public class AccountService {
     @Value("${otp.validity.time}")
     private Integer otpValidityTime;
 
-    @Value("${otp.validity.time}")
+    @Value("${test.otp.seed}")
     private Integer testOtpSeed;
 
     public AccountService(AccountRepository accountRepository, EmailService emailService) {

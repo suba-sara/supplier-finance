@@ -8,8 +8,6 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-
 @Service
 public class EmailService {
 
@@ -20,22 +18,25 @@ public class EmailService {
     @Value("${spring.mail.username}")
     private String emailSender;
 
+    @Value("${test.otp.seed}")
+    private Integer testOtpSeed;
+
     @Autowired
     public EmailService(JavaMailSender javaMailSender) {
         this.javaMailSender = javaMailSender;
     }
 
     public void sendOtp(String receiver, String otp) {
-        System.out.println(Arrays.toString(environment.getActiveProfiles()));
-
-        MimeMessagePreparator message = mimeMessage -> {
-            MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
-            messageHelper.setTo(receiver);
-            messageHelper.setFrom(emailSender);
-            messageHelper.setSubject("SHS Bank's Supplier Finance Verification Code");
-            messageHelper.setText(String.format("Your Verification Code is: %s", otp));
-        };
-        this.javaMailSender.send(message);
+        if (testOtpSeed == null) {
+            MimeMessagePreparator message = mimeMessage -> {
+                MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
+                messageHelper.setTo(receiver);
+                messageHelper.setFrom(emailSender);
+                messageHelper.setSubject("SHS Bank's Supplier Finance Verification Code");
+                messageHelper.setText(String.format("Your Verification Code is: %s", otp));
+            };
+            this.javaMailSender.send(message);
+        }
     }
 
 }
