@@ -21,6 +21,9 @@ export class BankAccountDetailsFormComponent implements OnInit {
   @Input()
   goBack!: () => void;
 
+  @Input()
+  initialValues!: AccountDetails;
+
   @Output()
   formSubmitEvent = new EventEmitter<AccountDetails>();
 
@@ -41,7 +44,13 @@ export class BankAccountDetailsFormComponent implements OnInit {
 
   constructor(private bankAccountService: BankAccountService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (this.initialValues) {
+      this.accountForm.controls['accountNumber'].setValue(
+        this.initialValues.accountNumber
+      );
+    }
+  }
 
   signUp(): void {
     // check verification

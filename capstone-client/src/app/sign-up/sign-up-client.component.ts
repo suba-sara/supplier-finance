@@ -3,6 +3,7 @@ import { UserDetails } from './user-data-form/user-data-form.component';
 import { PersonalDetails } from './personal-data-form/personal-data-form.component';
 import { SignUpService } from './sign-up.service';
 import { AppService } from '../app.service';
+import { AccountDetails } from './bank-account-details-form/bank-account-details-form.component';
 
 @Component({
   selector: 'app-sign-up-client',
@@ -12,6 +13,7 @@ import { AppService } from '../app.service';
 export class SignUpClientComponent implements OnInit {
   personalDetails: PersonalDetails;
   userDetails: UserDetails;
+  accountDetails: AccountDetails;
   pageNumber: number;
 
   constructor(
@@ -32,7 +34,10 @@ export class SignUpClientComponent implements OnInit {
 
     this.pageNumber = 1;
 
-    // this.clientAccDetails = {};
+    this.accountDetails = {
+      otp: '',
+      accountNumber: '',
+    };
     this.userDetails = { password: '', userId: '' };
   }
 
@@ -43,6 +48,10 @@ export class SignUpClientComponent implements OnInit {
   submitPersonalData = (value: PersonalDetails): void => {
     this.personalDetails = value;
     this.goToNextPage();
+  };
+  submitAccountData = (value: AccountDetails): void => {
+    this.accountDetails = value;
+    this.register();
   };
 
   ngOnInit(): void {
@@ -66,6 +75,7 @@ export class SignUpClientComponent implements OnInit {
       .signUpClient({
         ...this.userDetails,
         ...this.personalDetails,
+        ...this.accountDetails,
       })
       .subscribe(
         () => {

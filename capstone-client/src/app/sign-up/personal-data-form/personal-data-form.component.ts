@@ -12,10 +12,12 @@ export type PersonalDetails = {
   province: string;
   country: string;
 };
+
 export interface DialogData {
   animal: string;
   name: string;
 }
+
 @Component({
   selector: 'app-personal-data-form',
   templateUrl: './personal-data-form.component.html',
@@ -24,6 +26,9 @@ export interface DialogData {
 export class PersonalDataFormComponent implements OnInit {
   @Input()
   goBack!: () => void;
+
+  @Input()
+  initialValues!: PersonalDetails;
 
   personalDataForm = new FormGroup({
     firstName: new FormControl('', [
@@ -67,7 +72,35 @@ export class PersonalDataFormComponent implements OnInit {
   @Output()
   formSubmitEvent = new EventEmitter<PersonalDetails>();
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (this.initialValues) {
+      this.personalDataForm.controls['firstName'].setValue(
+        this.initialValues.firstName
+      );
+      this.personalDataForm.controls['lastName'].setValue(
+        this.initialValues.lastName
+      );
+      this.personalDataForm.controls['email'].setValue(
+        this.initialValues.email
+      );
+      this.personalDataForm.controls['phone'].setValue(
+        this.initialValues.phone
+      );
+      this.personalDataForm.controls['addressLine1'].setValue(
+        this.initialValues.addressLine1
+      );
+      this.personalDataForm.controls['city'].setValue(this.initialValues.city);
+      this.personalDataForm.controls['state'].setValue(
+        this.initialValues.state
+      );
+      this.personalDataForm.controls['province'].setValue(
+        this.initialValues.province
+      );
+      this.personalDataForm.controls['country'].setValue(
+        this.initialValues.country
+      );
+    }
+  }
 
   confirmPersonalData(): void {
     if (this.personalDataForm.valid) {
