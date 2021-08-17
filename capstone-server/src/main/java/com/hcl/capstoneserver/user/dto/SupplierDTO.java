@@ -6,9 +6,11 @@ public class SupplierDTO extends PersonDTO {
     public SupplierDTO() {
     }
 
-    public SupplierDTO(String userId, String name, String address, String email, String phone, Float interestRate,
-                       String supplierId) {
-        super(userId, name, address, email, phone, interestRate);
+    public SupplierDTO(
+            String userId, String name, String address, String email, String phone, String accountNumber,
+            String supplierId
+    ) {
+        super(userId, name, address, email, phone, accountNumber);
         this.supplierId = supplierId;
     }
 

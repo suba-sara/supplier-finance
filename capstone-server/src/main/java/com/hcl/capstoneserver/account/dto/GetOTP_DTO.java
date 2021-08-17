@@ -3,7 +3,7 @@ package com.hcl.capstoneserver.account.dto;
 import javax.validation.constraints.Pattern;
 
 public class GetOTP_DTO {
-    @Pattern(regexp = "[\\d]{8}")
+    @Pattern(regexp = "[\\d]{8}", message = "accountNumber is invalid")
     private String accountNumber;
 
     public GetOTP_DTO() {

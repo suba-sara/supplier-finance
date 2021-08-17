@@ -11,6 +11,7 @@ public class Account {
     private String accountNumber;
     @NotNull
     private String accountHolderName;
+    private Float interestRate;
     @NotNull
     private String email;
     private String OTP;
@@ -20,22 +21,17 @@ public class Account {
     public Account() {
     }
 
-    public Account(String accountNumber, String accountHolderName, String email) {
+    public Account(String accountNumber, String accountHolderName, String email, Float interestRate) {
         this.accountNumber = accountNumber;
         this.accountHolderName = accountHolderName;
         this.email = email;
+        this.interestRate = interestRate;
     }
 
-    public Account(
-            String accountNumber,
-            String accountHolderName,
-            String email,
-            String OTP,
-            Date otpExpiredDate,
-            Boolean isVerified
-    ) {
+    public Account(String accountNumber, String accountHolderName, Float interestRate, String email, String OTP, Date otpExpiredDate, Boolean isVerified) {
         this.accountNumber = accountNumber;
         this.accountHolderName = accountHolderName;
+        this.interestRate = interestRate;
         this.email = email;
         this.OTP = OTP;
         this.otpExpiredDate = otpExpiredDate;
@@ -56,6 +52,22 @@ public class Account {
 
     public void setName(String accountHolderName) {
         this.accountHolderName = accountHolderName;
+    }
+
+    public String getAccountHolderName() {
+        return accountHolderName;
+    }
+
+    public void setAccountHolderName(String accountHolderName) {
+        this.accountHolderName = accountHolderName;
+    }
+
+    public Float getInterestRate() {
+        return interestRate;
+    }
+
+    public void setInterestRate(Float interestRate) {
+        this.interestRate = interestRate;
     }
 
     public String getEmail() {

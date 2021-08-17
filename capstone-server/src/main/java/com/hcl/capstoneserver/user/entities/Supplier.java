@@ -15,17 +15,17 @@ public class Supplier extends Person {
 
     public Supplier(
             String userId, String password, String name, String address, String email,
-            String phone, Float interestRate, String supplierId
+            String phone, String supplierId, String accountNumber
     ) {
-        super(userId, password, UserType.SUPPLIER, name, address, email, phone, interestRate);
+        super(userId, password, UserType.SUPPLIER, name, address, email, phone, accountNumber);
         this.supplierId = supplierId;
     }
 
     public Supplier(
             String userId, String password, String name, String address, String email,
-            String phone, Float interestRate
+            String phone, String accountNumber
     ) {
-        super(userId, password, UserType.SUPPLIER, name, address, email, phone, interestRate);
+        super(userId, password, UserType.SUPPLIER, name, address, email, phone, accountNumber);
     }
 
     public String getSupplierId() {
