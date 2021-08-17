@@ -14,15 +14,11 @@
           {{
             accountNumber?.hasError("required")
               ? "required"
-              : accountNumber?.hasError("pattern")
-              ? "account number must be numeric characters"
-              : "account number must be 10 characters"
+              : "Invalid Account Number"
           }}
         </mat-error>
       </mat-form-field>
-      <button *ngIf="!isAccountChecked" (click)="checkAccountNumber()">
-        Check Account
-      </button>
+      <button (click)="getOTP()" *ngIf="!isAccountChecked">Verify</button>
     </div>
     <div *ngIf="isAccountChecked && !isAccountVerify">
       <div class="full-width-field2-container">
