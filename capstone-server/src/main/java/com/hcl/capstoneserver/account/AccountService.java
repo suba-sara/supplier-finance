@@ -9,6 +9,7 @@ import com.hcl.capstoneserver.account.exception.OTPTimedOut;
 import com.hcl.capstoneserver.account.repositories.AccountRepository;
 import com.hcl.capstoneserver.mail.sender.EmailService;
 import com.hcl.capstoneserver.user.dto.CheckValidDTO;
+import com.hcl.capstoneserver.util.EmailHideParts;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -58,16 +59,7 @@ public class AccountService {
                 acc.setOtpExpiredDate(new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(otpValidityTime)));
                 accountRepository.save(acc);
 
-                // hide part of email address
-                String[] splitted = acc.getEmail().split("@");
-                StringBuilder encryptedEmail = new StringBuilder(splitted[0]);
-                for (int i = 3; i < encryptedEmail.length(); i++) {
-                    encryptedEmail.setCharAt(i, '*');
-                }
-                encryptedEmail.append('@');
-                encryptedEmail.append(splitted[1]);
-
-                return new GetOtpResponseDTO("We have sent the verification code to the registered email address: " + encryptedEmail);
+                return new GetOtpResponseDTO(new EmailHideParts(acc.getEmail()).hide());
             } else {
                 throw new AccountAlreadyHasUser();
             }
@@ -84,7 +76,7 @@ public class AccountService {
             // verify otp time validity
             if (new Date().before(acc.getOtpExpiredDate())) {
                 // verify otp code
-                return new CheckValidDTO(acc.getOTP().equals(accountVerifiedDTO.getOTP()));
+                return new CheckValidDTO(acc.getOTP().equals(accountVerifiedDTO.getOTP()), null);
             } else {
                 throw new OTPTimedOut();
             }
@@ -100,7 +92,7 @@ public class AccountService {
                 if (acc.getOTP().equals(accountVerifiedDTO.getOTP())) {
                     acc.setVerified(true);
                     accountRepository.save(acc);
-                    return new CheckValidDTO(true);
+                    return new CheckValidDTO(true, null);
                 }
             } else {
                 throw new OTPTimedOut();
