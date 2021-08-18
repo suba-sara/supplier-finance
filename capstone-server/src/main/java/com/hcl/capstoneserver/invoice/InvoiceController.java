@@ -51,8 +51,8 @@ public class InvoiceController {
     }
 
     @GetMapping("/api/invoices/retrieve/bank")
-    public Page<BankViewInvoiceDTO> getAllInvoice(InvoiceSearchCriteriaDTO dto) {
-        return invoiceService.getBankInvoice(dto, "Bank");
+    public Page<BankViewInvoiceDTO> getAllInvoice(InvoiceSearchCriteriaDTO dto, Principal principal) {
+        return invoiceService.getBankInvoice(dto, principal.getName());
     }
 
     @GetMapping("/api/invoices/retrieve/client")

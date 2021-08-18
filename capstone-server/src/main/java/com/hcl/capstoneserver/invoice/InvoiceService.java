@@ -12,6 +12,7 @@ import com.hcl.capstoneserver.user.UserType;
 import com.hcl.capstoneserver.user.entities.AppUser;
 import com.hcl.capstoneserver.user.entities.Client;
 import com.hcl.capstoneserver.user.entities.Supplier;
+import com.hcl.capstoneserver.user.exceptions.ForbiddenException;
 import com.hcl.capstoneserver.user.repositories.AppUserRepository;
 import com.hcl.capstoneserver.user.repositories.ClientRepository;
 import com.hcl.capstoneserver.user.repositories.SupplierRepository;
@@ -227,6 +228,12 @@ public class InvoiceService {
 
     // This function use BANK for get all invoice
     public Page<BankViewInvoiceDTO> getBankInvoice(InvoiceSearchCriteriaDTO dto, String userId) {
+        // verify user type
+        Optional<AppUser> user = appUserRepository.findById(userId);
+        if (!user.isPresent() || user.get().getUserType() != UserType.BANKER) {
+            throw new ForbiddenException();
+        }
+
         // need to check userId account type -> This feature currently unavailable
         // One feature needs to be check when BANK user is created: invoice status can update only by BANK
         return _getInvoice(dto).map(invoice -> mapper.map(invoice, BankViewInvoiceDTO.class));
@@ -234,12 +241,24 @@ public class InvoiceService {
 
     // This function use Client for get his/ her all invoice
     public Page<ClientViewInvoiceDTO> getClientInvoice(InvoiceSearchCriteriaDTO dto, String userId) {
+        // verify user type
+        Optional<AppUser> user = appUserRepository.findById(userId);
+        if (!user.isPresent() || user.get().getUserType() != UserType.CLIENT) {
+            throw new ForbiddenException();
+        }
+
         dto.setClientId(userService.getClientId(userId));
         return _getInvoice(dto).map(invoice -> mapper.map(invoice, ClientViewInvoiceDTO.class));
     }
 
     // This function use Supplier for get his/ her all invoice
     public Page<SupplierVIewInvoiceDTO> getSupplierInvoice(InvoiceSearchCriteriaDTO dto, String userId) {
+        // verify user type
+        Optional<AppUser> user = appUserRepository.findById(userId);
+        if (!user.isPresent() || user.get().getUserType() != UserType.SUPPLIER) {
+            throw new ForbiddenException();
+        }
+
         dto.setSupplierId(userService.getSupplierId(userId));
         return _getInvoice(dto).map(invoice -> mapper.map(invoice, SupplierVIewInvoiceDTO.class));
     }
