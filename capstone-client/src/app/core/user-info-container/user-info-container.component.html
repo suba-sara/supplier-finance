@@ -1,0 +1,25 @@
+<div class="user-container">
+  <div class="user-avatar">
+    {{
+      authService.user.value?.username
+        ?.split("")
+        ?.slice(0, 2)
+        ?.join("")
+        ?.toUpperCase()
+    }}
+  </div>
+  <div class="user-name">{{ authService.user.value?.username }}</div>
+  <div class="user-action-container">
+    <!--    <button-->
+    <!--      mat-icon-button-->
+    <!--      matTooltip="User Settings"-->
+    <!--      routerLink="/user/settings"-->
+    <!--      routerLinkActive="nav-button-active"-->
+    <!--    >-->
+    <!--      <mat-icon>settings</mat-icon>-->
+    <!--    </button>-->
+    <button (click)="signOut()" mat-icon-button matTooltip="Sign Out">
+      <mat-icon>logout</mat-icon>
+    </button>
+  </div>
+</div>

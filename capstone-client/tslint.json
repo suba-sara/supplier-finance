@@ -10,6 +10,7 @@
         "statements"
       ]
     },
+    "no-string-literal": false,
     "array-type": false,
     "arrow-return-shorthand": true,
     "curly": true,
@@ -70,7 +71,8 @@
     ],
     "semicolon": {
       "options": [
-        "always"
+        "always",
+        "ignore-bound-class-methods"
       ]
     },
     "space-before-function-paren": {
@@ -108,7 +110,8 @@
       "options": [
         "ban-keywords",
         "check-format",
-        "allow-pascal-case"
+        "allow-pascal-case",
+        "allow-leading-underscore"
       ]
     },
     "whitespace": {

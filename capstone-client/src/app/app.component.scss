@@ -1,0 +1,34 @@
+@import "src/styles/variables";
+
+.page-root {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: auto;
+}
+
+.app-root {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.main-container {
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+}
+
+.content-root {
+  flex-grow: 1;
+}
+
+.right-panel {
+  flex-grow: 7;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #dcdcdc;
+}

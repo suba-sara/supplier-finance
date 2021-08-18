@@ -1,0 +1,21 @@
+@import "../sign-up-supplier.component";
+
+.otp-button-container {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+
+  button {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.otp-message {
+  margin: 10px 10px 20px;
+  font-size: 1rem;
+  padding: 10px;
+  border-radius: 10px;
+  background: rgba(67, 168, 79, 0.45);
+  color: #246225;
+}

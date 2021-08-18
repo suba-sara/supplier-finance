@@ -1,0 +1,159 @@
+.img {
+  width: 80%;
+  height: 80%;
+}
+
+.root-container {
+  display: flex;
+  width: 95%;
+  background-image: linear-gradient(to right, rgb(210, 235, 255), #f0f0f0);
+}
+
+.left-section {
+  width: 60%;
+  text-align: center;
+}
+
+.right-section {
+  width: 40%;
+}
+
+.content {
+  text-align: center;
+  margin-top: 35%;
+}
+
+.content p {
+  font-size: 20px;
+}
+
+.content button {
+  margin-left: 30px;
+  font-size: 20px;
+}
+
+.content img {
+  padding: 10px;
+}
+
+.logo h1 {
+  font-size: 28px;
+  font-weight: bolder;
+}
+
+.about_us {
+  width: 100%;
+  background-color: white;
+  padding: 30px;
+  text-align: justify;
+  font-size: 20px;
+}
+
+.about_us h1 {
+  font-size: 28px;
+}
+
+.img-about {
+  width: 80%;
+  height: 100%;
+}
+
+.question {
+  width: 90%;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0% auto;
+  justify-content: space-around;
+  text-align: center;
+}
+
+.box {
+  width: 49%;
+  margin-top: 50px;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.box h1 {
+  font-size: 28px;
+}
+
+.box1 {
+  background-image: linear-gradient(
+    to right,
+    rgb(0, 139, 253),
+    rgb(0, 84, 194)
+  );
+  color: white;
+}
+
+.box p {
+  font-size: 20px;
+  text-align: justify;
+  padding: 20px;
+}
+
+.box img {
+  width: 60%;
+  height: 60%;
+}
+@media only screen and (max-width: 768px) {
+  .root-container {
+    display: block;
+    width: 100%;
+  }
+  .left-section {
+    width: 100%;
+  }
+  .right-section {
+    width: 100%;
+  }
+  .content button {
+    margin-right: 30px;
+    margin-left: 0px;
+  }
+  .content {
+    margin-top: 0%;
+  }
+  .content p {
+    padding: 10px;
+  }
+
+  .img {
+    width: 50%;
+    height: 50%;
+  }
+  .content button {
+    margin-bottom: 30px;
+  }
+
+  .img-about {
+    width: 50%;
+    height: 100%;
+  }
+
+  .box {
+    width: 80%;
+  }
+  .box img {
+    width: 50%;
+    height: 50%;
+  }
+  .box p {
+    padding: 10px;
+  }
+}
+
+@media only screen and (max-width: 545px) {
+  .content p {
+    font-size: 18px;
+  }
+
+  .box {
+    width: 100%;
+  }
+  .box img {
+    width: 40%;
+    height: 40%;
+  }
+}

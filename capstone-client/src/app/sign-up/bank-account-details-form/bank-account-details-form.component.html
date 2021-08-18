@@ -1,0 +1,68 @@
+<form [formGroup]="accountForm">
+  <div class="form-content-container">
+    <mat-card class="mat-elevation-z0 outline" *ngIf="errorMessage">
+      <div class="mat-card-warning">
+        <mat-icon>error_outline</mat-icon>
+        <mat-label>{{ errorMessage }}</mat-label>
+      </div>
+    </mat-card>
+    <div class="full-width-field2-container">
+      <mat-form-field appearance="outline">
+        <mat-label>Account Number</mat-label>
+        <input matInput maxlength="255" formControlName="accountNumber" />
+        <mat-error *ngIf="accountNumber?.dirty || accountNumber?.touched">
+          {{
+            accountNumber?.hasError("required")
+              ? "required"
+              : "Invalid Account Number"
+          }}
+        </mat-error>
+      </mat-form-field>
+      <div class="otp-button-container">
+        <div>
+          <button
+            (click)="getOTP()"
+            *ngIf="!isAccountChecked"
+            [disabled]="getOtpLoading"
+            mat-button
+          >
+            <mat-spinner *ngIf="getOtpLoading" [diameter]="40"></mat-spinner>
+            <span *ngIf="!getOtpLoading">Get Verification Code</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="otpMessage" class="otp-message">
+      {{ otpMessage }}
+    </div>
+    <div *ngIf="isAccountChecked && !isAccountVerify">
+      <div class="full-width-field2-container">
+        <mat-form-field appearance="outline">
+          <mat-label>Verification Code</mat-label>
+          <input formControlName="otp" matInput maxlength="255" />
+          <mat-error *ngIf="otp?.dirty || otp?.touched">
+            {{
+              otp?.hasError("required")
+                ? "required"
+                : "Invalid Verification Code"
+            }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="button-container">
+      <div>
+        <button mat-flat-button (click)="goBack()">Previous</button>
+      </div>
+      <div>
+        <button
+          (click)="signUp()"
+          [disabled]="!isAccountChecked || !accountForm.valid"
+          mat-flat-button
+        >
+          Sign Up
+        </button>
+      </div>
+    </div>
+  </div>
+</form>

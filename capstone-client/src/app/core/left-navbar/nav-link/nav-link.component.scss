@@ -1,0 +1,51 @@
+@import "src/styles/variables";
+
+.link-root {
+  padding: 0.7em 1.2em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5em;
+  cursor: pointer;
+  border-radius: 0.8em;
+  margin-bottom: 0.4em;
+
+  &:hover {
+    background: #3e3ede;
+  }
+
+  mat-icon {
+    text-align: center;
+  }
+
+  transition: all ease 300ms;
+}
+
+.link-root-expanded {
+  padding: 0.7em 1.2em;
+  justify-content: flex-start;
+
+  mat-icon {
+    margin-right: 1em;
+  }
+}
+
+.nav-button-active {
+  background: #3e3ede99;
+}
+
+.title {
+  transition: all ease 500ms;
+}
+
+.title-hidden {
+  position: absolute;
+  opacity: 0;
+  transform: translateX(-100px);
+  min-width: 20em;
+}
+
+.title-visible {
+  position: relative;
+  opacity: 1;
+}

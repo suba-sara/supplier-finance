@@ -1,0 +1,33 @@
+<div [ngClass]="{ 'left-panel-expanded': isExpanded }" class="left-panel">
+  <app-navbar-menu-button></app-navbar-menu-button>
+  <app-user-info-container
+    class="show-only-on-mobile"
+  ></app-user-info-container>
+  <div class="logo-container">
+    <app-logo [logoOnly]="!isExpanded"></app-logo>
+  </div>
+  <div class="nav-container">
+    <app-nav-link
+      [isExpanded]="isExpanded"
+      icon="dashboard"
+      link="/dashboard"
+      title="Dashboard"
+    >
+    </app-nav-link>
+    <app-nav-link
+      *ngIf="authService.user.value?.userType === 'CLIENT'"
+      [isExpanded]="isExpanded"
+      icon="note_add"
+      link="/invoice/upload"
+      title="Upload Invoice"
+    >
+    </app-nav-link>
+    <app-nav-link
+      [isExpanded]="isExpanded"
+      icon="assignment"
+      link="/invoice/view-invoices"
+      title="View Invoices"
+    >
+    </app-nav-link>
+  </div>
+</div>

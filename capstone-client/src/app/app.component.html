@@ -1,1 +1,16 @@
-<h1>Hello World</h1>
+<div class="page-root">
+  <div *ngIf="!user" class="app-root">
+    <app-top-navbar></app-top-navbar>
+    <div class="content-root">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+
+  <div *ngIf="user" class="main-container">
+    <app-left-navbar class="left-panel"></app-left-navbar>
+    <div class="right-panel">
+      <app-title-panel></app-title-panel>
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

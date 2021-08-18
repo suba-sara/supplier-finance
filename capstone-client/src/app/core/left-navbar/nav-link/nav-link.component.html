@@ -1,0 +1,13 @@
+<div
+  [routerLink]="link"
+  class="link-root"
+  [ngClass]="isExpanded ? 'link-root-expanded' : ''"
+  routerLinkActive="nav-button-active"
+  matTooltip="{{ title }}"
+  matTooltipPosition="right"
+>
+  <mat-icon>{{ icon }}</mat-icon>
+  <div [ngClass]="isExpanded ? 'title-visible' : 'title-hidden'" class="title">
+    {{ title }}
+  </div>
+</div>

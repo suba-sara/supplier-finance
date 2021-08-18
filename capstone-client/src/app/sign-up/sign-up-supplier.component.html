@@ -1,0 +1,31 @@
+<div class="main-container">
+  <div class="content-container">
+    <app-form-header [pageNumber]="pageNumber" formName="Supplier Registration">
+    </app-form-header>
+    <div class="form-container" [ngSwitch]="pageNumber">
+      <section *ngSwitchCase="1">
+        <app-user-data-form
+          [initialValues]="userDetails"
+          (formSubmitEvent)="submitUserData($event)"
+        ></app-user-data-form>
+      </section>
+      <section *ngSwitchCase="2">
+        <app-personal-data-form
+          [initialValues]="personalDetails"
+          [goBack]="gotoPreviousPage"
+          (formSubmitEvent)="submitPersonalData($event)"
+        ></app-personal-data-form>
+      </section>
+      <section *ngSwitchCase="3">
+        <app-bank-account-details-form
+          [initialValues]="accountDetails"
+          [goBack]="gotoPreviousPage"
+          (formSubmitEvent)="submitAccountData($event)"
+        ></app-bank-account-details-form>
+      </section>
+      <section *ngSwitchCase="4">
+        <app-success-feedback></app-success-feedback>
+      </section>
+    </div>
+  </div>
+</div>

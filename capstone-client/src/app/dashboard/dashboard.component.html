@@ -1,0 +1,20 @@
+<div>
+  <div class="invoiceInfo">
+    <div *ngIf="profile" class="card">
+      <h1>
+        Welcome, <span class="username">{{ profile.username }}</span>
+      </h1>
+      <div *ngIf="profile.clientId">
+        Client Id: <span class="username">{{ profile.clientId }}</span>
+      </div>
+      <div *ngIf="profile.supplierId">
+        Supplier Id: <span class="username">{{ profile.supplierId }}</span>
+      </div>
+      <div *ngIf="profile.employeeId">
+        Employee Id: <span class="username">{{ profile.employeeId }}</span>
+      </div>
+    </div>
+  </div>
+  <br />
+  <app-invoice-info></app-invoice-info>
+</div>

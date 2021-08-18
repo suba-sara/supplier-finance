@@ -1,0 +1,100 @@
+<br />
+<div class="content-container">
+  <div class="body-container">
+    <div class="header-container">
+      <div class="main-header-container">
+        <h1>
+          INVOICE
+          <span class="invoice-number-container"
+            >#{{ invoice?.invoiceId }}</span
+          >
+        </h1>
+      </div>
+    </div>
+    <div class="invoice-detail-container">
+      <div class="back-button-container">
+        <button (click)="back()" color="primary" mat-stroked-button>
+          Back
+        </button>
+        <div *ngIf="invoice">
+          <a href="{{ SERVER }}{{ invoice.fileUrl }}">
+            <button color="primary" mat-flat-button>Download File</button>
+          </a>
+        </div>
+      </div>
+      <div class="single-detail">
+        <span class="detail-heading">Invoice Number :</span>
+        <span class="detail-content">{{ invoice?.invoiceNumber }}</span>
+      </div>
+      <div class="single-detail">
+        <span class="detail-heading">Invoice Date :</span>
+        <span class="detail-content">{{ invoice?.invoiceDate }}</span>
+      </div>
+      <div class="single-detail">
+        <span class="detail-heading">Uploaded Date :</span>
+        <span class="detail-content">{{ invoice?.uploadedDate }}</span>
+      </div>
+      <div class="single-detail">
+        <span class="detail-heading">Invoice Amount :</span>
+        <span class="detail-content">{{
+          invoice?.amount | currency: invoice?.currencyType
+        }}</span>
+      </div>
+      <div class="single-detail">
+        <span class="detail-heading">Invoice Status :</span>
+        <span class="detail-content">{{ invoice?.status }}</span>
+      </div>
+      <div class="single-detail">
+        <span class="detail-heading row-hd"> Client Details </span>
+      </div>
+      <div class="single-detail">
+        <span class="detail-heading">Client Id:</span>
+        <span class="detail-content">{{ invoice?.client?.clientId }}</span>
+      </div>
+      <div class="single-detail">
+        <span class="detail-heading">Client Name:</span>
+        <span class="detail-content">{{ invoice?.client?.name }}</span>
+      </div>
+      <div class="single-detail">
+        <span class="detail-heading row-hd"> Supplier Details </span>
+      </div>
+      <div class="single-detail">
+        <span class="detail-heading">Supplier Id:</span>
+        <span class="detail-content">{{ invoice?.supplier?.supplierId }}</span>
+      </div>
+      <div class="single-detail">
+        <span class="detail-heading">Supplier Name:</span>
+        <span class="detail-content">{{ invoice?.supplier?.name }}</span>
+      </div>
+      <div class="action-button-container">
+        <button
+          (click)="requestReview()"
+          *ngIf="reviewable"
+          color="warn"
+          mat-raised-button
+        >
+          Request Review
+        </button>
+        <button
+          *ngIf="approvable"
+          class="approve-button"
+          color="accent"
+          mat-raised-button
+          (click)="approve()"
+        >
+          Approve
+        </button>
+        <button
+          *ngIf="approvable"
+          [disabled]="!rejectable"
+          mat-raised-button
+          class="reject-button"
+          color="accent"
+          (click)="reject()"
+        >
+          Reject
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
