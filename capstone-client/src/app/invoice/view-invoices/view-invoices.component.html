@@ -206,10 +206,12 @@
               aria-label="Edit Invoice"
               mat-icon-button
               matTooltip="Edit Invoice"
+              *ngIf="userType === 'CLIENT'"
             >
               <mat-icon>edit</mat-icon>
             </button>
             <button
+              *ngIf="userType === 'CLIENT'"
               aria-label="Delete Invoice"
               mat-icon-button
               matTooltip="Delete Invoice"

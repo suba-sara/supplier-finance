@@ -9,7 +9,7 @@ import {
 import { Sort } from '@angular/material/sort';
 import { AppService } from '../../app.service';
 import { getDisplayColumns } from '../util/getDisplayColumns';
-import { AuthService } from '../../core/auth/auth.service';
+import { AuthService, UserType } from '../../core/auth/auth.service';
 import { InvoiceStatus } from '../invoice.types';
 
 @Component({
@@ -29,6 +29,10 @@ export class ViewInvoicesComponent implements OnInit {
     private appService: AppService,
     public authService: AuthService
   ) {}
+
+  get userType(): UserType | undefined {
+    return this.authService.user.value?.userType;
+  }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
