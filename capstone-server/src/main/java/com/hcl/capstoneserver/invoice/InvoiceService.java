@@ -378,7 +378,7 @@ public class InvoiceService {
             dashboardDataDto.setInReviewCount(invoiceRepository.countAllByStatus(
                     InvoiceStatus.IN_REVIEW
             ));
-            dashboardDataDto.setInReviewCount(invoiceRepository.countAllByStatus(
+            dashboardDataDto.setRejectedCount(invoiceRepository.countAllByStatus(
                     InvoiceStatus.REJECTED
             ));
             dashboardDataDto.setApprovedCount(invoiceRepository.countAllByStatus(
