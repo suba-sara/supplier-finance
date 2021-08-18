@@ -6,7 +6,7 @@
   display: flex;
   flex-direction: column;
   border-radius: 15px;
-  margin: 0% auto;
+  margin: 0 auto;
   padding: 10px;
   width: 80%;
 }
@@ -101,6 +101,15 @@
   justify-content: flex-end;
   margin-top: 30px;
   width: 100%;
+}
+
+.approve-button {
+  margin-right: 20px;
+  background: #307f32;
+}
+
+.reject-button {
+  background: #bc3c3c;
 }
 
 @media only screen and (max-width: variables.$media-query-tablet) {

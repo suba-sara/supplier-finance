@@ -45,9 +45,7 @@
         <span class="detail-content">{{ invoice?.status }}</span>
       </div>
       <div class="single-detail">
-        <span class="detail-heading">
-          <h1 class="row-hd">Client Details</h1>
-        </span>
+        <span class="detail-heading row-hd"> Client Details </span>
       </div>
       <div class="single-detail">
         <span class="detail-heading">Client Id:</span>
@@ -58,9 +56,7 @@
         <span class="detail-content">{{ invoice?.client?.name }}</span>
       </div>
       <div class="single-detail">
-        <span class="detail-heading">
-          <h1 class="row-hd">Supplier Details</h1>
-        </span>
+        <span class="detail-heading row-hd"> Supplier Details </span>
       </div>
       <div class="single-detail">
         <span class="detail-heading">Supplier Id:</span>
@@ -74,14 +70,20 @@
         <button *ngIf="reviewable" color="warn" mat-raised-button>
           Request Review
         </button>
-        <button *ngIf="approvable" color="accent" mat-raised-button>
+        <button
+          *ngIf="approvable"
+          class="approve-button"
+          color="accent"
+          mat-raised-button
+        >
           Approve
         </button>
         <button
           *ngIf="approvable"
           [disabled]="!rejectable"
-          color="danger"
           mat-raised-button
+          class="reject-button"
+          color="accent"
         >
           Reject
         </button>
