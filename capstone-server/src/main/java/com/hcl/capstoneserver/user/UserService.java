@@ -398,7 +398,7 @@ public class UserService implements UserDetailsService {
      * @param userId userId
      * @return if OTP code is correct, then return true. and other hand return following exception
      */
-    public Boolean getOTP(String userId) {
+    public CheckValidDTO getOTP(String userId) {
         // retrieve user from db
         Optional<AppUser> user = appUserRepository.findById(userId);
 
@@ -432,7 +432,7 @@ public class UserService implements UserDetailsService {
                 break;
         }
 
-        return true;
+        return new CheckValidDTO(true);
     }
 
     /**
@@ -441,7 +441,7 @@ public class UserService implements UserDetailsService {
      * @param dto UserVerifiedDto object -> for more information move on it
      * @return if OTP code is correct, then return true. and other hand return following exception
      */
-    public Boolean verifyUser(UserVerifiedDTO dto) {
+    public CheckValidDTO verifyUser(UserVerifiedDTO dto) {
         // retrieve user from db
         Optional<AppUser> user = appUserRepository.findById(dto.getUserId());
 
@@ -455,7 +455,7 @@ public class UserService implements UserDetailsService {
                      * set new password
                      */
                     user.get().setPassword(bCryptPasswordEncoder.encode(dto.getPassword()));
-                    return true;
+                    return new CheckValidDTO(true);
                 }
             } else {
                 // if OTP is expired then throw this exception
@@ -488,12 +488,13 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-    public Boolean checkUserId(String userId) {
-        return !appUserRepository.existsById(userId);
+    public CheckValidDTO checkUserId(String userId) {
+        return new CheckValidDTO(!appUserRepository.existsById(userId));
     }
 
-    public Boolean checkEmail(String email) {
-        return !clientRepository.existsClientByEmail(email) && !supplierRepository.existsSupplierByEmail(email);
+    public CheckValidDTO checkEmail(String email) {
+        return new CheckValidDTO(!clientRepository.existsClientByEmail(email) && !supplierRepository.existsSupplierByEmail(
+                email));
     }
 }
 

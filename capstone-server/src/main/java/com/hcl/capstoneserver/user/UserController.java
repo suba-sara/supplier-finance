@@ -145,7 +145,7 @@ public class UserController {
      * @return boolean
      */
     @PostMapping("/api/user/forgotPassword/getOTP")
-    public ResponseEntity<Boolean> getOTP(@Valid @RequestBody String userId) {
+    public ResponseEntity<CheckValidDTO> getOTP(@Valid @RequestBody String userId) {
         return new ResponseEntity<>(userService.getOTP(userId), HttpStatus.OK);
     }
 
@@ -156,7 +156,7 @@ public class UserController {
      * @return boolean
      */
     @PostMapping("/api/user/forgotPassword/verifyUser")
-    public ResponseEntity<Boolean> verifyUser(@Valid @RequestBody UserVerifiedDTO dto) {
+    public ResponseEntity<CheckValidDTO> verifyUser(@Valid @RequestBody UserVerifiedDTO dto) {
         return new ResponseEntity<>(userService.verifyUser(dto), HttpStatus.OK);
     }
 
@@ -167,7 +167,7 @@ public class UserController {
      * @return boolean
      */
     @PostMapping("/api/users/check-username")
-    public ResponseEntity<Boolean> checkUserId(@Valid @RequestBody String username) {
+    public ResponseEntity<CheckValidDTO> checkUserId(@Valid @RequestBody String username) {
         return new ResponseEntity<>(userService.checkUserId(username), HttpStatus.OK);
     }
 
@@ -178,7 +178,7 @@ public class UserController {
      * @return boolean
      */
     @PostMapping("/api/users/check-email")
-    public ResponseEntity<Boolean> checkEmail(@Valid @RequestBody String email) {
+    public ResponseEntity<CheckValidDTO> checkEmail(@Valid @RequestBody String email) {
         return new ResponseEntity<>(userService.checkEmail(email), HttpStatus.OK);
     }
 }
