@@ -8,6 +8,7 @@ import com.hcl.capstoneserver.account.exception.AccountNotFoundException;
 import com.hcl.capstoneserver.account.exception.OTPTimedOut;
 import com.hcl.capstoneserver.account.repositories.AccountRepository;
 import com.hcl.capstoneserver.mail.sender.EmailService;
+import com.hcl.capstoneserver.user.dto.CheckValidDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -75,7 +76,7 @@ public class AccountService {
         throw new AccountNotFoundException();
     }
 
-    public Boolean checkOTP(AccountVerifiedDTO accountVerifiedDTO) {
+    public CheckValidDTO checkOTP(AccountVerifiedDTO accountVerifiedDTO) {
         Optional<Account> account = accountRepository.findById(accountVerifiedDTO.getAccountNumber());
         if (account.isPresent()) {
             Account acc = account.get();
@@ -83,7 +84,7 @@ public class AccountService {
             // verify otp time validity
             if (new Date().before(acc.getOtpExpiredDate())) {
                 // verify otp code
-                return acc.getOTP().equals(accountVerifiedDTO.getOTP());
+                return new CheckValidDTO(acc.getOTP().equals(accountVerifiedDTO.getOTP()));
             } else {
                 throw new OTPTimedOut();
             }
@@ -91,7 +92,7 @@ public class AccountService {
         throw new AccountNotFoundException();
     }
 
-    public Boolean verifyAccount(AccountVerifiedDTO accountVerifiedDTO) {
+    public CheckValidDTO verifyAccount(AccountVerifiedDTO accountVerifiedDTO) {
         Optional<Account> account = accountRepository.findById(accountVerifiedDTO.getAccountNumber());
         if (account.isPresent()) {
             Account acc = account.get();
@@ -99,7 +100,7 @@ public class AccountService {
                 if (acc.getOTP().equals(accountVerifiedDTO.getOTP())) {
                     acc.setVerified(true);
                     accountRepository.save(acc);
-                    return true;
+                    return new CheckValidDTO(true);
                 }
             } else {
                 throw new OTPTimedOut();

@@ -3,6 +3,7 @@ package com.hcl.capstoneserver.account;
 import com.hcl.capstoneserver.account.dto.AccountVerifiedDTO;
 import com.hcl.capstoneserver.account.dto.GetOTP_DTO;
 import com.hcl.capstoneserver.account.dto.GetOtpResponseDTO;
+import com.hcl.capstoneserver.user.dto.CheckValidDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -27,7 +28,7 @@ public class AccountController {
     }
 
     @PostMapping("/api/account/check-otp")
-    public ResponseEntity<Boolean> verifyAccount(@Valid @RequestBody AccountVerifiedDTO accountVerifiedDTO) {
+    public ResponseEntity<CheckValidDTO> verifyAccount(@Valid @RequestBody AccountVerifiedDTO accountVerifiedDTO) {
         return new ResponseEntity<>(accountService.checkOTP(accountVerifiedDTO), HttpStatus.OK);
     }
 }
