@@ -30,8 +30,8 @@ public class UserTestUtils {
 
     public void accountCreate() {
         databaseSeeder.seedTest();
-        for (int i = 5; i < 9; i++) {
-            accountService.getOTP("1000023" + i);
+        for (int i = 35; i < 40; i++) {
+            accountService.getOTP("100002" + i);
         }
     }
 
