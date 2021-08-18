@@ -1,4 +1,5 @@
 @use "src/styles/variables";
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
 
 .content-container {
   background: white;
@@ -9,10 +10,13 @@
   padding: 10px;
   width: 80%;
 }
-.row-hd{
+
+.row-hd {
+  margin-top: 20px;
   color: variables.$primary-color;
   font-weight: bolder;
 }
+
 .header-container {
   display: flex;
   flex-direction: column;
@@ -31,27 +35,19 @@
     margin-bottom: 0.2em;
   }
 }
-.body-container{
+
+.body-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin: 20px;
 }
+
 .invoice-number-container {
   margin-left: auto;
 
-  h1 {
-    font-weight: bold;
-    color: variables.$gray-color;
-  }
-}
-
-.date {
   font-weight: bold;
   color: variables.$gray-color;
-  font-size: 1.2em;
-}
-
-.table-container {
-  display: flex;
-  flex-direction: row;
 }
 
 .left-container {
@@ -67,4 +63,85 @@
 .download-button-container {
   margin-top: 2em;
   margin-bottom: 2em;
+}
+
+.invoice-detail-container {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  min-width: 400px;
+}
+
+.single-detail {
+  display: flex;
+  margin-bottom: 30px;
+}
+
+.detail-heading {
+  font-size: 1.6rem;
+  font-weight: bold;
+  width: 250px;
+}
+
+.detail-content {
+  font-size: 1.7rem;
+  font-family: "Poppins", sans-serif;
+  color: #4b4444;
+}
+
+.back-button-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+.action-button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 30px;
+  width: 100%;
+}
+
+@media only screen and (max-width: variables.$media-query-tablet) {
+  .content-container {
+    border-radius: 15px;
+    padding: 10px;
+    width: 90%;
+    min-width: 0;
+  }
+
+  .invoice-detail-container {
+    width: 90%;
+  }
+
+  .detail-heading {
+    font-size: 1.5rem;
+    width: 200px;
+  }
+
+  .detail-content {
+    font-size: 1.6rem;
+  }
+}
+
+@media only screen and (max-width: variables.$media-query-mobile) {
+  .content-container {
+    border-radius: 15px;
+    padding: 5px;
+    width: 100%;
+  }
+
+  .invoice-detail-container {
+    width: 90%;
+  }
+
+  .detail-heading {
+    font-size: 1.3rem;
+    width: 200px;
+  }
+
+  .detail-content {
+    font-size: 1.4rem;
+  }
 }

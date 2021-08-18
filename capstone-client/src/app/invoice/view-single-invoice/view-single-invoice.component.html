@@ -1,59 +1,80 @@
-<br>
+<br />
 <div class="content-container">
   <div class="body-container">
     <div class="header-container">
       <div class="main-header-container">
-        <h1>INVOICE</h1>
-        <div class="invoice-number-container">
-          <h1>#{{ invoice?.invoiceNumber }}</h1>
+        <h1>
+          INVOICE
+          <span class="invoice-number-container"
+            >#{{ invoice?.invoiceId }}</span
+          >
+        </h1>
+      </div>
+    </div>
+    <div class="invoice-detail-container">
+      <div class="back-button-container">
+        <button (click)="back()" color="primary" mat-stroked-button>
+          Back
+        </button>
+        <div *ngIf="invoice">
+          <a href="{{ SERVER }}{{ invoice.fileUrl }}">
+            <button color="primary" mat-flat-button>Download File</button>
+          </a>
         </div>
       </div>
-     
-    </div>
-   
-
-<div class="table-container1">
-  <div class="row">
-    <div class="col-md-6" >
-      <div *ngIf="invoice">
-        <a href="{{ SERVER }}{{ invoice.fileUrl }}">
-          <button color="primary" mat-stroked-button>Download File</button>
-        </a>
+      <div class="single-detail">
+        <span class="detail-heading">Invoice Number :</span>
+        <span class="detail-content">{{ invoice?.invoiceNumber }}</span>
       </div>
-      <br>
-      <h3 class="date">{{ invoice?.invoiceDate | date: "dd/MM/yyyy" }}</h3>
-      <h1>Status: {{ invoice?.status }}</h1>
+      <div class="single-detail">
+        <span class="detail-heading">Invoice Date :</span>
+        <span class="detail-content">{{ invoice?.invoiceDate }}</span>
+      </div>
+      <div class="single-detail">
+        <span class="detail-heading">Uploaded Date :</span>
+        <span class="detail-content">{{ invoice?.uploadedDate }}</span>
+      </div>
+      <div class="single-detail">
+        <span class="detail-heading">Invoice Amount :</span>
+        <span class="detail-content">{{
+          invoice?.amount | currency: invoice?.currencyType
+        }}</span>
+      </div>
+      <div class="single-detail">
+        <span class="detail-heading">Invoice Status :</span>
+        <span class="detail-content">{{ invoice?.status }}</span>
+      </div>
+      <div class="single-detail">
+        <span class="detail-heading">
+          <h1 class="row-hd">Client Details</h1>
+        </span>
+      </div>
+      <div class="single-detail">
+        <span class="detail-heading">Client Id:</span>
+        <span class="detail-content">{{ invoice?.client?.clientId }}</span>
+      </div>
+      <div class="single-detail">
+        <span class="detail-heading">Client Name:</span>
+        <span class="detail-content">{{ invoice?.client?.name }}</span>
+      </div>
+      <div class="single-detail">
+        <span class="detail-heading">
+          <h1 class="row-hd">Supplier Details</h1>
+        </span>
+      </div>
+      <div class="single-detail">
+        <span class="detail-heading">Supplier Id:</span>
+        <span class="detail-content">{{ invoice?.supplier?.supplierId }}</span>
+      </div>
+      <div class="single-detail">
+        <span class="detail-heading">Supplier Name:</span>
+        <span class="detail-content">{{ invoice?.supplier?.name }}</span>
+      </div>
+      <div class="action-button-container">
+        <button *ngIf="requestPayment" color="warn" mat-raised-button>
+          Request Review
+        </button>
+      </div>
     </div>
-    <div class="col-md-6" >
-      <!--Request Review -->
-      <button *ngIf="requestPayment" color="warn" mat-raised-button>Request Review</button>
-      <br>
-      <h1 style="color: rgb(11, 187, 34); margin-top: 15px;">
-        Amount: {{ invoice?.amount | currency: invoice?.currencyType }}
-      </h1>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-md-6" >
-        <h1 class="row-hd">Customer Details:</h1>
-        <h2>Id: {{ invoice?.client?.clientId }}</h2>
-        <h2>Name: {{ invoice?.client?.name }}</h2>
-    </div>
-    <div class="col-md-6" >
-      <h1 class="row-hd">Supplier Details:</h1>
-      <h2>Id: {{ invoice?.supplier?.supplierId }}</h2>
-      <h2>Name: {{ invoice?.supplier?.name }}</h2>
-    </div>
-  </div>
-
-
-  <div class="row">
-  
-    <button color="primary" (click)="back()" mat-stroked-button>Back</button>
-  </div>
-
-</div>
-
   </div>
 </div>
