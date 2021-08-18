@@ -376,5 +376,13 @@ public class UserService implements UserDetailsService {
         }
         return optionalSupplier.get();
     }
+
+    public Boolean checkUserId(String userId) {
+        return !appUserRepository.existsById(userId);
+    }
+
+    public Boolean checkEmail(String email) {
+        return !clientRepository.existsClientByEmail(email) && !supplierRepository.existsSupplierByEmail(email);
+    }
 }
 

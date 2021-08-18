@@ -137,4 +137,26 @@ public class UserController {
                 HttpStatus.NOT_FOUND
         );
     }
+
+    /**
+     * Method to check userId is existed or not
+     *
+     * @param username
+     * @return boolean
+     */
+    @PostMapping("/api/users/check-username")
+    public ResponseEntity<Boolean> checkUserId(@Valid @RequestBody String username) {
+        return new ResponseEntity<>(userService.checkUserId(username), HttpStatus.OK);
+    }
+
+    /**
+     * Method to check email is existed or not
+     *
+     * @param email
+     * @return boolean
+     */
+    @PostMapping("/api/users/check-email")
+    public ResponseEntity<Boolean> checkEmail(@Valid @RequestBody String email) {
+        return new ResponseEntity<>(userService.checkEmail(email), HttpStatus.OK);
+    }
 }
