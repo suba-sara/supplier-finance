@@ -39,4 +39,17 @@ public class EmailService {
         }
     }
 
+    public void sendForgotPasswordOTP(String receiver, String otp) {
+        if (testOtpSeed == null) {
+            MimeMessagePreparator message = mimeMessage -> {
+                MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
+                messageHelper.setTo(receiver);
+                messageHelper.setFrom(emailSender);
+                messageHelper.setSubject("SHS Bank's Supplier Finance Password Reset Code");
+                messageHelper.setText(String.format("Your Verification Code is: %s", otp));
+            };
+            this.javaMailSender.send(message);
+        }
+    }
+
 }

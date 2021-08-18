@@ -33,8 +33,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.Date;
-import java.util.Objects;
 import java.util.Optional;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -56,6 +56,9 @@ public class UserService implements UserDetailsService {
     @Value("${otp.validity.time}")
     private Integer otpValidityTime;
 
+    @Value("${test.otp.seed}")
+    private Integer testOtpSeed;
+
     /**
      * Constructor for UserService
      */
@@ -68,8 +71,7 @@ public class UserService implements UserDetailsService {
             ModelMapper mapper,
             SequenceGenerator sequenceGenerator,
             BankerRepository bankerRepository,
-            AccountService accountService
-            BankerRepository bankerRepository,
+            AccountService accountService,
             EmailService emailService
     ) {
         this.appUserRepository = appUserRepository;
@@ -161,9 +163,9 @@ public class UserService implements UserDetailsService {
 
         return new User(
                 user.get()
-                        .getUserId(),
+                    .getUserId(),
                 user.get()
-                        .getPassword(),
+                    .getPassword(),
                 Collections.singleton(
                         new SimpleGrantedAuthority(user.get().getUserType().toString())
                 )
@@ -174,7 +176,6 @@ public class UserService implements UserDetailsService {
     /**
      * Method to register new supplier
      *
-     * @param supplier supplier data to register new supplier
      * @return if suppler is not exists, then return supplierDTO object, otherwise throws error
      */
     public SupplierDTO signUpSupplier(PersonWithPasswordDTO dto) {
@@ -207,7 +208,6 @@ public class UserService implements UserDetailsService {
     /**
      * Method to register new client
      *
-     * @param client client data to register new client
      * @return if client is not exists, then return clientDTO object, otherwise throws error
      */
     public ClientDTO signUpClient(PersonWithPasswordDTO dto) {
@@ -406,21 +406,28 @@ public class UserService implements UserDetailsService {
             throw new UsernameNotFoundException("User not found");
         }
 
-        int OTP;
+        Random r;
+        if (testOtpSeed != null) {
+            r = new Random(testOtpSeed);
+        } else {
+            r = new Random();
+        }
+
+        String otp = String.valueOf(10000000 + r.nextInt(99999999));
 
         // check the User account Type
         switch (user.get().getUserType()) {
             case CLIENT:
                 // send OTP Code
-                OTP = emailService.send(fetchClientDataByUserId(userId).getEmail());
+                emailService.sendForgotPasswordOTP(fetchClientDataByUserId(userId).getEmail(), otp);
                 // Save OTP code and OTP Code expired date
-                appUserRepository.save(_addOTPAndExpireDate(user.get(), OTP));
+                appUserRepository.save(_addOTPAndExpireDate(user.get(), otp));
                 break;
             case SUPPLIER:
                 // send OTP Code
-                OTP = emailService.send(fetchSupplierDataByUserId(userId).getEmail());
+                emailService.sendForgotPasswordOTP(fetchSupplierDataByUserId(userId).getEmail(), otp);
                 // Save OTP code and OTP Code expired date
-                appUserRepository.save(_addOTPAndExpireDate(user.get(), OTP));
+                appUserRepository.save(_addOTPAndExpireDate(user.get(), otp));
                 break;
         }
 
@@ -442,7 +449,7 @@ public class UserService implements UserDetailsService {
             // check the OTP time is expired or not
             if (new Date().before(user.get().getOtpExpiredDate())) {
                 // check OTP is equal or not
-                if (Objects.equals(user.get().getOTP(), dto.getOTP())) {
+                if (user.get().getOtp().equals(dto.getOTP())) {
                     /*
                      * set new password
                      */
@@ -466,9 +473,9 @@ public class UserService implements UserDetailsService {
      * @param OTP  One-time-password
      * @return AppUser object
      */
-    private AppUser _addOTPAndExpireDate(AppUser user, Integer OTP) {
+    private AppUser _addOTPAndExpireDate(AppUser user, String OTP) {
         // set OTP
-        user.setOTP(OTP);
+        user.setOtp(OTP);
 
         /*
          * set OTP expired date

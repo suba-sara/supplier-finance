@@ -15,13 +15,7 @@ import java.util.List;
 
 @Component
 public class DatabaseSeeder {
-    private final BankerRepository bankerRepository;
-    private final AccountRepository accountRepository;
 
-    public DatabaseSeeder(BankerRepository bankerRepository, AccountRepository accountRepository) {
-        this.bankerRepository = bankerRepository;
-        this.accountRepository = accountRepository;
-    }
     final static String _accNumberBase = "10000000";
     @Autowired
     private BankerRepository bankerRepository;
@@ -29,6 +23,10 @@ public class DatabaseSeeder {
     private AccountRepository accountRepository;
     @Value("${seed.account.data}")
     private boolean seedAccountData;
+
+    public DatabaseSeeder() {
+    }
+
 
     @EventListener
     public void seed(ContextRefreshedEvent event) {
