@@ -10,20 +10,24 @@
       </div>
      
     </div>
-    <div *ngIf="invoice" class="download-button-container">
-      <a href="{{ SERVER }}{{ invoice.fileUrl }}">
-        <button color="primary" mat-raised-button>Download File</button>
-      </a>
-    </div>
+   
 
 <div class="table-container1">
   <div class="row">
     <div class="col-md-6" >
+      <div *ngIf="invoice">
+        <a href="{{ SERVER }}{{ invoice.fileUrl }}">
+          <button color="primary" mat-stroked-button>Download File</button>
+        </a>
+      </div>
+      <br>
       <h3 class="date">{{ invoice?.invoiceDate | date: "dd/MM/yyyy" }}</h3>
       <h1>Status: {{ invoice?.status }}</h1>
     </div>
     <div class="col-md-6" >
-
+      <!--Request Review -->
+      <button *ngIf="requestPayment" color="warn" mat-raised-button>Request Review</button>
+      <br>
       <h1 style="color: rgb(11, 187, 34);">
         Amount: {{ invoice?.amount | currency: invoice?.currencyType }}
       </h1>

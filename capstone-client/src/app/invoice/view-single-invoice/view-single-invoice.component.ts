@@ -12,6 +12,8 @@ import { environment } from '../../../environments/environment';
 export class ViewSingleInvoiceComponent implements OnInit {
   SERVER = environment.SERVER;
   invoice?: Invoice;
+  userType:any;
+  requestPayment?:boolean;
 
   constructor(
     private router: Router,
@@ -20,8 +22,17 @@ export class ViewSingleInvoiceComponent implements OnInit {
   ) {
     const invoiceId = this.route.snapshot.params['id'];
     this.viewSingleInvoicesService
-      .getInvoiceById(invoiceId)
-      .then((invoice) => (this.invoice = invoice));
+      .getInvoiceById(invoiceId).then((invoice) => {
+        this.invoice = invoice
+        this.userType = localStorage.getItem("user_type");
+        if( this.userType === "CLIENT" && this.invoice.status === "UPLOADED"){
+          this.requestPayment = true;
+        }else{
+          this.requestPayment = false;
+        }
+        console.log(this.invoice.status)
+      });
+      
   }
 
   ngOnInit(): void {}
