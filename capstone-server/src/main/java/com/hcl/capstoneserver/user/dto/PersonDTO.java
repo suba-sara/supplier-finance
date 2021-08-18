@@ -8,7 +8,6 @@ public class PersonDTO extends AppUserDTO {
     private String name = null;
 
     @NotBlank(message = "address is required")
-    @Pattern(regexp = "^[a-zA-Z0-9_, ]+$", message = "address must only contain alphanumeric values")
     private String address = null;
 
     @NotBlank(message = "email is required")
