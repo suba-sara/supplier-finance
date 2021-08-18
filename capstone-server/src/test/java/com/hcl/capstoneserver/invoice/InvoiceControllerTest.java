@@ -87,9 +87,9 @@ public class InvoiceControllerTest {
         supplierRepository.deleteAll();
         clientRepository.deleteAll();
         bankerRepository.deleteAll();
-
-//        suppliers = userTestUtils.createASupplier();
-//        clients = userTestUtils.createAClient();
+        userTestUtils.accountCreate();
+        suppliers = userTestUtils.createASupplier();
+        clients = userTestUtils.createAClient();
         bankers = userTestUtils.createBankers();
         createInvoice = invoiceTestUtils.createInvoice(suppliers);
         expiredInvoice = invoiceTestUtils.createExpiredInvoice(suppliers, clients);
