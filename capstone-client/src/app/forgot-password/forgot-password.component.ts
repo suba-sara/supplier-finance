@@ -27,7 +27,7 @@ export class ForgotPasswordComponent implements OnInit {
   }
 
   searchAccount(): void {
-    this.forgotPasswordService.searchAccount(this.userAccountForm.value).subscribe(res => {
+    this.forgotPasswordService.searchAccount(this.userId?.value).subscribe(res => {
       if (res) {
         this.isAccountHas = !this.isAccountHas;
         this.userAccountForm?.addControl(
