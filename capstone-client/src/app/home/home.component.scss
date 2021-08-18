@@ -20,17 +20,18 @@
   margin-top: 35%;
 }
 .content p{
-  font-size: 18px;
+  font-size: 20px;
 }
 .content button{
   margin-left: 30px;
+  font-size: 20px;
 }
 
 .content img{
   padding: 10px;
 }
-.logo span{
- font-size: 26px;
+.logo h1{
+ font-size: 28px;
  font-weight: bolder;
 }
 
@@ -39,9 +40,11 @@
   background-color: white;
   padding: 30px;
   text-align: justify;
-  font-size: 16px;
+  font-size: 20px;
 }
-
+.about_us h1{
+  font-size: 28px;
+}
 .img-about{
   width: 80%;
   height: 100%;
@@ -60,13 +63,16 @@
   padding: 10px;
   border-radius: 10px;
 }
+.box h1{
+  font-size: 28px;
+}
 .box1{
   background-image: linear-gradient(to right, rgb(0, 139, 253),
   rgb(0, 84, 194));
   color: white;
 }
 .box p{
-  text-align: 18px;
+  font-size: 20px;
   text-align: justify;
   padding: 20px;
 }
