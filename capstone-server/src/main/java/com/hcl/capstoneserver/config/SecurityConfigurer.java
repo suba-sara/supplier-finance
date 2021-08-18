@@ -22,8 +22,10 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     private final JwtRequestFilter jwtRequestFilter;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public SecurityConfigurer(UserService userService, JwtRequestFilter jwtRequestFilter,
-                              BCryptPasswordEncoder passwordEncoder) {
+    public SecurityConfigurer(
+            UserService userService, JwtRequestFilter jwtRequestFilter,
+            BCryptPasswordEncoder passwordEncoder
+    ) {
         this.userService = userService;
         this.jwtRequestFilter = jwtRequestFilter;
         this.passwordEncoder = passwordEncoder;
@@ -57,6 +59,8 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/auth/sign-up/client").permitAll()
             .antMatchers("/api/auth/sign-up/supplier").permitAll()
             .antMatchers("/api/getFile/**").permitAll()
+            .antMatchers("/api/user/forgotPassword/getOTP").permitAll()
+            .antMatchers("/api/user/forgotPassword/verifyUser").permitAll()
             .and()
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
