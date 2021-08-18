@@ -23,6 +23,7 @@
   padding-left: 20px;
   padding-right: 20px;
   transition: all 0.5s ease;
+  margin-top: 15px;
 
   a {
     font-size: 1.2em;
@@ -43,7 +44,7 @@
   .nav-links-container {
     position: absolute;
     left: 0;
-    top: 10vh;
+    top: 7vh;
     width: 100%;
     background: linear-gradient(#1e2836, #19222d);
     display: flex;

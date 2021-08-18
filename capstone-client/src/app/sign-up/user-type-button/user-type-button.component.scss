@@ -3,11 +3,11 @@
 .button-card {
   min-width: 250px;
   width: 400px;
-  padding: 25px;
+  padding: 15px;
   margin: 10px;
   display: flex;
   flex-direction: column;
-  border-radius: 20px;
+  border-radius: 10px;
   align-items: center;
   background: none;
   border: none;
@@ -36,7 +36,7 @@
   align-items: center;
 
   img {
-    width: 175px;
-    height: 225px;
+    width: 125px;
+    height: 175px;
   }
 }
