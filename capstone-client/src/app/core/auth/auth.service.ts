@@ -24,6 +24,14 @@ export type ApplicationUser = {
   userType: UserType;
 };
 
+export type ProfileResponse = {
+  username: string;
+  userType: UserType;
+  clientId?: string;
+  supplierId?: string;
+  employeeId?: string;
+};
+
 @Injectable({
   providedIn: 'root',
 })
@@ -101,6 +109,8 @@ export class AuthService implements OnDestroy {
    * Method to set local storage data
    *
    * @param accessToken JWT token
+   * @param userName Username
+   * @param userType User Type
    */
   setLocalStorage({
     accessToken,
@@ -140,6 +150,10 @@ export class AuthService implements OnDestroy {
         });
       })
     );
+  }
+
+  getProfile(): Observable<ProfileResponse> {
+    return this.http.get<ProfileResponse>(`${API_PATH}/users/profile`);
   }
 
   /* to be used in future for refresh tokens */

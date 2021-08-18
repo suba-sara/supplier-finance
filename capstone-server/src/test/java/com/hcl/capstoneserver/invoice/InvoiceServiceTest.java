@@ -77,6 +77,7 @@ public class InvoiceServiceTest {
     }
 
     private InvoiceStatus updateInvoiceStatus(InvoiceStatus status, Integer invoiceId) {
+
         return invoiceService.statusUpdate(new StatusUpdateInvoiceDTO(
                 invoiceId,
                 status
@@ -165,31 +166,6 @@ public class InvoiceServiceTest {
         class InvoiceUpdateBankTests {
 
 
-            @Test
-            @DisplayName("it should update the invoice status")
-            public void shouldUpdateInvoiceStatus() {
-                assertEquals(
-                        InvoiceStatus.IN_REVIEW,
-                        updateInvoiceStatus(InvoiceStatus.IN_REVIEW, createInvoice.get(0).getInvoice().getInvoiceId())
-                );
-            }
-
-
-            @Test
-            @DisplayName("it should not update when invoice status is REJECTED")
-            public void shouldNotUpdateInvoiceWhenStatusIsRejected() {
-                updateInvoiceStatus(InvoiceStatus.REJECTED, createInvoice.get(0).getInvoice().getInvoiceId());
-                assertEquals(
-                        "This invoice can not update, because invoice is REJECTED.",
-                        assertThrows(
-                                HttpClientErrorException.class, () ->
-                                        updateInvoiceStatus(
-                                                InvoiceStatus.IN_REVIEW,
-                                                createInvoice.get(0).getInvoice().getInvoiceId()
-                                        )
-                        ).getMessage()
-                );
-            }
         }
 
         //Client
@@ -244,26 +220,7 @@ public class InvoiceServiceTest {
                 );
             }
 
-            @Test
-            @DisplayName("it should not update invoice with invoice status In_Review, Approved and Rejected")
-            public void shouldNotUpdateInvoiceWithInReviewAndApprovedAndRejected() {
-                updateInvoiceStatus(InvoiceStatus.IN_REVIEW, createInvoice.get(0).getInvoice().getInvoiceId());
-                assertEquals(
-                        "This invoice can not update, because invoice is IN_REVIEW.",
-                        assertThrows(
-                                HttpClientErrorException.class,
-                                () -> invoiceService.updateInvoice(
-                                        new UpdateInvoiceDTO(
-                                                createInvoice.get(0).getInvoice().getInvoiceId(),
-                                                suppliers.get(0).getSupplierId(),
-                                                "1234567892",
-                                                LocalDate.now(),
-                                                25000.0,
-                                                CurrencyType.EUR
-                                        ), "client")
-                        ).getMessage()
-                );
-            }
+
         }
     }
 
@@ -294,21 +251,6 @@ public class InvoiceServiceTest {
             );
         }
 
-        @Test
-        @DisplayName("it should not delete invoice with invoice status In_Review, Approved and Rejected")
-        public void shouldNotDeleteInvoiceWithInReviewAndApprovedAndRejected() {
-            updateInvoiceStatus(InvoiceStatus.IN_REVIEW, createInvoice.get(0).getInvoice().getInvoiceId());
-            assertEquals(
-                    "403 Invoice Delete Restricted",
-                    assertThrows(
-                            HttpClientErrorException.class,
-                            () -> invoiceService.deleteInvoice(
-                                    createInvoice.get(0).getInvoice().getInvoiceId(),
-                                    "client"
-                            )
-                    ).getMessage()
-            );
-        }
     }
 
     @Nested

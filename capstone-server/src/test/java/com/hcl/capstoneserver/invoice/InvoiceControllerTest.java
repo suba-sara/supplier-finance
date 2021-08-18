@@ -29,6 +29,7 @@ import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -101,10 +102,9 @@ public class InvoiceControllerTest {
     }
 
     private void updateInvoiceStatus(InvoiceStatus status, Integer invoiceId) {
-        invoiceService.statusUpdate(new StatusUpdateInvoiceDTO(
-                invoiceId,
-                status
-        ), "BANK");
+        Optional<Invoice> invoice = invoiceRepository.findById(invoiceId);
+        invoice.get().setStatus(status);
+        invoiceRepository.save(invoice.get());
     }
 
     @Nested
@@ -215,24 +215,6 @@ public class InvoiceControllerTest {
         @DisplayName("invoice update test: BANK")
         class InvoiceUpdateBankTests {
 
-            @Test
-            @DisplayName("it should update the invoice status")
-            public void shouldUpdateInvoiceStatus() {
-                StatusUpdateInvoiceDTO dto = new StatusUpdateInvoiceDTO(
-                        createInvoice.get(0).getInvoice().getInvoiceId(),
-                        InvoiceStatus.IN_REVIEW
-                );
-
-                webTestClient.put()
-                             .uri(String.format("http://localhost:%d/api/invoices/update/status", port))
-                             .contentType(MediaType.APPLICATION_JSON)
-                             .header(HttpHeaders.AUTHORIZATION, client1token)
-                             .contentType(MediaType.APPLICATION_JSON)
-                             .body(Mono.just(dto), StatusUpdateInvoiceDTO.class)
-                             .exchange()
-                             .expectStatus()
-                             .is2xxSuccessful();
-            }
 
 
             @Test
@@ -255,7 +237,7 @@ public class InvoiceControllerTest {
                              .is4xxClientError()
                              .expectBody()
                              .jsonPath("$.errors[0].message")
-                             .isEqualTo("This invoice can not update, because invoice is REJECTED.");
+                             .isEqualTo("Permission denied");
             }
         }
 

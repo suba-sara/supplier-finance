@@ -20,6 +20,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -91,7 +92,7 @@ public class InvoiceService {
     private Invoice _fetchInvoiceById(Integer invoiceId) {
         Optional<Invoice> invoice = invoiceRepository.findById(invoiceId);
         if (!invoice.isPresent()) {
-            throw new InvoiceNotFoundException("Invoice is not found.");
+            throw new InvoiceNotFoundException("Invoice not found.");
         }
         return invoice.get();
     }
@@ -101,13 +102,39 @@ public class InvoiceService {
             Integer invoiceId,
             String field
     ) {
+        Optional<AppUser> user = appUserRepository.findById(userId);
+        if (!user.isPresent()) {
+            throw new UsernameNotFoundException("user not found");
+        }
         Invoice invoice = _fetchInvoiceById(invoiceId);
-        if (!invoice.getClient().getUserId().equals(userId)) {
-            throw new InvoiceOwnershipException(String.format(
-                    "%s you do not have permission to %s this invoice.",
-                    userId, field
-            )
-            );
+
+        switch (user.get().getUserType()) {
+            case CLIENT:
+                if (!invoice.getClient().getUserId().equals(userId)) {
+                    throw new InvoiceOwnershipException(String.format(
+                            "%s you do not have permission to %s this invoice.",
+                            userId, field
+                    ));
+                }
+                break;
+            case SUPPLIER:
+                if (!invoice.getSupplier()
+                            .getUserId()
+                            .equals(userId) || invoice.getStatus() == InvoiceStatus.UPLOADED) {
+                    throw new InvoiceOwnershipException(String.format(
+                            "%s you do not have permission to %s this invoice.",
+                            userId, field
+                    ));
+                }
+                break;
+            case BANKER:
+                if (invoice.getStatus() == InvoiceStatus.UPLOADED) {
+                    throw new InvoiceOwnershipException(String.format(
+                            "%s you do not have permission to %s this invoice.",
+                            userId, field
+                    ));
+                }
+                break;
         }
         return invoice;
     }
@@ -209,13 +236,43 @@ public class InvoiceService {
 
     // This method use only Bank
     public BankViewInvoiceDTO statusUpdate(StatusUpdateInvoiceDTO dto, String userId) {
-        // need to check userId account type -> This feature currently unavailable
-        // One feature needs to be check when BANK user is created: invoice status can update only by BANK
+        Optional<AppUser> user = appUserRepository.findById(userId);
+        if (!user.isPresent() || user.get().getUserType() != UserType.BANKER) {
+            throw new InvoiceStatusException("Permission denied");
+        }
+
+
         Invoice invoice = _fetchInvoiceById(dto.getInvoiceId());
-        _checkInvoiceDate(invoice.getInvoiceDate(), UserType.BANKER);
-        _checkInvoiceStatus(invoice.getStatus(), "update");
-        mapper.map(dto, invoice);
+        if (!(dto.getStatus() == InvoiceStatus.APPROVED || dto.getStatus() == InvoiceStatus.REJECTED)) {
+            throw new InvoiceStatusException("Permission denied");
+        }
+        if (invoice.getStatus() == InvoiceStatus.APPROVED || invoice.getStatus() == InvoiceStatus.UPLOADED) {
+            throw new InvoiceStatusException("Permission denied");
+        }
+
+        invoice.setStatus(dto.getStatus());
+
         return mapper.map(invoiceRepository.save(invoice), BankViewInvoiceDTO.class);
+    }
+
+    public ViewInvoiceDTO requestReview(StatusUpdateInvoiceDTO dto, String userId) {
+        Optional<AppUser> user = appUserRepository.findById(userId);
+        Invoice invoice = _fetchInvoiceById(dto.getInvoiceId());
+
+        if (!user.isPresent() || !invoice.getClient().getUserId().equals(userId)) {
+            throw new InvoiceStatusException("Permission denied");
+        }
+        if (dto.getStatus() != InvoiceStatus.IN_REVIEW) {
+            throw new InvoiceStatusException("Permission denied");
+        }
+
+        if (invoice.getStatus() != InvoiceStatus.UPLOADED) {
+            throw new InvoiceStatusException("Permission denied");
+        }
+
+        invoice.setStatus(dto.getStatus());
+
+        return mapper.map(invoiceRepository.save(invoice), ViewInvoiceDTO.class);
     }
 
     public InvoiceDeletedDto deleteInvoice(Integer invoiceId, String userId) {

@@ -7,12 +7,12 @@ public class ViewClientNonSensitive {
     public ViewClientNonSensitive() {
     }
 
-    public String getSupplierId() {
+    public String getClientId() {
         return clientId;
     }
 
-    public void setSupplierId(String supplierId) {
-        this.clientId = supplierId;
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
     }
 
     public String getName() {

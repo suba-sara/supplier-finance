@@ -1,142 +1,158 @@
-.img{
+.img {
   width: 80%;
   height: 80%;
 }
-.root-container{
+
+.root-container {
   display: flex;
   width: 95%;
-  background-image: linear-gradient(to right, rgb(210, 235, 255),
-  #f0f0f0);
+  background-image: linear-gradient(to right, rgb(210, 235, 255), #f0f0f0);
 }
-.left-section{
+
+.left-section {
   width: 60%;
   text-align: center;
 }
-.right-section{
+
+.right-section {
   width: 40%;
 }
-.content{
+
+.content {
   text-align: center;
   margin-top: 35%;
 }
-.content p{
+
+.content p {
   font-size: 20px;
 }
-.content button{
+
+.content button {
   margin-left: 30px;
   font-size: 20px;
 }
 
-.content img{
+.content img {
   padding: 10px;
 }
-.logo h1{
- font-size: 28px;
- font-weight: bolder;
+
+.logo h1 {
+  font-size: 28px;
+  font-weight: bolder;
 }
 
-.about_us{
+.about_us {
   width: 100%;
   background-color: white;
   padding: 30px;
   text-align: justify;
   font-size: 20px;
 }
-.about_us h1{
+
+.about_us h1 {
   font-size: 28px;
 }
-.img-about{
+
+.img-about {
   width: 80%;
   height: 100%;
 }
-.question{
+
+.question {
   width: 90%;
-  display:flex;
+  display: flex;
   flex-wrap: wrap;
   margin: 0% auto;
   justify-content: space-around;
   text-align: center;
 }
-.box{
+
+.box {
   width: 49%;
   margin-top: 50px;
   padding: 10px;
   border-radius: 10px;
 }
-.box h1{
+
+.box h1 {
   font-size: 28px;
 }
-.box1{
-  background-image: linear-gradient(to right, rgb(0, 139, 253),
-  rgb(0, 84, 194));
+
+.box1 {
+  background-image: linear-gradient(
+    to right,
+    rgb(0, 139, 253),
+    rgb(0, 84, 194)
+  );
   color: white;
 }
-.box p{
+
+.box p {
   font-size: 20px;
   text-align: justify;
   padding: 20px;
 }
-.box img{
+
+.box img {
   width: 60%;
   height: 60%;
 }
 @media only screen and (max-width: 768px) {
-  .root-container{
+  .root-container {
     display: block;
     width: 100%;
   }
-  .left-section{
+  .left-section {
     width: 100%;
   }
-  .right-section{
+  .right-section {
     width: 100%;
   }
-  .content button{
+  .content button {
     margin-right: 30px;
     margin-left: 0px;
   }
-  .content{
+  .content {
     margin-top: 0%;
   }
-  .content p{
+  .content p {
     padding: 10px;
   }
 
-  .img{
+  .img {
     width: 50%;
     height: 50%;
   }
-  .content button{
+  .content button {
     margin-bottom: 30px;
   }
 
-  .img-about{
+  .img-about {
     width: 50%;
     height: 100%;
   }
 
-  .box{
+  .box {
     width: 80%;
   }
-  .box img{
+  .box img {
     width: 50%;
     height: 50%;
   }
-  .box p{
-    text-align: 16px;
+  .box p {
     padding: 10px;
   }
 }
 
 @media only screen and (max-width: 545px) {
-  .content p{
-   font-size: 18px;
+  .content p {
+    font-size: 18px;
   }
 
-  .box{
+  .box {
     width: 100%;
   }
-  .box img{
+  .box img {
     width: 40%;
     height: 40%;
   }

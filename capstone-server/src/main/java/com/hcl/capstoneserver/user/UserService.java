@@ -146,6 +146,34 @@ public class UserService implements UserDetailsService {
         );
     }
 
+    public ProfileDto getProfile(String userId) {
+        Optional<AppUser> user = appUserRepository.findById(userId);
+        if (!user.isPresent()) {
+            throw new UsernameNotFoundException("User not found");
+        }
+
+        ProfileDto profileDto = new ProfileDto();
+        profileDto.setUsername(userId);
+        profileDto.setUserType(user.get().getUserType());
+
+        switch (user.get().getUserType()) {
+            case CLIENT:
+                Optional<Client> client = clientRepository.findById(userId);
+                profileDto.setClientId(client.get().getClientId());
+                break;
+            case SUPPLIER:
+                Optional<Supplier> supplier = supplierRepository.findById(userId);
+                profileDto.setSupplierId(supplier.get().getSupplierId());
+                break;
+            case BANKER:
+                Optional<Banker> banker = bankerRepository.findById(userId);
+                profileDto.setEmployeeId(banker.get().getEmployeeId());
+                break;
+        }
+
+        return profileDto;
+    }
+
     /**
      * Method to get user by username
      *
