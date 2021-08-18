@@ -83,17 +83,17 @@ public class GlobalErrorHandler extends ResponseEntityExceptionHandler {
         errors.add(_getErrorsMaps(ex.getStatusText(), ex.getMessage()));
         return new ResponseEntity<>(
                 new DefaultValidationErrorResponse(
-                        ex.getStatusCode()
-                        , "Client Errors",
-                        errors),
+                        ex.getStatusCode(),
+                        "Validation Error",
+                        errors
+                ),
                 ex.getStatusCode()
         );
-//        } else {
-//            return new ResponseEntity<>(
-//                    new DefaultErrorResponse(ex.getStatusCode(), ex.getMessage()),
-//                    ex.getStatusCode()
-//            );
-//        }
+
+        //        return new ResponseEntity<>(
+        //                new DefaultErrorResponse(ex.getStatusCode(), ex.getStatusText()),
+        //                ex.getStatusCode()
+        //        );
     }
 
     @ExceptionHandler(JwtException.class)

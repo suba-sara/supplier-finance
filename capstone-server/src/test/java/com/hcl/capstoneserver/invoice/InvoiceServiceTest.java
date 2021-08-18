@@ -68,7 +68,7 @@ public class InvoiceServiceTest {
         supplierRepository.deleteAll();
         clientRepository.deleteAll();
         bankerRepository.deleteAll();
-
+        userTestUtils.accountCreate();
         suppliers = userTestUtils.createASupplier();
         clients = userTestUtils.createAClient();
         bankers = userTestUtils.createBankers();

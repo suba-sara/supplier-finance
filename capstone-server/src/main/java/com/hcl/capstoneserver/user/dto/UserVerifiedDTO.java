@@ -8,12 +8,12 @@ public class UserVerifiedDTO {
     @NotBlank(message = "password is required")
     private String password;
     @NotBlank(message = "OTP is required")
-    private Integer OTP;
+    private String otp;
 
-    public UserVerifiedDTO(String userId, String password, Integer OTP) {
+    public UserVerifiedDTO(String userId, String password, String otp) {
         this.userId = userId;
         this.password = password;
-        this.OTP = OTP;
+        this.otp = otp;
     }
 
     public String getUserId() {
@@ -32,11 +32,11 @@ public class UserVerifiedDTO {
         this.password = password;
     }
 
-    public Integer getOTP() {
-        return OTP;
+    public String getOTP() {
+        return otp;
     }
 
-    public void setOTP(Integer OTP) {
-        this.OTP = OTP;
+    public void setOTP(String otp) {
+        this.otp = otp;
     }
 }

@@ -11,11 +11,16 @@ const { API_PATH } = environment;
 export class BankAccountService {
   constructor(private http: HttpClient) {}
 
-  public checkAccountNumber(accountNumber: any): Observable<any> {
-    return this.http.get(`${API_PATH}/account/get-otp/${accountNumber}`);
+  public getOTP(accountNumber: number): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${API_PATH}/account/get-otp/`, {
+      accountNumber,
+    });
   }
 
-  public verifyOTP(data: any): Promise<any> {
-    return this.http.post(`${API_PATH}/account/verify`, data).toPromise();
+  public verifyOTP(data: any): Observable<{ valid: boolean }> {
+    return this.http.post<{ valid: boolean }>(
+      `${API_PATH}/account/check-otp`,
+      data
+    );
   }
 }

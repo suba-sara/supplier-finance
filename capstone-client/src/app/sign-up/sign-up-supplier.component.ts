@@ -3,13 +3,7 @@ import { PersonalDetails } from './personal-data-form/personal-data-form.compone
 import { UserDetails } from './user-data-form/user-data-form.component';
 import { SignUpService } from './sign-up.service';
 import { AppService } from '../app.service';
-
-type SupplierAccDetail = {
-  creditAccNumber?: number;
-  bankCode?: number;
-  supplierLimit?: number;
-  invoicePayment?: string;
-};
+import { AccountDetails } from './bank-account-details-form/bank-account-details-form.component';
 
 @Component({
   selector: 'app-sign-up-supplier',
@@ -19,7 +13,7 @@ type SupplierAccDetail = {
 export class SignUpSupplierComponent implements OnInit {
   personalDetails: PersonalDetails;
   pageNumber: number;
-  supplierAccDetail: SupplierAccDetail;
+  accountDetails: AccountDetails;
   userDetails: UserDetails;
 
   constructor(
@@ -39,7 +33,10 @@ export class SignUpSupplierComponent implements OnInit {
     };
     this.pageNumber = 1;
 
-    this.supplierAccDetail = {};
+    this.accountDetails = {
+      otp: '',
+      accountNumber: '',
+    };
     this.userDetails = { password: '', userId: '' };
   }
 
@@ -54,6 +51,10 @@ export class SignUpSupplierComponent implements OnInit {
   submitPersonalData = (value: PersonalDetails): void => {
     this.personalDetails = value;
     this.goToNextPage();
+  };
+  submitAccountData = (value: AccountDetails): void => {
+    this.accountDetails = value;
+    this.register();
   };
 
   gotoPreviousPage = (): void => {
@@ -73,6 +74,7 @@ export class SignUpSupplierComponent implements OnInit {
       .signUpSupplier({
         ...this.userDetails,
         ...this.personalDetails,
+        ...this.accountDetails,
       })
       .subscribe(() => {
         this.pageNumber = 4;

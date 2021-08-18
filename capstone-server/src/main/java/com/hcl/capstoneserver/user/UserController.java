@@ -2,8 +2,6 @@ package com.hcl.capstoneserver.user;
 
 import com.hcl.capstoneserver.user.dto.*;
 import com.hcl.capstoneserver.user.entities.AppUser;
-import com.hcl.capstoneserver.user.entities.Client;
-import com.hcl.capstoneserver.user.entities.Supplier;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -76,7 +74,7 @@ public class UserController {
     @PostMapping("/api/sign-up/supplier")
     public ResponseEntity<SupplierDTO> signUpSupplier(@Valid @RequestBody PersonWithPasswordDTO dto) {
         return new ResponseEntity<>(
-                userService.signUpSupplier(mapper.map(dto, Supplier.class)),
+                userService.signUpSupplier(dto),
                 HttpStatus.CREATED
         );
     }
@@ -90,7 +88,7 @@ public class UserController {
     @PostMapping("/api/sign-up/client")
     public ResponseEntity<ClientDTO> signUpClient(@Valid @RequestBody PersonWithPasswordDTO dto) {
         return new ResponseEntity<>(
-                userService.signUpClient(mapper.map(dto, Client.class)),
+                userService.signUpClient(dto),
                 HttpStatus.CREATED
         );
     }
@@ -147,7 +145,7 @@ public class UserController {
      * @return boolean
      */
     @PostMapping("/api/user/forgotPassword/getOTP")
-    public ResponseEntity<Boolean> getOTP(@Valid @RequestBody String userId) {
+    public ResponseEntity<CheckValidDTO> getOTP(@Valid @RequestBody String userId) {
         return new ResponseEntity<>(userService.getOTP(userId), HttpStatus.OK);
     }
 
@@ -158,7 +156,29 @@ public class UserController {
      * @return boolean
      */
     @PostMapping("/api/user/forgotPassword/verifyUser")
-    public ResponseEntity<Boolean> verifyUser(@Valid @RequestBody UserVerifiedDTO dto) {
+    public ResponseEntity<CheckValidDTO> verifyUser(@Valid @RequestBody UserVerifiedDTO dto) {
         return new ResponseEntity<>(userService.verifyUser(dto), HttpStatus.OK);
+    }
+
+    /**
+     * Method to check userId is existed or not
+     *
+     * @param username
+     * @return boolean
+     */
+    @PostMapping("/api/users/check-username")
+    public ResponseEntity<CheckValidDTO> checkUserId(@Valid @RequestBody String username) {
+        return new ResponseEntity<>(userService.checkUserId(username), HttpStatus.OK);
+    }
+
+    /**
+     * Method to check email is existed or not
+     *
+     * @param email
+     * @return boolean
+     */
+    @PostMapping("/api/users/check-email")
+    public ResponseEntity<CheckValidDTO> checkEmail(@Valid @RequestBody String email) {
+        return new ResponseEntity<>(userService.checkEmail(email), HttpStatus.OK);
     }
 }

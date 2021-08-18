@@ -47,7 +47,7 @@ public class UserControllerTest {
         invoiceRepository.deleteAll();
         supplierRepository.deleteAll();
         clientRepository.deleteAll();
-
+        userTestUtils.accountCreate();
         suppliers = userTestUtils.createASupplier();
         clients = userTestUtils.createAClient();
     }
@@ -183,7 +183,8 @@ public class UserControllerTest {
             dto.setAddress("address");
             dto.setEmail("madara1@konoh.org");
             dto.setPhone("123456");
-            dto.setInterestRate(5.0F);
+            dto.setAccountNumber("10000239");
+            dto.setOtp("482410");
 
 
             webTestClient.post()
@@ -207,7 +208,8 @@ public class UserControllerTest {
             dto.setAddress("address");
             dto.setEmail("madara2@konoh.org");
             dto.setPhone("123456");
-            dto.setInterestRate(5.0F);
+            dto.setAccountNumber("10000239");
+            dto.setOtp("482410");
 
             webTestClient.post()
                          .uri(String.format("http://localhost:%d/api/sign-up/supplier", port))
@@ -229,7 +231,8 @@ public class UserControllerTest {
             dto.setAddress("address");
             dto.setEmail("madara4@konoh.org");
             dto.setPhone("123456");
-            dto.setInterestRate(5.0F);
+            dto.setAccountNumber("10000239");
+            dto.setOtp("482410");
 
 
             webTestClient.post()
@@ -253,7 +256,8 @@ public class UserControllerTest {
             dto.setAddress("address");
             dto.setEmail("madara3@konoh.org");
             dto.setPhone("123456");
-            dto.setInterestRate(5.0F);
+            dto.setAccountNumber("10000239");
+            dto.setOtp("482410");
 
             // test the error
             webTestClient.post()
@@ -279,7 +283,8 @@ public class UserControllerTest {
             dto.setAddress("address");
             dto.setEmail("supplier@gmail.com");
             dto.setPhone("123456");
-            dto.setInterestRate(5.0F);
+            dto.setAccountNumber("10000239");
+            dto.setOtp("482410");
 
             webTestClient.post()
                          .uri(String.format("http://localhost:%d/api/sign-up/supplier", port))
@@ -307,8 +312,8 @@ public class UserControllerTest {
             dto.setAddress("colombo");
             dto.setEmail("shedfds1@gmail.com");
             dto.setPhone("21312");
-            dto.setInterestRate(2.0F);
-
+            dto.setAccountNumber("10000239");
+            dto.setOtp("482410");
 
             webTestClient.post()
                          .uri(String.format("http://localhost:%d/api/sign-up/client", port))
@@ -331,7 +336,8 @@ public class UserControllerTest {
             dto.setAddress("colombo");
             dto.setEmail("shedfds2@gmail.com");
             dto.setPhone("21312");
-            dto.setInterestRate(2.0F);
+            dto.setAccountNumber("10000239");
+            dto.setOtp("482410");
 
             webTestClient.post()
                          .uri(String.format("http://localhost:%d/api/sign-up/client", port))
@@ -353,8 +359,8 @@ public class UserControllerTest {
             dto.setAddress("colombo");
             dto.setEmail("shedfds4@gmail.com");
             dto.setPhone("21312");
-            dto.setInterestRate(2.0F);
-
+            dto.setAccountNumber("10000239");
+            dto.setOtp("482410");
 
             webTestClient.post()
                          .uri(String.format("http://localhost:%d/api/sign-up/client", port))
@@ -377,7 +383,8 @@ public class UserControllerTest {
             dto.setAddress("colombo");
             dto.setEmail("shedfds3@gmail.com");
             dto.setPhone("21312");
-            dto.setInterestRate(2.0F);
+            dto.setAccountNumber("10000239");
+            dto.setOtp("482410");
 
             // test the error
             webTestClient.post()
@@ -402,7 +409,8 @@ public class UserControllerTest {
             dto.setAddress("colombo");
             dto.setEmail("client@gmail.com");
             dto.setPhone("21312");
-            dto.setInterestRate(2.0F);
+            dto.setAccountNumber("10000239");
+            dto.setOtp("482410");
 
             // test the error
             webTestClient.post()

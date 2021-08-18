@@ -1,5 +1,7 @@
 package com.hcl.capstoneserver.user;
 
+import com.hcl.capstoneserver.account.AccountService;
+import com.hcl.capstoneserver.account.dto.AccountVerifiedDTO;
 import com.hcl.capstoneserver.account.exception.OTPTimedOut;
 import com.hcl.capstoneserver.mail.sender.EmailService;
 import com.hcl.capstoneserver.user.dto.*;
@@ -31,8 +33,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.Date;
-import java.util.Objects;
 import java.util.Optional;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -48,10 +50,17 @@ public class UserService implements UserDetailsService {
     private final ModelMapper mapper;
     private final SequenceGenerator sequenceGenerator;
     private final BankerRepository bankerRepository;
+    private final AccountService accountService;
     private final EmailService emailService;
 
     @Value("${otp.validity.time}")
     private Integer otpValidityTime;
+
+    @Value("${test.otp.seed}")
+    private Integer testOtpSeed;
+
+    @Value("${spring.env}")
+    private String env;
 
     /**
      * Constructor for UserService
@@ -65,6 +74,7 @@ public class UserService implements UserDetailsService {
             ModelMapper mapper,
             SequenceGenerator sequenceGenerator,
             BankerRepository bankerRepository,
+            AccountService accountService,
             EmailService emailService
     ) {
         this.appUserRepository = appUserRepository;
@@ -75,6 +85,7 @@ public class UserService implements UserDetailsService {
         this.mapper = mapper;
         this.sequenceGenerator = sequenceGenerator;
         this.bankerRepository = bankerRepository;
+        this.accountService = accountService;
         this.emailService = emailService;
     }
 
@@ -156,9 +167,9 @@ public class UserService implements UserDetailsService {
 
         return new User(
                 user.get()
-                        .getUserId(),
+                    .getUserId(),
                 user.get()
-                        .getPassword(),
+                    .getPassword(),
                 Collections.singleton(
                         new SimpleGrantedAuthority(user.get().getUserType().toString())
                 )
@@ -169,59 +180,64 @@ public class UserService implements UserDetailsService {
     /**
      * Method to register new supplier
      *
-     * @param supplier supplier data to register new supplier
      * @return if suppler is not exists, then return supplierDTO object, otherwise throws error
      */
-    public SupplierDTO signUpSupplier(Supplier supplier) {
+    public SupplierDTO signUpSupplier(PersonWithPasswordDTO dto) {
         try {
             // check if user already exists or not, if user is exists throw UserAlreadyExistsException
-            if (supplierRepository.existsById(supplier.getUserId())) {
-                throw new UserAlreadyExistsException(supplier.getUserId());
+            if (supplierRepository.existsById(dto.getUserId())) {
+                throw new UserAlreadyExistsException(dto.getUserId());
             }
 
+            // check OTP
+            accountService.verifyAccount(new AccountVerifiedDTO(dto.getAccountNumber(), dto.getOtp()));
+
             return mapper.map(supplierRepository.save(new Supplier(
-                    supplier.getUserId(),
-                    bCryptPasswordEncoder.encode(supplier.getPassword()),
-                    supplier.getName(),
-                    supplier.getAddress(),
-                    supplier.getEmail(),
-                    supplier.getPhone(),
-                    supplier.getInterestRate(),
+                    dto.getUserId(),
+                    bCryptPasswordEncoder.encode(dto.getPassword()),
+                    dto.getName(),
+                    dto.getAddress(),
+                    dto.getEmail(),
+                    dto.getPhone(),
+                    dto.getAccountNumber(),
                     sequenceGenerator.getSupplierSequence()
             )), SupplierDTO.class);
         } catch (DataIntegrityViolationException e) {
-//            if supplier email is already exists then throw DataIntegrityViolationException and catch form here and throw below error
-            throw new EmailAlreadyExistsException(supplier.getEmail());
+            //            if supplier email is already exists then throw DataIntegrityViolationException and catch
+            //            form here and throw below error
+            throw new EmailAlreadyExistsException(dto.getEmail());
         }
     }
 
     /**
      * Method to register new client
      *
-     * @param client client data to register new client
      * @return if client is not exists, then return clientDTO object, otherwise throws error
      */
-    public ClientDTO signUpClient(Client client) {
+    public ClientDTO signUpClient(PersonWithPasswordDTO dto) {
         try {
-            //check if the client is already exists or not, if user is exists throw UserAlreadyExistsException
-            if (clientRepository.existsById(client.getUserId())) {
-                throw new UserAlreadyExistsException(client.getUserId());
+            //check if the client is already exists or not, if user  exists throw UserAlreadyExistsException
+            if (clientRepository.existsById(dto.getUserId())) {
+                throw new UserAlreadyExistsException(dto.getUserId());
             }
 
+            // check OTP
+            accountService.verifyAccount(new AccountVerifiedDTO(dto.getAccountNumber(), dto.getOtp()));
+
             return mapper.map(clientRepository.save(new Client(
-                    client.getUserId(),
-                    bCryptPasswordEncoder.encode(client.getPassword()),
-                    client.getName(),
-                    client.getAddress(),
-                    client.getEmail(),
-                    client.getPhone(),
-                    client.getInterestRate(),
+                    dto.getUserId(),
+                    bCryptPasswordEncoder.encode(dto.getPassword()),
+                    dto.getName(),
+                    dto.getAddress(),
+                    dto.getEmail(),
+                    dto.getPhone(),
                     sequenceGenerator.getClientSequence(),
-                    client.getAccountNumber()
+                    dto.getAccountNumber()
             )), ClientDTO.class);
         } catch (DataIntegrityViolationException e) {
-//            if client email is already exists then throw DataIntegrityViolationException and catch form here and throw below error
-            throw new EmailAlreadyExistsException(client.getEmail());
+            //            if client email is already exists then throw DataIntegrityViolationException and catch form
+            //            here and throw below error
+            throw new EmailAlreadyExistsException(dto.getEmail());
         }
     }
 
@@ -300,7 +316,7 @@ public class UserService implements UserDetailsService {
      */
     public Client fetchClientDataByUserId(String userId) {
         /*
-         * Client table primary key is userId -> remember
+         * Client table primary key is username -> remember
          *
          * find User using the client repository and assign it to client local variable
          * */
@@ -385,7 +401,7 @@ public class UserService implements UserDetailsService {
      * @param userId userId
      * @return if OTP code is correct, then return true. and other hand return following exception
      */
-    public Boolean getOTP(String userId) {
+    public CheckValidDTO getOTP(String userId) {
         // retrieve user from db
         Optional<AppUser> user = appUserRepository.findById(userId);
 
@@ -394,25 +410,32 @@ public class UserService implements UserDetailsService {
             throw new UsernameNotFoundException("User not found");
         }
 
-        int OTP;
+        Random r;
+        if (env.equals("test")) {
+            r = new Random(testOtpSeed);
+        } else {
+            r = new Random();
+        }
+
+        String otp = String.valueOf(10000000 + r.nextInt(99999999));
 
         // check the User account Type
         switch (user.get().getUserType()) {
             case CLIENT:
                 // send OTP Code
-                OTP = emailService.send(fetchClientDataByUserId(userId).getEmail());
+                emailService.sendForgotPasswordOTP(fetchClientDataByUserId(userId).getEmail(), otp);
                 // Save OTP code and OTP Code expired date
-                appUserRepository.save(_addOTPAndExpireDate(user.get(), OTP));
+                appUserRepository.save(_addOTPAndExpireDate(user.get(), otp));
                 break;
             case SUPPLIER:
                 // send OTP Code
-                OTP = emailService.send(fetchSupplierDataByUserId(userId).getEmail());
+                emailService.sendForgotPasswordOTP(fetchSupplierDataByUserId(userId).getEmail(), otp);
                 // Save OTP code and OTP Code expired date
-                appUserRepository.save(_addOTPAndExpireDate(user.get(), OTP));
+                appUserRepository.save(_addOTPAndExpireDate(user.get(), otp));
                 break;
         }
 
-        return true;
+        return new CheckValidDTO(true);
     }
 
     /**
@@ -421,7 +444,7 @@ public class UserService implements UserDetailsService {
      * @param dto UserVerifiedDto object -> for more information move on it
      * @return if OTP code is correct, then return true. and other hand return following exception
      */
-    public Boolean verifyUser(UserVerifiedDTO dto) {
+    public CheckValidDTO verifyUser(UserVerifiedDTO dto) {
         // retrieve user from db
         Optional<AppUser> user = appUserRepository.findById(dto.getUserId());
 
@@ -430,12 +453,12 @@ public class UserService implements UserDetailsService {
             // check the OTP time is expired or not
             if (new Date().before(user.get().getOtpExpiredDate())) {
                 // check OTP is equal or not
-                if (Objects.equals(user.get().getOTP(), dto.getOTP())) {
+                if (user.get().getOtp().equals(dto.getOTP())) {
                     /*
                      * set new password
                      */
                     user.get().setPassword(bCryptPasswordEncoder.encode(dto.getPassword()));
-                    return true;
+                    return new CheckValidDTO(true);
                 }
             } else {
                 // if OTP is expired then throw this exception
@@ -454,9 +477,9 @@ public class UserService implements UserDetailsService {
      * @param OTP  One-time-password
      * @return AppUser object
      */
-    private AppUser _addOTPAndExpireDate(AppUser user, Integer OTP) {
+    private AppUser _addOTPAndExpireDate(AppUser user, String OTP) {
         // set OTP
-        user.setOTP(OTP);
+        user.setOtp(OTP);
 
         /*
          * set OTP expired date
@@ -466,6 +489,15 @@ public class UserService implements UserDetailsService {
          */
         user.setOtpExpiredDate(new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(otpValidityTime)));
         return user;
+    }
+
+    public CheckValidDTO checkUserId(String userId) {
+        return new CheckValidDTO(!appUserRepository.existsById(userId));
+    }
+
+    public CheckValidDTO checkEmail(String email) {
+        return new CheckValidDTO(!clientRepository.existsClientByEmail(email) && !supplierRepository.existsSupplierByEmail(
+                email));
     }
 }
 

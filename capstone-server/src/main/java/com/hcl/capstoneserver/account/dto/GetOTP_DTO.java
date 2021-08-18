@@ -2,14 +2,15 @@ package com.hcl.capstoneserver.account.dto;
 
 import javax.validation.constraints.Pattern;
 
-public class AccountVerifiedDTO {
+public class GetOTP_DTO {
     @Pattern(regexp = "[\\d]{8}", message = "accountNumber is invalid")
     private String accountNumber;
-    private String OTP;
 
-    public AccountVerifiedDTO(String accountNumber, String OTP) {
+    public GetOTP_DTO() {
+    }
+
+    public GetOTP_DTO(String accountNumber) {
         this.accountNumber = accountNumber;
-        this.OTP = OTP;
     }
 
     public String getAccountNumber() {
@@ -18,13 +19,5 @@ public class AccountVerifiedDTO {
 
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
-    }
-
-    public String getOTP() {
-        return OTP;
-    }
-
-    public void setOTP(String OTP) {
-        this.OTP = OTP;
     }
 }

@@ -16,7 +16,7 @@ public class AppUser {
     @Enumerated(value = EnumType.STRING)
     private UserType userType;
 
-    private Integer OTP;
+    private String otp;
     private Date otpExpiredDate;
 
     public AppUser() {
@@ -32,11 +32,11 @@ public class AppUser {
         this.userType = userType;
     }
 
-    public AppUser(String userId, String password, UserType userType, Integer OTP, Date otpExpiredDate) {
+    public AppUser(String userId, String password, UserType userType, String otp, Date otpExpiredDate) {
         this.userId = userId;
         this.password = password;
         this.userType = userType;
-        this.OTP = OTP;
+        this.otp = otp;
         this.otpExpiredDate = otpExpiredDate;
     }
 
@@ -67,13 +67,6 @@ public class AppUser {
         this.userType = userType;
     }
 
-    public Integer getOTP() {
-        return OTP;
-    }
-
-    public void setOTP(Integer OTP) {
-        this.OTP = OTP;
-    }
 
     public Date getOtpExpiredDate() {
         return otpExpiredDate;
@@ -81,5 +74,13 @@ public class AppUser {
 
     public void setOtpExpiredDate(Date otpExpiredDate) {
         this.otpExpiredDate = otpExpiredDate;
+    }
+
+    public String getOtp() {
+        return otp;
+    }
+
+    public void setOtp(String otp) {
+        this.otp = otp;
     }
 }

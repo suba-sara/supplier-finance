@@ -5,19 +5,22 @@
     <div class="form-container" [ngSwitch]="pageNumber">
       <section *ngSwitchCase="1">
         <app-user-data-form
+          [initialValues]="userDetails"
           (formSubmitEvent)="submitUserData($event)"
         ></app-user-data-form>
       </section>
       <section *ngSwitchCase="2">
         <app-personal-data-form
+          [initialValues]="personalDetails"
           [goBack]="gotoPreviousPage"
           (formSubmitEvent)="submitPersonalData($event)"
         ></app-personal-data-form>
       </section>
       <section *ngSwitchCase="3">
         <app-bank-account-details-form
+          [initialValues]="accountDetails"
           [goBack]="gotoPreviousPage"
-          (signUpEvent)="register()"
+          (formSubmitEvent)="submitAccountData($event)"
         ></app-bank-account-details-form>
       </section>
       <section *ngSwitchCase="4">
