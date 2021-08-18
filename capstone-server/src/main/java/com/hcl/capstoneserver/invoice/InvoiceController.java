@@ -45,6 +45,11 @@ public class InvoiceController {
         return new ResponseEntity<>(invoiceService.statusUpdate(dto, principal.getName()), HttpStatus.CREATED);
     }
 
+    @PutMapping("/api/invoices/request-review")
+    public ResponseEntity<ViewInvoiceDTO> requestReview(@RequestBody StatusUpdateInvoiceDTO dto, Principal principal) {
+        return new ResponseEntity<>(invoiceService.requestReview(dto, principal.getName()), HttpStatus.CREATED);
+    }
+
     @DeleteMapping("/api/invoices/delete/{id}")
     public ResponseEntity<InvoiceDeletedDto> deleteInvoice(@PathVariable Integer id, Principal principal) {
         return new ResponseEntity<>(invoiceService.deleteInvoice(id, principal.getName()), HttpStatus.OK);

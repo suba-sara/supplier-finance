@@ -236,13 +236,45 @@ public class InvoiceService {
 
     // This method use only Bank
     public BankViewInvoiceDTO statusUpdate(StatusUpdateInvoiceDTO dto, String userId) {
+        Optional<AppUser> user = appUserRepository.findById(userId);
+        if (!user.isPresent() || user.get().getUserType() != UserType.BANKER) {
+            throw new InvoiceStatusException("Permission denied");
+        }
+
+
         // need to check userId account type -> This feature currently unavailable
         // One feature needs to be check when BANK user is created: invoice status can update only by BANK
         Invoice invoice = _fetchInvoiceById(dto.getInvoiceId());
-        _checkInvoiceDate(invoice.getInvoiceDate(), UserType.BANKER);
-        _checkInvoiceStatus(invoice.getStatus(), "update");
-        mapper.map(dto, invoice);
+        if (dto.getStatus() != InvoiceStatus.APPROVED || dto.getStatus() != InvoiceStatus.REJECTED) {
+            throw new InvoiceStatusException("Permission denied");
+        }
+        if (invoice.getStatus() == InvoiceStatus.APPROVED || invoice.getStatus() == InvoiceStatus.UPLOADED) {
+            throw new InvoiceStatusException("Permission denied");
+        }
+
+        invoice.setStatus(dto.getStatus());
+
         return mapper.map(invoiceRepository.save(invoice), BankViewInvoiceDTO.class);
+    }
+
+    public ViewInvoiceDTO requestReview(StatusUpdateInvoiceDTO dto, String userId) {
+        Optional<AppUser> user = appUserRepository.findById(userId);
+        Invoice invoice = _fetchInvoiceById(dto.getInvoiceId());
+
+        if (!user.isPresent() || !invoice.getClient().getUserId().equals(userId)) {
+            throw new InvoiceStatusException("Permission denied");
+        }
+        if (dto.getStatus() != InvoiceStatus.IN_REVIEW) {
+            throw new InvoiceStatusException("Permission denied");
+        }
+
+        if (invoice.getStatus() != InvoiceStatus.UPLOADED) {
+            throw new InvoiceStatusException("Permission denied");
+        }
+
+        invoice.setStatus(dto.getStatus());
+
+        return mapper.map(invoiceRepository.save(invoice), ViewInvoiceDTO.class);
     }
 
     public InvoiceDeletedDto deleteInvoice(Integer invoiceId, String userId) {

@@ -34,7 +34,8 @@ export class ViewSingleInvoiceComponent implements OnInit {
         this.userType === 'BANKER' &&
         (this.invoice.status === 'IN_REVIEW' ||
           this.invoice.status === 'REJECTED');
-      this.rejectable = this.approvable && this.invoice.status === 'IN_REVIEW';
+      this.rejectable =
+        this.userType === 'BANKER' && this.invoice.status === 'IN_REVIEW';
     });
   }
 
@@ -44,5 +45,44 @@ export class ViewSingleInvoiceComponent implements OnInit {
 
   back(): void {
     this.router.navigateByUrl('invoice/view-invoices');
+  }
+
+  approve(): void {
+    if (this.invoice) {
+      this.viewSingleInvoicesService
+        .updateStatus({
+          invoiceId: this.invoice.invoiceId,
+          status: 'APPROVED',
+        })
+        .subscribe((res) => {
+          this.invoice = res;
+        });
+    }
+  }
+
+  reject(): void {
+    if (this.invoice) {
+      this.viewSingleInvoicesService
+        .updateStatus({
+          invoiceId: this.invoice.invoiceId,
+          status: 'REJECTED',
+        })
+        .subscribe((res) => {
+          this.invoice = res;
+        });
+    }
+  }
+
+  requestReview(): void {
+    if (this.invoice) {
+      this.viewSingleInvoicesService
+        .requestReview({
+          invoiceId: this.invoice.invoiceId,
+          status: 'IN_REVIEW',
+        })
+        .subscribe((res) => {
+          this.invoice = res;
+        });
+    }
   }
 }
