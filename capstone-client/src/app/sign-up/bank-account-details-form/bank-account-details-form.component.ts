@@ -1,11 +1,15 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
+import { BankAccountService } from './bank-account.service';
 
-export type BankDataFormSupplier = {
-  craditAccountNumber: string;
-  bankCode: string;
-  supplierLimit: string;
-  invoicePayament: string;
+export type AccountDetails = {
+  accountNumber: string;
+  otp: string;
 };
 
 @Component({
@@ -17,33 +21,83 @@ export class BankAccountDetailsFormComponent implements OnInit {
   @Input()
   goBack!: () => void;
 
-  BankDataFormSupplier = new FormGroup({
-    craditAccountNumber: new FormControl('', [
+  @Input()
+  initialValues!: AccountDetails;
+
+  @Output()
+  formSubmitEvent = new EventEmitter<AccountDetails>();
+
+  getOtpLoading = false;
+  otpMessage?: string;
+
+  accountForm: FormGroup = new FormGroup({
+    accountNumber: new FormControl('', [
       Validators.required,
-      Validators.maxLength(255),
-    ]),
-    bankCode: new FormControl('', [
-      Validators.required,
-      Validators.maxLength(255),
-    ]),
-    supplierLimit: new FormControl('', [
-      Validators.required,
-      Validators.maxLength(255),
-    ]),
-    invoicePayament: new FormControl('', [
-      Validators.required,
-      Validators.maxLength(255),
+      Validators.maxLength(8),
+      Validators.minLength(8),
+      Validators.pattern(/[\d]{8}/),
     ]),
   });
 
-  @Output()
-  signUpEvent: EventEmitter<void> = new EventEmitter<void>();
+  isAccountChecked = false;
+  isAccountVerify = false;
+  errorMessage = '';
 
-  constructor() {}
+  constructor(private bankAccountService: BankAccountService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (this.initialValues) {
+      this.accountForm.controls['accountNumber'].setValue(
+        this.initialValues.accountNumber
+      );
+    }
+  }
 
   signUp(): void {
-    this.signUpEvent.emit();
+    // check verification
+    this.bankAccountService.verifyOTP(this.accountForm.value).subscribe(
+      (val) => {
+        if (val.valid) {
+          this.formSubmitEvent.emit(this.accountForm.value);
+        } else {
+          this.errorMessage = 'Invalid Verification Code';
+        }
+      },
+      (_error) => (this.errorMessage = 'Invalid Verification Code')
+    );
+  }
+
+  get accountNumber(): AbstractControl | null {
+    return this.accountForm.get('accountNumber');
+  }
+
+  get otp(): AbstractControl | null {
+    return this.accountForm.get('otp');
+  }
+
+  getOTP(): void {
+    this.getOtpLoading = true;
+    this.accountForm?.addControl(
+      'otp',
+      new FormControl(undefined, [
+        Validators.required,
+        Validators.maxLength(6),
+        Validators.minLength(6),
+        Validators.pattern(/[\d]{6}/),
+      ])
+    );
+    this.bankAccountService
+      .getOTP(this.accountForm?.controls['accountNumber'].value)
+      .subscribe(
+        (data) => {
+          this.isAccountChecked = true;
+          this.getOtpLoading = false;
+          this.otpMessage = data.message;
+        },
+        (err) => {
+          this.errorMessage = err === 'OK' ? 'INTERNAL SERVER ERROR' : err;
+          this.getOtpLoading = false;
+        }
+      );
   }
 }

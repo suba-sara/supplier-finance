@@ -18,6 +18,7 @@ public class InvoiceSearchCriteriaDTO extends InvoicePage {
     private Long ageing;
     private List<InvoiceStatus> status;
     private List<CurrencyType> currencyType;
+    private Boolean fetchUploaded;
 
     public InvoiceSearchCriteriaDTO() {
         super();
@@ -120,5 +121,13 @@ public class InvoiceSearchCriteriaDTO extends InvoicePage {
 
     public void setCurrencyType(List<CurrencyType> currencyType) {
         this.currencyType = currencyType;
+    }
+
+    public Boolean getFetchUploaded() {
+        return fetchUploaded;
+    }
+
+    public void setFetchUploaded(Boolean fetchUploaded) {
+        this.fetchUploaded = fetchUploaded;
     }
 }

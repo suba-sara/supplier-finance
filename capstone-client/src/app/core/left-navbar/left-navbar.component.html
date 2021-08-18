@@ -15,6 +15,7 @@
     >
     </app-nav-link>
     <app-nav-link
+      *ngIf="authService.user.value?.userType === 'CLIENT'"
       [isExpanded]="isExpanded"
       icon="note_add"
       link="/invoice/upload"

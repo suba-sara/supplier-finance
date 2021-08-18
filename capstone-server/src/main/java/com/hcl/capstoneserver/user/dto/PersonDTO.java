@@ -8,7 +8,6 @@ public class PersonDTO extends AppUserDTO {
     private String name = null;
 
     @NotBlank(message = "address is required")
-    @Pattern(regexp = "^[a-zA-Z0-9_, ]+$", message = "address must only contain alphanumeric values")
     private String address = null;
 
     @NotBlank(message = "email is required")
@@ -19,20 +18,27 @@ public class PersonDTO extends AppUserDTO {
     @Pattern(regexp = "^[0-9+ ]+$", message = "phone number is not valid")
     private String phone = null;
 
-    @NotNull(message = "interest rate is required")
-    @Min(value = 0, message = "interest rate must be greater than 0")
-    private Float interestRate = null;
+    @NotNull(message = "accountNumber is required")
+    @Pattern(regexp = "[\\d]{8}", message = "accountNumber is invalid")
+    private String accountNumber = null;
 
     public PersonDTO() {
     }
 
-    public PersonDTO(String userId, String name, String address, String email, String phone, Float interestRate) {
+    public PersonDTO(
+            String userId,
+            String name,
+            String address,
+            String email,
+            String phone,
+            String accountNumber
+    ) {
         super(userId);
         this.name = name;
         this.address = address;
         this.email = email;
         this.phone = phone;
-        this.interestRate = interestRate;
+        this.accountNumber = accountNumber;
     }
 
     public String getName() {
@@ -67,11 +73,11 @@ public class PersonDTO extends AppUserDTO {
         this.phone = phone;
     }
 
-    public Float getInterestRate() {
-        return interestRate;
+    public String getAccountNumber() {
+        return accountNumber;
     }
 
-    public void setInterestRate(Float interestRate) {
-        this.interestRate = interestRate;
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
     }
 }

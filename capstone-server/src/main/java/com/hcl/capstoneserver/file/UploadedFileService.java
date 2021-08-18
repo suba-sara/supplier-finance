@@ -23,6 +23,7 @@ public class UploadedFileService {
     @Autowired
     private FileStorageService fileStorageService;
 
+
     public UploadedFile createInitialFile(String fileName) {
         UploadedFile uploadedFile = new UploadedFile();
         uploadedFile.setUploaded(false);
@@ -92,5 +93,10 @@ public class UploadedFileService {
         }
 
         return fileStorageService.load(file.getUri());
+    }
+
+    public void deleteFile(UploadedFile file) {
+        uploadedFileRepository.delete(file);
+        fileStorageService.delete(file.getUri());
     }
 }

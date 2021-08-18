@@ -46,6 +46,9 @@
       <mat-error *ngIf="personalDataForm.get('email')?.hasError('maxlength')">
         must be less than 255 characters
       </mat-error>
+      <mat-error *ngIf="personalDataForm.get('email')?.hasError('exists')">
+        Email already exists
+      </mat-error>
     </mat-form-field>
   </div>
   <div class="full-width-field-container">
@@ -113,7 +116,7 @@
     </mat-form-field>
     <mat-form-field appearance="outline">
       <mat-label>Country</mat-label>
-      <input formControlName="country" matInput/>
+      <input formControlName="country" matInput />
       <mat-error *ngIf="personalDataForm.get('country')?.hasError('required')">
         required
       </mat-error>

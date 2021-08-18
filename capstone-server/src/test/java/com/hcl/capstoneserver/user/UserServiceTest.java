@@ -2,10 +2,9 @@ package com.hcl.capstoneserver.user;
 
 import com.hcl.capstoneserver.invoice.repositories.InvoiceRepository;
 import com.hcl.capstoneserver.user.dto.JwtWithTypeDTO;
+import com.hcl.capstoneserver.user.dto.PersonWithPasswordDTO;
 import com.hcl.capstoneserver.user.dto.SupplierDTO;
 import com.hcl.capstoneserver.user.entities.AppUser;
-import com.hcl.capstoneserver.user.entities.Client;
-import com.hcl.capstoneserver.user.entities.Supplier;
 import com.hcl.capstoneserver.user.exceptions.EmailAlreadyExistsException;
 import com.hcl.capstoneserver.user.exceptions.UserAlreadyExistsException;
 import com.hcl.capstoneserver.user.repositories.ClientRepository;
@@ -43,6 +42,8 @@ public class UserServiceTest {
         invoiceRepository.deleteAll();
         supplierRepository.deleteAll();
         clientRepository.deleteAll();
+        userTestUtils.accountCreate();
+        userTestUtils.createAClient();
     }
 
     @Test
@@ -56,8 +57,6 @@ public class UserServiceTest {
         @Test
         @DisplayName("It should sign in a user on correct credentials")
         public void shouldSignInOnCorrectCredentials() {
-            userTestUtils.createAClient();
-
             AppUser user = new AppUser();
             user.setUserId("client");
             user.setPassword("password");
@@ -68,8 +67,6 @@ public class UserServiceTest {
         @Test
         @DisplayName("It should return data in required type on successful sign in")
         public void shouldReturnCorrectDataOnSignIn() {
-            userTestUtils.createAClient();
-
             AppUser user = new AppUser();
             user.setUserId("client");
             user.setPassword("password");
@@ -80,7 +77,6 @@ public class UserServiceTest {
             assertEquals("CLIENT", response.getUserType());
             assertNotNull(response.getJwt());
         }
-
 
         @Test
         @DisplayName("It should throw BadCredentialsException when username is not found")
@@ -98,7 +94,6 @@ public class UserServiceTest {
         @Test
         @DisplayName("It should throw BadCredentialsException when password is invalid")
         public void shouldHandleInvalidCredentialsError() {
-            userTestUtils.createAClient();
 
             AppUser user = new AppUser();
             user.setUserId("client");
@@ -116,7 +111,7 @@ public class UserServiceTest {
         @Test
         @DisplayName("it should return a valid response")
         public void shouldReturnValidResponse() {
-            userTestUtils.createAClient();
+
 
             JwtWithTypeDTO response = userService.refreshToken("client");
             assertEquals("client", response.getUsername());
@@ -132,28 +127,31 @@ public class UserServiceTest {
         @Test
         @DisplayName("it should create a new supplier")
         public void createNewSupplier() {
-            assertNotNull(userService.signUpSupplier(new Supplier(
-                    "sup1",
-                    "password",
-                    "ma",
-                    "konoha",
-                    "madara@konoha.org",
-                    "123456",
-                    5.0F
-            )));
+            assertNotNull(userService.signUpSupplier(
+                    new PersonWithPasswordDTO(
+                            "sup1",
+                            "ma",
+                            "Colombo",
+                            "madara@konoha.org",
+                            "071-2314532",
+                            "10000239",
+                            "password",
+                            "482410"
+                    )));
         }
 
         @Test
         @DisplayName("It should generate a new supplier id")
         public void shouldGenerateSupplierId() {
-            SupplierDTO supplier = userService.signUpSupplier(new Supplier(
+            SupplierDTO supplier = userService.signUpSupplier(new PersonWithPasswordDTO(
                     "sup2",
+                    "ma",
+                    "Colombo",
+                    "madara2@konoha.org",
+                    "071-2364552",
+                    "10000239",
                     "password",
-                    "madara",
-                    "konoha",
-                    "madara1@konoha.org",
-                    "123456",
-                    5.0F
+                    "482410"
             ));
 
             assertNotNull(supplier.getSupplierId());
@@ -163,14 +161,15 @@ public class UserServiceTest {
         @DisplayName("it should throw a UserAlreadyExistsException when username exists")
         public void shouldThrowUserAlreadyExistsException() {
             userTestUtils.createASupplier();
-            assertThrows(UserAlreadyExistsException.class, () -> userService.signUpSupplier(new Supplier(
+            assertThrows(UserAlreadyExistsException.class, () -> userService.signUpSupplier(new PersonWithPasswordDTO(
                     "supplier",
-                    "passwor2d",
                     "ma",
-                    "konoha",
-                    "madara2@konoha.org",
-                    "123456",
-                    5.0F
+                    "Colombo",
+                    "madara21@konoha.org",
+                    "071-2324552",
+                    "10000239",
+                    "password",
+                    "482410"
             )));
         }
 
@@ -178,20 +177,18 @@ public class UserServiceTest {
         @DisplayName("it should throw a EmailAlreadyExistsException when username exists")
         public void shouldThrowEmailAlreadyExistsException() {
             userTestUtils.createASupplier();
-            assertThrows(EmailAlreadyExistsException.class, () -> userService.signUpSupplier(new Supplier(
-                    "supplier2",
-                    "password",
+            assertThrows(EmailAlreadyExistsException.class, () -> userService.signUpSupplier(new PersonWithPasswordDTO(
+                    "supplier23",
                     "ma",
-                    "konoha",
+                    "Colombo",
                     "supplier@gmail.com",
-                    "123456",
-                    5.0F,
-                    "s001"
+                    "071-2314852",
+                    "10000239",
+                    "password",
+                    "482410"
             )));
         }
-
     }
-
 
     @Nested
     @DisplayName("Client Signup Tests")
@@ -202,15 +199,15 @@ public class UserServiceTest {
             assertEquals(
                     "Sheldon",
                     userService.signUpClient(
-                            new Client(
+                            new PersonWithPasswordDTO(
                                     "shel2",
-                                    "sdfdsfds",
                                     "Sheldon",
                                     "Colombo",
                                     "shel@gmail.com",
                                     "071-2314538",
-                                    2.5f,
-                                    1234567891
+                                    "10000239",
+                                    "sdfdsfds",
+                                    "482410"
                             )).getName()
             );
         }
@@ -218,48 +215,50 @@ public class UserServiceTest {
         @Test
         @DisplayName("It should generate Client Id")
         public void shouldGenerateClientId() {
-            assertNotNull(userService.signUpClient(new Client(
-                    "shel1",
-                    "sdfdsfds",
-                    "Sheldon",
-                    "Colombo",
-                    "shel1@gmail.com",
-                    "071-2314538",
-                    2.5f,
-                    1234567891
-            )).getClientId());
+            assertNotNull(userService.signUpClient(
+                    new PersonWithPasswordDTO(
+                            "shel1",
+                            "Sheldon",
+                            "Colombo",
+                            "shel1@gmail.com",
+                            "071-2314538",
+                            "10000239",
+                            "sdfdsfds",
+                            "482410"
+                    )).getClientId());
         }
 
         @Test
         @DisplayName("it should throw a UserAlreadyExistsException when username exists")
         public void shouldThrowUserAlreadyExistsException() {
-            userTestUtils.createAClient();
-            assertThrows(UserAlreadyExistsException.class, () -> userService.signUpClient(new Client(
-                    "client",
-                    "sdfdsfds",
-                    "Sheldon",
-                    "Colombo",
-                    "shel11@gmail.com",
-                    "071-2314538",
-                    2.5f,
-                    1234567891
-            )));
+            assertThrows(UserAlreadyExistsException.class, () -> userService.signUpClient(
+                    new PersonWithPasswordDTO(
+                            "client",
+                            "Sheldon",
+                            "Colombo",
+                            "shel1a@gmail.com",
+                            "071-2314538",
+                            "10000239",
+                            "sdfdsfds",
+                            "482410"
+                    )));
         }
 
         @Test
         @DisplayName("it should throw a EmailAlreadyExistsException when username exists")
         public void shouldThrowEmailAlreadyExistsException() {
-            userTestUtils.createAClient();
-            assertThrows(EmailAlreadyExistsException.class, () -> userService.signUpClient(new Client(
-                    "shel11",
-                    "sdfdsfds",
-                    "Sheldon",
-                    "Colombo",
-                    "client@gmail.com",
-                    "071-2314538",
-                    2.5f,
-                    1234567891
-            )));
+
+            assertThrows(EmailAlreadyExistsException.class, () -> userService.signUpClient(
+                    new PersonWithPasswordDTO(
+                            "shel11",
+                            "Sheldon",
+                            "Colombo",
+                            "client@gmail.com",
+                            "071-2314538",
+                            "10000239",
+                            "sdfdsfds",
+                            "482410"
+                    )));
         }
 
     }

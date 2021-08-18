@@ -68,7 +68,7 @@ public class InvoiceServiceTest {
         supplierRepository.deleteAll();
         clientRepository.deleteAll();
         bankerRepository.deleteAll();
-
+        userTestUtils.accountCreate();
         suppliers = userTestUtils.createASupplier();
         clients = userTestUtils.createAClient();
         bankers = userTestUtils.createBankers();
@@ -77,6 +77,7 @@ public class InvoiceServiceTest {
     }
 
     private InvoiceStatus updateInvoiceStatus(InvoiceStatus status, Integer invoiceId) {
+
         return invoiceService.statusUpdate(new StatusUpdateInvoiceDTO(
                 invoiceId,
                 status
@@ -116,17 +117,17 @@ public class InvoiceServiceTest {
         }
 
         @Test
-        @DisplayName("it should not create new invoice with old date")
+        @DisplayName("it should not create new invoice with future date")
         public void shouldNotCreateNewInvoiceWithOldDate() {
             assertEquals(
-                    "400 The invoice date is an older date.",
+                    "The invoice date is a future date.",
                     assertThrows(
                             HttpClientErrorException.class,
                             () -> invoiceService.createInvoice(
                                     new CreateInvoiceDTO(
                                             suppliers.get(0).getSupplierId(),
                                             "1234567892",
-                                            LocalDate.parse("2021-04-05"),
+                                            LocalDate.parse("2999-04-05"),
                                             25000.0,
                                             CurrencyType.USD
                                     ), "client")
@@ -138,7 +139,7 @@ public class InvoiceServiceTest {
         @DisplayName("it should not create new invoice with not exists supplier")
         public void shouldNotCreateNewInvoiceWithNotExistsSupplier() {
             assertEquals(
-                    "400 This SUPPLIER is not exist.",
+                    "This SUPPLIER is not exist.",
                     assertThrows(
                             HttpClientErrorException.class,
                             () -> invoiceService.createInvoice(
@@ -165,42 +166,6 @@ public class InvoiceServiceTest {
         class InvoiceUpdateBankTests {
 
 
-            @Test
-            @DisplayName("it should update the invoice status")
-            public void shouldUpdateInvoiceStatus() {
-                assertEquals(
-                        InvoiceStatus.IN_REVIEW,
-                        updateInvoiceStatus(InvoiceStatus.IN_REVIEW, createInvoice.get(0).getInvoice().getInvoiceId())
-                );
-            }
-
-            @Test
-            @DisplayName("it should not update when invoice is expired")
-            public void shouldNotUpdateInvoiceWhenInvoiceIsExpired() {
-                assertEquals(
-                        "400 You can not update the invoice status, because invoice is expire.",
-                        assertThrows(
-                                HttpClientErrorException.class, () ->
-                                        updateInvoiceStatus(InvoiceStatus.IN_REVIEW, expiredInvoice.getInvoiceId())
-                        ).getMessage()
-                );
-            }
-
-            @Test
-            @DisplayName("it should not update when invoice status is REJECTED")
-            public void shouldNotUpdateInvoiceWhenStatusIsRejected() {
-                updateInvoiceStatus(InvoiceStatus.REJECTED, createInvoice.get(0).getInvoice().getInvoiceId());
-                assertEquals(
-                        "400 This invoice can not update, because invoice is REJECTED.",
-                        assertThrows(
-                                HttpClientErrorException.class, () ->
-                                        updateInvoiceStatus(
-                                                InvoiceStatus.IN_REVIEW,
-                                                createInvoice.get(0).getInvoice().getInvoiceId()
-                                        )
-                        ).getMessage()
-                );
-            }
         }
 
         //Client
@@ -220,7 +185,7 @@ public class InvoiceServiceTest {
             @DisplayName("it should not update invoice when that invoice owner is not a same client")
             public void shouldNotUpdateInvoiceWhenInvoiceOwnerIsNotEqual() {
                 assertEquals(
-                        "400 client you do not have permission to update this invoice.",
+                        "client you do not have permission to update this invoice.",
                         assertThrows(
                                 HttpClientErrorException.class,
                                 () -> invoiceService.updateInvoice(new UpdateInvoiceDTO(
@@ -236,10 +201,10 @@ public class InvoiceServiceTest {
             }
 
             @Test
-            @DisplayName("it should not update invoice with old date")
+            @DisplayName("it should not update invoice with future date")
             public void shouldNotUpdateInvoiceWithOldDate() {
                 assertEquals(
-                        "400 The invoice date is an older date.",
+                        "The invoice date is a future date.",
                         assertThrows(
                                 HttpClientErrorException.class,
                                 () -> invoiceService.updateInvoice(
@@ -247,7 +212,7 @@ public class InvoiceServiceTest {
                                                 createInvoice.get(0).getInvoice().getInvoiceId(),
                                                 suppliers.get(0).getSupplierId(),
                                                 "1234567892",
-                                                LocalDate.parse("2021-04-05"),
+                                                LocalDate.parse("2921-04-05"),
                                                 25000.0,
                                                 CurrencyType.USD
                                         ), "client")
@@ -255,26 +220,7 @@ public class InvoiceServiceTest {
                 );
             }
 
-            @Test
-            @DisplayName("it should not update invoice with invoice status In_Review, Approved and Rejected")
-            public void shouldNotUpdateInvoiceWithInReviewAndApprovedAndRejected() {
-                updateInvoiceStatus(InvoiceStatus.IN_REVIEW, createInvoice.get(0).getInvoice().getInvoiceId());
-                assertEquals(
-                        "400 This invoice can not update, because invoice is IN_REVIEW.",
-                        assertThrows(
-                                HttpClientErrorException.class,
-                                () -> invoiceService.updateInvoice(
-                                        new UpdateInvoiceDTO(
-                                                createInvoice.get(0).getInvoice().getInvoiceId(),
-                                                suppliers.get(0).getSupplierId(),
-                                                "1234567892",
-                                                LocalDate.now(),
-                                                25000.0,
-                                                CurrencyType.EUR
-                                        ), "client")
-                        ).getMessage()
-                );
-            }
+
         }
     }
 
@@ -294,7 +240,7 @@ public class InvoiceServiceTest {
         @DisplayName("it should not delete invoice when that invoice owner is not a same client")
         public void shouldNotDeleteInvoiceWhenInvoiceOwnerIsNotEqual() {
             assertEquals(
-                    "400 client2 you do not have permission to delete this invoice.",
+                    "client2 you do not have permission to delete this invoice.",
                     assertThrows(
                             HttpClientErrorException.class,
                             () -> invoiceService.deleteInvoice(
@@ -305,21 +251,6 @@ public class InvoiceServiceTest {
             );
         }
 
-        @Test
-        @DisplayName("it should not delete invoice with invoice status In_Review, Approved and Rejected")
-        public void shouldNotDeleteInvoiceWithInReviewAndApprovedAndRejected() {
-            updateInvoiceStatus(InvoiceStatus.IN_REVIEW, createInvoice.get(0).getInvoice().getInvoiceId());
-            assertEquals(
-                    "400 This invoice can not delete, because invoice is IN_REVIEW.",
-                    assertThrows(
-                            HttpClientErrorException.class,
-                            () -> invoiceService.deleteInvoice(
-                                    createInvoice.get(0).getInvoice().getInvoiceId(),
-                                    "client"
-                            )
-                    ).getMessage()
-            );
-        }
     }
 
     @Nested
@@ -334,7 +265,7 @@ public class InvoiceServiceTest {
             @DisplayName("it should return all invoice")
             public void shouldReturnAllInvoice() {
                 InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
-                assertEquals(3, invoiceService.getBankInvoice(dto, "BANK").getNumberOfElements());
+                assertEquals(1, invoiceService.getBankInvoice(dto, "banker1").getNumberOfElements());
             }
 
             @Test
@@ -342,7 +273,7 @@ public class InvoiceServiceTest {
             public void shouldReturnAllInvoiceByClientId() {
                 InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
                 dto.setClientId("CL_00001");
-                invoiceService.getBankInvoice(dto, "BANK")
+                invoiceService.getBankInvoice(dto, "banker1")
                               .getContent()
                               .forEach(i -> assertEquals("CL_00001", i.getClient().getClientId()));
             }
@@ -353,7 +284,7 @@ public class InvoiceServiceTest {
                 InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
                 dto.setSupplierId("SP_00001");
 
-                invoiceService.getBankInvoice(dto, "BANK")
+                invoiceService.getBankInvoice(dto, "banker1")
                               .getContent()
                               .forEach(i -> assertEquals("SP_00001", i.getSupplier().getSupplierId()));
 
@@ -365,7 +296,7 @@ public class InvoiceServiceTest {
                 InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
                 dto.setInvoiceNumber("1234567898");
 
-                invoiceService.getBankInvoice(dto, "BANK")
+                invoiceService.getBankInvoice(dto, "banker1")
                               .getContent()
                               .forEach(i -> assertEquals("1234567898", i.getInvoiceNumber()));
 
@@ -377,7 +308,7 @@ public class InvoiceServiceTest {
                 InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
                 dto.setDateFrom(LocalDate.parse("2021-05-01"));
 
-                invoiceService.getBankInvoice(dto, "BANK")
+                invoiceService.getBankInvoice(dto, "banker1")
                               .getContent()
                               .forEach(i -> assertEquals(LocalDate.parse("2021-05-01"), i.getInvoiceDate()));
 
@@ -390,7 +321,7 @@ public class InvoiceServiceTest {
                 dto.setDateFrom(LocalDate.parse("2021-05-01"));
                 dto.setDateTo(LocalDate.now());
 
-                invoiceService.getBankInvoice(dto, "BANK")
+                invoiceService.getBankInvoice(dto, "banker1")
                               .getContent()
                               .forEach(i -> assertThat(
                                       i.getInvoiceDate()
@@ -404,7 +335,7 @@ public class InvoiceServiceTest {
                 InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
                 dto.setAgeing(ChronoUnit.DAYS.between(LocalDate.parse("2021-05-01"), LocalDate.now()));
 
-                invoiceService.getBankInvoice(dto, "BANK")
+                invoiceService.getBankInvoice(dto, "banker1")
                               .getContent()
                               .forEach(i -> assertEquals(
                                       LocalDate.parse("2021-05-01"),
@@ -420,7 +351,7 @@ public class InvoiceServiceTest {
                 InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
                 dto.setStatus(statuses);
 
-                invoiceService.getBankInvoice(dto, "BANK")
+                invoiceService.getBankInvoice(dto, "banker1")
                               .getContent()
                               .forEach(i -> assertEquals(
                                       InvoiceStatus.IN_REVIEW,
@@ -436,7 +367,7 @@ public class InvoiceServiceTest {
                 InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
                 dto.setCurrencyType(currencyTypes);
 
-                assertEquals(1, invoiceService.getBankInvoice(dto, "BANK")
+                assertEquals(1, invoiceService.getBankInvoice(dto, "banker1")
                                               .getNumberOfElements());
             }
         }
@@ -568,7 +499,7 @@ public class InvoiceServiceTest {
             @DisplayName("it should return all invoice")
             public void shouldReturnAllInvoice() {
                 InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
-                assertEquals(2, invoiceService.getSupplierInvoice(dto, "supplier").getNumberOfElements());
+                assertEquals(1, invoiceService.getSupplierInvoice(dto, "supplier").getNumberOfElements());
             }
 
             @Test
@@ -670,7 +601,7 @@ public class InvoiceServiceTest {
         @DisplayName("should fetch client dashboard data")
         public void shouldFetchClientData() {
             DashboardDataDto dashboardData = invoiceService.getDashboardData(clients.get(0).getUserId());
-            assertEquals(2, dashboardData.getUploadedCount());
+            assertEquals(1, dashboardData.getUploadedCount());
         }
 
         @Test()
@@ -685,7 +616,7 @@ public class InvoiceServiceTest {
         @DisplayName("should fetch all dashboard data as banker")
         public void shouldFetchBankerData() {
             DashboardDataDto dashboardData = invoiceService.getDashboardData(bankers.get(0).getUserId());
-            assertEquals(3, dashboardData.getUploadedCount());
+            assertEquals(2, dashboardData.getUploadedCount());
         }
     }
 }

@@ -1,14 +1,78 @@
 <div class="content-container">
+  <div class="status-selector">
+    <button
+      (click)="setInvoiceStatus(undefined)"
+      [ngClass]="
+        viewInvoicesService.$filters.value.status === undefined
+          ? 'status-selector-btn-active'
+          : ''
+      "
+      color="primary"
+      mat-stroked-button
+    >
+      All
+    </button>
+    <button
+      (click)="setInvoiceStatus('UPLOADED')"
+      *ngIf="authService.user.value?.userType === 'CLIENT'"
+      [ngClass]="
+        viewInvoicesService.$filters.value.status === 'UPLOADED'
+          ? 'status-selector-btn-active'
+          : ''
+      "
+      class="status-selector-btn"
+      color="primary"
+      mat-stroked-button
+    >
+      Uploaded
+    </button>
+    <button
+      (click)="setInvoiceStatus('IN_REVIEW')"
+      [ngClass]="
+        viewInvoicesService.$filters.value.status === 'IN_REVIEW'
+          ? 'status-selector-btn-active'
+          : ''
+      "
+      color="primary"
+      mat-stroked-button
+    >
+      In Review
+    </button>
+    <button
+      (click)="setInvoiceStatus('APPROVED')"
+      [ngClass]="
+        viewInvoicesService.$filters.value.status === 'APPROVED'
+          ? 'status-selector-btn-active'
+          : ''
+      "
+      color="primary"
+      mat-stroked-button
+    >
+      Approved
+    </button>
+    <button
+      (click)="setInvoiceStatus('REJECTED')"
+      [ngClass]="
+        viewInvoicesService.$filters.value.status === 'REJECTED'
+          ? 'status-selector-btn-active'
+          : ''
+      "
+      color="primary"
+      mat-stroked-button
+    >
+      Rejected
+    </button>
+  </div>
   <div class="filter-wrapper">
     <h4>Filters</h4>
-    <div>
-      <mat-form-field appearance="outline">
+    <div class="filter-input-wrapper">
+      <mat-form-field appearance="outline" class="filter-input">
         <mat-label>Invoice Number</mat-label>
         <input
           (change)="filterInputChange($event)"
           [value]="
             viewInvoicesService.$filters.value.invoiceNumber
-              ? viewInvoicesService.$filters.value.invoiceNumber
+              ? (viewInvoicesService.$filters.value.invoiceNumber | uppercase)
               : ''
           "
           matInput
@@ -16,17 +80,39 @@
         />
         <mat-icon matPrefix>person_outline</mat-icon>
       </mat-form-field>
-      <mat-form-field appearance="outline">
+      <mat-form-field
+        *ngIf="authService.user.value?.userType !== 'CLIENT'"
+        appearance="outline"
+        class="filter-input"
+      >
+        <mat-label>Client Code</mat-label>
+        <input
+          (change)="filterInputChange($event)"
+          [value]="
+            viewInvoicesService.$filters.value.clientId
+              ? (viewInvoicesService.$filters.value.clientId | uppercase)
+              : ''
+          "
+          matInput
+          name="clientId"
+        />
+        <mat-icon matPrefix>person_outline</mat-icon>
+      </mat-form-field>
+      <mat-form-field
+        *ngIf="authService.user.value?.userType !== 'SUPPLIER'"
+        appearance="outline"
+        class="filter-input"
+      >
         <mat-label>Supplier Code</mat-label>
         <input
           (change)="filterInputChange($event)"
           [value]="
-            viewInvoicesService.$filters.value.invoiceNumber
-              ? viewInvoicesService.$filters.value.invoiceNumber
+            viewInvoicesService.$filters.value.supplierId
+              ? (viewInvoicesService.$filters.value.supplierId | uppercase)
               : ''
           "
           matInput
-          name="supplierCode"
+          name="supplierId"
         />
         <mat-icon matPrefix>person_outline</mat-icon>
       </mat-form-field>
@@ -51,6 +137,13 @@
         <th *matHeaderCellDef mat-header-cell mat-sort-header>Supplier Code</th>
         <td *matCellDef="let element" mat-cell>
           {{ element.supplier.supplierId }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="clientId">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>Client Code</th>
+        <td *matCellDef="let element" mat-cell>
+          {{ element.client.clientId }}
         </td>
       </ng-container>
 
@@ -103,23 +196,31 @@
           <div class="options-wrapper">
             <a
               aria-label="View Invoice"
-              href="/invoice/view-invoice/{{ element.invoiceId }}"
+              routerLink="/invoice/view-invoice/{{ element.invoiceId }}"
               mat-icon-button
               matTooltip="View Invoice"
             >
               <mat-icon>preview</mat-icon>
             </a>
+            <!--            <button-->
+            <!--              aria-label="Edit Invoice"-->
+            <!--              mat-icon-button-->
+            <!--              matTooltip="Edit Invoice"-->
+            <!--              *ngIf="userType === 'CLIENT' && element.status === 'UPLOADED'"-->
+            <!--            >-->
+            <!--              <mat-icon>edit</mat-icon>-->
+            <!--            </button>-->
             <button
-              aria-label="Edit Invoice"
-              mat-icon-button
-              matTooltip="Edit Invoice"
-            >
-              <mat-icon>edit</mat-icon>
-            </button>
-            <button
+              *ngIf="userType === 'CLIENT' && element.status === 'UPLOADED'"
               aria-label="Delete Invoice"
               mat-icon-button
               matTooltip="Delete Invoice"
+              (click)="
+                deleteInvoice({
+                  invoiceId: element.invoiceId,
+                  invoiceNumber: element.invoiceNumber
+                })
+              "
             >
               <mat-icon>delete</mat-icon>
             </button>

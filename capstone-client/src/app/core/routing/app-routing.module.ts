@@ -19,6 +19,7 @@ import { InvoiceModule } from '../../invoice/invoice.module';
 import { ViewInvoicesComponent } from '../../invoice/view-invoices/view-invoices.component';
 import { ForbiddenComponent } from '../../forbidden/forbidden.component';
 import { ViewSingleInvoiceComponent } from '../../invoice/view-single-invoice/view-single-invoice.component';
+import { AboutComponent } from '../../about/about.component';
 
 const routes: Routes = [
   {
@@ -36,6 +37,14 @@ const routes: Routes = [
   {
     path: 'sign-in',
     component: SignInComponent,
+    canActivate: [AuthGuard],
+    data: {
+      roles: ['UNAUTHORIZED'],
+    },
+  },
+  {
+    path: 'about',
+    component: AboutComponent,
     canActivate: [AuthGuard],
     data: {
       roles: ['UNAUTHORIZED'],
@@ -78,7 +87,7 @@ const routes: Routes = [
     component: DashboardComponent,
     canActivate: [AuthGuard],
     data: {
-      roles: ['SUPPLIER', 'CLIENT', 'BANK'],
+      roles: ['SUPPLIER', 'CLIENT', 'BANKER'],
     },
   },
   {
@@ -94,7 +103,7 @@ const routes: Routes = [
     component: ViewInvoicesComponent,
     canActivate: [AuthGuard],
     data: {
-      roles: ['SUPPLIER', 'CLIENT', 'BANK'],
+      roles: ['SUPPLIER', 'CLIENT', 'BANKER'],
     },
   },
   {
@@ -102,7 +111,7 @@ const routes: Routes = [
     component: ViewSingleInvoiceComponent,
     canActivate: [AuthGuard],
     data: {
-      roles: ['SUPPLIER', 'CLIENT', 'BANK'],
+      roles: ['SUPPLIER', 'CLIENT', 'BANKER'],
     },
   },
 ];

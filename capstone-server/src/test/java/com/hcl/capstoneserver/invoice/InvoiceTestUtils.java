@@ -45,6 +45,8 @@ public class InvoiceTestUtils {
                 25000.0,
                 CurrencyType.USD
         ), "client2"));
+
+
         return dtoList;
     }
 
@@ -56,7 +58,7 @@ public class InvoiceTestUtils {
                 LocalDate.parse("2021-04-01"),
                 LocalDate.parse("2021-05-01"),
                 40000.0,
-                InvoiceStatus.UPLOADED,
+                InvoiceStatus.IN_REVIEW,
                 CurrencyType.GBP
         ));
     }

@@ -43,7 +43,9 @@ jobs:
         key: ${{ secrets.SERVER_SSH_KEY }}
         port: ${{ secrets.SERVER_PORT }}
         script: |
-          cd ${{ secrets.SERVER_PROJECT_DIR }}/capstone-server
+          cd ${{ secrets.SERVER_PROJECT_DIR }}
+          git pull origin main
+          cd capstone-server
           ./mvnw spring-boot:stop
           rm -rf {{ secrets.SERVER_PROJECT_DIR }}/capstone-server/target
           rm -rf {{ secrets.SERVER_PROJECT_DIR }}/capstone-client/dist

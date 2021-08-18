@@ -1,12 +1,16 @@
 package com.hcl.capstoneserver.user;
 
+import com.hcl.capstoneserver.account.AccountService;
+import com.hcl.capstoneserver.seeder.DatabaseSeeder;
 import com.hcl.capstoneserver.user.dto.BankerDTO;
 import com.hcl.capstoneserver.user.dto.ClientDTO;
+import com.hcl.capstoneserver.user.dto.PersonWithPasswordDTO;
 import com.hcl.capstoneserver.user.dto.SupplierDTO;
 import com.hcl.capstoneserver.user.entities.AppUser;
 import com.hcl.capstoneserver.user.entities.Banker;
-import com.hcl.capstoneserver.user.entities.Client;
-import com.hcl.capstoneserver.user.entities.Supplier;
+import com.hcl.capstoneserver.user.repositories.BankerRepository;
+import com.hcl.capstoneserver.user.repositories.ClientRepository;
+import com.hcl.capstoneserver.user.repositories.SupplierRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,56 +22,83 @@ public class UserTestUtils {
     @Autowired
     UserService userService;
 
+    @Autowired
+    AccountService accountService;
+
+    @Autowired
+    DatabaseSeeder databaseSeeder;
+
+    @Autowired
+    SupplierRepository supplierRepository;
+
+    @Autowired
+    ClientRepository clientRepository;
+
+    @Autowired
+    BankerRepository bankerRepository;
+
+    public void accountCreate() {
+        databaseSeeder.seedTest();
+        for (int i = 35; i < 40; i++) {
+            accountService.getOTP("100002" + i);
+        }
+    }
+
     public List<SupplierDTO> createASupplier() {
+        supplierRepository.deleteAll();
         List<SupplierDTO> suppliers = new ArrayList<>();
-        suppliers.add(userService.signUpSupplier(new Supplier(
+        suppliers.add(userService.signUpSupplier(new PersonWithPasswordDTO(
                 "supplier",
-                "password",
                 "supplier",
                 "Colombo",
                 "supplier@gmail.com",
-                "071-2314531a",
-                2.5f
-        )));
-        suppliers.add(userService.signUpSupplier(new Supplier(
-                "supplier9",
+                "071-2314531",
+                "10000235",
                 "password",
+                "482410"
+        )));
+        suppliers.add(userService.signUpSupplier(new PersonWithPasswordDTO(
+                "supplier9",
                 "supplier2",
                 "Colombo",
                 "supplier2@gmail.com",
-                "071-2314531a",
-                2.5f
+                "071-2314532",
+                "10000236",
+                "password",
+                "482410"
         )));
         return suppliers;
     }
 
     public List<ClientDTO> createAClient() {
+        clientRepository.deleteAll();
         List<ClientDTO> clients = new ArrayList<>();
-        clients.add(userService.signUpClient(new Client(
+        clients.add(userService.signUpClient(new PersonWithPasswordDTO(
                 "client",
-                "password",
                 "client",
                 "Colombo",
                 "client@gmail.com",
                 "071-2314538",
-                2.5f,
-                1234567891
-        )));
-        clients.add(userService.signUpClient(new Client(
-                "client2",
+                "10000237",
                 "password",
+                "482410"
+        )));
+        clients.add(userService.signUpClient(new PersonWithPasswordDTO(
+                "client2",
                 "client2",
                 "Colombo",
                 "client2@gmail.com",
                 "071-2314538",
-                2.5f,
-                1234567891
+                "10000238",
+                "password",
+                "482410"
         )));
 
         return clients;
     }
 
     public List<BankerDTO> createBankers() {
+        bankerRepository.deleteAll();
         List<BankerDTO> bankers = new ArrayList<>();
         bankers.add(userService.createBanker(new Banker(
                 "banker1",

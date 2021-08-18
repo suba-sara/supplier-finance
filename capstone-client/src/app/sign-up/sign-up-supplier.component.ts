@@ -2,13 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { PersonalDetails } from './personal-data-form/personal-data-form.component';
 import { UserDetails } from './user-data-form/user-data-form.component';
 import { SignUpService } from './sign-up.service';
-
-type SupplierAccDetail = {
-  creditAccNumber?: number;
-  bankCode?: number;
-  supplierLimit?: number;
-  invoicePayment?: string;
-};
+import { AppService } from '../app.service';
+import { AccountDetails } from './bank-account-details-form/bank-account-details-form.component';
 
 @Component({
   selector: 'app-sign-up-supplier',
@@ -18,10 +13,13 @@ type SupplierAccDetail = {
 export class SignUpSupplierComponent implements OnInit {
   personalDetails: PersonalDetails;
   pageNumber: number;
-  supplierAccDetail: SupplierAccDetail;
+  accountDetails: AccountDetails;
   userDetails: UserDetails;
 
-  constructor(private signUpService: SignUpService) {
+  constructor(
+    private signUpService: SignUpService,
+    private appService: AppService
+  ) {
     this.personalDetails = {
       firstName: '',
       lastName: '',
@@ -35,11 +33,16 @@ export class SignUpSupplierComponent implements OnInit {
     };
     this.pageNumber = 1;
 
-    this.supplierAccDetail = {};
+    this.accountDetails = {
+      otp: '',
+      accountNumber: '',
+    };
     this.userDetails = { password: '', userId: '' };
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.appService.setPageTitle('Sign Up Supplier');
+  }
 
   submitUserData = (value: UserDetails): void => {
     this.userDetails = value;
@@ -48,6 +51,10 @@ export class SignUpSupplierComponent implements OnInit {
   submitPersonalData = (value: PersonalDetails): void => {
     this.personalDetails = value;
     this.goToNextPage();
+  };
+  submitAccountData = (value: AccountDetails): void => {
+    this.accountDetails = value;
+    this.register();
   };
 
   gotoPreviousPage = (): void => {
@@ -67,6 +74,7 @@ export class SignUpSupplierComponent implements OnInit {
       .signUpSupplier({
         ...this.userDetails,
         ...this.personalDetails,
+        ...this.accountDetails,
       })
       .subscribe(() => {
         this.pageNumber = 4;

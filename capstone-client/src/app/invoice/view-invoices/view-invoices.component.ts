@@ -8,6 +8,11 @@ import {
 } from './view-invoices.service';
 import { Sort } from '@angular/material/sort';
 import { AppService } from '../../app.service';
+import { getDisplayColumns } from '../util/getDisplayColumns';
+import { AuthService, UserType } from '../../core/auth/auth.service';
+import { InvoiceStatus } from '../invoice.types';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-view-invoices',
@@ -15,24 +20,22 @@ import { AppService } from '../../app.service';
   styleUrls: ['./view-invoices.component.scss'],
 })
 export class ViewInvoicesComponent implements OnInit {
-  displayedColumns: string[] = [
-    'invoiceId',
-    'invoiceNumber',
-    'uploadedDate',
-    'invoiceDate',
-    'invoiceAge',
-    'supplierId',
-    'amount',
-    'invoiceStatus',
-    'options',
-  ];
+  displayedColumns: string[] = getDisplayColumns(
+    this.authService.user.value?.userType
+  );
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     public viewInvoicesService: ViewInvoicesService,
-    private appService: AppService
+    private appService: AppService,
+    public authService: AuthService,
+    public dialog: MatDialog
   ) {}
+
+  get userType(): UserType | undefined {
+    return this.authService.user.value?.userType;
+  }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
@@ -40,7 +43,8 @@ export class ViewInvoicesComponent implements OnInit {
       const pageSize = params['pageSize'] ? params['pageSize'] : 10;
       const pageIndex = params['pageNumber'] ? params['pageNumber'] - 1 : 0;
       const invoiceNumber = params['invoiceNumber'];
-      const supplierCode = params['supplierCode'];
+      const supplierId = params['supplierId'];
+      const clientId = params['clientId'];
       const dateFrom = params['dateFrom']
         ? new Dayjs(params['dateFrom']).startOf('date').toDate()
         : undefined;
@@ -56,7 +60,8 @@ export class ViewInvoicesComponent implements OnInit {
         pageSize,
         pageIndex,
         invoiceNumber,
-        supplierCode,
+        supplierId,
+        clientId,
         dateFrom,
         dateTo,
         ageing,
@@ -107,6 +112,34 @@ export class ViewInvoicesComponent implements OnInit {
       sortBy: e.active,
       sortDirection: e.direction.toUpperCase(),
       pageIndex: 0,
+    });
+  }
+
+  setInvoiceStatus(status?: InvoiceStatus): void {
+    this._changeQuery({
+      status,
+    });
+  }
+
+  deleteInvoice({
+    invoiceId,
+    invoiceNumber,
+  }: {
+    invoiceId: number;
+    invoiceNumber: string;
+  }): void {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '250px',
+      data: {
+        title: 'Are you sure you want to delete this invoice?',
+        message: `invoice ${invoiceNumber} will be deleted`,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+      if (confirmed) {
+        this.viewInvoicesService.deleteInvoice(invoiceId);
+      }
     });
   }
 }

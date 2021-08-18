@@ -29,6 +29,7 @@ import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -87,7 +88,7 @@ public class InvoiceControllerTest {
         supplierRepository.deleteAll();
         clientRepository.deleteAll();
         bankerRepository.deleteAll();
-
+        userTestUtils.accountCreate();
         suppliers = userTestUtils.createASupplier();
         clients = userTestUtils.createAClient();
         bankers = userTestUtils.createBankers();
@@ -101,10 +102,9 @@ public class InvoiceControllerTest {
     }
 
     private void updateInvoiceStatus(InvoiceStatus status, Integer invoiceId) {
-        invoiceService.statusUpdate(new StatusUpdateInvoiceDTO(
-                invoiceId,
-                status
-        ), "BANK");
+        Optional<Invoice> invoice = invoiceRepository.findById(invoiceId);
+        invoice.get().setStatus(status);
+        invoiceRepository.save(invoice.get());
     }
 
     @Nested
@@ -153,16 +153,16 @@ public class InvoiceControllerTest {
                          .isBadRequest()
                          .expectBody()
                          .jsonPath("$.errors[0].message")
-                         .isEqualTo("400 An invoice number already exists for this supplier.");
+                         .isEqualTo("An invoice number already exists for this supplier.");
         }
 
         @Test
-        @DisplayName("it should not create new invoice with old date")
+        @DisplayName("it should not create new invoice with future date")
         public void shouldNotCreateNewInvoiceWithOldDate() {
             CreateInvoiceDTO dto = new CreateInvoiceDTO(
                     suppliers.get(0).getSupplierId(),
                     "1234567892",
-                    LocalDate.parse("2021-04-05"),
+                    LocalDate.parse("2921-04-05"),
                     25000.0,
                     CurrencyType.USD
             );
@@ -177,7 +177,7 @@ public class InvoiceControllerTest {
                          .isBadRequest()
                          .expectBody()
                          .jsonPath("$.errors[0].message")
-                         .isEqualTo("400 The invoice date is an older date.");
+                         .isEqualTo("The invoice date is a future date.");
         }
 
         @Test
@@ -201,7 +201,7 @@ public class InvoiceControllerTest {
                          .is4xxClientError()
                          .expectBody()
                          .jsonPath("$.errors[0].message")
-                         .isEqualTo("400 This SUPPLIER is not exist.");
+                         .isEqualTo("This SUPPLIER is not exist.");
         }
     }
 
@@ -215,46 +215,7 @@ public class InvoiceControllerTest {
         @DisplayName("invoice update test: BANK")
         class InvoiceUpdateBankTests {
 
-            @Test
-            @DisplayName("it should update the invoice status")
-            public void shouldUpdateInvoiceStatus() {
-                StatusUpdateInvoiceDTO dto = new StatusUpdateInvoiceDTO(
-                        createInvoice.get(0).getInvoice().getInvoiceId(),
-                        InvoiceStatus.IN_REVIEW
-                );
 
-                webTestClient.put()
-                             .uri(String.format("http://localhost:%d/api/invoices/update/status", port))
-                             .contentType(MediaType.APPLICATION_JSON)
-                             .header(HttpHeaders.AUTHORIZATION, client1token)
-                             .contentType(MediaType.APPLICATION_JSON)
-                             .body(Mono.just(dto), StatusUpdateInvoiceDTO.class)
-                             .exchange()
-                             .expectStatus()
-                             .is2xxSuccessful();
-            }
-
-            @Test
-            @DisplayName("it should not update when invoice is expired")
-            public void shouldNotUpdateInvoiceWhenInvoiceIsExpired() {
-                StatusUpdateInvoiceDTO dto = new StatusUpdateInvoiceDTO(
-                        expiredInvoice.getInvoiceId(),
-                        InvoiceStatus.IN_REVIEW
-                );
-
-                webTestClient.put()
-                             .uri(String.format("http://localhost:%d/api/invoices/update/status", port))
-                             .contentType(MediaType.APPLICATION_JSON)
-                             .header(HttpHeaders.AUTHORIZATION, client1token)
-                             .contentType(MediaType.APPLICATION_JSON)
-                             .body(Mono.just(dto), StatusUpdateInvoiceDTO.class)
-                             .exchange()
-                             .expectStatus()
-                             .is4xxClientError()
-                             .expectBody()
-                             .jsonPath("$.errors[0].message")
-                             .isEqualTo("400 You can not update the invoice status, because invoice is expire.");
-            }
 
             @Test
             @DisplayName("it should not update when invoice status is REJECTED")
@@ -276,7 +237,7 @@ public class InvoiceControllerTest {
                              .is4xxClientError()
                              .expectBody()
                              .jsonPath("$.errors[0].message")
-                             .isEqualTo("400 This invoice can not update, because invoice is REJECTED.");
+                             .isEqualTo("Permission denied");
             }
         }
 
@@ -328,17 +289,17 @@ public class InvoiceControllerTest {
                              .is4xxClientError()
                              .expectBody()
                              .jsonPath("$.errors[0].message")
-                             .isEqualTo("400 client you do not have permission to update this invoice.");
+                             .isEqualTo("client you do not have permission to update this invoice.");
             }
 
             @Test
-            @DisplayName("it should not update invoice with old date")
-            public void shouldNotUpdateInvoiceWithOldDate() {
+            @DisplayName("it should not update invoice with futre date")
+            public void shouldNotUpdateInvoiceWithFutureDate() {
                 UpdateInvoiceDTO dto = new UpdateInvoiceDTO(
                         createInvoice.get(0).getInvoice().getInvoiceId(),
                         suppliers.get(0).getSupplierId(),
                         "1234567892",
-                        LocalDate.parse("2021-04-05"),
+                        LocalDate.parse("2921-04-05"),
                         25000.0,
                         CurrencyType.USD
                 );
@@ -353,7 +314,7 @@ public class InvoiceControllerTest {
                              .is4xxClientError()
                              .expectBody()
                              .jsonPath("$.errors[0].message")
-                             .isEqualTo("400 The invoice date is an older date.");
+                             .isEqualTo("The invoice date is a future date.");
             }
 
             @Test
@@ -379,7 +340,7 @@ public class InvoiceControllerTest {
                              .is4xxClientError()
                              .expectBody()
                              .jsonPath("$.errors[0].message")
-                             .isEqualTo("400 This invoice can not update, because invoice is IN_REVIEW.");
+                             .isEqualTo("This invoice can not update, because invoice is IN_REVIEW.");
             }
         }
     }
@@ -419,7 +380,7 @@ public class InvoiceControllerTest {
                          .is4xxClientError()
                          .expectBody()
                          .jsonPath("$.errors[0].message")
-                         .isEqualTo("400 client2 you do not have permission to delete this invoice.");
+                         .isEqualTo("client2 you do not have permission to delete this invoice.");
         }
 
         @Test
@@ -438,7 +399,7 @@ public class InvoiceControllerTest {
                          .is4xxClientError()
                          .expectBody()
                          .jsonPath("$.errors[0].message")
-                         .isEqualTo("400 This invoice can not delete, because invoice is IN_REVIEW.");
+                         .isEqualTo("403 Invoice Delete Restricted");
         }
     }
 
@@ -468,7 +429,7 @@ public class InvoiceControllerTest {
                          .exchange()
                          .expectBody()
                          .jsonPath("$.uploadedCount")
-                         .isEqualTo(2);
+                         .isEqualTo(1);
         }
 
         @Test()
@@ -499,7 +460,7 @@ public class InvoiceControllerTest {
                          .exchange()
                          .expectBody()
                          .jsonPath("$.uploadedCount")
-                         .isEqualTo(3);
+                         .isEqualTo(2);
         }
     }
 }
