@@ -417,7 +417,7 @@ public class InvoiceControllerTest {
                          .is4xxClientError()
                          .expectBody()
                          .jsonPath("$.errors[0].message")
-                         .isEqualTo("This invoice can not delete, because invoice is IN_REVIEW.");
+                         .isEqualTo("403 Invoice Delete Restricted");
         }
     }
 
@@ -447,7 +447,7 @@ public class InvoiceControllerTest {
                          .exchange()
                          .expectBody()
                          .jsonPath("$.uploadedCount")
-                         .isEqualTo(2);
+                         .isEqualTo(1);
         }
 
         @Test()
@@ -478,7 +478,7 @@ public class InvoiceControllerTest {
                          .exchange()
                          .expectBody()
                          .jsonPath("$.uploadedCount")
-                         .isEqualTo(3);
+                         .isEqualTo(2);
         }
     }
 }

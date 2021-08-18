@@ -299,7 +299,7 @@ public class InvoiceServiceTest {
         public void shouldNotDeleteInvoiceWithInReviewAndApprovedAndRejected() {
             updateInvoiceStatus(InvoiceStatus.IN_REVIEW, createInvoice.get(0).getInvoice().getInvoiceId());
             assertEquals(
-                    "This invoice can not delete, because invoice is IN_REVIEW.",
+                    "403 Invoice Delete Restricted",
                     assertThrows(
                             HttpClientErrorException.class,
                             () -> invoiceService.deleteInvoice(
@@ -323,7 +323,7 @@ public class InvoiceServiceTest {
             @DisplayName("it should return all invoice")
             public void shouldReturnAllInvoice() {
                 InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
-                assertEquals(3, invoiceService.getBankInvoice(dto, "BANK").getNumberOfElements());
+                assertEquals(3, invoiceService.getBankInvoice(dto, "banker1").getNumberOfElements());
             }
 
             @Test
@@ -331,7 +331,7 @@ public class InvoiceServiceTest {
             public void shouldReturnAllInvoiceByClientId() {
                 InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
                 dto.setClientId("CL_00001");
-                invoiceService.getBankInvoice(dto, "BANK")
+                invoiceService.getBankInvoice(dto, "banker1")
                               .getContent()
                               .forEach(i -> assertEquals("CL_00001", i.getClient().getClientId()));
             }
@@ -342,7 +342,7 @@ public class InvoiceServiceTest {
                 InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
                 dto.setSupplierId("SP_00001");
 
-                invoiceService.getBankInvoice(dto, "BANK")
+                invoiceService.getBankInvoice(dto, "banker1")
                               .getContent()
                               .forEach(i -> assertEquals("SP_00001", i.getSupplier().getSupplierId()));
 
@@ -354,7 +354,7 @@ public class InvoiceServiceTest {
                 InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
                 dto.setInvoiceNumber("1234567898");
 
-                invoiceService.getBankInvoice(dto, "BANK")
+                invoiceService.getBankInvoice(dto, "banker1")
                               .getContent()
                               .forEach(i -> assertEquals("1234567898", i.getInvoiceNumber()));
 
@@ -366,7 +366,7 @@ public class InvoiceServiceTest {
                 InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
                 dto.setDateFrom(LocalDate.parse("2021-05-01"));
 
-                invoiceService.getBankInvoice(dto, "BANK")
+                invoiceService.getBankInvoice(dto, "banker1")
                               .getContent()
                               .forEach(i -> assertEquals(LocalDate.parse("2021-05-01"), i.getInvoiceDate()));
 
@@ -379,7 +379,7 @@ public class InvoiceServiceTest {
                 dto.setDateFrom(LocalDate.parse("2021-05-01"));
                 dto.setDateTo(LocalDate.now());
 
-                invoiceService.getBankInvoice(dto, "BANK")
+                invoiceService.getBankInvoice(dto, "banker1")
                               .getContent()
                               .forEach(i -> assertThat(
                                       i.getInvoiceDate()
@@ -393,7 +393,7 @@ public class InvoiceServiceTest {
                 InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
                 dto.setAgeing(ChronoUnit.DAYS.between(LocalDate.parse("2021-05-01"), LocalDate.now()));
 
-                invoiceService.getBankInvoice(dto, "BANK")
+                invoiceService.getBankInvoice(dto, "banker1")
                               .getContent()
                               .forEach(i -> assertEquals(
                                       LocalDate.parse("2021-05-01"),
@@ -409,7 +409,7 @@ public class InvoiceServiceTest {
                 InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
                 dto.setStatus(statuses);
 
-                invoiceService.getBankInvoice(dto, "BANK")
+                invoiceService.getBankInvoice(dto, "banker1")
                               .getContent()
                               .forEach(i -> assertEquals(
                                       InvoiceStatus.IN_REVIEW,
@@ -425,7 +425,7 @@ public class InvoiceServiceTest {
                 InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
                 dto.setCurrencyType(currencyTypes);
 
-                assertEquals(1, invoiceService.getBankInvoice(dto, "BANK")
+                assertEquals(1, invoiceService.getBankInvoice(dto, "banker1")
                                               .getNumberOfElements());
             }
         }
@@ -557,7 +557,7 @@ public class InvoiceServiceTest {
             @DisplayName("it should return all invoice")
             public void shouldReturnAllInvoice() {
                 InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
-                assertEquals(2, invoiceService.getSupplierInvoice(dto, "supplier").getNumberOfElements());
+                assertEquals(1, invoiceService.getSupplierInvoice(dto, "supplier").getNumberOfElements());
             }
 
             @Test
@@ -659,7 +659,7 @@ public class InvoiceServiceTest {
         @DisplayName("should fetch client dashboard data")
         public void shouldFetchClientData() {
             DashboardDataDto dashboardData = invoiceService.getDashboardData(clients.get(0).getUserId());
-            assertEquals(2, dashboardData.getUploadedCount());
+            assertEquals(1, dashboardData.getUploadedCount());
         }
 
         @Test()
@@ -674,7 +674,7 @@ public class InvoiceServiceTest {
         @DisplayName("should fetch all dashboard data as banker")
         public void shouldFetchBankerData() {
             DashboardDataDto dashboardData = invoiceService.getDashboardData(bankers.get(0).getUserId());
-            assertEquals(3, dashboardData.getUploadedCount());
+            assertEquals(2, dashboardData.getUploadedCount());
         }
     }
 }
