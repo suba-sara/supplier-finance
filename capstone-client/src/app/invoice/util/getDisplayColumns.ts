@@ -24,6 +24,7 @@ export function getDisplayColumns(userType?: UserType): string[] {
         'invoiceAge',
         'amount',
         'invoiceStatus',
+        'options',
       ];
     case 'BANKER':
       return [

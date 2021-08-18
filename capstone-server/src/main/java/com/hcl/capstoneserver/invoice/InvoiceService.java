@@ -242,10 +242,8 @@ public class InvoiceService {
         }
 
 
-        // need to check userId account type -> This feature currently unavailable
-        // One feature needs to be check when BANK user is created: invoice status can update only by BANK
         Invoice invoice = _fetchInvoiceById(dto.getInvoiceId());
-        if (dto.getStatus() != InvoiceStatus.APPROVED || dto.getStatus() != InvoiceStatus.REJECTED) {
+        if (!(dto.getStatus() == InvoiceStatus.APPROVED || dto.getStatus() == InvoiceStatus.REJECTED)) {
             throw new InvoiceStatusException("Permission denied");
         }
         if (invoice.getStatus() == InvoiceStatus.APPROVED || invoice.getStatus() == InvoiceStatus.UPLOADED) {
