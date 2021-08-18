@@ -1,5 +1,7 @@
 package com.hcl.capstoneserver.user;
 
+import com.hcl.capstoneserver.account.exception.OTPTimedOut;
+import com.hcl.capstoneserver.mail.sender.EmailService;
 import com.hcl.capstoneserver.user.dto.*;
 import com.hcl.capstoneserver.user.entities.AppUser;
 import com.hcl.capstoneserver.user.entities.Banker;
@@ -15,6 +17,7 @@ import com.hcl.capstoneserver.user.repositories.SupplierRepository;
 import com.hcl.capstoneserver.util.JWTUtil;
 import com.hcl.capstoneserver.util.SequenceGenerator;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Example;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -27,7 +30,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.Date;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Service for Users
@@ -42,6 +48,10 @@ public class UserService implements UserDetailsService {
     private final ModelMapper mapper;
     private final SequenceGenerator sequenceGenerator;
     private final BankerRepository bankerRepository;
+    private final EmailService emailService;
+
+    @Value("${otp.validity.time}")
+    private Integer otpValidityTime;
 
     /**
      * Constructor for UserService
@@ -54,7 +64,8 @@ public class UserService implements UserDetailsService {
             BCryptPasswordEncoder bCryptPasswordEncoder,
             ModelMapper mapper,
             SequenceGenerator sequenceGenerator,
-            BankerRepository bankerRepository
+            BankerRepository bankerRepository,
+            EmailService emailService
     ) {
         this.appUserRepository = appUserRepository;
         this.supplierRepository = supplierRepository;
@@ -64,6 +75,7 @@ public class UserService implements UserDetailsService {
         this.mapper = mapper;
         this.sequenceGenerator = sequenceGenerator;
         this.bankerRepository = bankerRepository;
+        this.emailService = emailService;
     }
 
 
@@ -288,7 +300,7 @@ public class UserService implements UserDetailsService {
      */
     public Client fetchClientDataByUserId(String userId) {
         /*
-         * Client table primary key is username -> remember
+         * Client table primary key is userId -> remember
          *
          * find User using the client repository and assign it to client local variable
          * */
@@ -365,6 +377,95 @@ public class UserService implements UserDetailsService {
             throw new UserDoesNotExistException(UserType.SUPPLIER, "Supplier Id");
         }
         return optionalSupplier.get();
+    }
+
+    /**
+     * Method to send OTP code for forgot password
+     *
+     * @param userId userId
+     * @return if OTP code is correct, then return true. and other hand return following exception
+     */
+    public Boolean getOTP(String userId) {
+        // retrieve user from db
+        Optional<AppUser> user = appUserRepository.findById(userId);
+
+        // check user object is null, then throw following exception
+        if (!user.isPresent()) {
+            throw new UsernameNotFoundException("User not found");
+        }
+
+        int OTP;
+
+        // check the User account Type
+        switch (user.get().getUserType()) {
+            case CLIENT:
+                // send OTP Code
+                OTP = emailService.send(fetchClientDataByUserId(userId).getEmail());
+                // Save OTP code and OTP Code expired date
+                appUserRepository.save(_addOTPAndExpireDate(user.get(), OTP));
+                break;
+            case SUPPLIER:
+                // send OTP Code
+                OTP = emailService.send(fetchSupplierDataByUserId(userId).getEmail());
+                // Save OTP code and OTP Code expired date
+                appUserRepository.save(_addOTPAndExpireDate(user.get(), OTP));
+                break;
+        }
+
+        return true;
+    }
+
+    /**
+     * Method to verify OTP and update password
+     *
+     * @param dto UserVerifiedDto object -> for more information move on it
+     * @return if OTP code is correct, then return true. and other hand return following exception
+     */
+    public Boolean verifyUser(UserVerifiedDTO dto) {
+        // retrieve user from db
+        Optional<AppUser> user = appUserRepository.findById(dto.getUserId());
+
+        // check user object is null or not
+        if (user.isPresent()) {
+            // check the OTP time is expired or not
+            if (new Date().before(user.get().getOtpExpiredDate())) {
+                // check OTP is equal or not
+                if (Objects.equals(user.get().getOTP(), dto.getOTP())) {
+                    /*
+                     * set new password
+                     */
+                    user.get().setPassword(bCryptPasswordEncoder.encode(dto.getPassword()));
+                    return true;
+                }
+            } else {
+                // if OTP is expired then throw this exception
+                throw new OTPTimedOut();
+            }
+        }
+
+        // if user object is null then throw this exception
+        throw new UsernameNotFoundException("User not found");
+    }
+
+    /**
+     * Method to set OTP and OTP expired date
+     *
+     * @param user AppUser object
+     * @param OTP  One-time-password
+     * @return AppUser object
+     */
+    private AppUser _addOTPAndExpireDate(AppUser user, Integer OTP) {
+        // set OTP
+        user.setOTP(OTP);
+
+        /*
+         * set OTP expired date
+         *
+         * logic -> take the system current time and add OTP validity time to it.
+         * this OTP validity time is in resource property file and can change it
+         */
+        user.setOtpExpiredDate(new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(otpValidityTime)));
+        return user;
     }
 }
 

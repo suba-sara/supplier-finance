@@ -139,4 +139,26 @@ public class UserController {
                 HttpStatus.NOT_FOUND
         );
     }
+
+    /**
+     * Method to get OTP
+     *
+     * @param userId take userId
+     * @return boolean
+     */
+    @PostMapping("/api/user/forgotPassword/getOTP")
+    public ResponseEntity<Boolean> getOTP(@Valid @RequestBody String userId) {
+        return new ResponseEntity<>(userService.getOTP(userId), HttpStatus.OK);
+    }
+
+    /**
+     * Method to verified user account and update password
+     *
+     * @param dto take UserVerifiedDTO object
+     * @return boolean
+     */
+    @PostMapping("/api/user/forgotPassword/verifyUser")
+    public ResponseEntity<Boolean> verifyUser(@Valid @RequestBody UserVerifiedDTO dto) {
+        return new ResponseEntity<>(userService.verifyUser(dto), HttpStatus.OK);
+    }
 }
