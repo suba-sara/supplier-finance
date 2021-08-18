@@ -57,7 +57,7 @@ export class BankAccountDetailsFormComponent implements OnInit {
     // check verification
     this.bankAccountService.verifyOTP(this.accountForm.value).subscribe(
       (val) => {
-        if (val.isValid) {
+        if (val.valid) {
           this.formSubmitEvent.emit(this.accountForm.value);
         } else {
           this.errorMessage = 'Invalid Verification Code';

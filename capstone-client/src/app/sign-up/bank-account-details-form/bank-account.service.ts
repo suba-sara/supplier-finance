@@ -17,8 +17,8 @@ export class BankAccountService {
     });
   }
 
-  public verifyOTP(data: any): Observable<{ isValid: boolean }> {
-    return this.http.post<{ isValid: boolean }>(
+  public verifyOTP(data: any): Observable<{ valid: boolean }> {
+    return this.http.post<{ valid: boolean }>(
       `${API_PATH}/account/check-otp`,
       data
     );
