@@ -15,3 +15,5 @@ spring.mail.properties.mail.smtp.auth=true
 spring.mail.properties.mail.smtp.starttls.enable=true
 otp.validity.time=15
 seed.account.data=true
+spring.env=prod
+test.otp.seed=123456

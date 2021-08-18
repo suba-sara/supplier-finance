@@ -27,6 +27,9 @@ public class AccountService {
     @Value("${test.otp.seed}")
     private Integer testOtpSeed;
 
+    @Value("${spring.env}")
+    private String env;
+
     public AccountService(AccountRepository accountRepository, EmailService emailService) {
         this.accountRepository = accountRepository;
         this.emailService = emailService;
@@ -41,7 +44,7 @@ public class AccountService {
             if (!acc.getVerified()) {
                 // generate a six digit otp code
                 Random r;
-                if (testOtpSeed != null) {
+                if (env.equals("test")) {
                     r = new Random(testOtpSeed);
                 } else {
                     r = new Random();

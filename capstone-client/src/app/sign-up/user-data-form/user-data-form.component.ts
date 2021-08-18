@@ -5,6 +5,7 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
+import { SignUpService } from '../sign-up.service';
 
 export type UserDetails = {
   userId: string;
@@ -25,7 +26,7 @@ export class UserDataFormComponent implements OnInit {
 
   userDataForm: FormGroup;
 
-  constructor() {
+  constructor(private signUpService: SignUpService) {
     this.userDataForm = new FormGroup(
       {
         userId: new FormControl('', [
@@ -68,7 +69,15 @@ export class UserDataFormComponent implements OnInit {
 
   confirmUserData(): void {
     if (this.userDataForm.valid) {
-      this.formSubmitEvent.emit(this.userDataForm.value);
+      this.signUpService
+        .checkUsername(this.userDataForm.value.userId)
+        .subscribe((value) => {
+          if (value.valid) {
+            this.formSubmitEvent.emit(this.userDataForm.value);
+          } else {
+            this.userDataForm.controls['userId'].setErrors({ exists: true });
+          }
+        });
     } else {
       this.userDataForm.markAsDirty();
     }

@@ -59,6 +59,9 @@ public class UserService implements UserDetailsService {
     @Value("${test.otp.seed}")
     private Integer testOtpSeed;
 
+    @Value("${spring.env}")
+    private String env;
+
     /**
      * Constructor for UserService
      */
@@ -408,7 +411,7 @@ public class UserService implements UserDetailsService {
         }
 
         Random r;
-        if (testOtpSeed != null) {
+        if (env.equals("test")) {
             r = new Random(testOtpSeed);
         } else {
             r = new Random();

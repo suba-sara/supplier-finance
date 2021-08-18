@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { SignUpService } from '../sign-up.service';
 
 export type PersonalDetails = {
   firstName: string;
@@ -69,6 +70,8 @@ export class PersonalDataFormComponent implements OnInit {
     ]),
   });
 
+  constructor(private signUpService: SignUpService) {}
+
   @Output()
   formSubmitEvent = new EventEmitter<PersonalDetails>();
 
@@ -104,7 +107,15 @@ export class PersonalDataFormComponent implements OnInit {
 
   confirmPersonalData(): void {
     if (this.personalDataForm.valid) {
-      this.formSubmitEvent.emit(this.personalDataForm.value);
+      this.signUpService
+        .checkEmail(this.personalDataForm.value.email)
+        .subscribe((value) => {
+          if (value.valid) {
+            this.formSubmitEvent.emit(this.personalDataForm.value);
+          } else {
+            this.personalDataForm.controls['email'].setErrors({ exists: true });
+          }
+        });
     } else {
       this.personalDataForm.markAsDirty();
     }

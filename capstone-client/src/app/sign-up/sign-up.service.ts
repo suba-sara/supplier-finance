@@ -26,6 +26,20 @@ type SignupBaseDto = {
 export class SignUpService {
   constructor(private http: HttpClient) {}
 
+  checkUsername(username: string): Observable<{ valid: boolean }> {
+    return this.http.post<{ valid: boolean }>(
+      `${API_PATH}/users/check-username`,
+      username
+    );
+  }
+
+  checkEmail(email: string): Observable<{ valid: boolean }> {
+    return this.http.post<{ valid: boolean }>(
+      `${API_PATH}/users/check-email`,
+      email
+    );
+  }
+
   signUpSupplier = (
     data: UserDetails & PersonalDetails & AccountDetails
   ): Observable<void> => {

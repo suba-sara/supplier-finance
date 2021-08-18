@@ -21,13 +21,16 @@ public class EmailService {
     @Value("${test.otp.seed}")
     private Integer testOtpSeed;
 
+    @Value("${spring.env}")
+    private String env;
+
     @Autowired
     public EmailService(JavaMailSender javaMailSender) {
         this.javaMailSender = javaMailSender;
     }
 
     public void sendOtp(String receiver, String otp) {
-        if (testOtpSeed == null) {
+        if (env.equals("prod")) {
             MimeMessagePreparator message = mimeMessage -> {
                 MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
                 messageHelper.setTo(receiver);
@@ -40,7 +43,7 @@ public class EmailService {
     }
 
     public void sendForgotPasswordOTP(String receiver, String otp) {
-        if (testOtpSeed == null) {
+        if (env.equals("prod")) {
             MimeMessagePreparator message = mimeMessage -> {
                 MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
                 messageHelper.setTo(receiver);
