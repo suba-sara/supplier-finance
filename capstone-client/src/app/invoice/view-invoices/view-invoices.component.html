@@ -215,6 +215,12 @@
               aria-label="Delete Invoice"
               mat-icon-button
               matTooltip="Delete Invoice"
+              (click)="
+                deleteInvoice({
+                  invoiceId: element.invoiceId,
+                  invoiceNumber: element.invoiceNumber
+                })
+              "
             >
               <mat-icon>delete</mat-icon>
             </button>

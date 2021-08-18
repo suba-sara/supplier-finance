@@ -73,27 +73,44 @@ export class ViewInvoicesService {
      ngOnInit function in the component
      */
     this.$filters.pipe(skip(1)).subscribe((filters) => {
-      const params: { [p: string]: string | string[] } = {};
-      Object.keys(filters).forEach((key) => {
-        const value = filters[key as keyof InvoiceFilters];
-        if (value || value === 0) {
-          params[key] = value.toString();
-        }
-      });
-      this.http
-        .get<InvoicePageType>(
-          `${API_PATH}/invoices/retrieve/${this.userTypeApiPath}`,
-          {
-            params,
-          }
-        )
-        .subscribe((inData: InvoicePageType) => {
-          console.log(inData);
-          this.$data.next({
-            invoices: inData.content,
-            total: inData.totalElements,
-          });
-        });
+      this.fetchInvoices(this.getParams(filters));
     });
+  }
+
+  getParams(filters: any): { [p: string]: string | string[] } {
+    const params: { [p: string]: string | string[] } = {};
+    Object.keys(filters).forEach((key) => {
+      const value = filters[key as keyof InvoiceFilters];
+      if (value || value === 0) {
+        params[key] = value.toString();
+      }
+    });
+    return params;
+  }
+
+  fetchInvoices(params: { [p: string]: string | string[] }): void {
+    this.http
+      .get<InvoicePageType>(
+        `${API_PATH}/invoices/retrieve/${this.userTypeApiPath}`,
+        {
+          params,
+        }
+      )
+      .subscribe((inData: InvoicePageType) => {
+        this.$data.next({
+          invoices: inData.content,
+          total: inData.totalElements,
+        });
+      });
+  }
+
+  deleteInvoice(invoiceId: number): void {
+    this.http
+      .delete<{ invoiceId: number; status: string }>(
+        `${API_PATH}/invoices/delete/${invoiceId}`
+      )
+      .subscribe((_res) => {
+        this.fetchInvoices(this.getParams(this.$filters.value));
+      });
   }
 }

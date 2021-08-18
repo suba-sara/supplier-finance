@@ -11,6 +11,8 @@ import { AppService } from '../../app.service';
 import { getDisplayColumns } from '../util/getDisplayColumns';
 import { AuthService, UserType } from '../../core/auth/auth.service';
 import { InvoiceStatus } from '../invoice.types';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-view-invoices',
@@ -27,7 +29,8 @@ export class ViewInvoicesComponent implements OnInit {
     private route: ActivatedRoute,
     public viewInvoicesService: ViewInvoicesService,
     private appService: AppService,
-    public authService: AuthService
+    public authService: AuthService,
+    public dialog: MatDialog
   ) {}
 
   get userType(): UserType | undefined {
@@ -115,6 +118,28 @@ export class ViewInvoicesComponent implements OnInit {
   setInvoiceStatus(status?: InvoiceStatus): void {
     this._changeQuery({
       status,
+    });
+  }
+
+  deleteInvoice({
+    invoiceId,
+    invoiceNumber,
+  }: {
+    invoiceId: number;
+    invoiceNumber: string;
+  }): void {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '250px',
+      data: {
+        title: 'Are you sure you want to delete this invoice?',
+        message: `invoice ${invoiceNumber} will be deleted`,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+      if (confirmed) {
+        this.viewInvoicesService.deleteInvoice(invoiceId);
+      }
     });
   }
 }

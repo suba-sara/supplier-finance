@@ -43,6 +43,7 @@ public class InvoiceService {
     private SupplierRepository supplierRepository;
 
 
+
     /*
      * userId - current login user userId
      * */
@@ -217,13 +218,16 @@ public class InvoiceService {
         return mapper.map(invoiceRepository.save(invoice), BankViewInvoiceDTO.class);
     }
 
-    public Long deleteInvoice(Integer invoiceId, String userId) {
+    public InvoiceDeletedDto deleteInvoice(Integer invoiceId, String userId) {
         Invoice invoice = _checkInvoiceOwnershipAndFetchInvoice(userId, invoiceId, "delete");
-        if (invoice.getStatus() == InvoiceStatus.IN_REVIEW) {
-            _checkInvoiceStatus(InvoiceStatus.IN_REVIEW, "delete");
+        if (invoice.getStatus() != InvoiceStatus.UPLOADED) {
+            throw new InvoiceDeleteRestrictedException();
         }
-        invoiceRepository.delete(invoice);
-        return invoiceRepository.count();
+
+        invoiceRepository.deleteById(invoiceId);
+        uploadedFileService.deleteFile(invoice.getFile());
+
+        return new InvoiceDeletedDto(invoiceId);
     }
 
     // This function use BANK for get all invoice

@@ -46,7 +46,7 @@ public class InvoiceController {
     }
 
     @DeleteMapping("/api/invoices/delete/{id}")
-    public ResponseEntity<Long> deleteInvoice(@PathVariable Integer id, Principal principal) {
+    public ResponseEntity<InvoiceDeletedDto> deleteInvoice(@PathVariable Integer id, Principal principal) {
         return new ResponseEntity<>(invoiceService.deleteInvoice(id, principal.getName()), HttpStatus.OK);
     }
 
