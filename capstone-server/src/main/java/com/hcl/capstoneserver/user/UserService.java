@@ -9,6 +9,7 @@ import com.hcl.capstoneserver.user.entities.AppUser;
 import com.hcl.capstoneserver.user.entities.Banker;
 import com.hcl.capstoneserver.user.entities.Client;
 import com.hcl.capstoneserver.user.entities.Supplier;
+import com.hcl.capstoneserver.user.exceptions.AppUserNotFoundException;
 import com.hcl.capstoneserver.user.exceptions.EmailAlreadyExistsException;
 import com.hcl.capstoneserver.user.exceptions.UserAlreadyExistsException;
 import com.hcl.capstoneserver.user.exceptions.UserDoesNotExistException;
@@ -16,6 +17,7 @@ import com.hcl.capstoneserver.user.repositories.AppUserRepository;
 import com.hcl.capstoneserver.user.repositories.BankerRepository;
 import com.hcl.capstoneserver.user.repositories.ClientRepository;
 import com.hcl.capstoneserver.user.repositories.SupplierRepository;
+import com.hcl.capstoneserver.util.EmailHideParts;
 import com.hcl.capstoneserver.util.JWTUtil;
 import com.hcl.capstoneserver.util.SequenceGenerator;
 import org.modelmapper.ModelMapper;
@@ -407,7 +409,7 @@ public class UserService implements UserDetailsService {
 
         // check user object is null, then throw following exception
         if (!user.isPresent()) {
-            throw new UsernameNotFoundException("User not found");
+            throw new AppUserNotFoundException();
         }
 
         Random r;
@@ -419,23 +421,26 @@ public class UserService implements UserDetailsService {
 
         String otp = String.valueOf(10000000 + r.nextInt(99999999));
 
+        String email = null;
         // check the User account Type
         switch (user.get().getUserType()) {
             case CLIENT:
+                email = fetchClientDataByUserId(userId).getEmail();
                 // send OTP Code
-                emailService.sendForgotPasswordOTP(fetchClientDataByUserId(userId).getEmail(), otp);
+                emailService.sendForgotPasswordOTP(email, otp);
                 // Save OTP code and OTP Code expired date
                 appUserRepository.save(_addOTPAndExpireDate(user.get(), otp));
                 break;
             case SUPPLIER:
+                email = fetchSupplierDataByUserId(userId).getEmail();
                 // send OTP Code
-                emailService.sendForgotPasswordOTP(fetchSupplierDataByUserId(userId).getEmail(), otp);
+                emailService.sendForgotPasswordOTP(email, otp);
                 // Save OTP code and OTP Code expired date
                 appUserRepository.save(_addOTPAndExpireDate(user.get(), otp));
                 break;
         }
 
-        return new CheckValidDTO(true);
+        return new CheckValidDTO(true, new EmailHideParts(email).hide());
     }
 
     /**
@@ -458,7 +463,8 @@ public class UserService implements UserDetailsService {
                      * set new password
                      */
                     user.get().setPassword(bCryptPasswordEncoder.encode(dto.getPassword()));
-                    return new CheckValidDTO(true);
+                    appUserRepository.save(user.get());
+                    return new CheckValidDTO(true, null);
                 }
             } else {
                 // if OTP is expired then throw this exception
@@ -467,7 +473,7 @@ public class UserService implements UserDetailsService {
         }
 
         // if user object is null then throw this exception
-        throw new UsernameNotFoundException("User not found");
+        throw new AppUserNotFoundException();
     }
 
     /**
@@ -492,12 +498,12 @@ public class UserService implements UserDetailsService {
     }
 
     public CheckValidDTO checkUserId(String userId) {
-        return new CheckValidDTO(!appUserRepository.existsById(userId));
+        return new CheckValidDTO(!appUserRepository.existsById(userId), null);
     }
 
     public CheckValidDTO checkEmail(String email) {
         return new CheckValidDTO(!clientRepository.existsClientByEmail(email) && !supplierRepository.existsSupplierByEmail(
-                email));
+                email), null);
     }
 }
 

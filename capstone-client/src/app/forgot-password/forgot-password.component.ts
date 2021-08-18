@@ -19,6 +19,8 @@ export class ForgotPasswordComponent implements OnInit {
 
   errorMessages = '';
   isAccountHas = false;
+  getOtpLoading = false;
+  otpMessage: string | undefined = '';
 
   constructor(private forgotPasswordService: ForgotPasswordService) {}
 
@@ -29,32 +31,47 @@ export class ForgotPasswordComponent implements OnInit {
   }
 
   searchAccount(): void {
-    this.forgotPasswordService.searchAccount(this.userId?.value).subscribe(
-      (res) => {
-        if (res) {
-          this.isAccountHas = !this.isAccountHas;
-          this.userAccountForm?.addControl(
-            'OTP',
-            new FormControl('', [
-              Validators.required,
-              Validators.maxLength(6),
-              Validators.minLength(6),
-              Validators.pattern(/^-?(0|[1-9]\d*)?$/),
-            ])
-          );
+    this.errorMessages = '';
+    this.otpMessage = '';
+    this.getOtpLoading = !this.getOtpLoading;
+    this.forgotPasswordService
+      .searchAccount(this.userId?.value)
+      .subscribe(
+        (res) => {
+          if (res.valid) {
+            this.otpMessage = res.message;
+            this.isAccountHas = !this.isAccountHas;
+            this.userAccountForm?.addControl(
+              'otp',
+              new FormControl('', [
+                Validators.required,
+                Validators.maxLength(6),
+                Validators.minLength(6),
+                Validators.pattern(/^-?(0|[1-9]\d*)?$/),
+              ])
+            );
 
-          this.userAccountForm?.addControl(
-            'password',
-            new FormControl('', [Validators.required, Validators.minLength(6)])
-          );
-          this.userAccountForm?.addControl(
-            'confirm_password',
-            new FormControl('', [Validators.required, Validators.minLength(6)])
-          );
+            this.userAccountForm?.addControl(
+              'password',
+              new FormControl('', [
+                Validators.required,
+                Validators.minLength(6),
+              ])
+            );
+            this.userAccountForm?.addControl(
+              'confirm_password',
+              new FormControl('', [
+                Validators.required,
+                Validators.minLength(6),
+              ])
+            );
+          }
+        },
+        (err) => {
+          this.errorMessages = 'User not found!';
         }
-      },
-      (err) => (this.errorMessages = err)
-    );
+      )
+      .add(() => (this.getOtpLoading = !this.getOtpLoading));
   }
 
   onSubmitButtonClick(): void {
@@ -66,7 +83,6 @@ export class ForgotPasswordComponent implements OnInit {
         }
       },
       (err) => {
-        console.log(err);
         this.errorMessages = err;
       }
     );

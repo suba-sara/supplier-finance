@@ -17,12 +17,20 @@ export type userUpdatePassword = {
 export class ForgotPasswordService {
   constructor(private http: HttpClient) {}
 
-  searchAccount(userId: string): Observable<any> {
-    return this.http.post(`${API_PATH}/user/forgotPassword/getOTP`, userId);
+  searchAccount(
+    userId: string
+  ): Observable<{
+    valid: boolean;
+    message?: string;
+  }> {
+    return this.http.post<{
+      valid: boolean;
+      message?: string;
+    }>(`${API_PATH}/user/forgotPassword/getOTP`, userId);
   }
 
-  verifyUser(data: userUpdatePassword): Observable<{ valid: true }> {
-    return this.http.post<{ valid: true }>(
+  verifyUser(data: userUpdatePassword): Observable<{ valid: boolean }> {
+    return this.http.post<{ valid: boolean }>(
       `${API_PATH}/user/forgotPassword/verifyUser`,
       data
     );
