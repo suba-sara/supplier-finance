@@ -138,6 +138,14 @@ public class UserController {
         );
     }
 
+    @GetMapping("/api/users/profile")
+    public ResponseEntity<ProfileDto> getProfile(Principal principal) {
+        return new ResponseEntity<>(
+                userService.getProfile(principal.getName()),
+                HttpStatus.OK
+        );
+    }
+
     /**
      * Method to get OTP
      *
