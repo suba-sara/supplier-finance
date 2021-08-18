@@ -1,9 +1,5 @@
 package com.hcl.capstoneserver.user;
 
-import com.hcl.capstoneserver.account.AccountService;
-import com.hcl.capstoneserver.account.dto.AccountVerifiedDTO;
-import com.hcl.capstoneserver.account.exception.OTPTimedOut;
-import com.hcl.capstoneserver.mail.sender.EmailService;
 import com.hcl.capstoneserver.user.dto.*;
 import com.hcl.capstoneserver.user.entities.AppUser;
 import com.hcl.capstoneserver.user.entities.Banker;
@@ -86,6 +82,7 @@ public class UserService implements UserDetailsService {
         this.emailService = emailService;
     }
 
+
     /**
      * Method to signIn user
      *
@@ -163,9 +160,9 @@ public class UserService implements UserDetailsService {
 
         return new User(
                 user.get()
-                    .getUserId(),
+                        .getUserId(),
                 user.get()
-                    .getPassword(),
+                        .getPassword(),
                 Collections.singleton(
                         new SimpleGrantedAuthority(user.get().getUserType().toString())
                 )
@@ -485,6 +482,14 @@ public class UserService implements UserDetailsService {
          */
         user.setOtpExpiredDate(new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(otpValidityTime)));
         return user;
+    }
+
+    public Boolean checkUserId(String userId) {
+        return !appUserRepository.existsById(userId);
+    }
+
+    public Boolean checkEmail(String email) {
+        return !clientRepository.existsClientByEmail(email) && !supplierRepository.existsSupplierByEmail(email);
     }
 }
 
