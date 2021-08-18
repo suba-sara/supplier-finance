@@ -88,6 +88,12 @@ public class InvoiceCriteriaRepository {
             }
         }
 
+        // hide uploaded invoices from all other users
+        if (invoiceSearchCriteriaDTO.getFetchUploaded() == null) {
+            predicateList.add(criteriaBuilder.notEqual(invoiceRoot.get("status"), 0));
+        }
+
+
         if (Objects.nonNull(invoiceSearchCriteriaDTO.getCurrencyType())) {
             for (CurrencyType currency : invoiceSearchCriteriaDTO.getCurrencyType()) {
                 predicateList.add(criteriaBuilder.equal(invoiceRoot.get("currencyType"), currency));

@@ -234,6 +234,7 @@ public class InvoiceService {
             throw new ForbiddenException();
         }
 
+
         // need to check userId account type -> This feature currently unavailable
         // One feature needs to be check when BANK user is created: invoice status can update only by BANK
         return _getInvoice(dto).map(invoice -> mapper.map(invoice, BankViewInvoiceDTO.class));
@@ -248,6 +249,7 @@ public class InvoiceService {
         }
 
         dto.setClientId(userService.getClientId(userId));
+        dto.setFetchUploaded(true);
         return _getInvoice(dto).map(invoice -> mapper.map(invoice, ClientViewInvoiceDTO.class));
     }
 
