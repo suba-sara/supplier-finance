@@ -71,8 +71,19 @@
         <span class="detail-content">{{ invoice?.supplier?.name }}</span>
       </div>
       <div class="action-button-container">
-        <button *ngIf="requestPayment" color="warn" mat-raised-button>
+        <button *ngIf="reviewable" color="warn" mat-raised-button>
           Request Review
+        </button>
+        <button *ngIf="approvable" color="accent" mat-raised-button>
+          Approve
+        </button>
+        <button
+          *ngIf="approvable"
+          [disabled]="!rejectable"
+          color="danger"
+          mat-raised-button
+        >
+          Reject
         </button>
       </div>
     </div>

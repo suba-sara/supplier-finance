@@ -14,7 +14,9 @@ export class ViewSingleInvoiceComponent implements OnInit {
   SERVER = environment.SERVER;
   invoice?: Invoice;
   userType: any;
-  requestPayment?: boolean;
+  reviewable?: boolean;
+  approvable?: boolean;
+  rejectable?: boolean;
 
   constructor(
     private router: Router,
@@ -26,12 +28,13 @@ export class ViewSingleInvoiceComponent implements OnInit {
     this.viewSingleInvoicesService.getInvoiceById(invoiceId).then((invoice) => {
       this.invoice = invoice;
       this.userType = localStorage.getItem('user_type');
-      if (this.userType === 'CLIENT' && this.invoice.status === 'UPLOADED') {
-        this.requestPayment = true;
-      } else {
-        this.requestPayment = false;
-      }
-      console.log(this.invoice.status);
+      this.reviewable =
+        this.userType === 'CLIENT' && this.invoice.status === 'UPLOADED';
+      this.approvable =
+        this.userType === 'BANKER' &&
+        (this.invoice.status === 'IN_REVIEW' ||
+          this.invoice.status === 'REJECTED');
+      this.rejectable = this.approvable && this.invoice.status === 'IN_REVIEW';
     });
   }
 
@@ -39,7 +42,7 @@ export class ViewSingleInvoiceComponent implements OnInit {
     this.appService.setPageTitle('View Invoice');
   }
 
-  back() {
+  back(): void {
     this.router.navigateByUrl('invoice/view-invoices');
   }
 }

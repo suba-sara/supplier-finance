@@ -20,6 +20,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -91,7 +92,7 @@ public class InvoiceService {
     private Invoice _fetchInvoiceById(Integer invoiceId) {
         Optional<Invoice> invoice = invoiceRepository.findById(invoiceId);
         if (!invoice.isPresent()) {
-            throw new InvoiceNotFoundException("Invoice is not found.");
+            throw new InvoiceNotFoundException("Invoice not found.");
         }
         return invoice.get();
     }
@@ -101,13 +102,39 @@ public class InvoiceService {
             Integer invoiceId,
             String field
     ) {
+        Optional<AppUser> user = appUserRepository.findById(userId);
+        if (!user.isPresent()) {
+            throw new UsernameNotFoundException("user not found");
+        }
         Invoice invoice = _fetchInvoiceById(invoiceId);
-        if (!invoice.getClient().getUserId().equals(userId)) {
-            throw new InvoiceOwnershipException(String.format(
-                    "%s you do not have permission to %s this invoice.",
-                    userId, field
-            )
-            );
+
+        switch (user.get().getUserType()) {
+            case CLIENT:
+                if (!invoice.getClient().getUserId().equals(userId)) {
+                    throw new InvoiceOwnershipException(String.format(
+                            "%s you do not have permission to %s this invoice.",
+                            userId, field
+                    ));
+                }
+                break;
+            case SUPPLIER:
+                if (!invoice.getSupplier()
+                            .getUserId()
+                            .equals(userId) || invoice.getStatus() == InvoiceStatus.UPLOADED) {
+                    throw new InvoiceOwnershipException(String.format(
+                            "%s you do not have permission to %s this invoice.",
+                            userId, field
+                    ));
+                }
+                break;
+            case BANKER:
+                if (invoice.getStatus() == InvoiceStatus.UPLOADED) {
+                    throw new InvoiceOwnershipException(String.format(
+                            "%s you do not have permission to %s this invoice.",
+                            userId, field
+                    ));
+                }
+                break;
         }
         return invoice;
     }
