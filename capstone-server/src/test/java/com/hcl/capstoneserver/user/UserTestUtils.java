@@ -1,7 +1,6 @@
 package com.hcl.capstoneserver.user;
 
 import com.hcl.capstoneserver.account.AccountService;
-import com.hcl.capstoneserver.account.repositories.AccountRepository;
 import com.hcl.capstoneserver.seeder.DatabaseSeeder;
 import com.hcl.capstoneserver.user.dto.BankerDTO;
 import com.hcl.capstoneserver.user.dto.ClientDTO;
@@ -9,8 +8,9 @@ import com.hcl.capstoneserver.user.dto.PersonWithPasswordDTO;
 import com.hcl.capstoneserver.user.dto.SupplierDTO;
 import com.hcl.capstoneserver.user.entities.AppUser;
 import com.hcl.capstoneserver.user.entities.Banker;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
+import com.hcl.capstoneserver.user.repositories.BankerRepository;
+import com.hcl.capstoneserver.user.repositories.ClientRepository;
+import com.hcl.capstoneserver.user.repositories.SupplierRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -28,6 +28,15 @@ public class UserTestUtils {
     @Autowired
     DatabaseSeeder databaseSeeder;
 
+    @Autowired
+    SupplierRepository supplierRepository;
+
+    @Autowired
+    ClientRepository clientRepository;
+
+    @Autowired
+    BankerRepository bankerRepository;
+
     public void accountCreate() {
         databaseSeeder.seedTest();
         for (int i = 35; i < 40; i++) {
@@ -36,6 +45,7 @@ public class UserTestUtils {
     }
 
     public List<SupplierDTO> createASupplier() {
+        supplierRepository.deleteAll();
         List<SupplierDTO> suppliers = new ArrayList<>();
         suppliers.add(userService.signUpSupplier(new PersonWithPasswordDTO(
                 "supplier",
@@ -61,6 +71,7 @@ public class UserTestUtils {
     }
 
     public List<ClientDTO> createAClient() {
+        clientRepository.deleteAll();
         List<ClientDTO> clients = new ArrayList<>();
         clients.add(userService.signUpClient(new PersonWithPasswordDTO(
                 "client",
@@ -87,6 +98,7 @@ public class UserTestUtils {
     }
 
     public List<BankerDTO> createBankers() {
+        bankerRepository.deleteAll();
         List<BankerDTO> bankers = new ArrayList<>();
         bankers.add(userService.createBanker(new Banker(
                 "banker1",

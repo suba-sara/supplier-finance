@@ -18,6 +18,9 @@ import { InvoiceNumberFormatPipe } from './pipes/invoice-number-format.pipe';
 import { DateFormatPipe } from './pipes/date-format.pipe';
 import { InvoiceAgePipe } from './pipes/invoice-age.pipe';
 import { MatSortModule } from '@angular/material/sort';
+import { RouterModule } from '@angular/router';
+import { MatDialogModule } from '@angular/material/dialog';
+import { ConfirmDialogModule } from '../shared/confirm-dialog/confirm-dialog.module';
 
 @NgModule({
   declarations: [
@@ -42,6 +45,9 @@ import { MatSortModule } from '@angular/material/sort';
     MatTooltipModule,
     MatPaginatorModule,
     MatSortModule,
+    RouterModule,
+    MatDialogModule,
+    ConfirmDialogModule,
   ],
 })
 export class InvoiceModule {}

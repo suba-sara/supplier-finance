@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -23,6 +24,9 @@ public class DatabaseSeeder {
     private AccountRepository accountRepository;
     @Value("${seed.account.data}")
     private boolean seedAccountData;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public DatabaseSeeder() {
     }
@@ -46,8 +50,9 @@ public class DatabaseSeeder {
     private void seedBankerTable() {
         if (this.bankerRepository.count() == 0) {
             List<Banker> bankerList = new ArrayList<>();
-            bankerList.add(new Banker("shsbank1", "123456@shs", "EM_00001"));
-            bankerList.add(new Banker("shsbank2", "123456@shs", "EM_00002"));
+            String encryptedPassword = bCryptPasswordEncoder.encode("password");
+            bankerList.add(new Banker("banker1", encryptedPassword, "EM_00001"));
+            bankerList.add(new Banker("banker2", encryptedPassword, "EM_00002"));
             this.bankerRepository.saveAll(bankerList);
         }
     }

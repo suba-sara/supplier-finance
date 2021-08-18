@@ -196,7 +196,7 @@
           <div class="options-wrapper">
             <a
               aria-label="View Invoice"
-              href="/invoice/view-invoice/{{ element.invoiceId }}"
+              routerLink="/invoice/view-invoice/{{ element.invoiceId }}"
               mat-icon-button
               matTooltip="View Invoice"
             >
@@ -206,13 +206,21 @@
               aria-label="Edit Invoice"
               mat-icon-button
               matTooltip="Edit Invoice"
+              *ngIf="userType === 'CLIENT' && element.status === 'UPLOADED'"
             >
               <mat-icon>edit</mat-icon>
             </button>
             <button
+              *ngIf="userType === 'CLIENT' && element.status === 'UPLOADED'"
               aria-label="Delete Invoice"
               mat-icon-button
               matTooltip="Delete Invoice"
+              (click)="
+                deleteInvoice({
+                  invoiceId: element.invoiceId,
+                  invoiceNumber: element.invoiceNumber
+                })
+              "
             >
               <mat-icon>delete</mat-icon>
             </button>
