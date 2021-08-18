@@ -88,7 +88,7 @@ public class UserController {
     @PostMapping("/api/sign-up/client")
     public ResponseEntity<ClientDTO> signUpClient(@Valid @RequestBody PersonWithPasswordDTO dto) {
         return new ResponseEntity<>(
-                userService.signUpClient(mapper.map(dto, Client.class)),
+                userService.signUpClient(dto),
                 HttpStatus.CREATED
         );
     }
