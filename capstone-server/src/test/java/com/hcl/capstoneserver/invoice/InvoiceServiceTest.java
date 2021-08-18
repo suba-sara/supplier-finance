@@ -323,7 +323,7 @@ public class InvoiceServiceTest {
             @DisplayName("it should return all invoice")
             public void shouldReturnAllInvoice() {
                 InvoiceSearchCriteriaDTO dto = new InvoiceSearchCriteriaDTO();
-                assertEquals(3, invoiceService.getBankInvoice(dto, "banker1").getNumberOfElements());
+                assertEquals(1, invoiceService.getBankInvoice(dto, "banker1").getNumberOfElements());
             }
 
             @Test
