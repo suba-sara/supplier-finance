@@ -5,10 +5,14 @@
   display: flex;
   flex-direction: column;
   border-radius: 15px;
-  margin: 15px;
-  padding: 50px;
+  margin: 0% auto;
+  padding: 10px;
+  width: 80%;
 }
-
+.row-hd{
+  color: variables.$primary-color;
+  font-weight: bolder;
+}
 .header-container {
   display: flex;
   flex-direction: column;
@@ -27,7 +31,9 @@
     margin-bottom: 0.2em;
   }
 }
-
+.body-container{
+  margin: 20px;
+}
 .invoice-number-container {
   margin-left: auto;
 

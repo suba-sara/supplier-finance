@@ -1,3 +1,4 @@
+<br>
 <div class="content-container">
   <div class="body-container">
     <div class="header-container">
@@ -7,36 +8,48 @@
           <h1>#{{ invoice?.invoiceNumber }}</h1>
         </div>
       </div>
-      <h3 class="date">{{ invoice?.invoiceDate | date: "dd/MM/yyyy" }}</h3>
+     
     </div>
     <div *ngIf="invoice" class="download-button-container">
       <a href="{{ SERVER }}{{ invoice.fileUrl }}">
         <button color="primary" mat-raised-button>Download File</button>
       </a>
     </div>
-    <div class="table-container">
-      <div class="left-container">
-        <h1>Customer Details:</h1>
-        <h2>Id: {{ invoice?.client?.clientId }}</h2>
-        <h2>Name: {{ invoice?.client?.name }}</h2>
-      </div>
-      <div class="right-container">
-        <h1>Supplier Details:</h1>
-        <h2>Id: {{ invoice?.supplier?.supplierId }}</h2>
-        <h2>Name: {{ invoice?.supplier?.name }}</h2>
-      </div>
-    </div>
 
-    <div class="">
+<div class="table-container1">
+  <div class="row">
+    <div class="col-md-6" >
+      <h3 class="date">{{ invoice?.invoiceDate | date: "dd/MM/yyyy" }}</h3>
       <h1>Status: {{ invoice?.status }}</h1>
-      <h1>
-        Amount:
-        {{ invoice?.amount | currency: invoice?.currencyType }}
+    </div>
+    <div class="col-md-6" >
+
+      <h1 style="color: rgb(11, 187, 34);">
+        Amount: {{ invoice?.amount | currency: invoice?.currencyType }}
       </h1>
     </div>
+  </div>
 
-    <div class="button-container">
-      <button color="primary" mat-stroked-button>Back</button>
+  <div class="row">
+    <div class="col-md-6" >
+        <h1 class="row-hd">Customer Details:</h1>
+        <h2>Id: {{ invoice?.client?.clientId }}</h2>
+        <h2>Name: {{ invoice?.client?.name }}</h2>
     </div>
+    <div class="col-md-6" >
+      <h1 class="row-hd">Supplier Details:</h1>
+      <h2>Id: {{ invoice?.supplier?.supplierId }}</h2>
+      <h2>Name: {{ invoice?.supplier?.name }}</h2>
+    </div>
+  </div>
+
+
+  <div class="row">
+  
+    <button color="primary" mat-stroked-button>Back</button>
+  </div>
+
+</div>
+
   </div>
 </div>
