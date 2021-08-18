@@ -36,4 +36,8 @@ export class ViewSingleInvoiceComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  back(){
+    this.router.navigateByUrl("invoice/view-invoices");
+  }
 }

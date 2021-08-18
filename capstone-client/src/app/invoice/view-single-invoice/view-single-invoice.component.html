@@ -28,7 +28,7 @@
       <!--Request Review -->
       <button *ngIf="requestPayment" color="warn" mat-raised-button>Request Review</button>
       <br>
-      <h1 style="color: rgb(11, 187, 34);">
+      <h1 style="color: rgb(11, 187, 34); margin-top: 15px;">
         Amount: {{ invoice?.amount | currency: invoice?.currencyType }}
       </h1>
     </div>
@@ -50,7 +50,7 @@
 
   <div class="row">
   
-    <button color="primary" mat-stroked-button>Back</button>
+    <button color="primary" (click)="back()" mat-stroked-button>Back</button>
   </div>
 
 </div>
