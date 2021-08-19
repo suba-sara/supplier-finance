@@ -6,6 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import {SignUpModule} from '../sign-up/sign-up.module';
 
 @NgModule({
   declarations: [ForgotPasswordComponent],
@@ -16,6 +17,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatProgressSpinnerModule,
     MatCardModule,
     MatIconModule,
+    SignUpModule,
   ],
 })
 export class ForgotPasswordModule {}

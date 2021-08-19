@@ -40,5 +40,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatIconModule,
     MatProgressSpinnerModule,
   ],
+  exports: [SuccessFeedbackComponent],
 })
 export class SignUpModule {}

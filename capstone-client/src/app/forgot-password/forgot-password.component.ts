@@ -23,6 +23,7 @@ export class ForgotPasswordComponent implements OnInit {
   getOtpLoading = false;
   otpMessage: string | undefined = '';
   confirmPasswordMessage = false;
+  successfull = false;
 
   constructor(
     private forgotPasswordService: ForgotPasswordService,
@@ -50,6 +51,8 @@ export class ForgotPasswordComponent implements OnInit {
               'otp',
               new FormControl('', [
                 Validators.required,
+                Validators.maxLength(8),
+                Validators.minLength(8),
                 Validators.pattern(/[\d]{8}/),
               ])
             );
@@ -76,6 +79,8 @@ export class ForgotPasswordComponent implements OnInit {
   }
 
   onSubmitButtonClick(): void {
+    this.confirmPasswordMessage = false;
+    this.successfull = false;
     if (
       this.userAccountForm.get('confirm_password')?.value ===
       this.userAccountForm.get('password')?.value
@@ -87,7 +92,8 @@ export class ForgotPasswordComponent implements OnInit {
           (res) => {
             if (res.valid) {
               this.isAccountHas = !this.isAccountHas;
-              this.router.navigateByUrl('/sign-in');
+              this.successfull = !this.successfull;
+              // this.router.navigateByUrl('/sign-in');
             }
           },
           (err) => {
