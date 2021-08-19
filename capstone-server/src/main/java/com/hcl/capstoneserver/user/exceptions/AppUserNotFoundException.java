@@ -7,6 +7,6 @@ import org.springframework.web.client.HttpClientErrorException;
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class AppUserNotFoundException extends HttpClientErrorException {
     public AppUserNotFoundException() {
-        super("User not found.", HttpStatus.BAD_REQUEST, "User Id", null, null, null);
+        super(HttpStatus.BAD_REQUEST, "User not found.");
     }
 }

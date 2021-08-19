@@ -152,7 +152,7 @@ public class InvoiceControllerTest {
                          .expectStatus()
                          .isBadRequest()
                          .expectBody()
-                         .jsonPath("$.errors[0].message")
+                         .jsonPath("$.message")
                          .isEqualTo("An invoice number already exists for this supplier.");
         }
 
@@ -176,7 +176,7 @@ public class InvoiceControllerTest {
                          .expectStatus()
                          .isBadRequest()
                          .expectBody()
-                         .jsonPath("$.errors[0].message")
+                         .jsonPath("$.message")
                          .isEqualTo("The invoice date is a future date.");
         }
 
@@ -200,7 +200,7 @@ public class InvoiceControllerTest {
                          .expectStatus()
                          .is4xxClientError()
                          .expectBody()
-                         .jsonPath("$.errors[0].message")
+                         .jsonPath("$.message")
                          .isEqualTo("This SUPPLIER is not exist.");
         }
     }
@@ -236,7 +236,7 @@ public class InvoiceControllerTest {
                              .expectStatus()
                              .is4xxClientError()
                              .expectBody()
-                             .jsonPath("$.errors[0].message")
+                             .jsonPath("$.message")
                              .isEqualTo("Permission denied");
             }
         }
@@ -288,7 +288,7 @@ public class InvoiceControllerTest {
                              .expectStatus()
                              .is4xxClientError()
                              .expectBody()
-                             .jsonPath("$.errors[0].message")
+                             .jsonPath("$.message")
                              .isEqualTo("client you do not have permission to update this invoice.");
             }
 
@@ -313,7 +313,7 @@ public class InvoiceControllerTest {
                              .expectStatus()
                              .is4xxClientError()
                              .expectBody()
-                             .jsonPath("$.errors[0].message")
+                             .jsonPath("$.message")
                              .isEqualTo("The invoice date is a future date.");
             }
 
@@ -339,7 +339,7 @@ public class InvoiceControllerTest {
                              .expectStatus()
                              .is4xxClientError()
                              .expectBody()
-                             .jsonPath("$.errors[0].message")
+                             .jsonPath("$.message")
                              .isEqualTo("This invoice can not update, because invoice is IN_REVIEW.");
             }
         }
@@ -379,7 +379,7 @@ public class InvoiceControllerTest {
                          .expectStatus()
                          .is4xxClientError()
                          .expectBody()
-                         .jsonPath("$.errors[0].message")
+                         .jsonPath("$.message")
                          .isEqualTo("client2 you do not have permission to delete this invoice.");
         }
 
@@ -398,8 +398,8 @@ public class InvoiceControllerTest {
                          .expectStatus()
                          .is4xxClientError()
                          .expectBody()
-                         .jsonPath("$.errors[0].message")
-                         .isEqualTo("403 Invoice Delete Restricted");
+                         .jsonPath("$.message")
+                         .isEqualTo("Invoice Delete Restricted");
         }
     }
 

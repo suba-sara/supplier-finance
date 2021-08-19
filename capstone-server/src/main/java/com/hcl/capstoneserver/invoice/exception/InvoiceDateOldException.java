@@ -7,6 +7,6 @@ import org.springframework.web.client.HttpClientErrorException;
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class InvoiceDateOldException extends HttpClientErrorException {
     public InvoiceDateOldException(String msg) {
-        super(msg, HttpStatus.BAD_REQUEST, "Invoice Date", null, null, null);
+        super(HttpStatus.BAD_REQUEST, msg);
     }
 }

@@ -7,6 +7,6 @@ import org.springframework.web.client.HttpClientErrorException;
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class InvoiceNotFoundException extends HttpClientErrorException {
     public InvoiceNotFoundException(String message) {
-        super(message, HttpStatus.BAD_REQUEST, "User Id", null, null, null);
+        super(HttpStatus.BAD_REQUEST, message);
     }
 }
