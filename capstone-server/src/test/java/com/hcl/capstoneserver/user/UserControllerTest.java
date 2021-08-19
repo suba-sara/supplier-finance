@@ -268,7 +268,7 @@ public class UserControllerTest {
                          .expectStatus()
                          .isBadRequest()
                          .expectBody()
-                         .jsonPath("$.errors[0].message")
+                         .jsonPath("$.message")
                          .isEqualTo(String.format("User with username %s already exits.", dto.getUserId()));
         }
 
@@ -294,7 +294,7 @@ public class UserControllerTest {
                          .expectStatus()
                          .isBadRequest()
                          .expectBody()
-                         .jsonPath("$.errors[0].message")
+                         .jsonPath("$.message")
                          .isEqualTo(String.format("User with email %s already exits.", dto.getEmail()));
         }
     }
@@ -370,7 +370,7 @@ public class UserControllerTest {
                          .expectStatus()
                          .isBadRequest()
                          .expectBody()
-                         .jsonPath("$.errors[0].field").isEqualTo("userId");
+                         .jsonPath("$.message").isEqualTo("Validation Failed");
         }
 
         @Test
@@ -395,7 +395,7 @@ public class UserControllerTest {
                          .expectStatus()
                          .isBadRequest()
                          .expectBody()
-                         .jsonPath("$.errors[0].message")
+                         .jsonPath("$.message")
                          .isEqualTo(String.format("User with username %s already exits.", dto.getUserId()));
         }
 
@@ -421,7 +421,7 @@ public class UserControllerTest {
                          .expectStatus()
                          .isBadRequest()
                          .expectBody()
-                         .jsonPath("$.errors[0].message")
+                         .jsonPath("$.message")
                          .isEqualTo(String.format("User with email %s already exits.", dto.getEmail()));
         }
     }
