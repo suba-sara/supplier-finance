@@ -33,9 +33,7 @@ export class BankAccountDetailsFormComponent implements OnInit {
   accountForm: FormGroup = new FormGroup({
     accountNumber: new FormControl('', [
       Validators.required,
-      Validators.maxLength(8),
-      Validators.minLength(8),
-      Validators.pattern(/[\d]{8}/),
+      Validators.pattern(/[\d]/),
     ]),
   });
 

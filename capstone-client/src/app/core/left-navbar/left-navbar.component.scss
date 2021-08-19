@@ -18,7 +18,8 @@
 
 .left-panel-expanded {
   display: flex;
-  width: 20em;
+  width: 20vw;
+  min-width: 18em;
 }
 
 .menu-button-container {
@@ -55,7 +56,7 @@
   display: none;
 }
 
-@media only screen and (max-width: $media-query-mobile) {
+@media only screen and (max-width: $media-query-tablet) {
   .show-only-on-mobile {
     display: flex;
   }
@@ -64,11 +65,13 @@
     position: absolute;
     left: -100px;
   }
+
   .left-panel-expanded {
     z-index: 1000;
     position: absolute;
     left: 0;
     top: 0;
     display: flex;
+    width: 20em;
   }
 }
