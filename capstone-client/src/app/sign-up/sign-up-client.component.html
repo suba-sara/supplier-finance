@@ -24,7 +24,9 @@
         ></app-bank-account-details-form>
       </section>
       <section *ngSwitchCase="4">
-        <app-success-feedback></app-success-feedback>
+        <app-success-feedback
+          [message]="'Client Sign Up Successful'"
+        ></app-success-feedback>
       </section>
     </div>
   </div>
