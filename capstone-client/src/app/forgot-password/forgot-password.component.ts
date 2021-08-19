@@ -51,9 +51,7 @@ export class ForgotPasswordComponent implements OnInit {
               'otp',
               new FormControl('', [
                 Validators.required,
-                Validators.maxLength(8),
-                Validators.minLength(8),
-                Validators.pattern(/[\d]{8}/),
+                Validators.pattern(/[\d]/),
               ])
             );
 
@@ -97,9 +95,10 @@ export class ForgotPasswordComponent implements OnInit {
             }
           },
           (err) => {
-            this.errorMessages = err;
+            this.errorMessages = 'Invalid OTP Code';
           }
         );
+      this.userAccountForm.get('confirm_password')?.enable();
     } else {
       this.confirmPasswordMessage = !this.confirmPasswordMessage;
     }

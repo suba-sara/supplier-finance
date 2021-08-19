@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.hcl</groupId>
     <artifactId>supplier-finance-server</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.3-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>supplier-finance-server</name>
     <description>Supplier Finance backend</description>
