@@ -131,7 +131,7 @@ public class InvoiceServiceTest {
                                             25000.0,
                                             CurrencyType.USD
                                     ), "client")
-                    ).getMessage()
+                    ).getStatusText()
             );
         }
 
@@ -150,7 +150,7 @@ public class InvoiceServiceTest {
                                             25000.0,
                                             CurrencyType.USD
                                     ), "client")
-                    ).getMessage()
+                    ).getStatusText()
             );
         }
     }
@@ -196,7 +196,7 @@ public class InvoiceServiceTest {
                                         25000.0,
                                         CurrencyType.USD
                                 ), "client")
-                        ).getMessage()
+                        ).getStatusText()
                 );
             }
 
@@ -216,7 +216,7 @@ public class InvoiceServiceTest {
                                                 25000.0,
                                                 CurrencyType.USD
                                         ), "client")
-                        ).getMessage()
+                        ).getStatusText()
                 );
             }
 
@@ -247,7 +247,7 @@ public class InvoiceServiceTest {
                                     createInvoice.get(0).getInvoice().getInvoiceId(),
                                     "client2"
                             )
-                    ).getMessage()
+                    ).getStatusText()
             );
         }
 

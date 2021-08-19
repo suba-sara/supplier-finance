@@ -7,6 +7,6 @@ import org.springframework.web.client.HttpClientErrorException;
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class InvoiceStatusException extends HttpClientErrorException {
     public InvoiceStatusException(String msg) {
-        super(msg, HttpStatus.BAD_REQUEST, "Invoice Status", null, null, null);
+        super(HttpStatus.BAD_REQUEST, msg);
     }
 }

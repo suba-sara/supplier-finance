@@ -7,6 +7,6 @@ import org.springframework.web.client.HttpClientErrorException;
 @ResponseStatus(HttpStatus.FORBIDDEN)
 public class JwtInvalidException extends HttpClientErrorException {
     public JwtInvalidException() {
-        super("Jwt is invalid.", HttpStatus.FORBIDDEN, "Auth Token", null, null, null);
+        super(HttpStatus.FORBIDDEN, "Jwt is invalid.");
     }
 }

@@ -7,6 +7,6 @@ import org.springframework.web.client.HttpClientErrorException;
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class UserAlreadyExistsException extends HttpClientErrorException {
     public UserAlreadyExistsException(String username) {
-        super(String.format("User with username %s already exits.", username), HttpStatus.BAD_REQUEST, "Username", null, null, null);
+        super(HttpStatus.BAD_REQUEST, String.format("User with username %s already exits.", username));
     }
 }

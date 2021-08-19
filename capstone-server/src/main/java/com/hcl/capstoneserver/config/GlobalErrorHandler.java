@@ -79,21 +79,21 @@ public class GlobalErrorHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(HttpClientErrorException.class)
     public final ResponseEntity<Object> handleClientValidationErrors(HttpClientErrorException ex) {
-        ArrayList<Map<String, String>> errors = new ArrayList<>();
-        errors.add(_getErrorsMaps(ex.getStatusText(), ex.getMessage()));
-        return new ResponseEntity<>(
-                new DefaultValidationErrorResponse(
-                        ex.getStatusCode(),
-                        "Validation Error",
-                        errors
-                ),
-                ex.getStatusCode()
-        );
-
+        //        ArrayList<Map<String, String>> errors = new ArrayList<>();
+        //        errors.add(_getErrorsMaps(ex.getStatusText(), ex.getMessage()));
         //        return new ResponseEntity<>(
-        //                new DefaultErrorResponse(ex.getStatusCode(), ex.getStatusText()),
+        //                new DefaultValidationErrorResponse(
+        //                        ex.getStatusCode(),
+        //                        "Validation Error",
+        //                        errors
+        //                ),
         //                ex.getStatusCode()
         //        );
+        ex.printStackTrace();
+        return new ResponseEntity<>(
+                new DefaultErrorResponse(ex.getStatusCode(), ex.getStatusText()),
+                ex.getStatusCode()
+        );
     }
 
     @ExceptionHandler(JwtException.class)

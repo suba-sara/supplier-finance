@@ -76,28 +76,30 @@ export class BankAccountDetailsFormComponent implements OnInit {
   }
 
   getOTP(): void {
-    this.getOtpLoading = true;
-    this.accountForm?.addControl(
-      'otp',
-      new FormControl(undefined, [
-        Validators.required,
-        Validators.maxLength(6),
-        Validators.minLength(6),
-        Validators.pattern(/[\d]{6}/),
-      ])
-    );
-    this.bankAccountService
-      .getOTP(this.accountForm?.controls['accountNumber'].value)
-      .subscribe(
-        (data) => {
-          this.isAccountChecked = true;
-          this.getOtpLoading = false;
-          this.otpMessage = data.message;
-        },
-        (err) => {
-          this.errorMessage = err === 'OK' ? 'INTERNAL SERVER ERROR' : err;
-          this.getOtpLoading = false;
-        }
+    if (this.accountForm.valid) {
+      this.getOtpLoading = true;
+      this.accountForm?.addControl(
+        'otp',
+        new FormControl(undefined, [
+          Validators.required,
+          Validators.maxLength(6),
+          Validators.minLength(6),
+          Validators.pattern(/[\d]{6}/),
+        ])
       );
+      this.bankAccountService
+        .getOTP(this.accountForm?.controls['accountNumber'].value)
+        .subscribe(
+          (data) => {
+            this.isAccountChecked = true;
+            this.getOtpLoading = false;
+            this.otpMessage = data.message;
+          },
+          (err) => {
+            this.errorMessage = err === 'OK' ? 'INTERNAL SERVER ERROR' : err;
+            this.getOtpLoading = false;
+          }
+        );
+    }
   }
 }

@@ -7,6 +7,6 @@ import org.springframework.web.client.HttpClientErrorException;
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class InvoiceNumberAlreadyExistsSupplierException extends HttpClientErrorException {
     public InvoiceNumberAlreadyExistsSupplierException() {
-        super("An invoice number already exists for this supplier.", HttpStatus.BAD_REQUEST, "Invoice Number", null, null, null);
+        super(HttpStatus.BAD_REQUEST, "An invoice number already exists for this supplier.");
     }
 }
