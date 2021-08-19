@@ -6,6 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { ForgotPasswordService } from './forgot-password-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-forgot-password',
@@ -21,8 +22,12 @@ export class ForgotPasswordComponent implements OnInit {
   isAccountHas = false;
   getOtpLoading = false;
   otpMessage: string | undefined = '';
+  confirmPasswordMessage = false;
 
-  constructor(private forgotPasswordService: ForgotPasswordService) {}
+  constructor(
+    private forgotPasswordService: ForgotPasswordService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {}
 
@@ -45,25 +50,17 @@ export class ForgotPasswordComponent implements OnInit {
               'otp',
               new FormControl('', [
                 Validators.required,
-                Validators.maxLength(6),
-                Validators.minLength(6),
-                Validators.pattern(/^-?(0|[1-9]\d*)?$/),
+                Validators.pattern(/[\d]{8}/),
               ])
             );
 
             this.userAccountForm?.addControl(
               'password',
-              new FormControl('', [
-                Validators.required,
-                Validators.minLength(6),
-              ])
+              new FormControl('', [Validators.required])
             );
             this.userAccountForm?.addControl(
               'confirm_password',
-              new FormControl('', [
-                Validators.required,
-                Validators.minLength(6),
-              ])
+              new FormControl('', [Validators.required])
             );
           }
         },
@@ -74,17 +71,31 @@ export class ForgotPasswordComponent implements OnInit {
       .add(() => (this.getOtpLoading = !this.getOtpLoading));
   }
 
+  get otp(): AbstractControl | null {
+    return this.userAccountForm.get('otp');
+  }
+
   onSubmitButtonClick(): void {
-    this.userAccountForm.get('confirm_password')?.disable();
-    this.forgotPasswordService.verifyUser(this.userAccountForm.value).subscribe(
-      (res) => {
-        if (res.valid) {
-          this.isAccountHas = !this.isAccountHas;
-        }
-      },
-      (err) => {
-        this.errorMessages = err;
-      }
-    );
+    if (
+      this.userAccountForm.get('confirm_password')?.value ===
+      this.userAccountForm.get('password')?.value
+    ) {
+      this.userAccountForm.get('confirm_password')?.disable();
+      this.forgotPasswordService
+        .verifyUser(this.userAccountForm.value)
+        .subscribe(
+          (res) => {
+            if (res.valid) {
+              this.isAccountHas = !this.isAccountHas;
+              this.router.navigateByUrl('/sign-in');
+            }
+          },
+          (err) => {
+            this.errorMessages = err;
+          }
+        );
+    } else {
+      this.confirmPasswordMessage = !this.confirmPasswordMessage;
+    }
   }
 }
