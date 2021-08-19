@@ -95,7 +95,8 @@ export class ForgotPasswordComponent implements OnInit {
             }
           },
           (err) => {
-            this.errorMessages = 'Invalid OTP Code';
+            this.errorMessages =
+              err === 'User not found.' ? 'Invalid OTP Code' : err;
           }
         );
       this.userAccountForm.get('confirm_password')?.enable();
