@@ -206,7 +206,6 @@ public class UserService implements UserDetailsService {
         );
     }
 
-
     /**
      * Method to register new supplier
      *
@@ -229,8 +228,8 @@ public class UserService implements UserDetailsService {
                     dto.getAddress(),
                     dto.getEmail(),
                     dto.getPhone(),
-                    dto.getAccountNumber(),
-                    sequenceGenerator.getSupplierSequence()
+                    sequenceGenerator.getSupplierSequence(),
+                    dto.getAccountNumber()
             )), SupplierDTO.class);
         } catch (DataIntegrityViolationException e) {
             //            if supplier email is already exists then throw DataIntegrityViolationException and catch
